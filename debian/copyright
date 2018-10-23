@@ -58,6 +58,10 @@ Copyright: 2002, Julian Gilbey <jdg@debian.org>
  2013, James McCoy <jamessan@debian.org>
 License: GPL-2+
 
+Files: lib/Devscripts/Config.pm lib/Devscripts/Utils.pm
+Copyright: 2018, Xavier Guimard <yadd@debian.org>
+License: GPL-2+
+
 Files: lib/Devscripts/Debbugs.pm
 Copyright: 2008, Adam D. Barratt
 License: GPL-2+
@@ -66,11 +70,6 @@ Comment: select() is Copyright (C) 2007 Don Armstrong
 Files: lib/Devscripts/Packages.pm lib/Devscripts/Set.pm
 Copyright: 2001, Bill Allombert <ballombe@debian.org>
  2002, Julian Gilbey <jdg@debian.org>
-License: GPL-2+
-
-Files: lib/Devscripts/Uscan/* scripts/uscan*
-Copyright: 2002-2006, Julian Gilbey <jdg@debian.org>
- 2018, Xavier Guimard <yadd@debian.org>
 License: GPL-2+
 
 Files: po4a/po/de.po
@@ -257,9 +256,10 @@ Files: scripts/mk-build-deps.pl
 Copyright: 2008, Vincent Fourmond
 License: GPL-2+
 
-Files: scripts/mk-origtargz*
+Files: scripts/mk-origtargz* lib/Devscripts/MkOrigtargz/*
 Copyright: 2014, Joachim Breitner <nomeata@debian.org>
  2015, James McCoy <jamessan@debian.org>
+ 2018, Xavier Guimard <yadd@debian.org>
 License: GPL-2+
 Comment: It contains code formerly found in scripts/uscan.pl
 
@@ -306,6 +306,11 @@ License: GPL-2+
 
 Files: scripts/tagpending.pl scripts/transition-check.pl
 Copyright: 2008, Adam D. Barratt
+License: GPL-2+
+
+Files: scripts/uscan* lib/Devscripts/Uscan/*
+Copyright: 2002-2006, Julian Gilbey <jdg@debian.org>
+ 2018, Xavier Guimard <yadd@debian.org>
 License: GPL-2+
 
 Files: scripts/uupdate*

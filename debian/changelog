@@ -31,7 +31,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Accept uncompressed tarballs as source file.  Closes: #838682; MR: !64
     + Switch default compression from gzip to xz if source format is 2.0 or if
       mk-origtargz isn't used in a debian source directory
-      Closes: #910803; MR: !61; MMR: !63
+      Closes: #910803; MR: !61; MR: !63
     + Refactor the whole configuration management code, and add a 'default'
       compression to let mk-origtargz choose.  MR: !68
 
