@@ -40,6 +40,9 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
   * mk-build-deps:
     + Add patch by Joost van Baal-Ilić to allow building a package even if the
       package doesn't have any build dependencies.  Closes: #910369
+  * who-uploads:
+    + Fix bad signal handling that could potentially lead to insecure use of
+      /tmp.  Thanks to Jakub Wilk for reporting.  Closes: #911720
 
   [ Eli Uriegas ]
   * mk-build-deps:

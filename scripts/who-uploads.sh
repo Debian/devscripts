@@ -197,7 +197,11 @@ done
 IFS="${OIFS:- 	}"
 
 GNUPGHOME=$(mktemp -d)
-trap '[ ! -d "$GNUPGHOME" ] ||  rm -r "$GNUPGHOME"' HUP INT QUIT PIPE ALRM TERM
+exit_with_error() {
+    [ ! -d "$GNUPGHOME" ] || rm -r "$GNUPGHOME"
+    exit 1
+}
+trap exit_with_error HUP INT QUIT PIPE ALRM TERM
 export GNUPGHOME
 
 # Some useful abbreviations for gpg options
