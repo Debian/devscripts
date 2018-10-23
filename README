@@ -10,7 +10,9 @@ the authors, please see the code or manpages.
 Also, many of these scripts have dependencies on other packages, but
 rather than burden the package with a large number of dependencies,
 most of which will not be needed by most people, the individual
-dependencies are listed as "Recommends" in the control file.  This
+dependencies are listed as "Recommends" in the control file; lastly,
+scripts that are unlikely to be used by many people have their dependencies
+categorized as "Suggests" in the control file.  This
 ensures that the packages will be installed by default but allows
 users to remove them if desired.  The dependencies and recommendations
 are listed in square brackets in the description below, as well as in
