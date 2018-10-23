@@ -46,6 +46,8 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
   * who-uploads:
     + Fix bad signal handling that could potentially lead to insecure use of
       /tmp.  Thanks to Jakub Wilk for reporting.  Closes: #911720
+  * README:
+    + Normalize by always appending a full stop at the end of the sentence.
 
   [ Eli Uriegas ]
   * mk-build-deps:
