@@ -1425,7 +1425,7 @@ sub download_file_and_sig {
         } else {
             my ($gitrepo, $gitref) = split /[[:space:]]+/, $self->upstream_url;
             $self->keyring->verify_git($self->pkg . "-temporary.$$.git",
-                $gitref);
+                $gitref, $self->downloader->git_upstream);
         }
     } else {
         uscan_warn "strange ... unknown pgpmode = $self->{pgpmode}";

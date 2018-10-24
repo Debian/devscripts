@@ -131,10 +131,11 @@ sub verifyv {
 }
 
 sub verify_git {
-    my ($self, $gitdir, $tag) = @_;
+    my ($self, $gitdir, $tag, $git_upstream) = @_;
     my $commit;
+    my @dir = $git_upstream ? () : ('--git-dir', "../$gitdir");
     spawn(
-        exec      => ['git', '--git-dir', "../$gitdir", 'show-ref', $tag],
+        exec      => ['git', @dir, 'show-ref', $tag],
         to_string => \$commit
     );
     uscan_die "git tag not found" unless ($commit);
@@ -142,7 +143,7 @@ sub verify_git {
     chomp $commit;
     my $file;
     spawn(
-        exec => ['git', '--git-dir', "../$gitdir", 'cat-file', '-p', $commit],
+        exec      => ['git', @dir, 'cat-file', '-p', $commit],
         to_string => \$file
     );
     my $dir;

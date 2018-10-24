@@ -9,6 +9,8 @@ use Moo;
 
 our $haveSSL;
 
+has git_upstream => (is => 'rw');
+
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
@@ -118,26 +120,33 @@ sub download ($$$$$$$$) {
           = "$pkg-temporary.$$.git";    # same as outside of downloader
         my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 
-        if ($self->gitrepo_state == 0) {
-            if ($optref->gitmode eq 'shallow') {
-                my $tag = $gitref;
-                $tag =~ s|.*/||;
-                uscan_exec('git', 'clone', '--bare', '--depth=1', '-b', $tag,
-                    $base, "$destdir/$gitrepo_dir");
-                $self->gitrepo_state(1);
-            } else {
-                uscan_exec('git', 'clone', '--bare', $base,
-                    "$destdir/$gitrepo_dir");
-                $self->gitrepo_state(2);
+        if ($self->git_upstream) {
+            uscan_exec_no_fail('git', 'archive', '--format=tar',
+                "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
+                $gitref) == 0
+              or uscan_die("git archive failed");
+        } else {
+            if ($self->gitrepo_state == 0) {
+                if ($optref->gitmode eq 'shallow') {
+                    my $tag = $gitref;
+                    $tag =~ s|.*/||;
+                    uscan_exec('git', 'clone', '--bare', '--depth=1', '-b',
+                        $tag, $base, "$destdir/$gitrepo_dir");
+                    $self->gitrepo_state(1);
+                } else {
+                    uscan_exec('git', 'clone', '--bare', $base,
+                        "$destdir/$gitrepo_dir");
+                    $self->gitrepo_state(2);
+                }
             }
+            uscan_exec_no_fail(
+                'git',                 "--git-dir=$destdir/$gitrepo_dir",
+                'archive',             '--format=tar',
+                "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
+                $gitref
+              ) == 0
+              or uscan_die("git archive failed");
         }
-        uscan_exec_no_fail(
-            'git',                 "--git-dir=$destdir/$gitrepo_dir",
-            'archive',             '--format=tar',
-            "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
-            $gitref
-          ) == 0
-          or uscan_die("git archive failed");
 
         chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!");
         if ($suffix eq 'gz') {
