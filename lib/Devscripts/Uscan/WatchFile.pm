@@ -168,7 +168,7 @@ has shared => (
             previous_sigfile_base       => undef,
             signature                   => $_[0]->signature,
             uscanlog                    => undef,
-        }
+        };
     },
 );
 has keyring => (
@@ -230,7 +230,8 @@ sub BUILD {
                 # Note that version=1 watchfiles have no "version" field so
                 # authorizated values are >= 2 and <= CURRENT_WATCHFILE_VERSION
                 if (   $watch_version < 2
-                    or $watch_version > $Devscripts::Uscan::Config::CURRENT_WATCHFILE_VERSION) {
+                    or $watch_version
+                    > $Devscripts::Uscan::Config::CURRENT_WATCHFILE_VERSION) {
                     # "version" field found but has no authorizated value
                     uscan_warn
 "$args->{watchfile} version number is unrecognised; skipping watch file";
