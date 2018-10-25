@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2018-10-24 17:14+0200\n"
+"POT-Creation-Date: 2018-10-25 12:59+0200\n"
 "PO-Revision-Date: 2018-10-11 18:28+0200\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -407,7 +407,7 @@ msgstr ""
 #: ../scripts/build-rdeps.pl:534 ../scripts/checkbashisms.1:65
 #: ../scripts/cowpoke.1:385 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67
 #: ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58
-#: ../scripts/dcmd.1:110 ../scripts/dcontrol.pl:288 ../scripts/dd-list.1:106
+#: ../scripts/dcmd.1:110 ../scripts/dcontrol.pl:288 ../scripts/dd-list.1:107
 #: ../scripts/debc.1:129 ../scripts/debchange.1:487
 #: ../scripts/debcheckout.pl:236 ../scripts/debclean.1:113
 #: ../scripts/debcommit.pl:944 ../scripts/debdiff.1:242 ../scripts/debi.1:135
@@ -1958,9 +1958,14 @@ msgstr "B<archive> I<bogue>"
 
 #. type: textblock
 #: ../scripts/bts.pl:1313
+#, fuzzy
+#| msgid ""
+#| "Archive a I<bug> that has previously been archived but is currently not.  "
+#| "The I<bug> must fulfil all of the requirements for archiving with the "
+#| "exception of those that are time-based."
 msgid ""
 "Archive a I<bug> that has previously been archived but is currently not.  "
-"The I<bug> must fulfil all of the requirements for archiving with the "
+"The I<bug> must fulfill all of the requirements for archiving with the "
 "exception of those that are time-based."
 msgstr ""
 "Archiver un I<bogue> qui a déjà été archivé, mais ne l'est plus. Le I<bogue> "
@@ -6052,7 +6057,7 @@ msgid "Show a help message."
 msgstr "Afficher un message d'aide."
 
 #. type: TP
-#: ../scripts/dcontrol.pl:266 ../scripts/dd-list.1:102 ../scripts/dget.pl:681
+#: ../scripts/dcontrol.pl:266 ../scripts/dd-list.1:103 ../scripts/dget.pl:681
 #: ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
@@ -6298,22 +6303,27 @@ msgstr ""
 "bz2> ou I<.xz>, alors l'option B<-z> doit être utilisée."
 
 #. type: Plain text
-#: ../scripts/dd-list.1:89
+#: ../scripts/dd-list.1:90
+#, fuzzy
+#| msgid ""
+#| "If no I<Sources_file>s are specified, any files matching I</var/lib/apt/"
+#| "lists/*_source_Sources> will be used."
 msgid ""
-"If no I<Sources_file>s are specified, any files matching I</var/lib/apt/"
-"lists/*_source_Sources> will be used."
+"If no I<Sources_file>s are specified, dd-list will ask apt-get for an "
+"appropriate set of sources (if I<apt> is at version greater than 1.1.8), "
+"else any files matching I</var/lib/apt/lists/*_source_Sources> will be used."
 msgstr ""
 "Si aucun I<fichier_Sources> n'est indiqué, tous les fichiers correspondant à "
 "I</var/lib/apt/lists/*_source_Sources> seront utilisés."
 
 #. type: TP
-#: ../scripts/dd-list.1:89
+#: ../scripts/dd-list.1:90
 #, no-wrap
 msgid "B<-u>, B<--uploaders>"
 msgstr "B<-u>, B<--uploaders>"
 
 #. type: Plain text
-#: ../scripts/dd-list.1:94
+#: ../scripts/dd-list.1:95
 msgid ""
 "Also list developers who are named as uploaders of packages, not only the "
 "maintainers; this is the default behaviour, use --nouploaders to prevent it. "
@@ -6325,26 +6335,26 @@ msgstr ""
 "uploaders sont indiqués avec un « (U) » ajouté en fin de nom de paquet."
 
 #. type: TP
-#: ../scripts/dd-list.1:94
+#: ../scripts/dd-list.1:95
 #, no-wrap
 msgid "B<-nou>, B<--nouploaders>"
 msgstr "B<-nou>, B<--nouploaders>"
 
 #. type: Plain text
-#: ../scripts/dd-list.1:97
+#: ../scripts/dd-list.1:98
 msgid "Only list package Maintainers, do not list Uploaders."
 msgstr ""
 "N'afficher que la liste des responsables (Maintainers) d'un paquet, pas les "
 "Uploaders."
 
 #. type: TP
-#: ../scripts/dd-list.1:97
+#: ../scripts/dd-list.1:98
 #, no-wrap
 msgid "B<-b>, B<--print-binary>"
 msgstr "B<-b>, B<--print-binary>"
 
 #. type: Plain text
-#: ../scripts/dd-list.1:102
+#: ../scripts/dd-list.1:103
 msgid ""
 "Use binary package names in the output instead of source package names (has "
 "no effect with B<--dctrl> if the I<Package:> line contains source package "
@@ -6356,17 +6366,17 @@ msgstr ""
 
 #.  --------------------------------------------------------------------
 #. type: Plain text
-#: ../scripts/dd-list.1:106
+#: ../scripts/dd-list.1:107
 msgid "Print the version."
 msgstr "Afficher la version."
 
 #. type: Plain text
-#: ../scripts/dd-list.1:108
+#: ../scripts/dd-list.1:109
 msgid "Lars Wirzenius E<lt>liw@iki.fiE<gt>"
 msgstr "Lars Wirzenius E<lt>liw@iki.fiE<gt>"
 
 #. type: Plain text
-#: ../scripts/dd-list.1:109
+#: ../scripts/dd-list.1:110
 msgid "Joey Hess E<lt>joeyh@debian.orgE<gt>"
 msgstr "Joey Hess E<lt>joeyh@debian.orgE<gt>"
 

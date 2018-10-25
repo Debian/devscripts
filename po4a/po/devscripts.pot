@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-24 17:14+0200\n"
+"POT-Creation-Date: 2018-10-25 12:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:534 ../scripts/checkbashisms.1:65 ../scripts/cowpoke.1:385 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67 ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58 ../scripts/dcmd.1:110 ../scripts/dcontrol.pl:288 ../scripts/dd-list.1:106 ../scripts/debc.1:129 ../scripts/debchange.1:487 ../scripts/debcheckout.pl:236 ../scripts/debclean.1:113 ../scripts/debcommit.pl:944 ../scripts/debdiff.1:242 ../scripts/debi.1:135 ../scripts/debpkg.1:23 ../scripts/debrepro.pod:150 ../scripts/debrelease.1:136 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:70 ../scripts/debsign.1:144 ../scripts/debuild.1:459 ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26 ../scripts/dget.pl:731 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32 ../scripts/dscverify.1:81 ../scripts/getbuildlog.1:41 ../scripts/git-deborig.pl:76 ../scripts/grep-excuses.1:60 ../scripts/hardening-check.pl:570 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544 ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118 ../scripts/mk-origtargz.pl:206 ../scripts/namecheck.pl:24 ../scripts/nmudiff.1:116 ../scripts/origtargz.pl:162 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81 ../scripts/uscan.pl:1881 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:534 ../scripts/checkbashisms.1:65 ../scripts/cowpoke.1:385 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67 ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58 ../scripts/dcmd.1:110 ../scripts/dcontrol.pl:288 ../scripts/dd-list.1:107 ../scripts/debc.1:129 ../scripts/debchange.1:487 ../scripts/debcheckout.pl:236 ../scripts/debclean.1:113 ../scripts/debcommit.pl:944 ../scripts/debdiff.1:242 ../scripts/debi.1:135 ../scripts/debpkg.1:23 ../scripts/debrepro.pod:150 ../scripts/debrelease.1:136 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:70 ../scripts/debsign.1:144 ../scripts/debuild.1:459 ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26 ../scripts/dget.pl:731 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32 ../scripts/dscverify.1:81 ../scripts/getbuildlog.1:41 ../scripts/git-deborig.pl:76 ../scripts/grep-excuses.1:60 ../scripts/hardening-check.pl:570 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544 ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118 ../scripts/mk-origtargz.pl:206 ../scripts/namecheck.pl:24 ../scripts/nmudiff.1:116 ../scripts/origtargz.pl:162 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81 ../scripts/uscan.pl:1881 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -1385,7 +1385,7 @@ msgstr ""
 #: ../scripts/bts.pl:1313
 msgid ""
 "Archive a I<bug> that has previously been archived but is currently not.  "
-"The I<bug> must fulfil all of the requirements for archiving with the "
+"The I<bug> must fulfill all of the requirements for archiving with the "
 "exception of those that are time-based."
 msgstr ""
 
@@ -4628,7 +4628,7 @@ msgid "Show a help message."
 msgstr ""
 
 #. type: TP
-#: ../scripts/dcontrol.pl:266 ../scripts/dd-list.1:102 ../scripts/dget.pl:681 ../scripts/getbuildlog.1:28
+#: ../scripts/dcontrol.pl:266 ../scripts/dd-list.1:103 ../scripts/dget.pl:681 ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr ""
@@ -4829,20 +4829,21 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:89
+#: ../scripts/dd-list.1:90
 msgid ""
-"If no I<Sources_file>s are specified, any files matching "
-"I</var/lib/apt/lists/*_source_Sources> will be used."
+"If no I<Sources_file>s are specified, dd-list will ask apt-get for an "
+"appropriate set of sources (if I<apt> is at version greater than 1.1.8), "
+"else any files matching I</var/lib/apt/lists/*_source_Sources> will be used."
 msgstr ""
 
 #. type: TP
-#: ../scripts/dd-list.1:89
+#: ../scripts/dd-list.1:90
 #, no-wrap
 msgid "B<-u>, B<--uploaders>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:94
+#: ../scripts/dd-list.1:95
 msgid ""
 "Also list developers who are named as uploaders of packages, not only the "
 "maintainers; this is the default behaviour, use --nouploaders to prevent "
@@ -4850,24 +4851,24 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/dd-list.1:94
+#: ../scripts/dd-list.1:95
 #, no-wrap
 msgid "B<-nou>, B<--nouploaders>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:97
+#: ../scripts/dd-list.1:98
 msgid "Only list package Maintainers, do not list Uploaders."
 msgstr ""
 
 #. type: TP
-#: ../scripts/dd-list.1:97
+#: ../scripts/dd-list.1:98
 #, no-wrap
 msgid "B<-b>, B<--print-binary>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:102
+#: ../scripts/dd-list.1:103
 msgid ""
 "Use binary package names in the output instead of source package names (has "
 "no effect with B<--dctrl> if the I<Package:> line contains source package "
@@ -4876,17 +4877,17 @@ msgstr ""
 
 #.  --------------------------------------------------------------------
 #. type: Plain text
-#: ../scripts/dd-list.1:106
+#: ../scripts/dd-list.1:107
 msgid "Print the version."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:108
+#: ../scripts/dd-list.1:109
 msgid "Lars Wirzenius E<lt>liw@iki.fiE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dd-list.1:109
+#: ../scripts/dd-list.1:110
 msgid "Joey Hess E<lt>joeyh@debian.orgE<gt>"
 msgstr ""
 
