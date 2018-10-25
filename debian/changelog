@@ -58,10 +58,11 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
       expected to be marked as hard "Depends".  For now the following scripts
       are considered core: dcmd dd-list debchange debcheckout debclean debdiff
       debsign debuild uscan.
-  * debian/copyright:
+  * debian/control:
     + Per the above definition of "core scripts", promote the following
       packages to Depends: fakeroot, file, gnupg|gnupg2, gpgv|gpgv2,
       libfile-which-perl, libwww-perl, patchutils, wdiff.
+    + Generate the package description from the README.  MR: !77
 
   [ Eli Uriegas ]
   * mk-build-deps:

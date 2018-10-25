@@ -1,6 +1,11 @@
 #!/usr/bin/make -f
 
 UBU_SUGGESTS=debian-keyring, equivs, liblwp-protocol-https-perl, libsoap-lite-perl
+ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo ubuntu),ubuntu)
+ SUBSTVARS=-V'vendor:Suggests=$(UBU_SUGGESTS)' -V'vendor:Recommends='
+else
+ SUBSTVARS=-V'vendor:Suggests=' -V'vendor:Recommends=$(UBU_SUGGESTS)'
+endif
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
@@ -8,8 +13,5 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 	dh $@ --with python3
 
 override_dh_gencontrol:
-ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo ubuntu),ubuntu)
-	dh_gencontrol -- -V'vendor:Suggests=$(UBU_SUGGESTS)' -V'vendor:Recommends='
-else
-	dh_gencontrol -- -V'vendor:Suggests=' -V'vendor:Recommends=$(UBU_SUGGESTS)'
-endif
+	dh_gencontrol -- $(SUBSTVARS) \
+		-V"devscripts:LongDesc=$$(cat README| awk '/^- annotate-output/,/^  mailing lists./'|sed -e '/^[[:space:]]*$$/d' -e 's/^/ /g')"
