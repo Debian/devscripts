@@ -70,7 +70,7 @@ sub ftp_search {
         # info info ... info filename [ -> linkname]
         for my $ln (split(/\n/, $content)) {
             $ln
-              =~ s/^d.*$//; # FTP listing of directory, '' skiped by if ($ln...
+              =~ s/^d.*$//; # FTP listing of directory, '' skipped by if ($ln...
             $ln =~ s/\s+->\s+\S+$//;     # FTP listing for link destination
             $ln =~ s/^.*\s(\S+)$/$1/;    # filename only
             if ($ln and $ln =~ m/^($self->{parse_result}->{filepattern})$/) {
@@ -212,7 +212,7 @@ sub ftp_newdir {
         # info info ... info filename [ -> linkname]
         uscan_verbose "Standard FTP listing.";
         foreach my $ln (split(/\n/, $content)) {
-            $ln =~ s/^-.*$//;    # FTP listing of file, '' skiped by if ($ln...
+            $ln =~ s/^-.*$//;    # FTP listing of file, '' skipped by if ($ln...
             $ln =~ s/\s+->\s+\S+$//;     # FTP listing for link destination
             $ln =~ s/^.*\s(\S+)$/$1/;    # filename only
             if ($ln =~ m/^($pattern)(\s+->\s+\S+)?$/) {

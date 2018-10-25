@@ -35,7 +35,7 @@ A devscripts configuration package has just to declare:
 
 =item B<keys> constant: array ref I<(see below)>
 
-=item B<rules> contant: hash ref I<(see below)>
+=item B<rules> constant: hash ref I<(see below)>
 
 =back
 
@@ -54,7 +54,7 @@ be undefined:
 
 =over
 
-=item B<regexp> ref: will be applied to the value. If it fails againts the
+=item B<regexp> ref: will be applied to the value. If it fails against the
 devscripts.conf value, Devscripts::Config will warn. If it fails against the
 command line argument, Devscripts::Config will die.
 

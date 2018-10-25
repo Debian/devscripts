@@ -1311,7 +1311,7 @@ sub bts_reopen {
 =item B<archive> I<bug>
 
 Archive a I<bug> that has previously been archived but is currently not.
-The I<bug> must fulfil all of the requirements for archiving with the
+The I<bug> must fulfill all of the requirements for archiving with the
 exception of those that are time-based.
 
 =cut

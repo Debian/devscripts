@@ -104,7 +104,7 @@ use constant rules => [
             ? (1)
             : (0, "Could not read $_[0]->{upstream}: $!"));
     },
-    # Get Debian pakage name an version unless given
+    # Get Debian package name an version unless given
     sub {
         my ($self) = @_;
         unless (defined $self->package) {

@@ -139,7 +139,7 @@ has signature => (
     required => 1,
     lazy     => 1,
     default  => sub { $_[0]->config->signature });
-has watchfile => (is => 'ro', required => 1);    # usualy debian/watch
+has watchfile => (is => 'ro', required => 1);    # usually debian/watch
 
 # Internal attributes
 has origcount     => (is => 'rw');
@@ -199,7 +199,7 @@ sub BUILD {
 
       CHOMP:
 
-        # Reassemble lines splitted using \
+        # Reassemble lines split using \
         chomp;
         if (s/(?<!\\)\\$//) {
             if (eof(WATCH)) {
