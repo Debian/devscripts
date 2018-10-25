@@ -1,4 +1,4 @@
-devscripts (2.18.7) UNRELEASED; urgency=medium
+devscripts (2.18.7) unstable; urgency=medium
 
   [ Martyn Welch ]
   * chdist:
@@ -9,7 +9,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Add common modules to parse configuration, command line and normalize
       output.  MR: !51
       - This moves libmoo-perl and libipc-run-perl dependency from "Recommends"
-        to "Depends".  MR: !51 and !74
+        to "Depends".  MR: !51; MR: !74
   * uscan:
     + Fix bad package name in git HEAD mode.  Closes: #896136
     + Modified to use common Perl modules.  MR: !51
@@ -25,17 +25,17 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
       the default value.  Closes: #911401; MR: !73
     + In git mode, check the local git repository in the if there is an
       upstream remote and use it when available.  Closes: #910777; MR: !72
-  * French translation update.  MR: !59
   * mk-origtargz:
     + Rewritten using common Perl files.  MR: !55
     + Don't override compression when set in command line when we are
       implicitly repacking.  Closes: #894518; MR: !60
-    + Accept uncompressed tarballs as source file.  Closes: #838682; MR: !64
+    + Accept uncompressed tarballs as source files.  Closes: #838682; MR: !64
     + Switch default compression from gzip to xz if source format is 2.0 or if
       mk-origtargz isn't used in a debian source directory
       Closes: #910803; MR: !61; MR: !63
     + Refactor the whole configuration management code, and add a 'default'
       compression to let mk-origtargz choose.  MR: !68
+  * French translation update.  MR: !59
 
   [ Daniel Kahn Gillmor ]
   * uscan:
@@ -70,7 +70,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
   * mk-build-deps:
     + Fix use of an uninitialized variable in build_equiv().  MR: !56
 
- -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Oct 2018 23:07:22 +0200
+ -- Mattia Rizzolo <mattia@debian.org>  Thu, 25 Oct 2018 13:11:38 +0200
 
 devscripts (2.18.6) unstable; urgency=medium
 
