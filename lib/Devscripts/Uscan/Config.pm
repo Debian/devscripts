@@ -113,12 +113,38 @@ use constant keys => [
     # 2.3 - More complex options
 
     # "download" and its aliases
-    ['download|d!',    'USCAN_DOWNLOAD', 'bool', 1],
-    ['force-download', undef,            sub     { $_[0]->download(2) }],
-    ['dd',             undef,            sub     { $_[0]->download(2) }],
+    [
+        undef,
+        'USCAN_DOWNLOAD',
+        sub {
+            return (1, 'Bad USCAN_DOWNLOAD value, skipping')
+              unless ($_[1] =~ /^(?:yes|(no))$/i);
+            $_[0]->download(0) if $1;
+            return 1;
+        }
+    ],
+    [
+        'download|d+',
+        undef,
+        sub {
+            $_[1] =~ s/^yes$/1/i;
+            $_[1] =~ s/^no$/0/i;
+            return (0, "Wrong number of -d")
+              unless ($_[1] =~ /^[0123]$/);
+            $_[0]->download($_[1]);
+            return 1;
+        },
+        1
+    ],
+    [
+        'force-download',
+        undef,
+        sub {
+            $_[0]->download(2);
+        }
+    ],
     ['no-download', undef, sub { $_[0]->download(0); return 1; }],
     ['overwrite-download', undef, sub { $_[0]->download(3) }],
-    ['ddd',                undef, sub { $_[0]->download(3) }],
 
     # "pasv"
     [
