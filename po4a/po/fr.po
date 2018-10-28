@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2018-10-25 12:59+0200\n"
-"PO-Revision-Date: 2018-10-11 18:28+0200\n"
+"PO-Revision-Date: 2018-10-28 16:34+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -1958,19 +1958,14 @@ msgstr "B<archive> I<bogue>"
 
 #. type: textblock
 #: ../scripts/bts.pl:1313
-#, fuzzy
-#| msgid ""
-#| "Archive a I<bug> that has previously been archived but is currently not.  "
-#| "The I<bug> must fulfil all of the requirements for archiving with the "
-#| "exception of those that are time-based."
 msgid ""
 "Archive a I<bug> that has previously been archived but is currently not.  "
 "The I<bug> must fulfill all of the requirements for archiving with the "
 "exception of those that are time-based."
 msgstr ""
 "Archiver un I<bogue> qui a déjà été archivé, mais ne l'est plus. Le I<bogue> "
-"doit satisfaire à tous les critères pour les bogues archivés, sauf celui de "
-"la période d'attente."
+"doit satisfaire à tous les critères pour les bogues archivés, à l'exception "
+"de ceux basés sur le temps."
 
 #. type: =item
 #: ../scripts/bts.pl:1325
@@ -6304,17 +6299,15 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dd-list.1:90
-#, fuzzy
-#| msgid ""
-#| "If no I<Sources_file>s are specified, any files matching I</var/lib/apt/"
-#| "lists/*_source_Sources> will be used."
 msgid ""
 "If no I<Sources_file>s are specified, dd-list will ask apt-get for an "
 "appropriate set of sources (if I<apt> is at version greater than 1.1.8), "
 "else any files matching I</var/lib/apt/lists/*_source_Sources> will be used."
 msgstr ""
-"Si aucun I<fichier_Sources> n'est indiqué, tous les fichiers correspondant à "
-"I</var/lib/apt/lists/*_source_Sources> seront utilisés."
+"Si aucun I<fichier_Sources> n'est indiqué, dd-list demandera à apt-get une "
+"ensemble de sources approprié (si la version d'I<apt> est supérieure à "
+"1.1.8), sinon tous les fichiers correspondant à I</var/lib/apt/lists/"
+"*_source_Sources> seront utilisés."
 
 #. type: TP
 #: ../scripts/dd-list.1:90
@@ -17054,6 +17047,9 @@ msgid ""
 "source repository which format is \"1.0\" or undefined, the method switches "
 "to B<gzip>."
 msgstr ""
+"La méthode par défaut est B<xz>. Lorsque mk-origtargz est lancé dans un "
+"répertoire source debian dont le format est \"1.0\" ou non défini, la "
+"méthode devient B<gzip>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:181
@@ -20367,11 +20363,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:372
-#, fuzzy
-#| msgid ""
-#| "If the upstream publishes the released tarball via its web interface, "
-#| "please use it instead of using this mode.  This mode is the last resort "
-#| "method."
 msgid ""
 "If the upstream publishes the released tarball via its web interface, please "
 "use it instead of using this mode. This mode is the last resort method."
@@ -20440,6 +20431,10 @@ msgid ""
 "cloning separately.  The only local change is that uscan will run a \"fetch"
 "\" command to refresh the repository."
 msgstr ""
+"Si le répertoire courant est un dépôt git et si le dépôt recherché est listé "
+"dans les sources amont I<(\"remote\")>, alors uscan l'utilisera au lieu de "
+"dupliquer le dépôt dans un répertoire temporaire. Le seul changement dans le "
+"répertoire local est une mise à jour I<(\"fetch\")>."
 
 #. type: =item
 #: ../scripts/uscan.pl:401
@@ -20538,6 +20533,9 @@ msgid ""
 "listed among the registered \"remotes\", then uscan will use it instead of "
 "cloning separately."
 msgstr ""
+"Si le répertoire courant est un dépôt git et si le dépôt recherché est listé "
+"dans les sources amont I<(remote)>, alors uscan va l'utiliser plutôt que de "
+"cloner dans un répertoire temporaire."
 
 #. type: =item
 #: ../scripts/uscan.pl:438
