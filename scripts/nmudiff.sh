@@ -70,7 +70,8 @@ DEFAULT_NMUDIFF_MUTT="yes"
 DEFAULT_NMUDIFF_NEWREPORT="maybe"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
 DEFAULT_NMUDIFF_PENDING=" pending"
-VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND NMUDIFF_PENDING"
+DEFAULT_MUTT_PRG="mutt"
+VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND NMUDIFF_PENDING MUTT_PRG"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
@@ -243,9 +244,15 @@ if [ $# -gt 0 ]; then
     exit 1
 fi
 
-if [ "$NMUDIFF_MUTT" = yes ] && ! command -v mutt > /dev/null 2>&1; then
-    echo "$PROGNAME: can't find mutt, falling back to sendmail instead" >&2
-    NMUDIFF_MUTT=no
+if [ "$NMUDIFF_MUTT" = yes ]; then
+    if command -v mutt > /dev/null 2>&1; then
+        MUTT_PRG=mutt
+    elif command -v neomutt > /dev/null 2>&1; then
+        MUTT_PRG=neomutt
+    else
+        echo "$PROGNAME: can't find mutt, falling back to sendmail instead" >&2
+        NMUDIFF_MUTT=no
+    fi
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
@@ -447,7 +454,7 @@ $BODY
 
 EOF
 
-    mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
+    $MUTT_PRG -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
 	-e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
 	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff $BCC_ADDRESS_MUTT \
 	-- $TO_ADDRESSES_MUTT
