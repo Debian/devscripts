@@ -170,8 +170,10 @@ sub git_search {
                 } else {
                     uscan_warn
                       "$progname warning: In $self->{watchfile} no matching"
-                      . " refs for version $self->{download_version}"
-                      . " in watch line\n  $self->{line}";
+                      . " refs for version "
+                      . $self->shared->{download_version}
+                      . " in watch line\n  "
+                      . $self->{line};
                     return undef;
                 }
 
