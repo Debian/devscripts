@@ -424,8 +424,8 @@ fixup_control() {
     local sha1=$(sha1sum "$child" | cut -d' ' -f1)
     local sha256=$(sha256sum "$child" | cut -d' ' -f1)
     perl -i -pe 'BEGIN {
-    '" \$file=\"$child\"; \$md5=\"$md5\"; "'
-    '" \$sha1=\"$sha1\"; \$sha256=\"$sha256\"; "'
+    '" \$file='$child'; \$md5='$md5'; "'
+    '" \$sha1='$sha1'; \$sha256='$sha256'; "'
     $size=(-s $file); ($base=$file) =~ s|.*/||;
     $infiles=0; $inmd5=0; $insha1=0; $insha256=0; $format="";
     }

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+set -u
+
+base="$(readlink -f "${0%/*}"/..)"
+
+
+# perltidy test is ran only during dev
+if test "$(cd "$base" && dpkg-parsechangelog -c0 -SDistribution)" != UNRELEASED; then
+    echo "SKIP: Not checking a released version with perltidy."
+    exit 0
+fi
+
+# perltidy test isn't ran in autopkgtest environment
+if test "${1:-}" = --installed; then
+    echo "SKIP: Not running perltidy in autopkgtest."
+    exit 0
+fi
+
+# Don't run this test with old Perltidy versions
+if test "$(perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION')" -lt 20180000; then
+    echo "SKIP: perltidy version too old, skipping this test."
+    exit 0
+fi
+
+
+testPerltidy() {
+    LIST=$(find "$base/lib/" "$base/scripts/" -iname '*.pl' -or -iname '*.pm')
+
+    for file in $LIST; do
+        perltidy --output-path="$SHUNIT_TMPDIR/" --profile="$base/.perltidyrc" "$file"
+        cmp -s "$file" "$SHUNIT_TMPDIR/$(basename "$file").tdy"
+        retval=$?
+        assertEquals "## $file isn't following perltidy" 0 "$retval"
+    done
+
+}
+
+. shunit2

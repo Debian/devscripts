@@ -18,12 +18,12 @@ package Devscripts::Set;
 
 use strict;
 
-BEGIN{
-  use Exporter   ();
-  use vars       qw(@EXPORT @ISA %EXPORT_TAGS);
-  @EXPORT=qw(SetMinus SetInter SetUnion);
-  @ISA=qw(Exporter);
-  %EXPORT_TAGS=();
+BEGIN {
+    use Exporter ();
+    use vars qw(@EXPORT @ISA %EXPORT_TAGS);
+    @EXPORT      = qw(SetMinus SetInter SetUnion);
+    @ISA         = qw(Exporter);
+    %EXPORT_TAGS = ();
 }
 
 # Several routines to work with arrays whose elements are unique
@@ -59,8 +59,7 @@ intersection, union of two sets given as arrays.
 # input:  list
 # output: set
 
-sub ListToSet (@)
-{
+sub ListToSet (@) {
     my %items;
 
     grep $items{$_}++, @_;
@@ -68,52 +67,46 @@ sub ListToSet (@)
     return keys %items;
 }
 
-
 # Compute the set-theoretic difference of two sets.
 # input: ref to Set 1, ref to Set 2
 # output: set
 
-sub SetMinus ($$)
-{
-    my ($set1,$set2)=@_;
+sub SetMinus ($$) {
+    my ($set1, $set2) = @_;
     my %items;
 
     grep $items{$_}++, @$set1;
     grep $items{$_}--, @$set2;
 
-    return grep $items{$_}>0, keys %items;
+    return grep $items{$_} > 0, keys %items;
 }
-
 
 # Compute the set-theoretic intersection of two sets.
 # input: ref to Set 1, ref to Set 2
 # output: set
 
-sub SetInter ($$)
-{
-    my ($set1,$set2)=@_;
+sub SetInter ($$) {
+    my ($set1, $set2) = @_;
     my %items;
 
     grep $items{$_}++, @$set1;
     grep $items{$_}++, @$set2;
 
-    return grep $items{$_}==2, keys %items;
+    return grep $items{$_} == 2, keys %items;
 }
-
 
 #Compute the set-theoretic union of two sets.
 #input: ref to Set 1, ref to Set 2
 #output: set
 
-sub SetUnion ($$)
-{
-    my ($set1,$set2)=@_;
+sub SetUnion ($$) {
+    my ($set1, $set2) = @_;
     my %items;
 
     grep $items{$_}++, @$set1;
     grep $items{$_}++, @$set2;
 
-    return grep $items{$_}>0, keys %items;
+    return grep $items{$_} > 0, keys %items;
 }
 
 1;

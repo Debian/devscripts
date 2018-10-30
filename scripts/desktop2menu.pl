@@ -68,11 +68,13 @@ BEGIN {
     # Load the File::DesktopEntry module safely
     eval { require File::DesktopEntry; };
     if ($@) {
-	my $progname = basename $0;
-	if ($@ =~ /^Can\'t locate File\/DesktopEntry\.pm/) {
-	    die "$progname: you must have the libfile-desktopentry-perl package installed\nto use this script\n";
-	}
-	die "$progname: problem loading the File::DesktopEntry module:\n  $@\nHave you installed the libfile-desktopentry-perl package?\n";
+        my $progname = basename $0;
+        if ($@ =~ /^Can\'t locate File\/DesktopEntry\.pm/) {
+            die
+"$progname: you must have the libfile-desktopentry-perl package installed\nto use this script\n";
+        }
+        die
+"$progname: problem loading the File::DesktopEntry module:\n  $@\nHave you installed the libfile-desktopentry-perl package?\n";
     }
     import File::DesktopEntry;
 }
@@ -81,143 +83,145 @@ use File::DesktopEntry;
 
 # Big generic mapping between fdo sections and menu sections
 my %mappings = (
-    "AudioVideo" => "Applications/Video",
-    "Audio" => "Applications/Sound",
-    "Video" => "Applications/Video",
-    "Development" => "Applications/Programming",
-    "Education" => "Applications/Education",
-    "Game" => "Games!WARN",
-    "Graphics" => "Applications/Graphics!WARN",
-    "Network" => "Applications/Network!WARN",
-    "Office" => "Applications/Office",
-    "System" => "Applications/System/Administration",
-    "Utility" => "Applications!WARN",
-    "Building" => "Applications/Programming",
-    "Debugger" => "Applications/Programming",
-    "IDE" => "Applications/Programming",
-    "Profiling" => "Applications/Programming",
-    "RevisionControl" => "Applications/Programming",
-    "Translation" => "Applications/Programming",
-    "Calendar" => "Applications/Data Management",
-    "ContactManagement" => "Applications/Data Management",
-    "Database" => "Applications/Data Management",
-    "Dictionary" => "Applications/Text",
-    "Chart" => "Applications/Office",
-    "Email" => "Applications/Network/Communication",
-    "Finance" => "Applications/Office",
-    "FlowChart" => "Applications/Office",
-    "PDA" => "Applications/Mobile Devices",
-    "ProjectManagement" => "Applications/Project Management",
-    "Presentation" => "Applications/Office",
-    "Spreadsheet" => "Applications/Office",
-    "Wordprocessor" => "Applications/Office",
-    "2DGraphics" => "Applications/Graphics",
-    "VectorGraphics" => "Applications/Graphics",
-    "RasterGraphics" => "Applications/Graphics",
-    "3DGraphics" => "Applications/Graphics",
-    "Scanning" => "Applications/Graphics",
-    "OCR" => "Applications/Text",
-    "Photography" => "Applications/Graphics",
-    "Publishing" => "Applications/Office",
-    "Viewer" => "Applications/Viewers",
-    "TextTools" => "Applications/Text",
-    "DesktopSettings" => "Applications/System/Administration",
-    "HardwareSettings" => "Applications/System/Hardware",
-    "Printing" => "Applications/System/Administration",
-    "PackageManager" => "Applications/System/Package Management",
-    "Dialup" => "Applications/System/Administration",
-    "InstantMesasging" => "Applications/Network/Communication",
-    "Chat" => "Applications/Network/Communication",
-    "IRCClient" => "Applications/Network/Communication",
-    "FileTransfer" => "Applications/Network/File Transfer",
-    "HamRadio" => "Applications/Amateur Radio",
-    "News" => "Applicatiosn/Network/Web News",
-    "P2P" => "Applications/File Transfer",
-    "RemoteAccess" => "Applications/System/Administration",
-    "Telephony" => "Applications/Network/Communication",
-    "TelephonyTools" => "Applications/Network/Communication",
-    "VideoConference" => "Applications/Network/Communication",
-    "Midi" => "Applications/Sound",
-    "Mixer" => "Applications/Sound",
-    "Sequencer" => "Applications/Sound",
-    "Tuner" => "Applications/TV and Radio",
-    "TV" => "Applications/TV and Radio",
-    "AudioVideoEditing" => "Applications/Video!WARN",
-    "Player" => "Applications/Video!WARN",
-    "Recorder" => "Applications/Video!WARN",
-    "DiscBurning" => "Applications/File Management",
-    "ActionGame" => "Games/Action",
-    "AdventureGame" => "Games/Adventure",
-    "ArcadeGame" => "Games/Action",
-    "BoardGame" => "Games/Board",
-    "BlocksGame" => "Games/Blocks",
-    "CardGame" => "Games/Card",
-    "KidsGames" => "Games/Toys!WARN",
-    "LogicGames" => "Games/Puzzles",
-    "RolePlaying" => "Games/Adventure",
-    "Simulation" => "Games/Simulation",
-    "SportsGame" => "Games/Action",
-    "StrategyGame" => "Games/Strategy",
-    "Art" => "Applications/Education",
-    "Construction" => "Applications/Education",
-    "Music" => "Applications/Education",
-    "Languages" => "Applications/Education",
-    "Science" => "Applications/Science!WARN",
+    "AudioVideo"             => "Applications/Video",
+    "Audio"                  => "Applications/Sound",
+    "Video"                  => "Applications/Video",
+    "Development"            => "Applications/Programming",
+    "Education"              => "Applications/Education",
+    "Game"                   => "Games!WARN",
+    "Graphics"               => "Applications/Graphics!WARN",
+    "Network"                => "Applications/Network!WARN",
+    "Office"                 => "Applications/Office",
+    "System"                 => "Applications/System/Administration",
+    "Utility"                => "Applications!WARN",
+    "Building"               => "Applications/Programming",
+    "Debugger"               => "Applications/Programming",
+    "IDE"                    => "Applications/Programming",
+    "Profiling"              => "Applications/Programming",
+    "RevisionControl"        => "Applications/Programming",
+    "Translation"            => "Applications/Programming",
+    "Calendar"               => "Applications/Data Management",
+    "ContactManagement"      => "Applications/Data Management",
+    "Database"               => "Applications/Data Management",
+    "Dictionary"             => "Applications/Text",
+    "Chart"                  => "Applications/Office",
+    "Email"                  => "Applications/Network/Communication",
+    "Finance"                => "Applications/Office",
+    "FlowChart"              => "Applications/Office",
+    "PDA"                    => "Applications/Mobile Devices",
+    "ProjectManagement"      => "Applications/Project Management",
+    "Presentation"           => "Applications/Office",
+    "Spreadsheet"            => "Applications/Office",
+    "Wordprocessor"          => "Applications/Office",
+    "2DGraphics"             => "Applications/Graphics",
+    "VectorGraphics"         => "Applications/Graphics",
+    "RasterGraphics"         => "Applications/Graphics",
+    "3DGraphics"             => "Applications/Graphics",
+    "Scanning"               => "Applications/Graphics",
+    "OCR"                    => "Applications/Text",
+    "Photography"            => "Applications/Graphics",
+    "Publishing"             => "Applications/Office",
+    "Viewer"                 => "Applications/Viewers",
+    "TextTools"              => "Applications/Text",
+    "DesktopSettings"        => "Applications/System/Administration",
+    "HardwareSettings"       => "Applications/System/Hardware",
+    "Printing"               => "Applications/System/Administration",
+    "PackageManager"         => "Applications/System/Package Management",
+    "Dialup"                 => "Applications/System/Administration",
+    "InstantMesasging"       => "Applications/Network/Communication",
+    "Chat"                   => "Applications/Network/Communication",
+    "IRCClient"              => "Applications/Network/Communication",
+    "FileTransfer"           => "Applications/Network/File Transfer",
+    "HamRadio"               => "Applications/Amateur Radio",
+    "News"                   => "Applications/Network/Web News",
+    "P2P"                    => "Applications/File Transfer",
+    "RemoteAccess"           => "Applications/System/Administration",
+    "Telephony"              => "Applications/Network/Communication",
+    "TelephonyTools"         => "Applications/Network/Communication",
+    "VideoConference"        => "Applications/Network/Communication",
+    "Midi"                   => "Applications/Sound",
+    "Mixer"                  => "Applications/Sound",
+    "Sequencer"              => "Applications/Sound",
+    "Tuner"                  => "Applications/TV and Radio",
+    "TV"                     => "Applications/TV and Radio",
+    "AudioVideoEditing"      => "Applications/Video!WARN",
+    "Player"                 => "Applications/Video!WARN",
+    "Recorder"               => "Applications/Video!WARN",
+    "DiscBurning"            => "Applications/File Management",
+    "ActionGame"             => "Games/Action",
+    "AdventureGame"          => "Games/Adventure",
+    "ArcadeGame"             => "Games/Action",
+    "BoardGame"              => "Games/Board",
+    "BlocksGame"             => "Games/Blocks",
+    "CardGame"               => "Games/Card",
+    "KidsGames"              => "Games/Toys!WARN",
+    "LogicGames"             => "Games/Puzzles",
+    "RolePlaying"            => "Games/Adventure",
+    "Simulation"             => "Games/Simulation",
+    "SportsGame"             => "Games/Action",
+    "StrategyGame"           => "Games/Strategy",
+    "Art"                    => "Applications/Education",
+    "Construction"           => "Applications/Education",
+    "Music"                  => "Applications/Education",
+    "Languages"              => "Applications/Education",
+    "Science"                => "Applications/Science!WARN",
     "ArtificialIntelligence" => "Applications/Science!WARN",
-    "Astronomy" => "Applications/Science/Astronomy",
-    "Biology" => "Applications/Science/Biology",
-    "Chemistry" => "Applications/Science/Chemistry",
-    "ComputerScience" => "Applications/Science/Electronics!WARN",
-    "DataVisualization" => "Applications/Science/Data Analysis",
-    "Economy" => "Applications/Office",
-    "Electricity" => "Applications/Science/Engineering",
-    "Geography" => "Applications/Science/Geoscience",
-    "Geology" => "Applications/Science/Geoscience",
-    "Geoscience" => "Applications/Science/Geoscience",
-    "History" => "Applications/Science/Social",
-    "ImageProcessing" => "Applications/Graphics",
-    "Literature" => "Applications/Data Management",
-    "Math" => "Applications/Science/Mathematics",
-    "NumericalAnalyzisis" => "Applications/Science/Mathematics",
-    "MedicalSoftware" => "Applications/Science/Medicine",
-    "Physics" => "Applications/Science/Physics",
-    "Robotics" => "Applications/Science/Engineering",
-    "Sports" => "Games/Tools!WARN",
-    "ParallelComputing" => "Applications/Science/Electronics!WARN",
-    "Amusement" => "Games/Toys",
-    "Archiving" => "Applications/File Management",
-    "Compression" => "Applications/File Management",
-    "Electronics" => "Applications/Science/Electronics",
-    "Emulator" => "Applications/Emulators",
-    "Engineering" => "Applications/Science/Engineering",
-    "FileTools" => "Applications/File Management",
-    "FileManager" => "Applications/File Management",
-    "TerminalEmulator" => "Applications/Shells",
-    "Filesystem" => "Applications/System/Administration",
-    "Monitor" => "Applications/System/Monitoring",
-    "Security" => "Applications/System/Security",
-    "Accessibility" => "Applications/Accessibility",
-    "Calculator" => "Applications/Science/Mathematics",
-    "Clock" => "Games/Toys",
-    "TextEditor" => "Applications/Editors",
+    "Astronomy"              => "Applications/Science/Astronomy",
+    "Biology"                => "Applications/Science/Biology",
+    "Chemistry"              => "Applications/Science/Chemistry",
+    "ComputerScience"        => "Applications/Science/Electronics!WARN",
+    "DataVisualization"      => "Applications/Science/Data Analysis",
+    "Economy"                => "Applications/Office",
+    "Electricity"            => "Applications/Science/Engineering",
+    "Geography"              => "Applications/Science/Geoscience",
+    "Geology"                => "Applications/Science/Geoscience",
+    "Geoscience"             => "Applications/Science/Geoscience",
+    "History"                => "Applications/Science/Social",
+    "ImageProcessing"        => "Applications/Graphics",
+    "Literature"             => "Applications/Data Management",
+    "Math"                   => "Applications/Science/Mathematics",
+    "NumericalAnalyzisis"    => "Applications/Science/Mathematics",
+    "MedicalSoftware"        => "Applications/Science/Medicine",
+    "Physics"                => "Applications/Science/Physics",
+    "Robotics"               => "Applications/Science/Engineering",
+    "Sports"                 => "Games/Tools!WARN",
+    "ParallelComputing"      => "Applications/Science/Electronics!WARN",
+    "Amusement"              => "Games/Toys",
+    "Archiving"              => "Applications/File Management",
+    "Compression"            => "Applications/File Management",
+    "Electronics"            => "Applications/Science/Electronics",
+    "Emulator"               => "Applications/Emulators",
+    "Engineering"            => "Applications/Science/Engineering",
+    "FileTools"              => "Applications/File Management",
+    "FileManager"            => "Applications/File Management",
+    "TerminalEmulator"       => "Applications/Shells",
+    "Filesystem"             => "Applications/System/Administration",
+    "Monitor"                => "Applications/System/Monitoring",
+    "Security"               => "Applications/System/Security",
+    "Accessibility"          => "Applications/Accessibility",
+    "Calculator"             => "Applications/Science/Mathematics",
+    "Clock"                  => "Games/Toys",
+    "TextEditor"             => "Applications/Editors",
 );
 
 #values mentioned in Categories we accept as valid hints.
 my %hintscategories = (
-    "KDE" => "true",
-    "Qt" => "true",
+    "KDE"   => "true",
+    "Qt"    => "true",
     "GNOME" => "true",
-    "GTK" => "true",
+    "GTK"   => "true",
 );
 
 my ($opt_help, $opt_version);
 
-GetOptions("help|h" => \$opt_help,
-	   "version" => \$opt_version,
-	  )
-    or die "Usage: $progname desktopfile packagename\nRun $progname --help for more details\n";
+GetOptions(
+    "help|h"  => \$opt_help,
+    "version" => \$opt_version,
+  )
+  or die
+"Usage: $progname desktopfile packagename\nRun $progname --help for more details\n";
 
-if ($opt_help) { help(); exit 0; }
+if ($opt_help)    { help();    exit 0; }
 if ($opt_version) { version(); exit 0; }
 
 if (@ARGV == 0) {
@@ -231,29 +235,30 @@ my $needs;
 my $warnings = 0;
 
 my $filename = shift @ARGV;
-my $file = File::DesktopEntry->new_from_file("$filename") ;
+my $file     = File::DesktopEntry->new_from_file("$filename");
 
 # do menu files for non-applications make sense?
 die $file->get_value('Name') . " isn't an application\n"
-    unless $file->get_value('Type') eq 'Application';
+  unless $file->get_value('Type') eq 'Application';
 
 my $package = join(' ', @ARGV);
 if (!$package) {
     # Bad guess, but... maybe icon name could be better?
     $package = $file->get_value('Name');
-    print STDERR "WARNING: Package not specified. Guessing package as: $package\n";
+    print STDERR
+      "WARNING: Package not specified. Guessing package as: $package\n";
     $warnings++;
 }
 
 my $category = $file->get_value('Categories');
 
 my @categories = reverse split(";", $category);
-foreach (@categories ) {
-    if ($mappings{$_} && ! $section) {
-	$section = $mappings{$_};
+foreach (@categories) {
+    if ($mappings{$_} && !$section) {
+        $section = $mappings{$_};
     }
     if ($hintscategories{$_}) {
-	push(@hints,$_);
+        push(@hints, $_);
     }
 }
 
@@ -261,7 +266,8 @@ die "Desktop file has invalid categories" unless $section;
 
 # Not all mappings are completely accurate. Most are, but...
 if ($section =~ /!WARN/) {
-    print STDERR "WARNING: Section is highly inaccurate. Please check it manually\n";
+    print STDERR
+      "WARNING: Section is highly inaccurate. Please check it manually\n";
     $warnings++;
 }
 
@@ -279,7 +285,9 @@ print "\tsection=\"" . $section . "\" \\\n";
 print "\ttitle=\"" . $file->get_value('Name') . "\" \\\n";
 print "\thints=\"" . join(",", @hints) . "\" \\\n" if @hints;
 print "\tcommand=\"" . $file->get_value('Exec') . "\" \\\n";
-print "\ticon=\"/usr/share/pixmaps/" . $file->get_value('Icon') . ".xpm\" \\\n";
+print "\ticon=\"/usr/share/pixmaps/"
+  . $file->get_value('Icon')
+  . ".xpm\" \\\n";
 print "\n";
 
 # Unnecessary. but for clarity

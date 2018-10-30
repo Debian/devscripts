@@ -45,9 +45,11 @@ DISTRIBUTION_DEFAULT = "experimental"
 
 
 def workaround_dpkg_865430(dscfile, origdir, stdout):
-    filename = subprocess.check_output(["dcmd", "--tar", "echo", dscfile]).rstrip()
+    filename = subprocess.check_output(
+        ["dcmd", "--tar", "echo", dscfile]).rstrip()
     if not os.path.exists(os.path.join(origdir.encode("utf-8"), os.path.basename(filename))):
-        subprocess.check_call(["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
+        subprocess.check_call(
+            ["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
 
 
 def is_dch(path):
@@ -88,7 +90,8 @@ def apply_dch_patch(source_file, current, old_version, target, dry_run):
     else:
         version_suffix = target_version[len(old_version):]
         version = str(current[0].version) + version_suffix
-        logging.info("using version %s based on suffix %s", version, version_suffix)
+        logging.info("using version %s based on suffix %s",
+                     version, version_suffix)
 
     if dry_run:
         return version
@@ -138,7 +141,8 @@ def debdiff_apply(patch, patch_name, args):
         old_version = None
         target = ChangeBlock(
             package=CHBLOCK_DUMMY_PACKAGE,
-            author="%s <%s>" % (os.getenv("DEBFULLNAME"), os.getenv("DEBEMAIL")),
+            author="%s <%s>" % (os.getenv("DEBFULLNAME"),
+                                os.getenv("DEBEMAIL")),
             date=email.utils.formatdate(time.time(), localtime=True),
             version=None,
             distributions=args.distribution,
@@ -176,7 +180,8 @@ def debdiff_apply(patch, patch_name, args):
             raise ValueError("patch %s doesn't apply!" % (patch_name))
 
     # only apply d/changelog patch if the rest of the patch applied
-    new_version = apply_dch_patch(args.changelog, current, old_version, target, dry_run)
+    new_version = apply_dch_patch(
+        args.changelog, current, old_version, target, dry_run)
     if args.target_version:
         print(new_version)
         return False
@@ -262,7 +267,8 @@ def main(args):
         data = fp.read()
     for enc in TRY_ENCODINGS:
         try:
-            patch = unidiff.PatchSet(data.splitlines(keepends=True), encoding=enc)
+            patch = unidiff.PatchSet(
+                data.splitlines(keepends=True), encoding=enc)
             break
         except Exception:  # pylint: disable=broad-except
             if enc == TRY_ENCODINGS[-1]:
@@ -275,7 +281,8 @@ def main(args):
         hashlib.sha256(data).hexdigest()[:20 if args.patch_file == '/dev/stdin' else 8])
     quiet = args.source_version or args.target_version
     dry_run = args.source_version or args.target_version
-    stdout = subprocess.DEVNULL if quiet else None  # user can redirect stderr themselves
+    # user can redirect stderr themselves
+    stdout = subprocess.DEVNULL if quiet else None
 
     # change directory before applying patches
     if os.path.isdir(args.orig_dsc_or_dir):
@@ -290,7 +297,8 @@ def main(args):
         if not os.path.isdir(extractdir):
             os.makedirs(extractdir)
         try:
-            builddir = os.path.join(extractdir, parts[0])  # dpkg-source doesn't like existing dirs
+            # dpkg-source doesn't like existing dirs
+            builddir = os.path.join(extractdir, parts[0])
             subprocess.check_call(["dpkg-source", "-x", "--skip-patches", dscfile, builddir],
                                   stdout=stdout)
             origdir = os.getcwd()
@@ -315,7 +323,8 @@ while quilt push; do quilt refresh; done
         finally:
             cleandir = builddir if args.directory else extractdir
             if args.no_clean:
-                logging.warning("you should clean up temp files in %s", cleandir)
+                logging.warning(
+                    "you should clean up temp files in %s", cleandir)
             else:
                 shutil.rmtree(cleandir)
 

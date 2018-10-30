@@ -93,13 +93,15 @@ my $progname = basename($0);
 
 my ($opt_help, $opt_version, @opt_filename);
 
-GetOptions("help|h" => \$opt_help,
-           "version|v" => \$opt_version,
-           "filename|f=s" => sub {push (@opt_filename, $_[1]);},
-           )
-    or die "Usage: $progname [options] source_package_list\nRun $progname --help for more details\n";
+GetOptions(
+    "help|h"       => \$opt_help,
+    "version|v"    => \$opt_version,
+    "filename|f=s" => sub { push(@opt_filename, $_[1]); },
+  )
+  or die
+"Usage: $progname [options] source_package_list\nRun $progname --help for more details\n";
 
-if ($opt_help) { help(); exit 0; }
+if ($opt_help)    { help();    exit 0; }
 if ($opt_version) { version(); exit 0; }
 
 my ($lwp_broken, $yaml_broken);
@@ -114,94 +116,96 @@ sub have_lwp() {
 
     if ($@) {
         if ($@ =~ m%^Can\'t locate LWP%) {
-            $lwp_broken="the libwww-perl package is not installed";
+            $lwp_broken = "the libwww-perl package is not installed";
         } else {
-            $lwp_broken="couldn't load LWP::UserAgent: $@";
+            $lwp_broken = "couldn't load LWP::UserAgent: $@";
         }
+    } else {
+        $lwp_broken = '';
     }
-    else { $lwp_broken=''; }
     return $lwp_broken ? 0 : 1;
 }
 
 sub have_yaml() {
     return ($yaml_broken ? 0 : 1) if defined $yaml_broken;
-    eval {
-        require YAML::Syck;
-    };
+    eval { require YAML::Syck; };
 
     if ($@) {
         if ($@ =~ m%^Can\'t locate YAML%) {
-            $yaml_broken="the libyaml-syck-perl package is not installed";
+            $yaml_broken = "the libyaml-syck-perl package is not installed";
         } else {
-            $yaml_broken="couldn't load YAML::Syck: $@";
+            $yaml_broken = "couldn't load YAML::Syck: $@";
         }
+    } else {
+        $yaml_broken = '';
     }
-    else { $yaml_broken=''; }
     return $yaml_broken ? 0 : 1;
 }
 
 sub init_agent {
-  $ua = new LWP::UserAgent;  # we create a global UserAgent object
-  $ua->agent("LWP::UserAgent/Devscripts");
-  $ua->env_proxy;
+    $ua = new LWP::UserAgent;    # we create a global UserAgent object
+    $ua->agent("LWP::UserAgent/Devscripts");
+    $ua->env_proxy;
 }
 
-if (@opt_filename or ! @ARGV) {
+if (@opt_filename or !@ARGV) {
     @opt_filename = ("debian/control") unless @opt_filename;
 
     foreach my $filename (@opt_filename) {
-	my $message;
+        my $message;
 
-	if (! @ARGV) {
-	    $message = "No package list supplied and unable";
-	} else {
-	    $message = "Unable";
-	}
+        if (!@ARGV) {
+            $message = "No package list supplied and unable";
+        } else {
+            $message = "Unable";
+        }
 
-	$message .= " to open $filename";
-	open FILE, $filename or die "$progname: $message: $!\n";
-	while (<FILE>) {
-	    if (/^(?:Source): (.*)/) {
-		push (@ARGV, $1);
-		last;
-	    }
-	}
+        $message .= " to open $filename";
+        open FILE, $filename or die "$progname: $message: $!\n";
+        while (<FILE>) {
+            if (/^(?:Source): (.*)/) {
+                push(@ARGV, $1);
+                last;
+            }
+        }
 
-	close FILE;
+        close FILE;
     }
 }
 
 die "$progname: Unable to retrieve transition information: $lwp_broken\n"
-    unless have_lwp;
+  unless have_lwp;
 
 init_agent() unless $ua;
-my $request = HTTP::Request->new('GET', 'https://ftp-master.debian.org/transitions.yaml');
+my $request = HTTP::Request->new('GET',
+    'https://ftp-master.debian.org/transitions.yaml');
 my $response = $ua->request($request);
 if (!$response->is_success) {
     die "$progname: Failed to retrieve transitions list: $!\n";
 }
 
 die "$progname: Unable to parse transition information: $yaml_broken\n"
-    unless have_yaml();
+  unless have_yaml();
 
-my $yaml = YAML::Syck::Load($response->content);
-my $packagelist = join("|", map {qq/\Q$_\E/} @ARGV);
-my $found = 0;
+my $yaml        = YAML::Syck::Load($response->content);
+my $packagelist = join("|", map { qq/\Q$_\E/ } @ARGV);
+my $found       = 0;
 
-foreach my $transition(keys(%{$yaml})) {
+foreach my $transition (keys(%{$yaml})) {
     my $data = $yaml->{$transition};
 
-    my @affected = grep /^($packagelist)$/, @{$data->{packages}};
+    my @affected = grep /^($packagelist)$/, @{ $data->{packages} };
 
     if (@affected) {
-	print "\n\n" if $found;
-	$found = 1;
-	print "The following packages are involved in the $transition transition:\n";
-	print map {qq(  - $_\n)} @affected;
+        print "\n\n" if $found;
+        $found = 1;
+        print
+"The following packages are involved in the $transition transition:\n";
+        print map { qq(  - $_\n) } @affected;
 
-	print "\nDetails of this transition:\n"
-	    . "  - Reason: $data->{reason}\n"
-	    . "  - Release team contact: $data->{rm}\n";
+        print "\nDetails of this transition:\n"
+          . "  - Reason: $data->{reason}\n"
+          . "  - Release team contact: $data->{rm}\n";
     }
 }
 
@@ -212,7 +216,7 @@ if (!$found) {
 exit $found;
 
 sub help {
-   print <<"EOF";
+    print <<"EOF";
 Usage: $progname [options] source_package_list
 Valid options are:
    --help, -h             Display this message

@@ -18,7 +18,7 @@
 
 use strict;
 use warnings;
-use 5.006_000;  # our() commands
+use 5.006_000;    # our() commands
 use Cwd;
 use File::Basename;
 use Getopt::Long;
@@ -37,18 +37,19 @@ our %opts;
 
 # A list of files that do not belong to a Debian package but are known
 # to never create a dependency
-our @known_files = ("/etc/ld.so.cache", "/etc/dpkg/shlibs.default",
-		    "/etc/dpkg/dpkg.cfg", "/etc/devscripts.conf");
+our @known_files = (
+    "/etc/ld.so.cache",   "/etc/dpkg/shlibs.default",
+    "/etc/dpkg/dpkg.cfg", "/etc/devscripts.conf"
+);
 
 # This will be given information about features later on
 our (%feature, %default_feature);
 
-my $progname=basename($0);
+my $progname = basename($0);
 my $modified_conf_msg;
 
-sub usage ()
-{
-    my @ed=("disabled","enabled");
+sub usage () {
+    my @ed = ("disabled", "enabled");
     print <<"EOF";
 Usage:
   $progname [options] <command>
@@ -105,9 +106,7 @@ $modified_conf_msg
 EOF
 }
 
-
-sub version ()
-{
+sub version () {
     print <<'EOF';
 This is $progname, from the Debian devscripts package, version ###VERSION###
 Copyright Bill Allombert <ballombe@debian.org> 2001.
@@ -118,7 +117,6 @@ GNU General Public License, version 2 or later.
 EOF
 }
 
-
 # Main program
 
 # Features:
@@ -126,11 +124,13 @@ EOF
 # Since thay may be considered as "kludges" or worse "bugs"
 # by some, they can be deactivated
 # 0 disabled by default, 1 enabled by default.
-%feature=(
-	  "warn-local"=>1, "discard-check-version"=>1,
-	  "trace-local"=>0, "catch-alternatives"=>1,
-          "discard-sgml-catalogs"=>1,
-	  );
+%feature = (
+    "warn-local"            => 1,
+    "discard-check-version" => 1,
+    "trace-local"           => 0,
+    "catch-alternatives"    => 1,
+    "discard-sgml-catalogs" => 1,
+);
 %default_feature = %feature;
 
 # First process configuration file options, then check for command-line
@@ -141,61 +141,61 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
-		       'DPKG_DEPCHECK_OPTIONS' => '',
-		       );
+    my %config_vars = ('DPKG_DEPCHECK_OPTIONS' => '',);
     my %config_default = %config_vars;
 
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
+        $shell_cmd .= qq[$var="$config_vars{$var}";\n];
     }
-    $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+    $shell_cmd .= 'for file in ' . join(" ", @config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
     # Read back values
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
-    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+    @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
 
     foreach my $var (sort keys %config_vars) {
-	if ($config_vars{$var} ne $config_default{$var}) {
-	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
-	}
+        if ($config_vars{$var} ne $config_default{$var}) {
+            $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+        }
     }
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
     if ($config_vars{'DPKG_DEPCHECK_OPTIONS'} ne '') {
-	unshift @ARGV, split(' ', $config_vars{'DPKG_DEPCHECK_OPTIONS'});
+        unshift @ARGV, split(' ', $config_vars{'DPKG_DEPCHECK_OPTIONS'});
     }
 }
 
 # Default option:
-$opts{"pkgs"} = 'all';
+$opts{"pkgs"}    = 'all';
 $opts{"allpkgs"} = 0;
 
-Getopt::Long::Configure('bundling','require_order');
-GetOptions("h|help" => sub { usage(); exit; },
-           "v|version" => sub { version(); exit; },
-           "a|all" => sub { $opts{"allpkgs"}=1; },
-           "b|build-depends" => sub { $opts{"pkgs"}='build'; },
-           "d|ignore-dev-deps" => sub { $opts{"pkgs"}='dev'; },
-           "m|min-deps" => sub { $opts{"pkgs"}='min'; },
-           "C|C-locale" => \$opts{"C"},
-           "no-C-locale|noC-locale" => sub { $opts{"C"}=0; },
-           "l|list-files" => \$opts{"l"},
-           "no-list-files|nolist-files" => sub { $opts{"l"}=0; },
-           "o|output=s" => \$opts{"o"},
-           "O|strace-output=s" => \$opts{"strace-output"},
-           "I|strace-input=s" => \$opts{"strace-input"},
-           "f|features=s" => \&process_features,
-           "no-conf" => \$opts{"noconf"},
-           "noconf" => \$opts{"noconf"},
-           ) or do { usage; exit 1; };
+Getopt::Long::Configure('bundling', 'require_order');
+GetOptions(
+    "h|help"    => sub { usage();   exit; },
+    "v|version" => sub { version(); exit; },
+    "a|all"                      => sub { $opts{"allpkgs"} = 1; },
+    "b|build-depends"            => sub { $opts{"pkgs"}    = 'build'; },
+    "d|ignore-dev-deps"          => sub { $opts{"pkgs"}    = 'dev'; },
+    "m|min-deps"                 => sub { $opts{"pkgs"}    = 'min'; },
+    "C|C-locale"                 => \$opts{"C"},
+    "no-C-locale|noC-locale"     => sub { $opts{"C"}       = 0; },
+    "l|list-files"               => \$opts{"l"},
+    "no-list-files|nolist-files" => sub { $opts{"l"}       = 0; },
+    "o|output=s"                 => \$opts{"o"},
+    "O|strace-output=s"          => \$opts{"strace-output"},
+    "I|strace-input=s"           => \$opts{"strace-input"},
+    "f|features=s"               => \&process_features,
+    "no-conf"                    => \$opts{"noconf"},
+    "noconf"                     => \$opts{"noconf"},
+) or do { usage; exit 1; };
 
 if ($opts{"noconf"}) {
-    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+    die
+"$progname: --no-conf is only acceptable as the first command-line option!\n";
 }
 
 if ($opts{"pkgs"} eq 'all') {
@@ -204,21 +204,24 @@ if ($opts{"pkgs"} eq 'all') {
     # We don't initialise the packages database before doing this check,
     # as that takes quite some time
     unless (system('dpkg -L build-essential >/dev/null 2>&1') >> 8 == 0) {
-	die "You must have the build-essential package installed or use the --all option\n";
+        die
+"You must have the build-essential package installed or use the --all option\n";
     }
 }
 
-
-@ARGV > 0 or $opts{"strace-input"} or
-    die "You need to specify a command!  Run $progname --help for more info\n";
+@ARGV > 0
+  or $opts{"strace-input"}
+  or
+  die "You need to specify a command!  Run $progname --help for more info\n";
 
 # Run the command and trace it to see what's going on
 my @usedfiles = getusedfiles(@ARGV);
 
 if ($opts{"o"}) {
     $opts{"o"} =~ s%^(\s)%./$1%;
-    open STDOUT,"> $opts{'o'}" or
-	warn "Cannot open $opts{'o'} for writing: $!\nTrying to use stdout instead\n";
+    open STDOUT, "> $opts{'o'}"
+      or warn
+      "Cannot open $opts{'o'} for writing: $!\nTrying to use stdout instead\n";
 } else {
     # Visual space
     print "\n\n";
@@ -242,42 +245,42 @@ my $packagedeps;
 my @used_ess_files;
 
 # Exclude essential and build-essential packages?
-if ($opts{"pkgs"} ne 'all')
-{
-    $packagedeps = new Devscripts::PackageDeps ('/var/lib/dpkg/status');
+if ($opts{"pkgs"} ne 'all') {
+    $packagedeps = new Devscripts::PackageDeps('/var/lib/dpkg/status');
     my @essential = PackagesMatch('^Essential: yes$');
-    my @essential_packages =
-	$packagedeps->full_dependencies('build-essential', @essential);
+    my @essential_packages
+      = $packagedeps->full_dependencies('build-essential', @essential);
     my @essential_files = PackagesToFiles(@essential_packages);
-    @used_ess_files = SetInter(\@usedfiles,\@essential_files);
-    @usedfiles = SetMinus(\@usedfiles,\@used_ess_files);
+    @used_ess_files = SetInter(\@usedfiles, \@essential_files);
+    @usedfiles = SetMinus(\@usedfiles, \@used_ess_files);
 }
 
 # Now let's find out which packages are used...
 my @ess_packages = FilesToPackages(@used_ess_files);
-my @packages = FilesToPackages(@usedfiles);
-my %dep_packages = ();  # packages which are depended upon by others
+my @packages     = FilesToPackages(@usedfiles);
+my %dep_packages = ();    # packages which are depended upon by others
 
 # ... and remove their files from the filelist
 if ($opts{"l"}) {
     # Have to do it slowly :-(
     if ($opts{"allpkgs"}) {
-	print "Files used in each of the needed build-essential or essential packages:\n";
-	foreach my $pkg (sort @ess_packages) {
-	    my @pkgfiles = PackagesToFiles($pkg);
-	    print "Files used in (build-)essential package $pkg:\n  ",
-	    join("\n  ", SetInter(\@used_ess_files, \@pkgfiles)), "\n";
-	}
-	print "\n";
+        print
+"Files used in each of the needed build-essential or essential packages:\n";
+        foreach my $pkg (sort @ess_packages) {
+            my @pkgfiles = PackagesToFiles($pkg);
+            print "Files used in (build-)essential package $pkg:\n  ",
+              join("\n  ", SetInter(\@used_ess_files, \@pkgfiles)), "\n";
+        }
+        print "\n";
     }
     print "Files used in each of the needed packages:\n";
     foreach my $pkg (sort @packages) {
-	my @pkgfiles = PackagesToFiles($pkg);
-	print "Files used in package $pkg:\n  ",
-	    join("\n  ", SetInter(\@usedfiles, \@pkgfiles)), "\n";
-	# We take care to note any files used which
-	# do not appear in any package
-	@usedfiles = SetMinus(\@usedfiles, \@pkgfiles);
+        my @pkgfiles = PackagesToFiles($pkg);
+        print "Files used in package $pkg:\n  ",
+          join("\n  ", SetInter(\@usedfiles, \@pkgfiles)), "\n";
+        # We take care to note any files used which
+        # do not appear in any package
+        @usedfiles = SetMinus(\@usedfiles, \@pkgfiles);
     }
     print "\n";
 } else {
@@ -293,30 +296,29 @@ if ($opts{"pkgs"} eq 'dev') {
     @pkgs{@packages} = (1) x @packages;
 
     foreach my $pkg (@packages) {
-	next unless $pkg =~ /-dev$/;
-	my @deps = $packagedeps->dependencies($pkg);
-	foreach my $dep (@deps) {
-	    $dep = $$dep[0] if ref $dep;
-	    if (exists $pkgs{$dep}) {
-		$dep_packages{$dep} = $pkg;
-		delete $pkgs{$dep};
-	    }
-	}
+        next unless $pkg =~ /-dev$/;
+        my @deps = $packagedeps->dependencies($pkg);
+        foreach my $dep (@deps) {
+            $dep = $$dep[0] if ref $dep;
+            if (exists $pkgs{$dep}) {
+                $dep_packages{$dep} = $pkg;
+                delete $pkgs{$dep};
+            }
+        }
     }
 
     @packages = keys %pkgs;
-}
-elsif ($opts{"pkgs"} eq 'min') {
+} elsif ($opts{"pkgs"} eq 'min') {
     # Do a mindep job on the package list
-    my ($packages_ref,$dep_packages_ref) =
-	$packagedeps->min_dependencies(@packages);
-    @packages = @$packages_ref;
+    my ($packages_ref, $dep_packages_ref)
+      = $packagedeps->min_dependencies(@packages);
+    @packages     = @$packages_ref;
     %dep_packages = %$dep_packages_ref;
 }
 
 print "Summary: $number_files_used files considered.\n" if $opts{"l"};
 # Ignore unrecognised /var/... files
-@usedfiles = grep ! /^\/var\//, @usedfiles;
+@usedfiles = grep !/^\/var\//, @usedfiles;
 if (@usedfiles) {
     warn "The following files did not appear to belong to any package:\n";
     warn join("\n", @usedfiles) . "\n";
@@ -327,80 +329,82 @@ print join("\n  ", @packages), "\n";
 
 if ($opts{"allpkgs"}) {
     if (@ess_packages) {
-	print "\n(Build-)Essential packages used:\n  ";
-	print join("\n  ", @ess_packages), "\n";
+        print "\n(Build-)Essential packages used:\n  ";
+        print join("\n  ", @ess_packages), "\n";
     } else {
-	print "\nNo (Build-)Essential packages used\n";
+        print "\nNo (Build-)Essential packages used\n";
     }
 
     if (scalar keys %dep_packages) {
-	print "\nOther packages used with depending packages listed:\n";
-	foreach my $pkg (sort keys %dep_packages) {
-	    print "  $pkg  <=  $dep_packages{$pkg}\n";
-	}
+        print "\nOther packages used with depending packages listed:\n";
+        foreach my $pkg (sort keys %dep_packages) {
+            print "  $pkg  <=  $dep_packages{$pkg}\n";
+        }
     }
 }
 
 exit 0;
 
-
 ### Subroutines
 
 # This sub is handed two arguments: f or feature, and the setting
 
-sub process_features ($$)
-{
+sub process_features ($$) {
     foreach (split(',', $_[1])) {
-	my $state=1;
-	m/^-/ and $state=0;
-	s/^[-+]//;
-	if (exists $feature{$_}) {
-	    $feature{$_}=$state;
-	} else {
-	    die("Unknown feature $_\n");
-	}
+        my $state = 1;
+        m/^-/ and $state = 0;
+        s/^[-+]//;
+        if (exists $feature{$_}) {
+            $feature{$_} = $state;
+        } else {
+            die("Unknown feature $_\n");
+        }
     }
 }
-
 
 # Get used files.  This runs the requested command (given as parameters
 # to this sub) under strace and then parses the output, returning a list
 # of all absolute filenames successfully opened or execve'd.
 
-sub getusedfiles (@)
-{
+sub getusedfiles (@) {
     my $file;
     if ($opts{"strace-input"}) {
-	$file=$opts{"strace-input"};
-    }
-    else {
-	my $old_locale = $ENV{'LC_ALL'} || undef;
-	$file = $opts{"strace-output"} || `tempfile -p depcheck`;
-	chomp $file;
-	$file =~ s%^(\s)%./$1%;
-	my @strace_cmd=('strace', '-e', 'trace=open,openat,execve',  '-f',
-			'-q', '-o', $file, @_);
-	$ENV{'LC_ALL'}="C" if $opts{"C"};
-	system(@strace_cmd);
-	$? >> 8 == 0 or
-	    die "Running strace failed (command line:\n@strace_cmd\n";
-	if (defined $old_locale) { $ENV{'LC_ALL'} = $old_locale; }
-	else { delete $ENV{'LC_ALL'}; }
+        $file = $opts{"strace-input"};
+    } else {
+        my $old_locale = $ENV{'LC_ALL'} || undef;
+        $file = $opts{"strace-output"} || `tempfile -p depcheck`;
+        chomp $file;
+        $file =~ s%^(\s)%./$1%;
+        my @strace_cmd = (
+            'strace', '-e', 'trace=open,openat,execve', '-f',
+            '-q', '-o', $file, @_
+        );
+        $ENV{'LC_ALL'} = "C" if $opts{"C"};
+        system(@strace_cmd);
+        $? >> 8 == 0
+          or die "Running strace failed (command line:\n@strace_cmd\n";
+        if (defined $old_locale) { $ENV{'LC_ALL'} = $old_locale; }
+        else                     { delete $ENV{'LC_ALL'}; }
     }
 
-    my %openfiles=();
+    my %openfiles = ();
     open FILE, $file or die "Cannot open $file for reading: $!\n";
     while (<FILE>) {
-	# We only consider absolute filenames
-	m/^\d+\s+(\w+)\((?:[\w\d_]*, )?\"(\/.*?)\",.*\) = (-?\d+)/ or next;
-	my ($syscall, $filename, $status) = ($1, $2, $3);
-	if ($syscall eq 'open' || $syscall eq 'openat') { next unless $status >= 0; }
-	elsif ($syscall eq 'execve') { next unless $status == 0; }
-	else { next; }  # unrecognised syscall
-	next if $feature{"discard-check-version"} and
-	    m/execve\(\"\Q$filename\E\", \[\"[^\"]+\", "--version"\], /;
-	# So it's a real file
-	$openfiles{$filename}=1;
+        # We only consider absolute filenames
+        m/^\d+\s+(\w+)\((?:[\w\d_]*, )?\"(\/.*?)\",.*\) = (-?\d+)/ or next;
+        my ($syscall, $filename, $status) = ($1, $2, $3);
+        if ($syscall eq 'open' || $syscall eq 'openat') {
+            next unless $status >= 0;
+        } elsif ($syscall eq 'execve') {
+            next unless $status == 0;
+        } else {
+            next;
+        }    # unrecognised syscall
+        next
+          if $feature{"discard-check-version"}
+          and m/execve\(\"\Q$filename\E\", \[\"[^\"]+\", "--version"\], /;
+        # So it's a real file
+        $openfiles{$filename} = 1;
     }
 
     unlink $file unless $opts{"strace-input"} or $opts{"strace-output"};
@@ -408,61 +412,56 @@ sub getusedfiles (@)
     return keys %openfiles;
 }
 
-
 # Select those files which we are interested in, as determined by the
 # user-specified options
 
-sub filterfiles (@)
-{
-    my %files=();
-    my %local_files=();
-    my %alternatives=();
-    my $pwd=cwd();
+sub filterfiles (@) {
+    my %files        = ();
+    my %local_files  = ();
+    my %alternatives = ();
+    my $pwd          = cwd();
 
     foreach my $file (@_) {
-	next unless -f $file;
-	$file = Cwd::abs_path($file);
+        next unless -f $file;
+        $file = Cwd::abs_path($file);
 
-	my @links=();
-	my $prevlink='';
-	foreach (ListSymlinks($file, $pwd)) {
-	    if (m%^/(usr|var)/local(/|\z)%) {
-		$feature{"warn-local"} and $local_files{$_} = 1;
-		unless ($feature{"trace-local"}) {
-		    $prevlink = $_;
-		    next;
-		}
-	    }
-	    elsif ($feature{"discard-sgml-catalogs"} and
-		   m%^/usr/share/(sgml/.*\.cat|.*/catalog)%) {
-		next;
-	    }
-	    elsif ($feature{"catch-alternatives"} and m%^/etc/alternatives/%) {
-		$alternatives{"$prevlink --> " . readlink($_)} = 1
-		    if $prevlink;
-	    }
-	    $prevlink=$_;
-	    # If it's not in one of these dirs, we skip it
-	    next unless m%^/(bin|etc|lib|sbin|usr|var)%;
-	    push @links, $_;
-	}
+        my @links    = ();
+        my $prevlink = '';
+        foreach (ListSymlinks($file, $pwd)) {
+            if (m%^/(usr|var)/local(/|\z)%) {
+                $feature{"warn-local"} and $local_files{$_} = 1;
+                unless ($feature{"trace-local"}) {
+                    $prevlink = $_;
+                    next;
+                }
+            } elsif ($feature{"discard-sgml-catalogs"}
+                and m%^/usr/share/(sgml/.*\.cat|.*/catalog)%) {
+                next;
+            } elsif ($feature{"catch-alternatives"} and m%^/etc/alternatives/%)
+            {
+                $alternatives{ "$prevlink --> " . readlink($_) } = 1
+                  if $prevlink;
+            }
+            $prevlink = $_;
+            # If it's not in one of these dirs, we skip it
+            next unless m%^/(bin|etc|lib|sbin|usr|var)%;
+            push @links, $_;
+        }
 
-	@files{@links} = (1) x @links;
+        @files{@links} = (1) x @links;
     }
 
     if (keys %local_files) {
-	print "warning: files in /usr/local or /var/local used:\n",
-	    join("\n", sort keys %local_files), "\n";
+        print "warning: files in /usr/local or /var/local used:\n",
+          join("\n", sort keys %local_files), "\n";
     }
     if (keys %alternatives) {
-	print "warning: alternatives used:\n",
-	    join("\n", sort keys %alternatives), "\n";
+        print "warning: alternatives used:\n",
+          join("\n", sort keys %alternatives), "\n";
     }
 
     return keys %files;
 }
-
-
 
 # The purpose here is to find out all the symlinks crossed by a file access.
 # We work from the end of the filename (basename) back towards the root of
@@ -478,52 +477,48 @@ sub filterfiles (@)
 # output: if symlink found: (readlink-replaced file, prefix)
 #         if not: (file, '')
 
-sub NextSymlink ($)
-{
+sub NextSymlink ($) {
     my $file = shift;
 
     my $filestart = $file;
-    my $fileend = '';
+    my $fileend   = '';
 
     while ($filestart ne '/') {
-	if (-l $filestart) {
-	    my $link = readlink($filestart);
-	    my $parent = dirname $filestart;
-	    if ($link =~ m%^/%) { # absolute symlink
-		return $link . $fileend;
-	    }
-	    while ($link =~ s%^\./%%) { }
-	    # The following is not actually correct: if we have
-	    # /usr -> /moved/usr and /usr/mylib -> ../mylibdir, then
-	    # /usr/mylib should resolve to /moved/mylibdir, not /mylibdir
-	    # But if we try to take this into account, we would need to
-	    # use something like Cwd(), which would immediately resolve
-	    # /usr -> /moved/usr, losing us the opportunity of recognising
-	    # the filename we want.  This is a bug we'll probably have to
-	    # cope with.
-	    # One way of doing this correctly would be to have a function
-	    # resolvelink which would recursively resolve any initial ../ in
-	    # symlinks, but no more than that.  But I don't really want to
-	    # implement this unless it really proves to be necessary:
-	    # people shouldn't be having evil symlinks like that on their
-	    # system!!
-	    while ($link =~ s%^\.\./%%) { $parent = dirname $parent; }
-	    return $parent . '/' . $link . $fileend;
-	}
-	else {
-	    $fileend = '/' . basename($filestart) . $fileend;
-	    $filestart = dirname($filestart);
-	}
+        if (-l $filestart) {
+            my $link   = readlink($filestart);
+            my $parent = dirname $filestart;
+            if ($link =~ m%^/%) {    # absolute symlink
+                return $link . $fileend;
+            }
+            while ($link =~ s%^\./%%) { }
+            # The following is not actually correct: if we have
+            # /usr -> /moved/usr and /usr/mylib -> ../mylibdir, then
+            # /usr/mylib should resolve to /moved/mylibdir, not /mylibdir
+            # But if we try to take this into account, we would need to
+            # use something like Cwd(), which would immediately resolve
+            # /usr -> /moved/usr, losing us the opportunity of recognising
+            # the filename we want.  This is a bug we'll probably have to
+            # cope with.
+            # One way of doing this correctly would be to have a function
+            # resolvelink which would recursively resolve any initial ../ in
+            # symlinks, but no more than that.  But I don't really want to
+            # implement this unless it really proves to be necessary:
+            # people shouldn't be having evil symlinks like that on their
+            # system!!
+            while ($link =~ s%^\.\./%%) { $parent = dirname $parent; }
+            return $parent . '/' . $link . $fileend;
+        } else {
+            $fileend   = '/' . basename($filestart) . $fileend;
+            $filestart = dirname($filestart);
+        }
     }
     return undef;
 }
 
-
 # input: file, pwd
 # output: list of full filenames encountered en route
 
-sub ListSymlinks ($$)
-{
+sub ListSymlinks ($$) {
     my ($file, $path) = @_;
 
     if ($file !~ m%^/%) { $file = "$path/$file"; }
@@ -531,7 +526,7 @@ sub ListSymlinks ($$)
     my @fn = ($file);
 
     while ($file = NextSymlink($file)) {
-	push @fn, $file;
+        push @fn, $file;
     }
 
     return @fn;

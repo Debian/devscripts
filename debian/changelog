@@ -1,3 +1,193 @@
+devscripts (2.18.7) unstable; urgency=medium
+
+  [ Martyn Welch ]
+  * chdist:
+    + Make src2bin use the chosen dist config instead of the host's.  MR: !52
+
+  [ Xavier Guimard ]
+  * Perl scripts:
+    + Add common modules to parse configuration, command line and normalize
+      output.  MR: !51
+      - This moves libmoo-perl and libipc-run-perl dependency from "Recommends"
+        to "Depends".  MR: !51; MR: !74
+  * uscan:
+    + Fix bad package name in git HEAD mode.  Closes: #896136
+    + Modified to use common Perl modules.  MR: !51
+    + Download only the good ref in gitmode shallow.  Closes: #910709; MR: !57
+    + Fix documentation: -dd isn't usable, but --dd is.  MR: !58
+    + Embed mk-origtargz instead of launching it and parse stdout.  MR: !55
+    + Enclose the whole @ANY_VERSION@, @ARCHIVE_EXT@, @DEB_EXT@ and
+      @SIGNATURE_EXT into non-capturing groups (See #910910).  MR: !66
+    + Disable pgpmode=previous lines if nothing was downloaded.
+      Closes: #910910; MR: !69
+    + Use new value 'default' for compression when not chosen.  MR: !68
+    + Fix regression from 2.18.5 where the User-Agent string was not set to
+      the default value.  Closes: #911401; MR: !73
+    + In git mode, check the local git repository in the if there is an
+      upstream remote and use it when available.  Closes: #910777; MR: !72
+  * mk-origtargz:
+    + Rewritten using common Perl files.  MR: !55
+    + Don't override compression when set in command line when we are
+      implicitly repacking.  Closes: #894518; MR: !60
+    + Accept uncompressed tarballs as source files.  Closes: #838682; MR: !64
+    + Switch default compression from gzip to xz if source format is 2.0 or if
+      mk-origtargz isn't used in a debian source directory
+      Closes: #910803; MR: !61; MR: !63
+    + Refactor the whole configuration management code, and add a 'default'
+      compression to let mk-origtargz choose.  MR: !68
+  * French translation update.  MR: !59
+
+  [ Daniel Kahn Gillmor ]
+  * uscan:
+    + Fix typo in documentation, s/hush/hash.  Closes: #910759
+
+  [ Mattia Rizzolo ]
+  * mk-build-deps:
+    + Add patch by Joost van Baal-Ilić to allow building a package even if the
+      package doesn't have any build dependencies.  Closes: #910369
+  * who-uploads:
+    + Fix bad signal handling that could potentially lead to insecure use of
+      /tmp.  Thanks to Jakub Wilk for reporting.  Closes: #911720
+  * dd-list:
+    + Update documentation to match reality, as dd-list is now using
+      `apt-get indextargets` when available.  Closes: #911423
+  * README:
+    + Normalize by always appending a full stop at the end of the sentence.
+    + Document the role of "Suggests"ed packages.
+    + Introduce the concept of "core" scripts, for which base dependencies are
+      expected to be marked as hard "Depends".  For now the following scripts
+      are considered core: dcmd dd-list debchange debcheckout debclean debdiff
+      debsign debuild uscan.
+  * debian/control:
+    + Per the above definition of "core scripts", promote the following
+      packages to Depends: fakeroot, file, gnupg|gnupg2, gpgv|gpgv2,
+      libfile-which-perl, libwww-perl, patchutils, wdiff.
+    + Generate the package description from the README.  MR: !77
+  * tests:
+    + Skip test_debrepro on hurd-i386, at it requires sem_open().
+
+  [ Eli Uriegas ]
+  * mk-build-deps:
+    + Fix use of an uninitialized variable in build_equiv().  MR: !56
+
+ -- Mattia Rizzolo <mattia@debian.org>  Thu, 25 Oct 2018 13:11:38 +0200
+
+devscripts (2.18.6) unstable; urgency=medium
+
+  [ Unit 193 ]
+  * uscan:
+    + Tweak the bash completion so directory names can be tab completed.
+
+  [ Simon McVittie ]
+  * sadt:
+    + Ignore the new test restriction "superficial".  MR: !50
+
+  [ Mattia Rizzolo ]
+  * tests:
+    + Fix autopkgtest that was failing due to missing test dependency
+      on fakeroot.  Closes: #910262
+
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 05 Oct 2018 01:00:11 +0200
+
+devscripts (2.18.5) unstable; urgency=medium
+
+  [ Antoine Beaupre ]
+  * debchange:
+    + Bump LTS version number from 7 to 8.  Closes: #908062
+
+  [ Mattia Rizzolo ]
+  * mk-build-deps:
+    + Install the README used for the equivs package into a directory
+      named /templates/ to avoid the new lintian tag
+      package-contains-documentation-outside-usr-share-doc.
+  * wrap-and-sort:
+    + Update man-page to list the --dry-run option.  Closes: #908036
+  * tests:
+    + pylint:
+      - Re-enable the test again.
+      - Appease the new pylint rule useless-object-inheritance.
+    + test_package_lifecycle:
+      - Adapt the expected output for dpkg-source 1.19.1.  Closes: #909719
+    + Use `set -u` in all the test files.
+    + Move some the temporary directories into SHUNIT_TMPDIR, to have more
+      assurances that they are cleaned up at the end.
+    + In autopkgtest, avoid using the deprecated needs-recomends option, and
+      instead explicitly list all the required packages.
+
+  [ Benjamin Drung ]
+  * test:
+    + Use sys.executable instead of looking at /proc/self/cmdline.
+    + Avoid creating .pylint.d directory.
+    + Ignore some error-handling code when computing the test coverage.
+  * debsign:
+    + Fix incomplete .buildinfo entry when an at ('@') sign is in the path.
+
+  [ Chris Lamb ]
+  * PEP8-ify a number of Python scripts.  MR: !27
+
+  [ Xavier Guimard ]
+  * Rewrite debian/copyright using copyright-format 1.0.  MR: !41
+  * Add .perltidyrc to format Perl files and reformat all Perl files.  MR: !47
+    - Add a new test test_perltidy to verify that scripts are well formatted.
+    - This adds a new build dependency on perltidy.
+  * tests:  MR: !48
+    - Add faketime to the dependencies in d/tests/control.
+    - Fix test_mk-origtargz random failure.
+  * uscan:
+    + Rewrite using object-oriented code.  MR: !28
+      - This adds a new dependency on libmoo-perl for uscan (Recommended).
+    + Optimize code:  MR: !30
+      - Set FTP passive mode in a trigger.
+      - Avoid system() calls.
+        + This adds a new dependency on libipc-run-perl and libfile-which-perl
+          for uscan (Recommended).
+      - Avoid code duplication.
+    + Behaviour changes:
+      - Warn when find old pgp keyring.
+    + Add myself to authors list.
+    + Clean temporary git repo.  Closes: #909418; MR: !32
+      - Keep it only if --debug is set (previously kept if --verbose).  MR: !33
+    + Add @DEB_EXT@ macro containing [\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$.
+      - add also a "auto" value for dversionmangle which is replaced by
+        dversionmangle=s/@DEB_EXT@//.
+      - modify test_uscan to test these values.
+      - Closes: #908528; MR: !35
+    + Add "pgpmode=gittag" option to verify git tag signature if any.
+      Closes: #827065; MR: !38
+    + Document the default values of the 'version' and 'script' options.
+      Closes: #907289; MR: !40
+    + Add tests for git mode.
+      - This adds a new build dependency on git.  MR: !42
+      - De-duplicate test code.
+    + Add a new "searchmode" line option to parse raw/plain content instead of
+      just the href= attributes of <a> html tags.  Can be used to e.g. easily
+      check .json files.  Closes: #897382; MR: !39
+
+  [ Sean Whitton ]
+  * git-deborig:
+    + Don't fail when .git/info does not exist.  Closes: #909339; MR: !29
+
+  [ James McCoy ]
+  * Audit usage of Dpkg::Version in all scripts.  MR: !44
+    + mk-build-deps: Check whether version object exists before trying to use
+      it.  This silences Dpkg::Version's new warning about usage in boolean
+      context.
+    + Devscripts::Uscan::WatchLine: Add missing Dpkg::Version import.
+    + chdist: Explicitly import version_compare() from Dpkg::Version.
+    + mk-origtargz: Use Dpkg::Version->is_native() instead of reading
+      internals.
+    + git-deborig: Check sanity of version object before using it.
+
+  [ Dima Kogan ]
+  * debcheckout:
+    + Fix incorrect interpretation of system() error codes.  Closes: #895307
+
+  [ Cyril Brulebois ]
+  * debdiff:
+    + Make bash completion autocomplete on *.udeb files.  Closes: #887358
+
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 03 Oct 2018 16:43:52 +0200
+
 devscripts (2.18.4~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
@@ -21,7 +211,7 @@ devscripts (2.18.4) unstable; urgency=medium
   * test/test_uscan_ftp:
     + Skip test on hurd-i386, hurd is missing a required feature.  MR: !23
   * test/pylint:
-    + Temporarily disable the test, as pylist is currently uninstallable,
+    + Temporarily disable the test, as pylint is currently uninstallable,
       see #902631.
   * debian/control:
     + Comment-out build-dependency on pylint3.

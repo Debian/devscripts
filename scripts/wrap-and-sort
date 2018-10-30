@@ -106,7 +106,8 @@ class WrapAndSortControl(Control):
         packages = [x.strip() for x in control[entry].split(",") if x.strip()]
 
         # Sanitize alternative packages. E.g. "a|b  |c" -> "a | b | c"
-        packages = [" | ".join([x.strip() for x in p.split("|")]) for p in packages]
+        packages = [" | ".join([x.strip() for x in p.split("|")])
+                    for p in packages]
 
         if sort:
             # Remove duplicate entries
@@ -138,7 +139,7 @@ class WrapAndSortControl(Control):
         return False
 
 
-class Install(object):
+class Install:
     def __init__(self, filename, args):
         self.content = None
         self.filename = None
@@ -246,6 +247,7 @@ def main():
     epilog = "See %s(1) for more info." % (script_name)
     parser = argparse.ArgumentParser(epilog=epilog)
 
+    # Remember to keep doc/wrap-and-sort.1 updated!
     parser.add_argument("-a", "--wrap-always", action="store_true", default=False,
                         help="wrap lists even if they do not exceed the line length limit")
     parser.add_argument("-s", "--short-indent", dest="short_indent",
@@ -262,7 +264,7 @@ def main():
                              "configuration files are applied to the first "
                              "package.",
                         dest="keep_first", action="store_true", default=False)
-    parser.add_argument("-n", "--no-cleanup", help="don't cleanup whitespaces",
+    parser.add_argument("-n", "--no-cleanup", help="do not remove trailing whitespaces",
                         dest="cleanup", action="store_false", default=True)
     parser.add_argument("-t", "--trailing-comma", help="add trailing comma",
                         dest="trailing_comma", action="store_true",

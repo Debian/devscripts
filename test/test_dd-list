@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+set -u
+
 WORKDIR="$(readlink -f "${0%/*}")"
 
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     COMMAND=dd-list
     shift
 else

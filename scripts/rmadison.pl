@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim:sw=4:sta:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 # Copyright (C) 2006-2013 Christoph Berg <myon@debian.org>
 #           (C) 2010 Uli Martens <uli@youam.net>
@@ -28,11 +28,13 @@ BEGIN {
     # Load the URI::Escape module safely
     eval { require URI::Escape; };
     if ($@) {
-       my $progname = basename $0;
-       if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
-           die "$progname: you must have the liburi-perl package installed\nto use this script\n";
-       }
-       die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
+        my $progname = basename $0;
+        if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
+            die
+"$progname: you must have the liburi-perl package installed\nto use this script\n";
+        }
+        die
+"$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
     }
     import URI::Escape;
 }
@@ -50,10 +52,10 @@ EOT
 
 my %url_map = (
     'debian' => "https://api.ftp-master.debian.org/madison",
-    'new' => "https://api.ftp-master.debian.org/madison?s=new",
-    'qa' => "https://qa.debian.org/madison.php",
+    'new'    => "https://api.ftp-master.debian.org/madison?s=new",
+    'qa'     => "https://qa.debian.org/madison.php",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
-    'udd' => 'https://qa.debian.org/cgi-bin/madison.cgi',
+    'udd'    => 'https://qa.debian.org/cgi-bin/madison.cgi',
 );
 my $default_url = 'debian';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
@@ -63,8 +65,10 @@ if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
 sub usage($$) {
     my ($fd, $exit) = @_;
     my @urls = split /,/, $default_url;
-    my $url = (@urls > 1) ? join(', and ', join(', ', @urls[0..$#urls-1]), $urls[-1])
-                          : $urls[0];
+    my $url
+      = (@urls > 1)
+      ? join(', and ', join(', ', @urls[0 .. $#urls - 1]), $urls[-1])
+      : $urls[0];
 
     print $fd <<EOT;
 Usage: rmadison [OPTION] PACKAGE[...]
@@ -90,7 +94,7 @@ ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
 Aliases for URLs:
 EOT
     foreach my $alias (sort keys %url_map) {
-	print $fd "\t$alias\t$url_map{$alias}\n";
+        print $fd "\t$alias\t$url_map{$alias}\n";
     }
     exit $exit;
 }
@@ -120,47 +124,49 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     @config_vars = split /\n/, $shell_out, -1;
 
     foreach my $confvar (@config_vars) {
-	if ($confvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
-	    $url_map{lc($1)}=$2;
-	} elsif ($confvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
-	    $default_url=$1;
-	} elsif ($confvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
-	    $default_arch=$1;
-	} elsif ($confvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
-	    $ssl_ca_file=$1;
-	} elsif ($confvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
-	    $ssl_ca_path=$1;
-	}
+        if ($confvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
+            $url_map{ lc($1) } = $2;
+        } elsif ($confvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
+            $default_url = $1;
+        } elsif ($confvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
+            $default_arch = $1;
+        } elsif ($confvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
+            $ssl_ca_file = $1;
+        } elsif ($confvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
+            $ssl_ca_path = $1;
+        }
     }
 }
 
-unless (GetOptions(
-    '-a=s'                =>  \$params->{'architecture'},
-    '--architecture=s'    =>  \$params->{'architecture'},
-    '-b=s'                =>  \$params->{'binary-type'},
-    '--binary-type=s'     =>  \$params->{'binary-type'},
-    '-c=s'                =>  \$params->{'component'},
-    '--component=s'       =>  \$params->{'component'},
-    '-g'                  =>  \$params->{'greaterorequal'},
-    '--greaterorequal'    =>  \$params->{'greaterorequal'},
-    '-G'                  =>  \$params->{'greaterthan'},
-    '--greaterthan'       =>  \$params->{'greaterthan'},
-    '-h'                  =>  \$params->{'help'},
-    '--help'              =>  \$params->{'help'},
-    '-r'                  =>  \$params->{'regex'},
-    '--regex'             =>  \$params->{'regex'},
-    '-s=s'                =>  \$params->{'suite'},
-    '--suite=s'           =>  \$params->{'suite'},
-    '-S'                  =>  \$params->{'source-and-binary'},
-    '--source-and-binary' =>  \$params->{'source-and-binary'},
-    '-t'                  =>  \$params->{'time'},
-    '--time'              =>  \$params->{'time'},
-    '-u=s'                =>  \$params->{'url'},
-    '--url=s'             =>  \$params->{'url'},
-    '--version'           =>  \$params->{'version'},
-)) {
+unless (
+    GetOptions(
+        '-a=s'                => \$params->{'architecture'},
+        '--architecture=s'    => \$params->{'architecture'},
+        '-b=s'                => \$params->{'binary-type'},
+        '--binary-type=s'     => \$params->{'binary-type'},
+        '-c=s'                => \$params->{'component'},
+        '--component=s'       => \$params->{'component'},
+        '-g'                  => \$params->{'greaterorequal'},
+        '--greaterorequal'    => \$params->{'greaterorequal'},
+        '-G'                  => \$params->{'greaterthan'},
+        '--greaterthan'       => \$params->{'greaterthan'},
+        '-h'                  => \$params->{'help'},
+        '--help'              => \$params->{'help'},
+        '-r'                  => \$params->{'regex'},
+        '--regex'             => \$params->{'regex'},
+        '-s=s'                => \$params->{'suite'},
+        '--suite=s'           => \$params->{'suite'},
+        '-S'                  => \$params->{'source-and-binary'},
+        '--source-and-binary' => \$params->{'source-and-binary'},
+        '-t'                  => \$params->{'time'},
+        '--time'              => \$params->{'time'},
+        '-u=s'                => \$params->{'url'},
+        '--url=s'             => \$params->{'url'},
+        '--version'           => \$params->{'version'},
+    )
+) {
     usage(\*STDERR, 1);
-};
+}
 
 if ($params->{help}) {
     usage(\*STDOUT, 0);
@@ -175,25 +181,26 @@ unless (@ARGV) {
     exit 1;
 }
 if ($params->{greaterorequal} and $params->{greaterthan}) {
-    print STDERR "E: -g/--greaterorequal and -G/--greaterthan are mutually exclusive.\n";
+    print STDERR
+      "E: -g/--greaterorequal and -G/--greaterthan are mutually exclusive.\n";
     exit 1;
 }
 
 my @args;
 
-if ( $params->{'architecture'} ) {
+if ($params->{'architecture'}) {
     push @args, "a=$params->{'architecture'}";
-} elsif ( $default_arch ) {
+} elsif ($default_arch) {
     push @args, "a=$default_arch";
 }
 push @args, "b=$params->{'binary-type'}" if $params->{'binary-type'};
-push @args, "c=$params->{'component'}" if $params->{'component'};
-push @args, "g" if $params->{'greaterorequal'};
-push @args, "G" if $params->{'greaterthan'};
-push @args, "r" if $params->{'regex'};
-push @args, "s=$params->{'suite'}" if $params->{'suite'};
-push @args, "S" if $params->{'source-and-binary'};
-push @args, "t" if $params->{'time'};
+push @args, "c=$params->{'component'}"   if $params->{'component'};
+push @args, "g"                          if $params->{'greaterorequal'};
+push @args, "G"                          if $params->{'greaterthan'};
+push @args, "r"                          if $params->{'regex'};
+push @args, "s=$params->{'suite'}"       if $params->{'suite'};
+push @args, "S"                          if $params->{'source-and-binary'};
+push @args, "t"                          if $params->{'time'};
 
 my $url = $params->{'url'} ? $params->{'url'} : $default_url;
 my @url = split /,/, $url;
@@ -209,7 +216,7 @@ foreach my $url (@url) {
     $url = $url_map{$url} if $url_map{$url};
     my @cmd;
     my @ssl_errors;
-    if ( -x "/usr/bin/curl" ) {
+    if (-x "/usr/bin/curl") {
         @cmd = qw/curl -f -s -S -L/;
         push @cmd, "--cacert", $ssl_ca_file if $ssl_ca_file;
         push @cmd, "--capath", $ssl_ca_path if $ssl_ca_path;
@@ -220,11 +227,18 @@ foreach my $url (@url) {
         push @cmd, "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
         push @ssl_errors, 5;
     }
-    system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
+    system @cmd,
+        $url
+      . (($url =~ m/\?/) ? '&' : '?')
+      . "package="
+      . join("+", map { uri_escape($_) } @ARGV)
+      . "&text=on&"
+      . join("&", @args);
     my $rc = $? >> 8;
     if ($rc != 0) {
         if (grep { $_ == $rc } @ssl_errors) {
-            die "Problem with SSL CACERT check:\n Have you installed the ca-certificates package?\n";
+            die
+"Problem with SSL CACERT check:\n Have you installed the ca-certificates package?\n";
         }
         $status = 1;
     }

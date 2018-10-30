@@ -36,60 +36,47 @@ the same terms as Perl itself.
 
 =cut
 
-
-
 #
 #  Good practise.
 #
 use strict;
 use warnings;
 
-
 #
 #  A module for fetching webpages.
 #
 use LWP::UserAgent;
-
-
 
 #
 # A module for finding the user home dir.
 #
 use File::HomeDir;
 
-
 #
 #  Get the name from the command line.
 #
 my $name = shift;
-if ( !defined($name) )
-{
+if (!defined($name)) {
     print <<EOF;
 Usage: $0 name
 EOF
     exit;
 }
 
-
-
 #
 #  Get the patterns we're going to use for testing.
 #
 my @lines = loadPatterns();
-
 
 #
 #  Assuming we have patterns use them.
 #
 testSites(@lines);
 
-
 #
 #  NOT REACHED.
 #
 exit;
-
-
 
 #
 #  Load the list of sites, and patterns, to test.
@@ -99,26 +86,20 @@ exit;
 # their own patterns if they prefer.
 #
 
-sub loadPatterns
-{
+sub loadPatterns {
     my $file  = File::HomeDir->my_home . "/.namecheckrc";
     my @lines = ();
 
-    if ( -e $file )
-    {
-        open( FILE, "<", $file )
+    if (-e $file) {
+        open(FILE, "<", $file)
           or die "Failed to open $file - $!";
-        while (<FILE>)
-        {
-            push( @lines, $_ );
+        while (<FILE>) {
+            push(@lines, $_);
         }
         close(FILE);
-    }
-    else
-    {
-        while (<DATA>)
-        {
-            push( @lines, $_ );
+    } else {
+        while (<DATA>) {
+            push(@lines, $_);
         }
     }
 
@@ -130,8 +111,7 @@ sub loadPatterns
 # own script, or the users configuration file.
 #
 
-sub testSites
-{
+sub testSites {
     my (@patterns) = (@_);
 
     #
@@ -145,21 +125,19 @@ sub testSites
     my $headers = HTTP::Headers->new();
     $headers->header('Accept' => '*/*');
 
-    foreach my $entry (@patterns)
-    {
+    foreach my $entry (@patterns) {
 
         #
         #  Skip blank lines, and comments.
         #
         chomp($entry);
-        next if ( ( !$entry ) || ( !length($entry) ) );
-        next if ( $entry =~ /^#/ );
-
+        next if ((!$entry) || (!length($entry)));
+        next if ($entry =~ /^#/);
 
         #
         #  Each line is an URL + a pattern, separated by a pipe.
         #
-        my ( $url, $pattern ) = split( /\|/, $entry );
+        my ($url, $pattern) = split(/\|/, $entry);
 
         #
         #  Strip leading/trailing spaces.
@@ -167,23 +145,20 @@ sub testSites
         $pattern =~ s/^\s+//;
         $pattern =~ s/\s+$//;
 
-
         #
         #  Interpolate the proposed project name in the string.
         #
-        $url =~ s/\%s/$name/g if ( $url =~ /\%s/ );
+        $url =~ s/\%s/$name/g if ($url =~ /\%s/);
 
         #
         #  Find the hostname we're downloading; just to show the user
         # something is happening.
         #
         my $urlname = $url;
-        if ( $urlname =~ /:\/\/([^\/]+)\// )
-        {
+        if ($urlname =~ /:\/\/([^\/]+)\//) {
             $urlname = $1;
         }
         print sprintf "Testing %20s", $urlname;
-
 
         #
         #  Get the URL
@@ -194,8 +169,7 @@ sub testSites
         #
         #  If success we look at the returned text.
         #
-        if ( $response->is_success() )
-        {
+        if ($response->is_success()) {
 
             #
             #  Get the page content - collapsing linefeeds.
@@ -206,31 +180,23 @@ sub testSites
             #
             #  Does the page have the pattern?
             #
-            if ( $c !~ /\Q$pattern\E/i )
-            {
+            if ($c !~ /\Q$pattern\E/i) {
                 print " - In use\n";
                 print "Aborting - name '$name' is currently used.\n";
                 exit 0;
-            }
-            else
-            {
+            } else {
                 print " - Available\n";
             }
-        }
-        else
-        {
+        } else {
 
             #
             #  Otherwise we'll assume that 404 means that the
             # project isn't taken.
             #
             my $c = $response->status_line();
-            if ( $c =~ /404/ )
-            {
+            if ($c =~ /404/) {
                 print " - Available\n";
-            }
-            else
-            {
+            } else {
 
                 #
                 #  Other errors we can't handle.
@@ -241,14 +207,12 @@ sub testSites
 
     }
 
-
     #
     #  If we got here the name is free.
     #
     print "\n\nThe name '$name' doesn't appear to be in use.\n";
     exit 1;
 }
-
 
 __DATA__
 

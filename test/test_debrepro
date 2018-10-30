@@ -15,7 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-if test "$1" = --installed; then
+set -u
+
+ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
+if [ "$ARCHITECTURE" = "hurd-i386" ]; then
+    # hurd-i386 lacks sem_open() which is required by something in here
+    echo "This test is not supported on $ARCHITECTURE, skipping"
+    exit 0
+fi
+
+if test "${1:-}" = --installed; then
     debrepro="debrepro"
     shift
 else

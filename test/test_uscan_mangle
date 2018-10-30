@@ -15,21 +15,13 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-test_dir=$(readlink -f "${0%/*}")
+set -u
 
-# Operation mode
-if test "$1" = --installed; then
-    COMMAND="uscan --no-conf"
-    shift
-else
-    top_srcdir=$(readlink -f "${0%/*}/..")
-    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
-    PATH="$top_srcdir/scripts:$PATH"
-    export PATH
-    PERL5LIB="$top_srcdir/lib"
-    export PERL5LIB
-    COMMAND="uscan --no-conf"
-fi
+TESTTYPE=Mangle
+. ./lib_test_uscan
+
+COMMAND="uscan --no-conf"
+
 # set safe defaults
 WEBSCRIPT=":"
 DEBUGECHO=":"
@@ -43,45 +35,13 @@ DEBUGBASH=":"
 #DEBUGLSLR="ls -la"
 #DEBUGBASH="bash -i"
 
-GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
-
-GPG=gpg
-if !command -v $GPG >/dev/null 2>&1; then
-    echo "$GPG missing"
-    GPG=gpg2
-    if ! command -v $GPG >/dev/null 2>&1; then
-	echo "$GPG missing"
-	exit 1
-    fi
-fi
-
-PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
-PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
-PRIVATE_KEYRING=$GPGHOME/secring.gpg
-PUBLIC_KEYRING=$GPGHOME/pubring.gpg
-
-
-oneTimeSetUp () {
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
-
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
-
-    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-	    --list-keys --verbose
-
-    export GNUPGHOME=$GPGHOME
-}
-
 # Initial Debian revision value is distribution dependent
 SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
     VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
     case "$VENDER" in
-	debian) SUFFIX="1" ;;
-	*) SUFFIX="0${VENDER}1" ;;
+        debian) SUFFIX="1" ;;
+        *) SUFFIX="0${VENDER}1" ;;
     esac
 fi
 
@@ -94,15 +54,15 @@ cleanup(){
 spawnHttpServer(){
     unset http_proxy
     (
-	USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
-	mkdir -p $TMPDIR/$REPOPATH
-	cd $TMPDIR/$REPOPATH
-	python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
-	echo $! > pid
-	while ! [ -s port ]; do
-	    :
-	done
-	unset USCAN_HTTP_SERVER
+        USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
+        mkdir -p $TMPDIR/$REPOPATH
+        cd $TMPDIR/$REPOPATH
+        python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
+        echo $! > pid
+        while ! [ -s port ]; do
+            :
+        done
+        unset USCAN_HTTP_SERVER
     )
 }
 
@@ -130,7 +90,7 @@ makeDebianDir() {
 
     cat <<END > debian/rules
 %:
-	dh $@
+        dh $@
 END
 chmod 755 debian/rules
 
@@ -143,28 +103,28 @@ $DEBNAME ($DEBVER) unstable; urgency=low
 END
     # debian/source/format
     case $DEBVER in
-	*-*) # non-native package
-	    echo "3.0 (quilt)" > debian/source/format
-	     ;;
-	*) # native package
-	    echo "3.0 (native)" > debian/source/format
-	     ;;
+        *-*) # non-native package
+            echo "3.0 (quilt)" > debian/source/format
+             ;;
+        *) # native package
+            echo "3.0 (native)" > debian/source/format
+             ;;
     esac
     # debian/copyright
     echo "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" \
-	> debian/copyright
-    if [ "$FILEEXCLUDE" = "1" ]; then
-	# exclude just for main
-	cat <<'END' >> debian/copyright
+        > debian/copyright
+    if [ "${FILEEXCLUDE:-0}" = "1" ]; then
+        # exclude just for main
+        cat <<'END' >> debian/copyright
 Files-Excluded: exclude-this
  */exclude-dir
  .*
  */js/jquery.js
  ;?echo?baz;?#
 END
-    elif [ "$FILEEXCLUDE" = "2" ]; then
-	# exclude for main(=foo) bar baz
-	cat <<'END' >> debian/copyright
+    elif [ "${FILEEXCLUDE:-0}" = "2" ]; then
+        # exclude for main(=foo) bar baz
+        cat <<'END' >> debian/copyright
 Files-Excluded: exclude-this
  */exclude-dir
  .*
@@ -181,9 +141,9 @@ Files-Excluded-baz: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
-    elif [ "$FILEEXCLUDE" = "3" ]; then
-	# exclude for foo bar baz
-	cat <<'END' >> debian/copyright
+    elif [ "${FILEEXCLUDE:-0}" = "3" ]; then
+        # exclude for foo bar baz
+        cat <<'END' >> debian/copyright
 Files-Excluded-foo: exclude-this
  */exclude-dir
  .*
@@ -204,13 +164,13 @@ END
     # debian/watch
     echo "version=$WATCHVER" > debian/watch
     echo "$WATCHLINE" | sed -e "s,@@@url@@@,http://localhost:${PORT}/,g" - \
-	>> debian/watch
+        >> debian/watch
     # debian/upstream/signing-key.asc
     mkdir -p debian/upstream
     if [ "$KEYMODE" = "ASC" ]; then
-	cp -f $test_dir/uscan/PUBLIC_KEY.asc debian/upstream/signing-key.asc
+        cp -f $test_dir/uscan/PUBLIC_KEY.asc debian/upstream/signing-key.asc
     else
-	cp -f "$GPGHOME/pubring.gpg" debian/upstream/signing-key.pgp
+        cp -f "$GPGHOME/pubring.gpg" debian/upstream/signing-key.pgp
     fi
 }
 
@@ -236,48 +196,48 @@ makeUpstreamTar() {
     mkdir -p $UPNAME-$UPVER/docs/html/js/
     touch $UPNAME-$UPVER/docs/html/js/jquery.js
     if [ "$TYPE" = "native" ]; then
-	cd $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
-	makeDebianDir $UPNAME $UPVER
-	cd $TMPDIR/$REPOPATH/$POOLPATH
+        cd $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
+        makeDebianDir $UPNAME $UPVER
+        cd $TMPDIR/$REPOPATH/$POOLPATH
     fi
     case $COMPRESSION in
-	gz|gzip)
-	    NEWTAR=$UPNAME-$UPVER.tar.gz
-	    tar -czf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	bz2|bzip2)
-	    NEWTAR=$UPNAME-$UPVER.tar.bz2
-	    tar --bzip2 -cf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	xz)
-	    NEWTAR= $UPNAME-$UPVER.tar.xz
-	    tar --xz -cf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	zip)
-	    NEWTAR=$UPNAME-$UPVER.zip
-	    zip -r $NEWTAR $UPNAME-$UPVER
-	    ;;
-	*)  echo "Wrong compression mode: $COMPRESSION"
-	    exit 1
-	    ;;
-	esac
-    case $SIGMODE in
-	ASC) # make $NEWTAR.asc
-	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-		--armor --detach-sign $NEWTAR
-	    ;;
-	BIN) #make $NEWTAR.sig
-	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-		--detach-sign $NEWTAR
-	    ;;
-	SELF) #make $NEWTAR.gpg
-	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-		--sign $NEWTAR
+        gz|gzip)
+            NEWTAR=$UPNAME-$UPVER.tar.gz
+            tar -czf $NEWTAR $UPNAME-$UPVER
+            ;;
+        bz2|bzip2)
+            NEWTAR=$UPNAME-$UPVER.tar.bz2
+            tar --bzip2 -cf $NEWTAR $UPNAME-$UPVER
+            ;;
+        xz)
+            NEWTAR= $UPNAME-$UPVER.tar.xz
+            tar --xz -cf $NEWTAR $UPNAME-$UPVER
+            ;;
+        zip)
+            NEWTAR=$UPNAME-$UPVER.zip
+            zip -r $NEWTAR $UPNAME-$UPVER
+            ;;
+        *)  echo "Wrong compression mode: $COMPRESSION"
+            exit 1
+            ;;
+        esac
+    case "${SIGMODE:-}" in  # undefined SIGMODE → no sig
+        ASC) # make $NEWTAR.asc
+            $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+                --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+                --armor --detach-sign $NEWTAR
+            ;;
+        BIN) #make $NEWTAR.sig
+            $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+                --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+                --detach-sign $NEWTAR
+            ;;
+        SELF) #make $NEWTAR.gpg
+            $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+                --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+                --sign $NEWTAR
     esac
-    
+
     cd $OLDDIR
 }
 
@@ -286,13 +246,14 @@ helperWatch() {
     local SITESCRIPT=${1:-siteWebNonNative}
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
-    local PREFIX=$4
+    local PREFIX="${4:-}"
     local TMPDIR=$(mktemp -d)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
     POOLPATH=${POOLPATH:-pool}
-    GZREPACK=${GZREPACK:-gz}
+    GZREPACK=${GZREPACK:-xz}
+    MGZREPACK=${MGZREPACK:-gz}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
     WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"
@@ -311,96 +272,96 @@ helperWatch() {
     # make local $VEROLD source tree
     tar -xzf $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
     if [ -n "$PREFIX" ]; then
-	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+        mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
     fi
     mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
     cd $TMPDIR/${PKG}
     if [ ! -d debian ]; then
-	makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
+        makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
     fi
     local UUPDATE=""
     if grep -q "uupdate" $TMPDIR/${PKG}/debian/watch ; then
-	UUPDATE=uupdate
+        UUPDATE=uupdate
     fi
     local PGP=""
     if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *auto" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *previous" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
     cd $TMPDIR
     $DEBUGLSLR
     UTARBALL=${PKG}-${VERNEW}.tar.gz
-    STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK
+    STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
-	UTARSIG=${PKG}-${VERNEW}.tar.gz.sig
-	if [ ! -f $UTARSIG ]; then
-	    UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
-	fi
-	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
-	assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
-	assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+        UTARSIG=${PKG}-${VERNEW}.tar.gz.sig
+        if [ ! -f $UTARSIG ]; then
+            UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
+        fi
+        STARSIG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK.asc
+        assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+        assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
     for cpnt in $COMPONENTS; do
-	UTARBALL=${cpnt}-${VERNEW}.tar.gz
-	STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK
-	assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
-	assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
-	if [ "$PGP" = "pgp" ]; then
-	    UTARSIG=${cpnt}-${VERNEW}.tar.gz.sig
-	    if [ ! -f $UTARSIG ]; then
-		UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
-	    fi
-	    STARSUG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
-	    assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
-	    assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
-	fi
+        UTARBALL=${cpnt}-${VERNEW}.tar.gz
+        STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK
+        assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
+        assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
+        if [ "$PGP" = "pgp" ]; then
+            UTARSIG=${cpnt}-${VERNEW}.tar.gz.sig
+            if [ ! -f $UTARSIG ]; then
+                UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
+            fi
+            STARSIG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
+            assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+            assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+        fi
     done
     # check uupdate
     if [ "$UUPDATE" = "uupdate" ]; then
-	cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
-	assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
-	DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
-	assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
-	if [ "$FILEEXCLUDE" != "3" ]; then
-	# main is dummy
-	assertTrue 'file that must be present is excluded in the tarball' '[ -f include-this ]'
-	fi
-	if [ "$FILEEXCLUDE" = "1" ] || [ "$FILEEXCLUDE" = "2" ]; then
-	assertFalse "file that must be excluded is present in the tarball" '[ -f exclude-this ]'
-	assertFalse "hidden file that must be excluded is present in the tarball" '[ -f .hidden ]'
-	assertFalse "dir that must be excluded is present in the tarball" '[ -d exclude-dir ]'
-	assertFalse "subdir that must be excluded is present in the tarball" '[ -d subdir/exclude-dir ]'
-	CONTENTS=$(ls -R)
-	assertFalse "non-root-file that must be excluded is present in the tarball"	\
+        cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
+        assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
+        DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
+        assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
+        if [ "$FILEEXCLUDE" != "3" ]; then
+        # main is dummy
+        assertTrue 'file that must be present is excluded in the tarball' '[ -f include-this ]'
+        fi
+        if [ "$FILEEXCLUDE" = "1" ] || [ "$FILEEXCLUDE" = "2" ]; then
+        assertFalse "file that must be excluded is present in the tarball" '[ -f exclude-this ]'
+        assertFalse "hidden file that must be excluded is present in the tarball" '[ -f .hidden ]'
+        assertFalse "dir that must be excluded is present in the tarball" '[ -d exclude-dir ]'
+        assertFalse "subdir that must be excluded is present in the tarball" '[ -d subdir/exclude-dir ]'
+        CONTENTS=$(ls -R)
+        assertFalse "non-root-file that must be excluded is present in the tarball"        \
                 $(containsName "$CONTENTS" jquery.js)
-	assertFalse "path with whitespace that must be excluded is present in the tarball"	\
+        assertFalse "path with whitespace that must be excluded is present in the tarball"        \
                 $(containsName "$CONTENTS" "; echo baz; #/")
-	fi
+        fi
         for c in $COMPONENTS ; do
-	    cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}/$c
-	assertTrue 'file that must be present is excluded in the tarball' '[ -f include-this ]'
-	if [ "$FILEEXCLUDE" = "1" ] || [ "$FILEEXCLUDE" = "2" ]; then
-	assertFalse "file that must be excluded is present in the orig-$c.tar" '[ -f exclude-this ]'
-	assertFalse "hidden file that must be excluded is present in the orig-$c.tar" '[ -f .hidden ]'
-	assertFalse "dir that must be excluded is present in the orig-$c.tar" '[ -d exclude-dir ]'
-	assertFalse "subdir that must be excluded is present in the orig-$c.tar" '[ -d subdir/exclude-dir ]'
-	CONTENTS=$(ls -R)
-	assertFalse "non-root-file that must be excluded is present in the orig-$c.tar"	\
+            cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}/$c
+        assertTrue 'file that must be present is excluded in the tarball' '[ -f include-this ]'
+        if [ "$FILEEXCLUDE" = "1" ] || [ "$FILEEXCLUDE" = "2" ]; then
+        assertFalse "file that must be excluded is present in the orig-$c.tar" '[ -f exclude-this ]'
+        assertFalse "hidden file that must be excluded is present in the orig-$c.tar" '[ -f .hidden ]'
+        assertFalse "dir that must be excluded is present in the orig-$c.tar" '[ -d exclude-dir ]'
+        assertFalse "subdir that must be excluded is present in the orig-$c.tar" '[ -d subdir/exclude-dir ]'
+        CONTENTS=$(ls -R)
+        assertFalse "non-root-file that must be excluded is present in the orig-$c.tar"        \
                 $(containsName "$CONTENTS" jquery.js)
-	assertFalse "path with whitespace that must be excluded is present in the orig-$c.tar"	\
+        assertFalse "path with whitespace that must be excluded is present in the orig-$c.tar"        \
                 $(containsName "$CONTENTS" "; echo baz; #/")
-	fi
-	done
-	cd $TMPDIR
+        fi
+        done
+        cd $TMPDIR
     fi
     $DEBUGBASH
     cd $ORIGDIR
@@ -408,6 +369,7 @@ helperWatch() {
     unset REPOPATH
     unset POOLPATH
     unset GZREPACK
+    unset MGZREPACK
     unset XCOMMAND
     unset WATCHVER
     unset WATCHLINE
@@ -441,7 +403,7 @@ helperWatchUA() {
     mkdir -p $TMPDIR/${PKG}
     cd $TMPDIR/${PKG}
     if [ ! -d debian ]; then
-	makeDebianDir $PKG 1.0-$SUFFIX
+        makeDebianDir $PKG 1.0-$SUFFIX
     fi
     $XCOMMAND
     USERAGENTX="$(grep -ie '^User-Agent:' ../repo/log |head -1 | perl -p -e "s/\r//g" )"
@@ -486,7 +448,7 @@ siteNonNative() {
     makeUpstreamTar $PKG 3.0 gz non-native
     mkdir -p $TMPDIR/$REPOPATH/3.0/$PKG/ooo/
     fi
-    if [ "$SIGMODE" = "ASC" ]; then
+    if [ "${SIGMODE:-}" = "ASC" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.asc
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
@@ -497,7 +459,7 @@ siteNonNative() {
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.asc $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.asc
     fi
-    elif [ "$SIGMODE" = "BIN" ]; then
+    elif [ "${SIGMODE:-}" = "BIN" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.sig
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
@@ -508,7 +470,7 @@ siteNonNative() {
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.sig $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.sig
     fi
-    elif [ "$SIGMODE" = "SELF" ]; then
+    elif [ "${SIGMODE:-}" = "SELF" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
     ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.gpg
@@ -803,6 +765,7 @@ testWatch4WebNonNative() {
 
 # test normal web page (Files-exclude)
 testWatch4WebNonNativeFE() {
+    MGZREPACK=xz
     FILEEXCLUDE=1
     WATCHVER=4
     helperWatch
@@ -876,8 +839,8 @@ testWatch4WebNonNativeDlDversion() {
 testWatch4WebNonNativeLarge() {
     WATCHVER=4
     WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , \
-	oversionmangle = s/(.*)/0.$1/" \
-	@@@url@@@  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+        oversionmangle = s/(.*)/0.$1/" \
+        @@@url@@@  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteWebNonNativeLarge 20000101 20010101 0.
 }
 
@@ -885,8 +848,8 @@ testWatch4WebNonNativeLarge() {
 testWatch4XmlNonNative() {
     WATCHVER=4
     WATCHLINE='opts="pagemangle = \
-	s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g" \
-	@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+        s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g" \
+        @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteXmlNonNative
 }
 
@@ -896,7 +859,7 @@ testWatch4WebNonNativeUA() {
     KEYMODE=BIN
     USCAN_HTTP_SERVER="server-head.py"
     USERAGENT="foo/bar; baz:12,3.45"
-    WATCHLINE='opts="useragent= '$USERAGENT' "'"
+    WATCHLINE='opts="useragent= '$USERAGENT' "'" \
 "'@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatchUA
     unset USERAGENT
@@ -908,12 +871,14 @@ testWatch4WebNonNativeBZ2() {
     WATCHVER=4
     WATCHLINE='opts=repack,compression=bz2 @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=bz2
+    MGZREPACK=bz2
     helperWatch
     unset GZREPACK
 }
 
 # test repack and compression
 testWatch4WebNonNativeXZ() {
+    MGZREPACK=xz
     WATCHVER=4
     WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=xz
@@ -923,6 +888,7 @@ testWatch4WebNonNativeXZ() {
 
 # test spaces everywhere
 testWatch4PrWebNonNativeXZ() {
+    MGZREPACK=xz
     WATCHVER=4
     WATCHLINE='opts = "downloadurlmangle = s%boo/xxx%@PACKAGE@/ooo% ; s%boo-%@PACKAGE@-%, \
                      filenamemangle    = s%.*boo-(.*)%@PACKAGE@-$1% , \
@@ -937,7 +903,7 @@ testWatch4PrWebNonNativeXZ() {
 # test get strictly href from links and not something like foo-href. See #904578 and MR !25
 testWatchGetOnlyHref() {
     WATCHVER=4
-	WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian	uupdate'
+        WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian        uupdate'
     helperWatch siteWebNonNativeGetOnlyHref 1.0 2.0
 }
 
@@ -947,7 +913,7 @@ testWatchGetOnlyHref() {
 testWatch4WebNonNativeSig() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s%(.*)%$1.asc%" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -955,7 +921,7 @@ testWatch4WebNonNativeSig() {
 testWatch4WebNonNativeSigAngleBraket() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s<(.*)><$1.asc>" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -963,15 +929,15 @@ testWatch4WebNonNativeSigAngleBraket() {
 testWatch4WebNonNativeSigAngleBraketSpace() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s<(.*)> <$1.asc>" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
 # test normal web page with sig(asc) with < and > with tab
 testWatch4WebNonNativeSigAngleBraketTab() {
     WATCHVER=4
-    WATCHLINE='opts = "pgpsigurlmangle = s<(.*)>	<$1.asc>" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    WATCHLINE='opts = "pgpsigurlmangle = s<(.*)>        <$1.asc>" \
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -979,7 +945,7 @@ testWatch4WebNonNativeSigAngleBraketTab() {
 testWatch4WebNonNativeSigSquareBraket() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s[(.*)][$1.asc]" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -987,7 +953,7 @@ testWatch4WebNonNativeSigSquareBraket() {
 testWatch4WebNonNativeSigCurlyBraket() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s{(.*)}{$1.asc}" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -995,12 +961,13 @@ testWatch4WebNonNativeSigCurlyBraket() {
 testWatch4WebNonNativeSigAuto() {
     WATCHVER=4
     WATCHLINE='opts = "pgpmode = auto" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
 # test normal web page with sig(bin) (Files-exclude)
 testWatch4WebNonNativeFESig() {
+    MGZREPACK=xz
     FILEEXCLUDE=1
     WATCHVER=4
     SIGMODE=BIN
@@ -1043,7 +1010,7 @@ testWatch4WebNonNativeSelfSig() {
     WATCHVER=4
     SIGMODE=SELF
     WATCHLINE='opts = "pgpmode = self" \
-		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.gpg debian uupdate'
+                @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.gpg debian uupdate'
     helperWatch siteWebNonNativeR
 }
 
@@ -1051,6 +1018,7 @@ testWatch4WebNonNativeSelfSig() {
 
 # test normal web page (MUT)
 testWatch4WebNonNativeMUT() {
+    MGZREPACK=xz
     WATCHVER=4
     COMPONENTS="bar baz"
     SIGMODE=BIN
@@ -1072,11 +1040,6 @@ opts="component=foo,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@
 opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
 opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same uupdate'
     helperWatch siteWebNonNativeMUT
-}
-
-oneTimeTearDown () {
-    gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
-    rm -rf "$GPGHOME"
 }
 
 

@@ -44,6 +44,7 @@ _uscan_completion () {
 
         *)
             COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+            compopt -o dirnames
             ;;
     esac
 }

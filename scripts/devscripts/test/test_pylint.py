@@ -26,7 +26,6 @@ from . import get_source_files, unittest_verbosity
 CONFIG = os.path.join(os.path.dirname(__file__), "pylint.conf")
 
 
-@unittest.skip("pylint is currently unusable.  #902631")
 class PylintTestCase(unittest.TestCase):
     """
     This unittest class provides a test that runs the pylint code check
@@ -38,18 +37,14 @@ class PylintTestCase(unittest.TestCase):
     def test_pylint(self):
         """Test: Run pylint on Python source code"""
 
-        with open("/proc/self/cmdline", "r") as cmdline_file:
-            python_binary = cmdline_file.read().split("\0")[0]
-        cmd = [python_binary, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
-        env = os.environ.copy()
-        env["PYLINTHOME"] = ".pylint.d"
+        cmd = [sys.executable, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
         if unittest_verbosity() >= 2:
             sys.stderr.write("Running following command:\n{}\n".format(" ".join(cmd)))
-        process = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    close_fds=True)
         out, err = process.communicate()
 
-        if process.returncode != 0:
+        if process.returncode != 0:  # pragma: no cover
             # Strip trailing summary (introduced in pylint 1.7). This summary might look like:
             #
             # ------------------------------------

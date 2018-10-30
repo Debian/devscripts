@@ -174,219 +174,226 @@ use File::Temp qw/tempdir/;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Pod::Usage;
 
-my @dirs = ();
+my @dirs     = ();
 my $tar_only = 0;
-my $unpack = 'once'; # default when --unpack is not used
-my $clean = 0;
+my $unpack   = 'once';    # default when --unpack is not used
+my $clean    = 0;
 
 GetOptions(
-	"path|p=s" => \@dirs,
-	"download-only|d" => sub { $unpack = 'no' },
-	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
-	"tar-only|t" => \$tar_only,
-	"unpack|u:s" => \$unpack,
-	"clean" => \$clean,
-) or pod2usage({-exitval => 3});
+    "path|p=s"        => \@dirs,
+    "download-only|d" => sub { $unpack = 'no' },
+    "help|h"          => sub { pod2usage({ -exitval => 0, -verbose => 1 }); },
+    "tar-only|t"      => \$tar_only,
+    "unpack|u:s"      => \$unpack,
+    "clean"           => \$clean,
+) or pod2usage({ -exitval => 3 });
 
-$unpack = 'yes' if (defined $unpack and $unpack eq ''); # default for --unpack without argument
-pod2usage({-exitval => 3}) if (@ARGV > 0 or $unpack !~ /^(no|once|yes)$/);
+$unpack = 'yes'
+  if (defined $unpack and $unpack eq '')
+  ;    # default for --unpack without argument
+pod2usage({ -exitval => 3 }) if (@ARGV > 0 or $unpack !~ /^(no|once|yes)$/);
 
 # get package name and version number
 
 my ($package, $version, $origversion, $fileversion);
 
-chdir ".." if (! -f "debian/changelog" and -f "../debian/changelog");
+chdir ".." if (!-f "debian/changelog" and -f "../debian/changelog");
 open F, "debian/changelog" or die "debian/changelog: $!\n";
 my $line = <F>;
 close F;
 unless ($line =~ /^(\S+) \((\S+)\)/) {
-	die "could not parse debian/changelog:1: $line";
+    die "could not parse debian/changelog:1: $line";
 }
 ($package, $version) = ($1, $2);
 unless ($version =~ /-/) {
-	print "Package with native version number $version, skipping orig.tar.* download\n";
-	exit 0;
+    print
+"Package with native version number $version, skipping orig.tar.* download\n";
+    exit 0;
 }
 $origversion = $version;
-$origversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
+$origversion =~ s/(.*)-.*/$1/;    # strip everything from the last dash
 $fileversion = $origversion;
-$fileversion =~ s/^\d+://; # strip epoch
+$fileversion =~ s/^\d+://;        # strip epoch
 
 # functions
 
-sub download_origtar ()
-{
-	# look for an existing file
+sub download_origtar () {
+    # look for an existing file
 
-	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-		print "Using existing $f[0]\n";
-		return $f[0];
-	}
+    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+        print "Using existing $f[0]\n";
+        return $f[0];
+    }
 
-	# try other directories
+    # try other directories
 
-	foreach my $dir (@dirs) {
-		$dir =~ s!/$!!;
+    foreach my $dir (@dirs) {
+        $dir =~ s!/$!!;
 
-		if (my @f = glob "$dir/${package}_$fileversion.orig.tar.*") {
-			print "Using $f[0]\n";
-			my $basename = $f[0];
-			$basename =~ s!.*/!!;
-			link $f[0], "../$basename" or
-				symlink $f[0], "../$basename" or
-				die "symlink: $!";
-			return "../$basename";
-		}
-	}
+        if (my @f = glob "$dir/${package}_$fileversion.orig.tar.*") {
+            print "Using $f[0]\n";
+            my $basename = $f[0];
+            $basename =~ s!.*/!!;
+            link $f[0],         "../$basename"
+              or symlink $f[0], "../$basename"
+              or die "symlink: $!";
+            return "../$basename";
+        }
+    }
 
-	# try pristine-tar
+    # try pristine-tar
 
-	my @files = grep { /^\Q${package}_$fileversion.orig.tar.\E/ }
-		map { chomp; $_; } # remove newlines
-		`pristine-tar list 2>&1`;
-	if (@files) {
-		system "pristine-tar checkout ../$files[0]";
-	}
+    my @files = grep { /^\Q${package}_$fileversion.orig.tar.\E/ }
+      map { chomp; $_; }    # remove newlines
+      `pristine-tar list 2>&1`;
+    if (@files) {
+        system "pristine-tar checkout ../$files[0]";
+    }
 
-	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-		return $f[0];
-	}
+    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+        return $f[0];
+    }
 
-	# try apt-get source
+    # try apt-get source
 
-	open S, "apt-cache showsrc '$package' |";
-	my @showsrc;
-	{
-		local $/ = ""; # slurp paragraphs
-		@showsrc = <S>;
-	}
-	close S;
+    open S, "apt-cache showsrc '$package' |";
+    my @showsrc;
+    {
+        local $/ = "";    # slurp paragraphs
+        @showsrc = <S>;
+    }
+    close S;
 
-	my $bestsrcversion;
-	foreach my $src (@showsrc) {
-		$src =~ /^Package: (.*)/m or next;
-		next if ($1 ne $package); ; # should never trigger, but who knows
-		$src =~ /^Version: (.*)/m or next;
-		my $srcversion = $1;
-		my $srcorigversion = $srcversion;
-		$srcorigversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
+    my $bestsrcversion;
+    foreach my $src (@showsrc) {
+        $src =~ /^Package: (.*)/m or next;
+        next if ($1 ne $package);
+        ;                 # should never trigger, but who knows
+        $src =~ /^Version: (.*)/m or next;
+        my $srcversion     = $1;
+        my $srcorigversion = $srcversion;
+        $srcorigversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
 
-		if ($srcorigversion eq $origversion) { # loop through all matching versions
-			$bestsrcversion = $srcversion;
-			last if ($srcversion eq $version); # break if exact match
-		}
-	}
+        if ($srcorigversion eq $origversion)
+        {                                 # loop through all matching versions
+            $bestsrcversion = $srcversion;
+            last if ($srcversion eq $version);    # break if exact match
+        }
+    }
 
-	if ($bestsrcversion) {
-		print "Trying apt-get source $package=$bestsrcversion ...\n";
-		my $t = $tar_only ? '--tar-only' : '';
-		system "cd .. && apt-get source --only-source --download-only $t '$package=$bestsrcversion'";
-	}
+    if ($bestsrcversion) {
+        print "Trying apt-get source $package=$bestsrcversion ...\n";
+        my $t = $tar_only ? '--tar-only' : '';
+        system
+"cd .. && apt-get source --only-source --download-only $t '$package=$bestsrcversion'";
+    }
 
-	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-		return $f[0];
-	}
+    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+        return $f[0];
+    }
 
-	# try uscan
+    # try uscan
 
-	if (-f "debian/watch") {
-		print "Trying uscan --download --download-current-version ...\n";
-		system "uscan --download --download-current-version --rename\n";
-	}
+    if (-f "debian/watch") {
+        print "Trying uscan --download --download-current-version ...\n";
+        system "uscan --download --download-current-version --rename\n";
+    }
 
-	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-		return $f[0];
-	}
+    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+        return $f[0];
+    }
 
-	print "Could not find any location for ${package}_$fileversion.orig.tar.*\n";
-	return undef;
+    print
+      "Could not find any location for ${package}_$fileversion.orig.tar.*\n";
+    return undef;
 }
 
-sub clean_checkout ()
-{
-	# delete all files except debian/, our VCS checkout, and some files
-	# often in VCS outside debian/ even in debian-dir-only repositories
-	opendir DIR, '.' or die "opendir: $!";
-	my @rm;
-	while (my $file = readdir DIR) {
-		next if ($file eq '.' or $file eq '..');
-		next if ($file eq 'debian');
-		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS|_darcs)$/);
-		if ($file eq '.gitignore' and -d '.git') { # preserve .gitignore if it's from git
-			next if `git ls-files .gitignore` eq ".gitignore\n";
-		}
-		if (($file =~ /^\.bzr(ignore|-builddeb)$/ and -d '.bzr') or
-		    ($file eq '.hgignore' and -d '.hg')) {
-			print "Notice: not deleting $file (likely to come from VCS checkout)\n";
-			next;
-		}
-		push @rm, $file;
-	}
-	close DIR;
-	system ('rm', '-rf', '--', @rm);
+sub clean_checkout () {
+    # delete all files except debian/, our VCS checkout, and some files
+    # often in VCS outside debian/ even in debian-dir-only repositories
+    opendir DIR, '.' or die "opendir: $!";
+    my @rm;
+    while (my $file = readdir DIR) {
+        next if ($file eq '.' or $file eq '..');
+        next if ($file eq 'debian');
+        next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS|_darcs)$/);
+        if ($file eq '.gitignore' and -d '.git')
+        {    # preserve .gitignore if it's from git
+            next if `git ls-files .gitignore` eq ".gitignore\n";
+        }
+        if (   ($file =~ /^\.bzr(ignore|-builddeb)$/ and -d '.bzr')
+            or ($file eq '.hgignore' and -d '.hg')) {
+            print
+"Notice: not deleting $file (likely to come from VCS checkout)\n";
+            next;
+        }
+        push @rm, $file;
+    }
+    close DIR;
+    system('rm', '-rf', '--', @rm);
 }
 
-sub unpack_tarball ($)
-{
-	my $origtar = shift;
-	my $tmpdir = File::Temp->newdir(DIR => ".", CLEANUP => 1);
+sub unpack_tarball ($) {
+    my $origtar = shift;
+    my $tmpdir = File::Temp->newdir(DIR => ".", CLEANUP => 1);
 
-	print "Unpacking $origtar\n";
+    print "Unpacking $origtar\n";
 
-	# unpack
-	system ('tar', "--directory=$tmpdir", '-xf', "$origtar");
-	if ($? >> 8) {
-		print STDERR "unpacking $origtar failed\n";
-		return 0;
-	}
+    # unpack
+    system('tar', "--directory=$tmpdir", '-xf', "$origtar");
+    if ($? >> 8) {
+        print STDERR "unpacking $origtar failed\n";
+        return 0;
+    }
 
-	# figure out which directory was created
-	my @dirs = glob "$tmpdir/*/";
-	unless (@dirs) {
-		print STDERR "unpacking $origtar did not create any directory\n";
-		return 0;
-	}
-	my $directory = $dirs[0];
-	chop $directory;
+    # figure out which directory was created
+    my @dirs = glob "$tmpdir/*/";
+    unless (@dirs) {
+        print STDERR "unpacking $origtar did not create any directory\n";
+        return 0;
+    }
+    my $directory = $dirs[0];
+    chop $directory;
 
-	# move all files over, except the debian directory
-	opendir DIR, $directory or die "opendir $directory: $!";
-	foreach my $file (readdir DIR) {
-		if ($file eq 'debian') {
-			system ('rm', '-rf', '--', "$directory/$file");
-			next;
-		} elsif ($file eq '.' or $file eq '..') {
-			next;
-		}
-		unless (rename "$directory/$file", "$file") {
-			print STDERR "rename $directory/$file $file: $!\n";
-			return 0;
-		}
-	}
-	closedir DIR;
-	rmdir $directory;
+    # move all files over, except the debian directory
+    opendir DIR, $directory or die "opendir $directory: $!";
+    foreach my $file (readdir DIR) {
+        if ($file eq 'debian') {
+            system('rm', '-rf', '--', "$directory/$file");
+            next;
+        } elsif ($file eq '.' or $file eq '..') {
+            next;
+        }
+        unless (rename "$directory/$file", "$file") {
+            print STDERR "rename $directory/$file $file: $!\n";
+            return 0;
+        }
+    }
+    closedir DIR;
+    rmdir $directory;
 
-	return 1;
+    return 1;
 }
 
 # main
 
 if ($clean) {
-	clean_checkout;
-	exit 0;
+    clean_checkout;
+    exit 0;
 }
 
 my $origtar = download_origtar;
 exit 1 unless ($origtar);
 
 if ($unpack eq 'once') {
-	my @files = glob '*'; # ignores dotfiles
-	if (@files == 1) { # this is debian/, we have already opened debian/changelog
-		unpack_tarball ($origtar) or exit 1;
-	}
+    my @files = glob '*';    # ignores dotfiles
+    if (@files == 1)
+    {    # this is debian/, we have already opened debian/changelog
+        unpack_tarball($origtar) or exit 1;
+    }
 } elsif ($unpack eq 'yes') {
-	clean_checkout;
-	unpack_tarball ($origtar) or exit 1;
+    clean_checkout;
+    unpack_tarball($origtar) or exit 1;
 }
 
 exit 0;

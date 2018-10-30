@@ -21,9 +21,9 @@ use Dpkg::IPC;
 use Exporter qw(import);
 
 our @EXPORT = (
-	@Dpkg::Compression::EXPORT,
-	qw(compression_get_file_extension_regex compression_guess_from_file),
-	);
+    @Dpkg::Compression::EXPORT,
+    qw(compression_get_file_extension_regex compression_guess_from_file),
+);
 
 eval {
     Dpkg::Compression->VERSION(1.02);
@@ -31,37 +31,39 @@ eval {
 } or do {
     # Ensure we have compression_get_file_extension_regex, regardless of the
     # version of Dpkg::Compression to ease backporting.
-    *{'Devscripts::Compression::compression_get_file_extension_regex'} = sub
-    {
-	return $compression_re_file_ext;
+    *{'Devscripts::Compression::compression_get_file_extension_regex'} = sub {
+        return $compression_re_file_ext;
     };
 };
 
 # This can potentially be moved to Dpkg::Compression
 
 my %mime2comp = (
-    "application/x-gzip"  => "gzip",
-    "application/gzip"    => "gzip",
-    "application/x-bzip2" => "bzip2",
-    "application/bzip2  " => "bzip2",
-    "application/x-xz"    => "xz",
-    "application/xz"      => "xz",
-    "application/zip"     => "zip",
-    "application/x-compress" => "compress",
+    "application/x-gzip"       => "gzip",
+    "application/gzip"         => "gzip",
+    "application/x-bzip2"      => "bzip2",
+    "application/bzip2  "      => "bzip2",
+    "application/x-xz"         => "xz",
+    "application/xz"           => "xz",
+    "application/zip"          => "zip",
+    "application/x-compress"   => "compress",
     "application/java-archive" => "zip",
+    "application/x-tar"        => "tar",
 );
 
 sub compression_guess_from_file {
     my $filename = shift;
     my $mimetype;
-    spawn(exec => ['file', '--dereference', '--brief', '--mime-type', $filename],
-	  to_string => \$mimetype,
-	  wait_child => 1);
+    spawn(
+        exec => ['file', '--dereference', '--brief', '--mime-type', $filename],
+        to_string  => \$mimetype,
+        wait_child => 1
+    );
     chomp($mimetype);
     if (exists $mime2comp{$mimetype}) {
-	return $mime2comp{$mimetype};
+        return $mime2comp{$mimetype};
     } else {
-	return;
+        return;
     }
 }
 
@@ -70,24 +72,23 @@ sub compression_guess_from_file {
 # these as compressors
 my %comp_properties = (
     compress => {
-	file_ext => 'Z',
-	decomp_prog => ['uncompress'],
+        file_ext    => 'Z',
+        decomp_prog => ['uncompress'],
     },
     zip => {
-	file_ext => 'zip',
-	decomp_prog => ['unzip'],
-    }
-);
+        file_ext    => 'zip',
+        decomp_prog => ['unzip'],
+    });
 
-sub compression_get_property
-{
+sub compression_get_property {
     my ($compression, $property) = @_;
     if (!exists $comp_properties{$compression}) {
-	return Dpkg::Compression::compression_get_property($compression, $property);
+        return Dpkg::Compression::compression_get_property($compression,
+            $property);
     }
 
     if (exists $comp_properties{$compression}{$property}) {
-	return $comp_properties{$compression}{$property};
+        return $comp_properties{$compression}{$property};
     }
     return;
 }

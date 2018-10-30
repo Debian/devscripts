@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+LIB=-I../lib
+if test "${1:-}" = --installed; then
+    LIB=""
+    shift
+fi
+
+prove --norc $LIB t/*.t
+

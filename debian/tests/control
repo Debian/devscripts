@@ -1,3 +1,19 @@
 Tests: shunit2
-Depends: @, build-essential, debhelper, libdistro-info-perl, mozilla-devscripts, python3-pyftpdlib, shunit2, zip
-Restrictions: allow-stderr needs-recommends
+Depends:
+ @,
+ build-essential,
+ debhelper,
+ fakeroot,
+ faketime,
+ git,
+ gnupg,
+ libdistro-info-perl,
+ libipc-run-perl,
+ libwww-perl,
+ mozilla-devscripts,
+ python3-debian,
+ python3-pyftpdlib,
+ shunit2,
+ wdiff,
+ zip,
+Restrictions: allow-stderr

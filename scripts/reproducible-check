@@ -36,7 +36,7 @@ except ImportError:
     sys.exit(1)
 
 
-class ReproducibleCheck(object):
+class ReproducibleCheck:
     HELP = """
         Reports on the reproducible status of installed packages.
         For more details please see <https://reproducible-builds.org>.

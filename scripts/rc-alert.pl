@@ -36,22 +36,23 @@ sub unhtmlsanit($);
 sub dt_parse_request($);
 
 $ENV{HOME} = File::HomeDir->my_home;
-my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
+my $cachedir
+  = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
 $cachedir = File::Spec->catdir($cachedir, 'devscripts', 'rc-alert');
 
-my $url = "http://bugs.debian.org/release-critical/other/all.html";
-my $cachefile = File::Spec->catfile($cachedir, basename($url));
+my $url        = "http://bugs.debian.org/release-critical/other/all.html";
+my $cachefile  = File::Spec->catfile($cachedir, basename($url));
 my $forcecache = 0;
-my $usecache = 0;
+my $usecache   = 0;
 
 my @flags = (
-    [qr/P/ => 'pending'],
+    [qr/P/  => 'pending'],
     [qr/\+/ => 'patch'],
-    [qr/H/ => 'help [wanted]'],
-    [qr/M/ => 'moreinfo [needed]'],
-    [qr/R/ => 'unreproducible'],
-    [qr/S/ => 'security'],
-    [qr/U/ => 'upstream'],
+    [qr/H/  => 'help [wanted]'],
+    [qr/M/  => 'moreinfo [needed]'],
+    [qr/R/  => 'unreproducible'],
+    [qr/S/  => 'security'],
+    [qr/U/  => 'upstream'],
 );
 # A little hacky but allows us to sort the list by length
 my @dists = (
@@ -68,16 +69,16 @@ my $excludetags = "";
 my $includedists = "";
 my $excludedists = "";
 
-my $tagincoperation = "or";
-my $tagexcoperation = "or";
+my $tagincoperation  = "or";
+my $tagexcoperation  = "or";
 my $distincoperation = "or";
 my $distexcoperation = "or";
 
-my $popcon = 0;
+my $popcon         = 0;
 my $popcon_by_vote = 0;
-my $popcon_local = 0;
+my $popcon_local   = 0;
 
-my $debtags = '';
+my $debtags    = '';
 my $debtags_db = '/var/lib/debtags/package-tags';
 
 my $progname = basename($0);
@@ -130,37 +131,38 @@ EOF
 ##
 
 my ($opt_help, $opt_version);
-GetOptions("help|h" => \$opt_help,
-	   "version|v" => \$opt_version,
-	   "cache" => \$forcecache,
-	   "include-tags|f=s" => \$includetags,
-	   "exclude-tags=s" => \$excludetags,
-	   "include-tag-op|t=s" => \$tagincoperation,
-	   "exclude-tag-op=s" => \$tagexcoperation,
-	   "include-dists|d=s" => \$includedists,
-	   "exclude-dists=s" => \$excludedists,
-	   "include-dist-op|o=s" => \$distincoperation,
-	   "exclude-dist-op=s" => \$distexcoperation,
-	   "debtags=s" => \$debtags,
-	   "debtags-database=s" => \$debtags_db,
-	   "popcon" => \$popcon,
-	   "pc-vote" => \$popcon_by_vote,
-	   "pc-local" => \$popcon_local,
-	   ) or do { print $usage; exit 1; };
+GetOptions(
+    "help|h"              => \$opt_help,
+    "version|v"           => \$opt_version,
+    "cache"               => \$forcecache,
+    "include-tags|f=s"    => \$includetags,
+    "exclude-tags=s"      => \$excludetags,
+    "include-tag-op|t=s"  => \$tagincoperation,
+    "exclude-tag-op=s"    => \$tagexcoperation,
+    "include-dists|d=s"   => \$includedists,
+    "exclude-dists=s"     => \$excludedists,
+    "include-dist-op|o=s" => \$distincoperation,
+    "exclude-dist-op=s"   => \$distexcoperation,
+    "debtags=s"           => \$debtags,
+    "debtags-database=s"  => \$debtags_db,
+    "popcon"              => \$popcon,
+    "pc-vote"             => \$popcon_by_vote,
+    "pc-local"            => \$popcon_local,
+) or do { print $usage; exit 1; };
 
-if ($opt_help) { print $usage; exit 0; }
+if ($opt_help)    { print $usage;   exit 0; }
 if ($opt_version) { print $version; exit 0; }
 
-$tagincoperation =~ /^(or|and)$/ or $tagincoperation = 'or';
+$tagincoperation =~ /^(or|and)$/  or $tagincoperation  = 'or';
 $distincoperation =~ /^(or|and)$/ or $distincoperation = 'or';
-$tagexcoperation =~ /^(or|and)$/ or $tagexcoperation = 'or';
+$tagexcoperation =~ /^(or|and)$/  or $tagexcoperation  = 'or';
 $distexcoperation =~ /^(or|and)$/ or $distexcoperation = 'or';
 $includetags =~ s/[^P+HMRSUI]//gi;
 $excludetags =~ s/[^P+HMRSUI]//gi;
 $includedists =~ s/[^OSTUE]//gi;
 $excludedists =~ s/[^OSTUE]//gi;
-$includetags = remove_duplicate_values(uc($includetags));
-$excludetags = remove_duplicate_values(uc($excludetags));
+$includetags  = remove_duplicate_values(uc($includetags));
+$excludetags  = remove_duplicate_values(uc($excludetags));
 $includedists = remove_duplicate_values(uc($includedists));
 $excludedists = remove_duplicate_values(uc($excludedists));
 
@@ -170,17 +172,18 @@ my $curl_or_wget;
 my $getcommand;
 if (system("command -v wget >/dev/null 2>&1") == 0) {
     $curl_or_wget = "wget";
-    $getcommand = "wget -q -O -";
+    $getcommand   = "wget -q -O -";
 } elsif (system("command -v curl >/dev/null 2>&1") == 0) {
     $curl_or_wget = "curl";
-    $getcommand = "curl -qfs";
+    $getcommand   = "curl -qfs";
 } else {
-    die "$progname: this program requires either the wget or curl package to be installed\n";
+    die
+"$progname: this program requires either the wget or curl package to be installed\n";
 }
 
-if (! -d $cachedir) {
+if (!-d $cachedir) {
     if ($forcecache) {
-	make_path($cachedir);
+        make_path($cachedir);
     }
 }
 
@@ -189,24 +192,23 @@ if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
     if ("$curl_or_wget" eq "wget") {
-	# Either use the cached version because the remote hasn't been
-	# updated (-N) or download a complete new copy (--no-continue)
-	if (system('wget', '-qN', '--no-continue', $url) != 0) {
-	    die "$progname: wget failed!\n";
-	}
+        # Either use the cached version because the remote hasn't been
+        # updated (-N) or download a complete new copy (--no-continue)
+        if (system('wget', '-qN', '--no-continue', $url) != 0) {
+            die "$progname: wget failed!\n";
+        }
     } elsif ("$curl_or_wget" eq "curl") {
-	if (system('curl', '-qfsR', $url) != 0) {
-	    die "$progname: curl failed!\n";
-	}
+        if (system('curl', '-qfsR', $url) != 0) {
+            die "$progname: curl failed!\n";
+        }
     } else {
-	die "$progname: Unknown download program $curl_or_wget!\n";
+        die "$progname: Unknown download program $curl_or_wget!\n";
     }
     open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
     $usingcache = 1;
-}
-else {
-    open BUGS, "$getcommand $url |" or
-	die "$progname: could not run $curl_or_wget: $!\n";
+} else {
+    open BUGS, "$getcommand $url |"
+      or die "$progname: could not run $curl_or_wget: $!\n";
 }
 
 ## Get list of installed packages (not source packages)
@@ -214,8 +216,7 @@ my $package_list;
 if (@ARGV) {
     my %tmp = map { $_ => 1 } @ARGV;
     $package_list = \%tmp;
-}
-else {
+} else {
     $package_list = InstalledPackages(1);
 }
 
@@ -226,24 +227,25 @@ if ($popcon) {
 
     my $pc_regex;
     if ($popcon_local) {
-	open POPCON, "/var/log/popularity-contest"
-	    or die "$progname: Unable to access popcon data: $!";
-	$pc_regex = '(\d+)\s\d+\s(\S+)';
+        open POPCON, "/var/log/popularity-contest"
+          or die "$progname: Unable to access popcon data: $!";
+        $pc_regex = '(\d+)\s\d+\s(\S+)';
     } else {
-	open POPCON, "$getcommand http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
-	    or die "$progname: Not able to receive remote popcon data!";
-	$pc_regex = '(\d+)\s+(\S+)\s+(\d+\s+){5}\(.*\)';
+        open POPCON,
+          "$getcommand http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
+          or die "$progname: Not able to receive remote popcon data!";
+        $pc_regex = '(\d+)\s+(\S+)\s+(\d+\s+){5}\(.*\)';
     }
 
     while (<POPCON>) {
-	next unless /$pc_regex/;
-	# rank $1 for package $2
-	if ($popcon_local) {
-	    # negative for inverse sorting of atimes
-	    $popcon{$2} = "-$1";
-	} else {
-	    $popcon{$2} = $1;
-	}
+        next unless /$pc_regex/;
+        # rank $1 for package $2
+        if ($popcon_local) {
+            # negative for inverse sorting of atimes
+            $popcon{$2} = "-$1";
+        } else {
+            $popcon{$2} = $1;
+        }
     }
     close POPCON;
 }
@@ -253,7 +255,8 @@ my %dt_pkg;
 my @dt_requests;
 if ($debtags) {
     ## read debtags database to %dt_pkg
-    open DEBTAGS, $debtags_db or die "$progname: could not read debtags database: $!\n";
+    open DEBTAGS, $debtags_db
+      or die "$progname: could not read debtags database: $!\n";
     while (<DEBTAGS>) {
         next unless /^(.+?)(?::?\s*|:\s+(.+?)\s*)$/;
         $dt_pkg{$1} = $2;
@@ -281,23 +284,38 @@ push(@flags, [qr/I/ => $ignore]);
 my @stanzas = $html =~ m%<div class="package">(.*?)</div>%gs;
 my %pkg_store;
 foreach my $stanza (@stanzas) {
-    if ($stanza =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
-	$current_package = $1;
-	$comment = '';
-	while ($stanza =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%igc) {
-	    my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
-	    chomp $name;
-	    store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
-	}
+    if ($stanza
+        =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i
+    ) {
+        $current_package = $1;
+        $comment         = '';
+        while ($stanza
+            =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%igc
+        ) {
+            my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
+            chomp $name;
+            store_if_relevant(
+                pkg     => $current_package,
+                num     => $num,
+                tags    => $tags,
+                dists   => $dists,
+                name    => $name,
+                comment => $comment
+            );
+        }
     }
 }
-for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
+for (sort { $a <=> $b } keys %pkg_store) {
+    print $pkg_store{$_};
+}
 
 if ($usingcache) {
-  close BUGS or die "$progname: could not close $cachefile: $!\n";
+    close BUGS or die "$progname: could not close $cachefile: $!\n";
 } else {
-  close BUGS or die $! ? "$progname: could not close $curl_or_wget pipe: $!\n"
-		       : "$progname: exit status from $curl_or_wget: $?\n";
+    close BUGS
+      or die $!
+      ? "$progname: could not close $curl_or_wget pipe: $!\n"
+      : "$progname: exit status from $curl_or_wget: $?\n";
 }
 
 exit 0;
@@ -305,7 +323,7 @@ exit 0;
 sub remove_duplicate_values($) {
     my $in = shift || "";
 
-    $in = join( "", sort { $a cmp $b } split //, $in );
+    $in = join("", sort { $a cmp $b } split //, $in);
 
     $in =~ s/(.)\1/$1/g while $in =~ /(.)\1/;
 
@@ -318,128 +336,143 @@ sub store_if_relevant(%) {
     my $pkgname = $args{pkg};
     $args{pkg} =~ s/^src://;
 
-    if (exists($package_list->{$args{pkg}})
+    if (   exists($package_list->{ $args{pkg} })
         || exists($package_list->{$pkgname})) {
-	# potentially relevant
-	my ($flags, $flagsapply) = human_flags($args{tags});
-	my $distsapply = 1;
-	my $dists;
-	($dists, $distsapply) = human_dists($args{dists}) if defined $args{dists};
+        # potentially relevant
+        my ($flags, $flagsapply) = human_flags($args{tags});
+        my $distsapply = 1;
+        my $dists;
+        ($dists, $distsapply) = human_dists($args{dists})
+          if defined $args{dists};
 
-	return unless $flagsapply and $distsapply;
+        return unless $flagsapply and $distsapply;
 
-	foreach (@dt_requests) {
-	    ## the array should be empty if nothing requested
-	    return unless ($dt_pkg{$args{pkg}} and
-		$dt_pkg{$args{pkg}} =~ /(\A|,\s*)$_(,|\z)/);
-	}
+        foreach (@dt_requests) {
+            ## the array should be empty if nothing requested
+            return
+              unless ($dt_pkg{ $args{pkg} }
+                and $dt_pkg{ $args{pkg} } =~ /(\A|,\s*)$_(,|\z)/);
+        }
 
-	# yep, relevant
-	my $bug_string = "Package: $pkgname\n" .
-	    $comment .  # non-empty comments always contain the trailing \n
-	    "Bug:     $args{num}\n" .
-	    "Bug-URL: https://bugs.debian.org/$args{num}\n" .
-	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
-	    "Flags:   " . $flags . "\n" .
-	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .
-	    (defined $dt_pkg{$args{pkg}} ?
-		"Debtags: " . $dt_pkg{$args{pkg}} . "\n" : "");
+        # yep, relevant
+        my $bug_string
+          = "Package: $pkgname\n"
+          . $comment
+          .    # non-empty comments always contain the trailing \n
+          "Bug:     $args{num}\n"
+          . "Bug-URL: https://bugs.debian.org/$args{num}\n"
+          . "Title:   "
+          . unhtmlsanit($args{name}) . "\n"
+          . "Flags:   "
+          . $flags . "\n"
+          . (defined $args{dists} ? "Dists:  " . $dists . "\n" : "")
+          . (
+            defined $dt_pkg{ $args{pkg} }
+            ? "Debtags: " . $dt_pkg{ $args{pkg} } . "\n"
+            : ""
+          );
 
-	unless ($popcon_local) {
-	    $bug_string .= (defined $popcon{$args{pkg}} ?
-		"Popcon rank: " . $popcon{$args{pkg}} . "\n" : "");
-	}
-	$bug_string .= "\n";
+        unless ($popcon_local) {
+            $bug_string .= (
+                defined $popcon{ $args{pkg} }
+                ? "Popcon rank: " . $popcon{ $args{pkg} } . "\n"
+                : ""
+            );
+        }
+        $bug_string .= "\n";
 
-	if ($popcon) {
-	    return unless $bug_string;
-	    my $index = $popcon{$args{pkg}} ? $popcon{$args{pkg}} : 9999999;
-	    $pkg_store{$index} .= $bug_string;
-	} else {
-	    $pkg_store{1} .= $bug_string;
-	}
+        if ($popcon) {
+            return unless $bug_string;
+            my $index
+              = $popcon{ $args{pkg} } ? $popcon{ $args{pkg} } : 9999999;
+            $pkg_store{$index} .= $bug_string;
+        } else {
+            $pkg_store{1} .= $bug_string;
+        }
     }
 }
 
 sub human_flags($) {
     my $mrf = shift;    # machine readable flags, for those of you wondering
     my @hrf = ();       # considering above, should be obvious
-    my $matchedflags = 0;
+    my $matchedflags    = 0;
     my $matchedexcludes = 0;
-    my $applies = 1;
+    my $applies         = 1;
 
     foreach my $flagref (@flags) {
-	my ($flag, $desc) = @{$flagref};
-	if ($mrf =~ $flag) {
-	    if ($excludetags =~ $flag) {
-		$matchedexcludes++;
-	    } elsif ($includetags =~ $flag or ! $includetags) {
-		$matchedflags++;
-	    }
-	    push @hrf, $desc;
-	}
+        my ($flag, $desc) = @{$flagref};
+        if ($mrf =~ $flag) {
+            if ($excludetags =~ $flag) {
+                $matchedexcludes++;
+            } elsif ($includetags =~ $flag or !$includetags) {
+                $matchedflags++;
+            }
+            push @hrf, $desc;
+        }
     }
-    if ($excludetags and $tagexcoperation eq 'and' and
-	(length $excludetags == $matchedexcludes)) {
-	$applies = 0;
-    }
-    elsif ($matchedexcludes and $tagexcoperation eq 'or') {
-	$applies = 0;
-    }
-    elsif ($includetags and ! $matchedflags) {
-	$applies = 0;
-    } elsif ($includetags and $tagincoperation eq 'and' and
-	(length $includetags != $matchedflags)) {
-	$applies = 0;
+    if (    $excludetags
+        and $tagexcoperation eq 'and'
+        and (length $excludetags == $matchedexcludes)) {
+        $applies = 0;
+    } elsif ($matchedexcludes and $tagexcoperation eq 'or') {
+        $applies = 0;
+    } elsif ($includetags and !$matchedflags) {
+        $applies = 0;
+    } elsif ($includetags
+        and $tagincoperation eq 'and'
+        and (length $includetags != $matchedflags)) {
+        $applies = 0;
     }
 
     if (@hrf) {
-	return ("$mrf (" . join(", ", @hrf) . ')', $applies);
+        return ("$mrf (" . join(", ", @hrf) . ')', $applies);
     } else {
-	return ("$mrf (none)", $applies);
+        return ("$mrf (none)", $applies);
     }
 }
 
 sub human_dists($) {
-    my $mrf = shift;     # machine readable flags, for those of you wondering
-    my @hrf = ();        # considering above, should be obvious
-    my $matcheddists = 0;
+    my $mrf = shift;    # machine readable flags, for those of you wondering
+    my @hrf = ();       # considering above, should be obvious
+    my $matcheddists    = 0;
     my $matchedexcludes = 0;
-    my $applies = 1;
+    my $applies         = 1;
 
     foreach my $distref (@dists) {
-	my ($dist, $desc) = @{$distref};
-	if ($mrf =~ $dist) {
-	    if ($excludedists =~ $dist) {
-		$matchedexcludes++;
-	    } elsif ($includedists =~ $dist or ! $includedists) {
-		$matcheddists++;
-	    }
-	    push @hrf, $desc;
-	}
+        my ($dist, $desc) = @{$distref};
+        if ($mrf =~ $dist) {
+            if ($excludedists =~ $dist) {
+                $matchedexcludes++;
+            } elsif ($includedists =~ $dist or !$includedists) {
+                $matcheddists++;
+            }
+            push @hrf, $desc;
+        }
     }
-    if ($excludedists and $distexcoperation eq 'and' and
-	(length $excludedists == $matchedexcludes)) {
-	$applies = 0;
+    if (    $excludedists
+        and $distexcoperation eq 'and'
+        and (length $excludedists == $matchedexcludes)) {
+        $applies = 0;
     } elsif ($matchedexcludes and $distexcoperation eq 'or') {
-	$applies = 0;
-    } elsif ($includedists and ! $matcheddists) {
-	$applies = 0;
-    } elsif ($includedists and $distincoperation eq 'and' and
-	(length $includedists != $matcheddists)) {
-	$applies = 0;
+        $applies = 0;
+    } elsif ($includedists and !$matcheddists) {
+        $applies = 0;
+    } elsif ($includedists
+        and $distincoperation eq 'and'
+        and (length $includedists != $matcheddists)) {
+        $applies = 0;
     }
 
     if (@hrf) {
-	return ("$mrf (" . join(", ", @hrf) . ')', $applies);
+        return ("$mrf (" . join(", ", @hrf) . ')', $applies);
     } else {
-	return ('', $applies);
+        return ('', $applies);
     }
 }
 
 # Reverse of master.debian.org:/srv/bugs.debian.org/cgi-bin/common.pl
 sub unhtmlsanit ($) {
-    my %saniarray = ('lt','<', 'gt','>', 'amp','&', 'quot', '"');
+    my %saniarray = ('lt', '<', 'gt', '>', 'amp', '&', 'quot', '"');
     my $in = $_[0];
     $in =~ s/&(lt|gt|amp|quot);/$saniarray{$1}/g;
     return $in;
@@ -448,20 +481,21 @@ sub unhtmlsanit ($) {
 sub dt_parse_request($) {
     my %dt_lookup;
     foreach (split /,/, $_[0]) {
-	my ($d_key, $d_val) = split '::', $_;
-	die "$progname: A debtag must be of the form 'key::value'. See debtags(1) for details!"
-	    unless ($d_key and $d_val);
-	if ($dt_lookup{$d_key}) {
-	    $dt_lookup{$d_key} = "$dt_lookup{$d_key}|$d_val";
-	} else {
-	    $dt_lookup{$d_key} = quotemeta($d_val);
-	}
+        my ($d_key, $d_val) = split '::', $_;
+        die
+"$progname: A debtag must be of the form 'key::value'. See debtags(1) for details!"
+          unless ($d_key and $d_val);
+        if ($dt_lookup{$d_key}) {
+            $dt_lookup{$d_key} = "$dt_lookup{$d_key}|$d_val";
+        } else {
+            $dt_lookup{$d_key} = quotemeta($d_val);
+        }
     }
 
     my @out;
     while (my ($dk, $dv) = each %dt_lookup) {
-	$dv = "($dv)" if ($dv =~ /\|/);
-	push @out, $dk . "::" . $dv;
+        $dv = "($dv)" if ($dv =~ /\|/);
+        push @out, $dk . "::" . $dv;
     }
     return @out;
 }

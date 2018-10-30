@@ -30,8 +30,7 @@ import subprocess as ipc
 import sys
 import tempfile
 import threading
-
-import debian.deb822 as deb822
+from debian import deb822
 
 
 def chmod_x(path):
@@ -91,7 +90,7 @@ class Fail(Exception):
     pass
 
 
-class Progress(object):
+class Progress:
 
     @staticmethod
     def _write(s):
@@ -175,11 +174,13 @@ class VerboseProgress(Progress):
         self._write(line)
 
     def skip(self, name, reason):
-        self._write('{test}: SKIP ({reason})\n'.format(test=name, reason=reason))
+        self._write('{test}: SKIP ({reason})\n'.format(
+            test=name, reason=reason))
 
     def fail(self, name, reason):
         self._separator()
-        self._write('{test}: FAIL ({reason})\n'.format(test=name, reason=reason))
+        self._write('{test}: FAIL ({reason})\n'.format(
+            test=name, reason=reason))
         self._write('\n')
 
     def ok(self, name):
@@ -188,7 +189,7 @@ class VerboseProgress(Progress):
         self._write('\n')
 
 
-class TestCommand(object):
+class TestCommand:
 
     def __init__(self, group, command):
         self.group = group
@@ -216,8 +217,10 @@ class TestCommand(object):
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
         environ = dict(os.environ)
         environ['AUTOPKGTEST_TMP'] = tmpdir1
-        environ['ADTTMP'] = tmpdir2  # only for compatibility with old DEP-8 spec.
-        child = ipc.Popen(command, stdout=ipc.PIPE, stderr=ipc.PIPE, env=environ)
+        # only for compatibility with old DEP-8 spec.
+        environ['ADTTMP'] = tmpdir2
+        child = ipc.Popen(command, stdout=ipc.PIPE,
+                          stderr=ipc.PIPE, env=environ)
         output = []
         stderr = False
         for tag, line in annotate_output(child):
@@ -307,8 +310,7 @@ class TestOptions:  # pylint: disable=too-few-public-methods
         self.skippable = False
 
 
-class TestGroup(object):
-
+class TestGroup:
     def __init__(self):
         self.tests = []
         self.restrictions = frozenset()
@@ -358,7 +360,8 @@ class TestGroup(object):
             if isinstance(self._depends_cache, Exception):
                 raise self._depends_cache  # fpos, pylint: disable=raising-bad-type
             return
-        child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends], stderr=ipc.PIPE, env={})
+        child = ipc.Popen(['dpkg-checkbuilddeps', '-d',
+                           self.depends], stderr=ipc.PIPE, env={})
         error = child.stderr.read().decode('ASCII')
         child.stderr.close()
         if child.wait() != 0:
@@ -382,7 +385,8 @@ class TestGroup(object):
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
             elif r == 'breaks-testbed':
-                raise Skip('breaks-testbed restriction is not implemented; use adt-run')
+                raise Skip(
+                    'breaks-testbed restriction is not implemented; use adt-run')
             elif r == 'build-needed':
                 raise Skip('source tree not built')
             elif r == 'allow-stderr':
@@ -408,6 +412,7 @@ class TestGroup(object):
         if built_source_tree:
             ignored_restrictions.add('build-needed')
         ignored_restrictions.add('needs-recommends')
+        ignored_restrictions.add('superficial')
         try:
             options = self.check(ignored_restrictions)
         except Skip as exc:
@@ -453,15 +458,18 @@ def main():
     # TODO: refactor main function
     # pylint: disable=too-many-branches,too-many-statements,too-many-locals,too-many-nested-blocks
     parser = argparse.ArgumentParser(description=__doc__.strip())
-    parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
+    parser.add_argument('-v', '--verbose',
+                        action='store_true', help='verbose output')
     parser.add_argument('-b', '--built-source-tree', action='store_true',
                         help='assume built source tree')
     parser.add_argument('--ignore-restrictions', metavar='<restr>[,<restr>...]',
                         help='ignore specified restrictions', default='')
-    parser.add_argument('tests', metavar='<test-name>', nargs='*', help='tests to run')
+    parser.add_argument('tests', metavar='<test-name>',
+                        nargs='*', help='tests to run')
     options = parser.parse_args()
     options.tests = frozenset(options.tests)
-    options.ignore_restrictions = frozenset(options.ignore_restrictions.split(','))
+    options.ignore_restrictions = frozenset(
+        options.ignore_restrictions.split(','))
     binary_packages = set()
     build_depends = []
     try:
@@ -478,7 +486,8 @@ def main():
                 # para['Source']
                 for field in 'Build-Depends', 'Build-Depends-Indep':
                     try:
-                        build_depends += deb822.PkgRelation.parse_relations(para[field])
+                        build_depends += deb822.PkgRelation.parse_relations(
+                            para[field])
                     except KeyError:
                         continue
             else:
@@ -550,11 +559,13 @@ def main():
     if failures:
         for name, exception in failures:
             print('=' * 70)
-            print('FAIL: {test} ({reason})'.format(test=name, reason=exception.args[1]))
+            print('FAIL: {test} ({reason})'.format(
+                test=name, reason=exception.args[1]))
     if flakes:
         for name, exception in flakes:
             print('=' * 70)
-            print('FLAKY: {test} ({reason})'.format(test=name, reason=exception.args[1]))
+            print('FLAKY: {test} ({reason})'.format(
+                test=name, reason=exception.args[1]))
     print()
     fmt_message = ['tests={n}'.format(n=n_test)]
     if n_skip > 0:
