@@ -97,11 +97,23 @@ makeDebianDirWithUpstream() {
     cd -
 }
 
+makeDebianDirHead() {
+    WATCHARGS=$1
+    makeDebianDir $WATCHARGS
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=4
+opts="mode=git,pretty=0.0+git%cd.%h" \
+file:///$TMPDIR/repo HEAD
+END
+}
+
 helperLaunch() {
     WATCHARGS=$1
     ARG="${2:-}"
     if test "$ARG" = "upstream"; then
         makeDebianDirWithUpstream $WATCHARGS
+    elif test "$ARG" = "HEAD"; then
+        makeDebianDirHead $WATCHARGS
     else
         makeDebianDir $WATCHARGS
     fi
@@ -115,6 +127,16 @@ testGit() {
     assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    cleanup
+}
+
+testGitHead() {
+    helperLaunch "pgpmode=none" HEAD
+    ORIG=$(ls $TMPDIR|perl -ne 'print if/^foo.*\.orig\.tar\.xz/')
+    UPSTREAM=$(ls $TMPDIR|perl -ne 'print if/^foo.*(?<!orig)\.tar\.xz/')
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/$UPSTREAM ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$ORIG ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$ORIG ]"
     cleanup
 }
 

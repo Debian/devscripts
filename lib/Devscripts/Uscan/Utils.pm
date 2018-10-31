@@ -136,6 +136,9 @@ sub get_suffix ($) {
     # Normalize compression methods to the names used by Dpkg::Compression
     if (exists $opt2suffix{$compression}) {
         $canonical_suffix = $opt2suffix{$compression};
+    } elsif ($compression eq 'default') {
+        require Devscripts::MkOrigtargz::Config;
+        return &Devscripts::MkOrigtargz::Config::default_compression;
     } else {
         uscan_die "$progname: invalid suffix, $compression given.";
     }

@@ -1,11 +1,13 @@
 devscripts (2.18.8) UNRELEASED; urgency=medium
 
-  [ Xavier Guimard ]
-  * French translation update.
-
   [ Reiner Herrmann ]
   * nmudiff:
     + Check for neomutt if mutt is not available.  Closes: #912083
+
+  [ Xavier Guimard ]
+  * French translation update.
+  * uscan:
+    + Fix default compression suffix in git HEAD mode.  Closes: #912403; MR: !81
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Oct 2018 16:30:43 +0100
 
