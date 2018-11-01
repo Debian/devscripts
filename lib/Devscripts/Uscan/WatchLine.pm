@@ -1,4 +1,3 @@
-
 =pod
 
 =head1 NAME
@@ -1522,7 +1521,7 @@ sub mkorigtargz {
         push @ARGV, $path;
         my $tmp = $Devscripts::Output::die_on_error;
 
-        uscan_verbose "Launck mk-origtargz with options:\n   "
+        uscan_verbose "Launch mk-origtargz with options:\n   "
           . join(" ", @ARGV);
         my $mk = Devscripts::MkOrigtargz->new;
         $mk->do;
