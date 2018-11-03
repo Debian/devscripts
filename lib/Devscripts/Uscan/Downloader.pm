@@ -104,8 +104,8 @@ sub download ($$$$$$$$) {
         $response = $self->user_agent->request($request, $fname);
         if (!$response->is_success) {
             uscan_warn((defined $pkg_dir ? "In directory $pkg_dir, d" : "D")
-              . "ownloading\n  $url failed: "
-              . $response->status_line);
+                . "ownloading\n  $url failed: "
+                  . $response->status_line);
             return 0;
         }
     } else {    # elsif ($$optref{'mode'} eq 'git')
