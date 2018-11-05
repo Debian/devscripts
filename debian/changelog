@@ -10,7 +10,13 @@ devscripts (2.18.8) UNRELEASED; urgency=medium
     + Fix default compression suffix in git HEAD mode.  Closes: #912403; MR: !81
 
   [ Jérémy Lal ]
-  * uscan: fix missing parenthesis
+  * uscan:
+    + Fix missing parenthesis.
+
+  [ Mattia Rizzolo ]
+  * doc:
+    + Move the instructions to build/install/clean the doc/ directory into a
+      Makefile in that directory.
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Oct 2018 16:30:43 +0100
 
