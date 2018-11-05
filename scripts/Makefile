@@ -47,7 +47,6 @@ PKGNAMES := \
 
 GEN_MAN1S += \
 	debrepro.1 \
-	devscripts.1 \
 	ltnu.1 \
 	mk-origtargz.1 \
 	reproducible-check.1 \
@@ -99,14 +98,6 @@ test_pl: $(PL_CHECKS)
 
 test_py: $(VERSION_FILE)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
-
-# There is a slight chance this gets called twice, once here from here and once
-# from ../po4a/Makefile. Treat files with care.
-PID := $(shell echo $$$$-$$PPID)
-devscripts.1: devscripts.1.in
-	cat $< > $@.$(PID)
-	perl ../debian/genmanpage.pl >> $@.$(PID)
-	mv $@.$(PID) $@
 
 reproducible-check.1: reproducible-check
 	help2man \

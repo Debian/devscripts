@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.16.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2018-10-25 12:59+0200\n"
+"POT-Creation-Date: 2018-11-05 13:54+0100\n"
 "PO-Revision-Date: 2016-09-25 18:56+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -30,8 +30,8 @@ msgstr "ANNOTATE-OUTPUT"
 #: ../scripts/debdiff.1:1 ../scripts/debdiff-apply.1:15 ../scripts/debi.1:1
 #: ../scripts/debpkg.1:1 ../scripts/debrelease.1:1 ../scripts/debrsign.1:1
 #: ../scripts/debsign.1:1 ../scripts/debuild.1:1 ../scripts/dep3changelog.1:1
-#: ../scripts/devscripts.1:1 ../scripts/dpkg-genbuilddeps.1:1
-#: ../doc/edit-patch.1:1 ../scripts/dscextract.1:1 ../scripts/dscverify.1:1
+#: ../doc/devscripts.1:1 ../scripts/dpkg-genbuilddeps.1:1 ../doc/edit-patch.1:1
+#: ../scripts/dscextract.1:1 ../scripts/dscverify.1:1
 #: ../scripts/getbuildlog.1:1 ../scripts/grep-excuses.1:1
 #: ../scripts/list-unreleased.1:1 ../scripts/manpage-alert.1:1
 #: ../scripts/mergechanges.1:1 ../scripts/nmudiff.1:1
@@ -39,7 +39,7 @@ msgstr "ANNOTATE-OUTPUT"
 #: ../scripts/rc-alert.1:1 ../doc/suspicious-source.1:15 ../scripts/uupdate.1:1
 #: ../doc/what-patch.1:1 ../scripts/whodepends.1:1 ../scripts/who-uploads.1:1
 #: ../scripts/wnpp-alert.1:1 ../scripts/wnpp-check.1:1
-#: ../doc/wrap-and-sort.1:15 ../scripts/devscripts.conf.5:1
+#: ../doc/wrap-and-sort.1:15 ../doc/devscripts.conf.5:1
 #, no-wrap
 msgid "Debian Utilities"
 msgstr "Debian-Hilfswerkzeuge"
@@ -52,7 +52,7 @@ msgstr "Debian-Hilfswerkzeuge"
 #: ../scripts/debdiff.1:1 ../scripts/debdiff-apply.1:15 ../scripts/debi.1:1
 #: ../scripts/debpkg.1:1 ../scripts/debrelease.1:1 ../scripts/debrsign.1:1
 #: ../scripts/debsign.1:1 ../scripts/debuild.1:1 ../scripts/dep3changelog.1:1
-#: ../scripts/devscripts.1:1 ../scripts/dpkg-depcheck.1:1
+#: ../doc/devscripts.1:1 ../scripts/dpkg-depcheck.1:1
 #: ../scripts/dpkg-genbuilddeps.1:1 ../doc/edit-patch.1:1
 #: ../scripts/dscextract.1:1 ../scripts/dscverify.1:1
 #: ../scripts/getbuildlog.1:1 ../scripts/grep-excuses.1:1
@@ -62,7 +62,7 @@ msgstr "Debian-Hilfswerkzeuge"
 #: ../scripts/rc-alert.1:1 ../doc/suspicious-source.1:15 ../scripts/uupdate.1:1
 #: ../doc/what-patch.1:1 ../scripts/whodepends.1:1 ../scripts/who-uploads.1:1
 #: ../scripts/wnpp-alert.1:1 ../scripts/wnpp-check.1:1
-#: ../doc/wrap-and-sort.1:15 ../scripts/devscripts.conf.5:1
+#: ../doc/wrap-and-sort.1:15 ../doc/devscripts.conf.5:1
 #, no-wrap
 msgid "DEBIAN"
 msgstr "DEBIAN"
@@ -80,7 +80,7 @@ msgstr "DEBIAN"
 #: ../scripts/debrepro.pod:1 ../scripts/debrelease.1:2 ../scripts/debrsign.1:2
 #: ../scripts/debsign.1:2 ../scripts/debsnap.1:3 ../scripts/debuild.1:2
 #: ../scripts/desktop2menu.pl:24 ../scripts/dep3changelog.1:2
-#: ../scripts/devscripts.1:2 ../scripts/dget.pl:562 ../scripts/diff2patches.1:2
+#: ../doc/devscripts.1:2 ../scripts/dget.pl:562 ../scripts/diff2patches.1:2
 #: ../scripts/dpkg-depcheck.1:2 ../scripts/dpkg-genbuilddeps.1:2
 #: ../doc/edit-patch.1:2 ../scripts/dscextract.1:2 ../scripts/dscverify.1:2
 #: ../scripts/getbuildlog.1:2 ../scripts/git-deborig.pl:20
@@ -98,7 +98,7 @@ msgstr "DEBIAN"
 #: ../scripts/whodepends.1:2 ../scripts/who-uploads.1:2
 #: ../scripts/who-permits-upload.pl:48 ../scripts/wnpp-alert.1:2
 #: ../scripts/wnpp-check.1:2 ../doc/wrap-and-sort.1:16
-#: ../scripts/devscripts.conf.5:2
+#: ../doc/devscripts.conf.5:2
 #, no-wrap
 msgid "NAME"
 msgstr "BEZEICHNUNG"
@@ -162,10 +162,9 @@ msgstr "B<annotate-output> [I<Optionen>] I<Programm> [I<Argumente> …]"
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
 #: ../scripts/debsign.1:6 ../scripts/debsnap.1:14 ../scripts/debuild.1:10
 #: ../scripts/desktop2menu.pl:34 ../scripts/dep3changelog.1:6
-#: ../scripts/devscripts.1:4 ../scripts/dget.pl:576
-#: ../scripts/diff2patches.1:10 ../scripts/dpkg-depcheck.1:6
-#: ../scripts/dpkg-genbuilddeps.1:6 ../doc/edit-patch.1:11
-#: ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
+#: ../doc/devscripts.1:4 ../scripts/dget.pl:576 ../scripts/diff2patches.1:10
+#: ../scripts/dpkg-depcheck.1:6 ../scripts/dpkg-genbuilddeps.1:6
+#: ../doc/edit-patch.1:11 ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
 #: ../scripts/getbuildlog.1:8 ../scripts/git-deborig.pl:28
 #: ../scripts/grep-excuses.1:6 ../scripts/hardening-check.pl:438
 #: ../scripts/list-unreleased.1:6 ../scripts/ltnu.pod:13
@@ -181,7 +180,7 @@ msgstr "B<annotate-output> [I<Optionen>] I<Programm> [I<Argumente> …]"
 #: ../scripts/whodepends.1:6 ../scripts/who-uploads.1:6
 #: ../scripts/who-permits-upload.pl:56 ../scripts/wnpp-alert.1:8
 #: ../scripts/wnpp-check.1:8 ../doc/wrap-and-sort.1:22
-#: ../scripts/devscripts.conf.5:4
+#: ../doc/devscripts.conf.5:4
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "BESCHREIBUNG"
@@ -364,7 +363,7 @@ msgstr ""
 #: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:1877
 #: ../scripts/uupdate.1:189 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:167 ../scripts/wnpp-alert.1:29
-#: ../scripts/wnpp-check.1:26 ../scripts/devscripts.conf.5:54
+#: ../scripts/wnpp-check.1:26 ../doc/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "SIEHE AUCH"
@@ -419,7 +418,7 @@ msgstr ""
 #: ../scripts/uscan.pl:1881 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36
-#: ../scripts/devscripts.conf.5:58
+#: ../doc/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr "AUTOR"
@@ -6646,7 +6645,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/debc.1:118 ../scripts/debchange.1:418 ../scripts/debclean.1:103
 #: ../scripts/debi.1:125 ../scripts/debrelease.1:125 ../scripts/debuild.1:397
-#: ../scripts/devscripts.conf.5:42
+#: ../doc/devscripts.conf.5:42
 #, no-wrap
 msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
@@ -8004,7 +8003,7 @@ msgstr ""
 
 #. type: =head1
 #: ../scripts/debchange.1:467 ../scripts/dep3changelog.1:22
-#: ../scripts/devscripts.1:16 ../scripts/devscripts.1:20 ../scripts/ltnu.pod:68
+#: ../doc/devscripts.1:16 ../doc/devscripts.1:20 ../scripts/ltnu.pod:68
 #: ../scripts/mass-bug.pl:127
 #, no-wrap
 msgid "ENVIRONMENT"
@@ -13544,18 +13543,18 @@ msgid "B<debchange>(1)"
 msgstr "B<debchange>(1)"
 
 #. type: TH
-#: ../scripts/devscripts.1:1
+#: ../doc/devscripts.1:1
 #, no-wrap
 msgid "DEVSCRIPTS"
 msgstr "DEVSCRIPTS"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:4
+#: ../doc/devscripts.1:4
 msgid "devscripts - scripts to ease the lives of Debian developers"
 msgstr "devscripts - Skripte, die das Leben von Debian-Entwicklern erleichtern"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:12
+#: ../doc/devscripts.1:12
 msgid ""
 "The B<devscripts> package provides a collection of scripts which may be of "
 "use to Debian developers and others wishing to build Debian packages.  For a "
@@ -13572,7 +13571,7 @@ msgstr ""
 "Einzelheiten über die Autoren finden Sie im Code oder den Handbuchseiten."
 
 #. type: Plain text
-#: ../scripts/devscripts.1:16
+#: ../doc/devscripts.1:16
 msgid ""
 "Also, the directory I</usr/share/doc/devscripts/examples> contains examples "
 "of B<procmail> and B<exim> scripts for sorting mail arriving to Debian "
@@ -13583,7 +13582,7 @@ msgstr ""
 "Mails zu Debian-Mailinglisten."
 
 #. type: Plain text
-#: ../scripts/devscripts.1:20
+#: ../doc/devscripts.1:20
 msgid ""
 "Several scripts of the devscripts suite use the following environment "
 "variables. Check the man pages of individual scripts for more details on how "
@@ -13595,51 +13594,51 @@ msgstr ""
 
 # FIXME appears not in the manpage --> remove from translation
 #. type: IX
-#: ../scripts/devscripts.1:20
+#: ../doc/devscripts.1:20
 #, no-wrap
 msgid "Header"
 msgstr "Header"
 
 #. type: IP
-#: ../scripts/devscripts.1:21
+#: ../doc/devscripts.1:21
 #, no-wrap
 msgid "\\s-1DEBEMAIL\\s0"
 msgstr "\\s-1DEBEMAIL\\s0"
 
 # FIXME appears not in the manpage --> remove from translation
 #. type: IX
-#: ../scripts/devscripts.1:22 ../scripts/devscripts.1:25
+#: ../doc/devscripts.1:22 ../doc/devscripts.1:25
 #, no-wrap
 msgid "Item"
 msgstr "Item"
 
 #. type: =item
-#: ../scripts/devscripts.1:22 ../scripts/ltnu.pod:74
+#: ../doc/devscripts.1:22 ../scripts/ltnu.pod:74
 #, no-wrap
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:24
+#: ../doc/devscripts.1:24
 msgid "Email of the person acting on a given Debian package via devscripts."
 msgstr ""
 "E-Mail-Adresse der Person, die an einem angegebenen Debian-Paket mittels "
 "Devscripts tätig ist."
 
 #. type: IP
-#: ../scripts/devscripts.1:24
+#: ../doc/devscripts.1:24
 #, no-wrap
 msgid "\\s-1DEBFULLNAME\\s0"
 msgstr "\\s-1DEBFULLNAME\\s0"
 
 #. type: IX
-#: ../scripts/devscripts.1:25
+#: ../doc/devscripts.1:25
 #, no-wrap
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:28
+#: ../doc/devscripts.1:28
 msgid ""
 "Full name (first + family) of the person acting on a given Debian package "
 "via devscripts."
@@ -13648,13 +13647,13 @@ msgstr ""
 "Debian-Paket mittels Devscripts tätig ist."
 
 #. type: SH
-#: ../scripts/devscripts.1:28
+#: ../doc/devscripts.1:28
 #, no-wrap
 msgid "SCRIPTS"
 msgstr "SKRIPTE"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:30
+#: ../doc/devscripts.1:30
 msgid ""
 "Here is the complete list of available devscripts. See their man pages for "
 "additional documentation."
@@ -17264,10 +17263,15 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:36
+#, fuzzy
+#| msgid ""
+#| "Use B<mutt>(1) for editing and sending the message to the BTS (default "
+#| "behaviour).  This can be controlled using a configuration file option "
+#| "(see below)."
 msgid ""
-"Use B<mutt>(1) for editing and sending the message to the BTS (default "
-"behaviour).  This can be controlled using a configuration file option (see "
-"below)."
+"Use B<mutt>(1) (or B<neomutt>(1)) for editing and sending the message to the "
+"BTS (default behaviour).  This can be controlled using a configuration file "
+"option (see below)."
 msgstr ""
 "verwendet B<mutt>(1) zum Bearbeiten und Versenden der Nachricht an die "
 "Fehlerdatenbank (Standardverhalten). Dies kann mittels einer "
@@ -17405,9 +17409,13 @@ msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:100
+#, fuzzy
+#| msgid ""
+#| "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> to "
+#| "compose and send the message or not, as described above."
 msgid ""
-"Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> to "
-"compose and send the message or not, as described above."
+"Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> (or "
+"B<neomut>)to compose and send the message or not, as described above."
 msgstr ""
 "kann I<yes> (Vorgabe) oder I<no> sein und gibt wie oben beschrieben an, ob "
 "B<mutt> zum Verfassen und Senden der Nachricht verwendet wird oder nicht."
@@ -25798,18 +25806,18 @@ msgstr ""
 "E<lt>bdrung@debian.orgE<gt> geschrieben."
 
 #. type: TH
-#: ../scripts/devscripts.conf.5:1
+#: ../doc/devscripts.conf.5:1
 #, no-wrap
 msgid "DEVSCRIPTS.CONF"
 msgstr "DEVSCRIPTS.CONF"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:4
+#: ../doc/devscripts.conf.5:4
 msgid "devscripts.conf - configuration file for the devscripts package"
 msgstr "devscripts.conf - Konfigurationsdatei für das Paket Devscripts"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:9
+#: ../doc/devscripts.conf.5:9
 msgid ""
 "The B<devscripts> package provides a collection of scripts which may be of "
 "use to Debian developers and others wishing to build Debian packages.  Many "
@@ -25822,7 +25830,7 @@ msgstr ""
 "konfiguriert werden können."
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:15
+#: ../doc/devscripts.conf.5:15
 msgid ""
 "Every script in the B<devscripts> package which makes use of values from "
 "these configuration files describes the specific settings recognised in its "
@@ -25837,7 +25845,7 @@ msgstr ""
 "oder sehen Sie in die Ausgabe von I<dpkg -L devscripts | grep /usr/bin>.)"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:24
+#: ../doc/devscripts.conf.5:24
 msgid ""
 "The two configuration files are I</etc/devscripts.conf> for system-wide "
 "defaults and I<~/.devscripts> for per-user settings.  They are written with "
@@ -25857,7 +25865,7 @@ msgstr ""
 "Entsprechung zur Standardeinstellung betrachtet."
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:28
+#: ../doc/devscripts.conf.5:28
 msgid ""
 "All variable names are written in uppercase, and begin with the script "
 "name.  Package-wide variables begin with \"DEVSCRIPTS\", and are listed "
@@ -25868,7 +25876,7 @@ msgstr ""
 "nachfolgend ebenso wie in den einschlägigen Handbuchseiten aufgeführt."
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:36
+#: ../doc/devscripts.conf.5:36
 msgid ""
 "For a list of all of the available options variables, along with their "
 "default settings, see the example configuration file I</usr/share/doc/"
@@ -25885,7 +25893,7 @@ msgstr ""
 "wurden, werden beim Upgrade des Pakets an I</etc/devscripts.conf> angehängt."
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:40
+#: ../doc/devscripts.conf.5:40
 msgid ""
 "Every script which reads the configuration files can be forced to ignore "
 "them by using B<--no-conf> as the I<first> command-line option."
@@ -25894,18 +25902,18 @@ msgstr ""
 "als I<erste> Befehlszeilenoption gezwungen werden, sie zu ignorieren."
 
 #. type: SH
-#: ../scripts/devscripts.conf.5:40
+#: ../doc/devscripts.conf.5:40
 #, no-wrap
 msgid "PACKAGE-WIDE VARIABLES"
 msgstr "PAKETWEITE VARIABLEN"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:42
+#: ../doc/devscripts.conf.5:42
 msgid "The currently recognised package-wide variables are:"
 msgstr "Die derzeit erkannten paketweiten Variablen sind:"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:54
+#: ../doc/devscripts.conf.5:54
 msgid ""
 "These variables control scripts which change directory to find a I<debian/"
 "changelog> file or suchlike, and some other miscellaneous cases.  In order "
@@ -25929,12 +25937,12 @@ msgstr ""
 "das spezielle Verhalten für jedes Skript zu erfahren."
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:58
+#: ../doc/devscripts.conf.5:58
 msgid "B<devscripts>(1)  and I</usr/share/doc/devscripts/README.gz.>"
 msgstr "B<devscripts>(1) und I</usr/share/doc/devscripts/README.gz>"
 
 #. type: Plain text
-#: ../scripts/devscripts.conf.5:60
+#: ../doc/devscripts.conf.5:60
 msgid ""
 "This manpage was written for the B<devscripts> package by the package "
 "maintainer Julian Gilbey E<lt>jdg@debian.orgE<gt>."
