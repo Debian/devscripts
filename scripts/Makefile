@@ -8,7 +8,7 @@ define \n
 endef
 
 VERSION_FILE = ../version
-VERSION = $(file < $(VERSION_FILE))
+VERSION = $(shell cat $(VERSION_FILE))
 
 PL_FILES := $(wildcard *.pl)
 SH_FILES = $(wildcard *.sh)
