@@ -216,9 +216,8 @@ sub parse_conf_files {
             wait_child => 1,
             to_string  => \$shell_out
         );
-        @config_vars{@key_names}
-          = map { s/^\s*(\S.*?)\s*/$1/ ? $_ : undef } split /\n/,
-          $shell_out, -1;
+        @config_vars{@key_names} = map { s/^\s*(.*?)\s*/$1/ ? $_ : undef }
+          split(/\n/, $shell_out, -1);
 
         # Check validity and set value
         foreach my $key (@$keys) {
