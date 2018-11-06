@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2018-11-05 14:29+0100\n"
-"PO-Revision-Date: 2018-10-28 16:34+0100\n"
+"PO-Revision-Date: 2018-11-06 07:10+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -13608,10 +13608,6 @@ msgstr "B<annotate-output>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:33
-#, fuzzy
-#| msgid ""
-#| "run a command and prepend time and stream (O for stdout, E for stderr) "
-#| "for every line of output"
 msgid ""
 "run a command and prepend time and stream (O for stdout, E for stderr) for "
 "every line of output."
@@ -13632,6 +13628,8 @@ msgid ""
 "Prints arch (tla/Bazaar) package names. Also supports calculating the "
 "package names for other branches. [tla | bazaar]"
 msgstr ""
+"Affiche les noms de paquet arch (tla/Bazaar). Supporte également le calcul "
+"des noms de paquet pour les autres branches. [tla | bazaar]"
 
 #. type: IP
 #: ../doc/devscripts.1:35
@@ -13641,20 +13639,16 @@ msgstr "B<bts>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:37
-#, fuzzy
-#| msgid ""
-#| "a command-line tool for manipulating the BTS [www-browser, libauthen-sasl-"
-#| "perl, libnet-smtps-perl, libsoap-lite-perl, liburi-perl, libwww-perl, bsd-"
-#| "mailx | mailx]"
 msgid ""
 "A command-line tool for accessing the BTS, both to send mails to control@bts."
 "debian.org and to access the web pages and SOAP interface of the BTS. [www-"
 "browser, libauthen-sasl-perl, libnet-smtps-perl, libsoap-lite-perl, liburi-"
 "perl, libwww-perl, bsd-mailx | mailx]"
 msgstr ""
-"outil en ligne de commande pour manipuler le BTS [www-browser, libauthen-"
-"sasl-perl, libnet-smtps-perl, libsoap-lite-perl, liburi-perl, libwww-perl, "
-"bsd-mailx | mailx]"
+"outil en ligne de commande pour manipuler le BTS, à la fois pour envoyer des "
+"courriels à control@bts.debian.org et accéder aux pages web et à l'interface "
+"SOAP du BTS. [www-browser, libauthen-sasl-perl, libnet-smtps-perl, libsoap-"
+"lite-perl, liburi-perl, libwww-perl, bsd-mailx | mailx]"
 
 #. type: IP
 #: ../doc/devscripts.1:37
@@ -13664,16 +13658,12 @@ msgstr "B<build-rdeps>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:39
-#, fuzzy
-#| msgid ""
-#| "search for all packages that build-depend on a given package [dctrl-"
-#| "tools, dose-extra, libdpkg-perl]"
 msgid ""
 "Searches for all packages that build-depend on a given package.  [dctrl-"
 "tools, dose-extra, libdpkg-perl]"
 msgstr ""
-"rechercher tous les paquets qui dépendent du paquet indiqué pour leur "
-"construction [dctrl-tools, dose-extra, libdpkg-perl]"
+"Rechercher tous les paquets qui dépendent du paquet indiqué pour leur "
+"construction. [dctrl-tools, dose-extra, libdpkg-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:39
@@ -13683,11 +13673,9 @@ msgstr "B<chdist>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:41
-#, fuzzy
-#| msgid "tool to easily play with several distributions [dctrl-tools]"
 msgid "tool to easily play with several distributions. [dctrl-tools]"
 msgstr ""
-"outil pour jouer facilement avec différentes distributions [dctrl-tools]"
+"outil pour jouer facilement avec différentes distributions. [dctrl-tools]"
 
 #. type: IP
 #: ../doc/devscripts.1:41
@@ -13697,10 +13685,6 @@ msgstr "B<checkbashisms>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:43
-#, fuzzy
-#| msgid ""
-#| "check whether a /bin/sh script contains any common bash-specific "
-#| "constructs"
 msgid ""
 "check whether a /bin/sh script contains any common bash-specific constructs."
 msgstr "rechercher des constructions spécifiques à bash dans un script /bin/sh"
@@ -13713,18 +13697,13 @@ msgstr "B<cowpoke>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:45
-#, fuzzy
-#| msgid ""
-#| "upload a Debian source package to a cowbuilder host and build it, "
-#| "optionally also signing and uploading the result to an incoming queue "
-#| "[ssh-client]"
 msgid ""
 "upload a Debian source package to a cowbuilder host and build it, optionally "
 "also signing and uploading the result to an incoming queue.  [ssh-client]"
 msgstr ""
 "envoyer un paquet source Debian à un hôte cowbuilder et construire le "
 "paquet. Le paquet résultant peut également être signé et envoyé dans une "
-"file d'attente [ssh-client]"
+"file d'attente. [ssh-client]"
 
 #. type: IP
 #: ../doc/devscripts.1:45
@@ -13734,16 +13713,12 @@ msgstr "B<cvs-debi>, B<cvs-debc>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:47
-#, fuzzy
-#| msgid ""
-#| "wrappers around debi and debc respectively (see below) which allow them "
-#| "to be called from the CVS working directory [cvs-buildpackage]"
 msgid ""
 "wrappers around debi and debc respectively (see below)  which allow them to "
 "be called from the CVS working directory.  [cvs-buildpackage]"
 msgstr ""
 "encapsulations (« wrappers ») respectivement de debi et debc (voir plus bas) "
-"pouvant être appelées depuis un répertoire de travail CVS [cvs-buildpackage]"
+"pouvant être appelées depuis un répertoire de travail CVS. [cvs-buildpackage]"
 
 #. type: IP
 #: ../doc/devscripts.1:47
@@ -13753,16 +13728,12 @@ msgstr "B<cvs-debrelease>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:49
-#, fuzzy
-#| msgid ""
-#| "wrapper around debrelease which allows it to be called from the CVS "
-#| "working directory [cvs-buildpackage, dupload | dput, ssh-client]"
 msgid ""
 "wrapper around debrelease which allows it to be called from the CVS working "
 "directory. [cvs-buildpackage, dupload | dput, ssh-client]"
 msgstr ""
 "encapsulation de debrelease pouvant être appelée depuis un répertoire de "
-"travail CVS [cvs-buildpackage, dupload | dput, ssh-client]"
+"travail CVS. [cvs-buildpackage, dupload | dput, ssh-client]"
 
 #. type: IP
 #: ../doc/devscripts.1:49
@@ -13772,15 +13743,11 @@ msgstr "B<cvs-debuild>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:51
-#, fuzzy
-#| msgid ""
-#| "wrapper for cvs-buildpackage to use debuild as its package building "
-#| "program [cvs-buildpackage, fakeroot, lintian, gnupg | gnupg2]"
 msgid ""
 "A wrapper for cvs-buildpackage to use debuild as its package building "
 "program. [cvs-buildpackage, fakeroot, lintian, gnupg |gnupg2]"
 msgstr ""
-"encapsulation de debuild pour construire les paquets avec cvs-buildpackage "
+"encapsulation de debuild pour construire les paquets avec cvs-buildpackage. "
 "[cvs-buildpackage, fakeroot, lintian, gnupg | gnupg2]"
 
 #. type: IP
@@ -13791,16 +13758,12 @@ msgstr "B<dcmd>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:53
-#, fuzzy
-#| msgid ""
-#| "run a given command replacing the name of a .changes or .dsc file with "
-#| "each of the files referenced therein"
 msgid ""
 "run a given command replacing the name of a .changes or .dsc file with each "
 "of the files referenced therein. *"
 msgstr ""
 "exécuter une commande donnée en remplaçant le nom d'un fichier .changes ou ."
-"dsc par chaque fichier référencé"
+"dsc par chaque fichier référencé. *"
 
 #. type: IP
 #: ../doc/devscripts.1:53
@@ -13811,16 +13774,12 @@ msgstr "B<dcontrol>(1)"
 # NOTE: -- -> -
 #. type: Plain text
 #: ../doc/devscripts.1:55
-#, fuzzy
-#| msgid ""
-#| "remotely query package and source control files for all Debian "
-#| "distributions [liburl-perl, libwww-perl]"
 msgid ""
 "remotely query package and source control files for all Debian "
 "distributions. [liburl-perl, libwww-perl]"
 msgstr ""
 "interroger les fichiers de contrôle des paquets source et binaires pour "
-"toutes les distributions Debian [liburl-perl, libwww-perl]"
+"toutes les distributions Debian. [liburl-perl, libwww-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:55
@@ -13830,10 +13789,8 @@ msgstr "B<dd-list>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:57
-#, fuzzy
-#| msgid "given a list of packages, pretty-print it ordered by maintainer"
 msgid "given a list of packages, pretty-print it ordered by maintainer. *"
-msgstr "ordonner joliment une liste de paquets par responsable"
+msgstr "ordonner joliment une liste de paquets par responsable. *"
 
 #. type: IP
 #: ../doc/devscripts.1:57
@@ -13847,13 +13804,14 @@ msgid ""
 "List contents of current package.  Do this after a successful \"debuild\" to "
 "see if the package looks all right."
 msgstr ""
+"Liste le contenu du paquet courant. Le faire après la réussite de \"debuild"
+"\" pour voir si le paquet semble correct."
 
 #. type: IP
 #: ../doc/devscripts.1:59
-#, fuzzy, no-wrap
-#| msgid "I<debchange/dch>(1)"
+#, no-wrap
 msgid "I<debchange (abbreviation dch)>(1)"
-msgstr "B<debchange>/B<dch>(1)"
+msgstr "B<debchange (abréviation dch>)(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:61
@@ -13863,6 +13821,9 @@ msgid ""
 "depending upon the options given to it.  [libdistro-info-perl, libsoap-lite-"
 "perl]*"
 msgstr ""
+"Modifie debian/changelog et gère les numéros de version. Il augmentera la "
+"version ou ajoutera une entrée dans l'actuelle suivant les options données "
+"en paramètre. [libdistro-info-perl, libsoap-lite-perl]*"
 
 #. type: IP
 #: ../doc/devscripts.1:61
@@ -13872,10 +13833,8 @@ msgstr "B<debcheckout>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:63
-#, fuzzy
-#| msgid "checkout the development repository of a Debian package"
 msgid "checkout the development repository of a Debian package. *"
-msgstr "récupérer le contenu du dépôt d'un paquet Debian"
+msgstr "récupérer le contenu du dépôt d'un paquet Debian. *"
 
 #. type: IP
 #: ../doc/devscripts.1:63
@@ -13892,6 +13851,11 @@ msgid ""
 "files).  It will keep the .diffs and original files, though, so that the "
 "binaries and other files can be rebuilt if necessary.  [fakeroot]*"
 msgstr ""
+"Nettoie un répertoire source Debian. debclean nettoie tous les répertoires "
+"source Debian présents dans le répertoire courant et, si demandé, efface "
+"aussi les fichiers générés depuis ces répertoires (c'est à dire les "
+"fichiers  .deb, .dsc et .changes). Il conserve en revanche les fichiers "
+"originaux et .diffs, permettant ainsi la reconstruction. [fakeroot]*"
 
 #. type: IP
 #: ../doc/devscripts.1:65
@@ -13901,11 +13865,6 @@ msgstr "B<debcommit>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:67
-#, fuzzy
-#| msgid ""
-#| "commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg, basing "
-#| "commit message on changelog [cvs | darcs | subversion | svk | tla | bzr | "
-#| "git-core | mercurial, libtimedate-perl]"
 msgid ""
 "Commits changes to cvs, darcs, svn, svk, tla, bzr, git, or hg, using new "
 "entries in debian/changelog as the commit message. Also supports tagging "
@@ -13914,7 +13873,7 @@ msgid ""
 msgstr ""
 "soumettre les changements vers CVS, Darcs, Subversion, SVK, GNU Arch, "
 "Bazaar, Git ou Mercurial en basant le message de modification sur le journal "
-"de modifications [cvs | darcs | subversion | svk | tla | bzr | git | "
+"de modifications. [cvs | darcs | subversion | svk | tla | bzr | git | "
 "mercurial, libtimedate-perl]"
 
 #. type: IP
@@ -13932,6 +13891,12 @@ msgid ""
 "and report on the changes between source versions.  For a deeper comparison "
 "one can use the diffoscope package.  [wdiff, patchutils]*"
 msgstr ""
+"Programme qui examine deux fichiers .deb et reporte toutes les différences "
+"trouvées dans leurs listes de fichiers. Patique pour s'assurer qu'aucu "
+"fichier n'a été perdu entre deux versions. Peut également examiner deux "
+"fichiers .dsc et montrer les changements entre les versions source. Pour une "
+"comparaison plus profonde, on peut utiliser le paquet diffoscope.  [wdiff, "
+"patchutils]*"
 
 #. type: IP
 #: ../doc/devscripts.1:69
@@ -13949,6 +13914,13 @@ msgid ""
 "patches still apply to newer versions of those packages.  [python3-debian, "
 "python3-unidiff, quilt]"
 msgstr ""
+"Applique les différentiels unifiés de deux paquets source Debian, tels ceux "
+"générés par debdiff, à un paquet source Debian cible. Toute modification "
+"apportée à debian / changelog est traitée spécialement afin d'éviter les "
+"conflits générés par les différences de changelog lorsqu'il est appliqué "
+"naïvement. Peut être utilisé pour vérifier que les anciens correctifs "
+"s'appliquent toujours aux versions les plus récentes de ces packages.  "
+"[python3-debian, python3-unidiff, quilt]"
 
 #. type: IP
 #: ../doc/devscripts.1:71
@@ -13966,6 +13938,12 @@ msgid ""
 "package with a very short command is very useful when troubleshooting "
 "packages."
 msgstr ""
+"Installe le paquet actuel en utilisant le script setuid-root debpkg décrit "
+"ci-dessous. Il suppose que le paquet actuel vient d'être construit (par "
+"exemple, par debuild) et que le fichier .deb se trouve dans le répertoire "
+"parent et qu'il exécutera effectivement dpkg -i sur le fichier .deb. La "
+"possibilité d'installer le package à l'aide d'une commande très courte est "
+"très utile lors du dépannage de packages."
 
 #. type: IP
 #: ../doc/devscripts.1:73
@@ -13986,6 +13964,17 @@ msgid ""
 "superuser mode (e.g., an inadvertent rm -rf * in the wrong directory is "
 "disastrous as many can attest to)."
 msgstr ""
+"Un wrapper pour dpkg utilisé par debi pour permettre de tester facilement "
+"les paquets. Pour que debpkg fonctionne, il doit être positionné setuid "
+"root, ce qui doit être effectué par l’administrateur système - il n’est pas "
+"installé par défaut avec le setuid root. (Notez que le fait de pouvoir "
+"exécuter un debpkg avec le setuid root équivaut en réalité à avoir un accès "
+"root au système, il faut donc le faire avec prudence). Avoir debpkg en tant "
+"que wrapper pour dpkg peut être unu bonne chose, car ça peut réduire les "
+"risques de dommages résultant d'une mauvaise utilisation accidentelle des "
+"commandes en mode superutilisateur (par exemple, un rm -rf * par "
+"inadvertance dans le mauvais répertoire est désastreux, comme beaucoup "
+"peuvent en témoigner)."
 
 #. type: IP
 #: ../doc/devscripts.1:75
@@ -14000,6 +13989,9 @@ msgid ""
 "and then calls dupload or dput to actually perform the upload. [dupload | "
 "dput, ssh-client]"
 msgstr ""
+"Un wrapper autour de dupload ou dput qui détermine quelle version "
+"télécharger, puis appelle dupload ou dput pour effectuer le téléchargement. "
+"[dupload | dput, ssh-client]"
 
 #. type: IP
 #: ../doc/devscripts.1:77
@@ -14009,14 +14001,6 @@ msgstr "B<debrepro>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:79
-#, fuzzy
-#| msgid ""
-#| "B<debrepro> will build a given source directory twice, with a set of "
-#| "variations between the first and the second build, and compare the "
-#| "produced binary packages. If B<diffoscope> is installed, it is used to "
-#| "compare non-matching binaries. If B<disorderfs> is installed, it is used "
-#| "during the build to inject non-determinism in filesystem listing "
-#| "operations."
 msgid ""
 "A script that tests reproducibility of Debian packages. It will build a "
 "given source directory twice, with a set of variation between the first and "
@@ -14025,43 +14009,36 @@ msgid ""
 "installed, it is used during the build to inject non-determinism in "
 "filesystem listing operations.  [faketime, diffoscope, disorderfs]"
 msgstr ""
-"B<debrepro> construira deux fois un répertoire source donné, avec un "
-"ensemble de variations entre la première et la deuxième construction, et "
-"comparera les paquets binaires produits. Si B<diffoscope> est installé, il "
-"est utilisé pour comparer les binaires qui diffèrent. Si B<disorderfs> est "
-"installé, il est utilisé lors de la construction pour injecter du non-"
-"déterminisme dans les opérations de liste du système de fichiers."
+"Script qui teste la reproductibilité d'un paquet Debian. Il construit deux "
+"fois un répertoire source donné, avec un ensemble de variations entre la "
+"première et la deuxième construction, et compare les paquets binaires "
+"produits. Si diffoscope est installé, il est utilisé pour comparer les "
+"binaires qui diffèrent. Si disorderfs est installé, il est utilisé lors de "
+"la construction pour injecter du non-déterminisme dans les opérations de "
+"liste du système de fichiers.  [faketime, diffoscope, disorderfs]"
 
 #. type: IP
 #: ../doc/devscripts.1:79
-#, fuzzy, no-wrap
-#| msgid "I<debi>(1)"
+#, no-wrap
 msgid "I<debrsign>(1)"
-msgstr "B<debi>(1)"
+msgstr "I<debrsign>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:81
-#, fuzzy
-#| msgid ""
-#| "sign a .changes/.dsc pair without needing any of the rest of the package "
-#| "to be present; can sign the pair remotely or fetch the pair from a remote "
-#| "machine for signing [gnupg | gnupg2, debian-keyring, ssh-client]"
 msgid ""
 "This transfers a .changes/.dsc pair to a remote machine for signing, and "
 "runs debsign on the remote machine over an SSH connection.  [gnupg | gnupg2, "
 "debian-keyring, ssh-client]"
 msgstr ""
-"signer une paire de fichiers .changes et .dsc sans avoir besoin du reste du "
-"paquet. Signature à distance possible, ainsi que la récupération de la paire "
-"de fichiers depuis une machine distante pour la signature [gnupg | gnupg2, "
+"Transfère une paire de fichiers à signer .changes et .dsc et lance debsign "
+"sur la machine distante au travers d'une connection SSH. [gnupg | gnupg2, "
 "debian-keyring, ssh-client]"
 
 #. type: IP
 #: ../doc/devscripts.1:81
-#, fuzzy, no-wrap
-#| msgid "I<debi>(1)"
+#, no-wrap
 msgid "I<debsign>(1)"
-msgstr "B<debi>(1)"
+msgstr "I<debsign>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:83
@@ -14072,6 +14049,12 @@ msgid ""
 "This script is capable of automatically downloading the .changes and .dsc "
 "files from a remote machine. [gnupg |gnupg2, debian-keyring, ssh-client]*"
 msgstr ""
+"Utilisez GNU Privacy Guard pour signer les fichiers de changements (et "
+"éventuellement dsc) créés en exécutant dpkg-buildpackage avec les options "
+"sans signature. Utile si vous construisez un paquet sur une machine distante "
+"et souhaitez le signer sur un ordinateur local. Ce script est capable de "
+"télécharger automatiquement les fichiers .changes et .dsc à partir d’un "
+"ordinateur distant. [gnupg | gnupg2, debian-keyring, ssh-client] *"
 
 #. type: IP
 #: ../doc/devscripts.1:83
@@ -14081,11 +14064,11 @@ msgstr "B<debsnap>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:85
-#, fuzzy
-#| msgid "grab packages from https://snapshot.debian.org [libwww-perl]"
 msgid ""
 "grab packages from https://snapshot.debian.org [libwww-perl, libjson-perl]"
-msgstr "récupérer des paquets de https://snapshot.debian.org [libwww-perl]"
+msgstr ""
+"récupérer des paquets de https://snapshot.debian.org [libwww-perl, libjson-"
+"perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:85
@@ -14106,6 +14089,16 @@ msgid ""
 "package does not have any major policy violations. [fakeroot, lintian, gnupg "
 "| gnupg2]*"
 msgstr ""
+"Un wrapper pour construire un paquet (c'est-à-dire, dpkg-buildpackage) afin "
+"d'éviter les problèmes des permissions insuffisantes, des chemins "
+"incorrects, etc… Debuild configure l'environnement approprié pour la "
+"construction d'un paquet. Debuild utilise le programme fakeroot pour "
+"construire le paquet par défaut, mais peut être invité à utiliser toute "
+"autre commande gain-root, ou peut même être installé setuid root. Debuild "
+"peut également être utilisé pour exécuter diverses opérations du fichier "
+"debian/rules avec la même procédure de gain root. Debuild exécute également "
+"lintian pour vérifier que le paquet ne comporte pas de violation majeure de "
+"la politique. [fakeroot, lintian, gnupg | gnupg2] *"
 
 #. type: IP
 #: ../doc/devscripts.1:87
@@ -14115,16 +14108,12 @@ msgstr "B<deb-reversion>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:89
-#, fuzzy
-#| msgid ""
-#| "increase a binary package version number and repacks the package, useful "
-#| "for porters and the like"
 msgid ""
 "increases a binary package version number and repacks the package, useful "
 "for porters and the like."
 msgstr ""
-"augmenter le numéro de version d'un paquet binaire et reconstruire le "
-"paquet, pratique pour les porteurs et autres"
+"augmente le numéro de version d'un paquet binaire et reconstruit le paquet, "
+"pratique pour les porteurs et autres"
 
 #. type: IP
 #: ../doc/devscripts.1:89
@@ -14134,12 +14123,10 @@ msgstr "B<dep3changelog>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:91
-#, fuzzy
-#| msgid "generate a changelog entry from a DEP3-style patch header"
 msgid "generate a changelog entry from a DEP3-style patch header."
 msgstr ""
 "préparer une entrée du journal de modifications à partir de l'en-tête d'un "
-"correctif compatible DEP3"
+"correctif compatible DEP3."
 
 #. type: IP
 #: ../doc/devscripts.1:91
@@ -14149,16 +14136,12 @@ msgstr "B<desktop2menu>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:93
-#, fuzzy
-#| msgid ""
-#| "given a freedesktop.org desktop file, generate a skeleton for a menu file "
-#| "[libfile-desktopentry-perl]"
 msgid ""
 "given a freedesktop.org desktop file, generate a skeleton for a menu file. "
 "[libfile-desktopentry-perl]"
 msgstr ""
 "À partir d'un fichier desktop freedesktop.org, produire un corps de fichier "
-"menu [libfile-desktopentry-perl]"
+"menu. [libfile-desktopentry-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:93
@@ -14173,6 +14156,10 @@ msgid ""
 "download all references files. Specify a package name to download it from "
 "the configured apt repository. [wget | curl]"
 msgstr ""
+"Télécharge les paquets source et binaires Debian. Pointe sur un fichier ."
+"changes ou .dsc pour télécharger tous les fichiers de référence. Indiquer un "
+"nom de paquet pour le télécharger depuis le référentiel apt configuré. [wget "
+"| curl]"
 
 #. type: IP
 #: ../doc/devscripts.1:95
@@ -14182,16 +14169,12 @@ msgstr "B<diff2patches>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:97
-#, fuzzy
-#| msgid ""
-#| "extract patches from a .diff.gz file placing them under debian/ or, if "
-#| "present, debian/patches [patchutils]"
 msgid ""
 "extracts patches from a .diff.gz file placing them under debian/ or, if "
 "present, debian/patches. [patchutils]"
 msgstr ""
-"extraire les correctifs d'un fichier .diff.gz en les plaçant dans debian/ ou "
-"debian/patches s'il existe [patchutils]"
+"extrait les correctifs d'un fichier .diff.gz en les plaçant dans debian/, ou "
+"debian/patches s'il existe. [patchutils]"
 
 #. type: IP
 #: ../doc/devscripts.1:97
@@ -14208,6 +14191,11 @@ msgid ""
 "the Build-Depends etc.  lines in the debian/control file. [build-essential, "
 "strace]"
 msgstr ""
+"Exécute une commande spécifiée (telle que debian/rules build) ou dpkg-"
+"buildpackage, respectivement, pour déterminer les paquets utilisés lors du "
+"processus de construction. Ces informations peuvent être utiles lorsque vous "
+"essayez de déterminer les paquets nécessaires dans les lignes Build-Depends "
+"etc. du fichier debian/control. [build-essential, strace]"
 
 #. type: IP
 #: ../doc/devscripts.1:99
@@ -14217,10 +14205,8 @@ msgstr "B<dscextract>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:101
-#, fuzzy
-#| msgid "extract a single file from a Debian source package [patchutils]"
 msgid "extract a single file from a Debian source package. [patchutils]"
-msgstr "extraire un seul fichier d'un paquet source Debian [patchutils]"
+msgstr "extraire un seul fichier d'un paquet source Debian. [patchutils]"
 
 #. type: IP
 #: ../doc/devscripts.1:101
@@ -14234,6 +14220,9 @@ msgid ""
 "check the signature and MD5 sums of a dsc file against the most current "
 "Debian keyring on your system. [gnupg | gnupg2, debian-keyring]"
 msgstr ""
+"vérifie la signature et les sommes MD5 d’un fichier dsc par rapport au "
+"dernier fichier de clés Debian de votre système. [gnupg | gnupg2, debian-"
+"keyring]"
 
 #. type: IP
 #: ../doc/devscripts.1:103
@@ -14243,16 +14232,12 @@ msgstr "B<edit-patch>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:105
-#, fuzzy
-#| msgid ""
-#| "add/edit a patch for a source package and commit the changes [quilt | "
-#| "dpatch | cdbs]"
 msgid ""
 "add/edit a patch for a source package and commit the changes.  [quilt | "
 "dpatch | cdbs]"
 msgstr ""
 "ajouter et éditer un correctif pour un paquet source et envoyer les "
-"modifications [quilt | dpatch | cdbs]"
+"modifications. [quilt | dpatch | cdbs]"
 
 #. type: IP
 #: ../doc/devscripts.1:105
@@ -14262,12 +14247,10 @@ msgstr "B<getbuildlog>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:107
-#, fuzzy
-#| msgid "download package build logs from Debian auto-builders [wget]"
 msgid "download package build logs from Debian auto-builders. [wget]"
 msgstr ""
 "télécharger les journaux de construction de paquet des serveurs Debian de "
-"construction automatique [wget]"
+"construction automatique. [wget]"
 
 #. type: IP
 #: ../doc/devscripts.1:107
@@ -14277,19 +14260,14 @@ msgstr "B<git-deborig>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:109
-#, fuzzy
-#| msgid ""
-#| "try to produce Debian orig.tar using git-archive(1) [libdpkg-perl, libgit-"
-#| "wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, libtry-"
-#| "tiny-perl]"
 msgid ""
 "try to produce Debian orig.tar using git-archive(1).  [libdpkg-perl, libgit-"
 "wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, libtry-tiny-"
 "perl]"
 msgstr ""
-"essayer de produire orig.tar de Debian avec B<git-archive>(1) [libdpkg-perl, "
-"libgit-wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, libtry-"
-"tiny-perl]"
+"essayer de produire orig.tar de Debian avec B<git-archive>(1). [libdpkg-"
+"perl, libgit-wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, "
+"libtry-tiny-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:109
@@ -14299,16 +14277,12 @@ msgstr "B<grep-excuses>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:111
-#, fuzzy
-#| msgid ""
-#| "grep britney's excuses for your packages [libdbd-pg-perl, libterm-size-"
-#| "perl, libyaml-syck-perl, wget, w3m]"
 msgid ""
 "grep britney's excuses to find out what is happening to your packages. "
 "[libdbd-pg-perl, libterm-size-perl, libyaml-syck-perl, wget, w3m]"
 msgstr ""
-"rechercher vos paquets dans les fichiers excuses de britney [libterm-size-"
-"perl, libyaml-syck-perl, wget, w3m]"
+"rechercher vos paquets dans les fichiers excuses de britney. [libdbd-pg-"
+"perl, libterm-size-perl, libyaml-syck-perl, wget, w3m]"
 
 #. type: IP
 #: ../doc/devscripts.1:111
@@ -14318,11 +14292,9 @@ msgstr "B<hardening-check>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:113
-#, fuzzy
-#| msgid "report the hardening characteristics of a set of binaries"
 msgid "report the hardening characteristics of a set of binaries."
 msgstr ""
-"rapporter les caractéristiques de sécurisation d'un ensemble de binaires"
+"rapporter les caractéristiques de sécurisation d'un ensemble de binaires."
 
 #. type: IP
 #: ../doc/devscripts.1:113
@@ -14333,26 +14305,22 @@ msgstr "B<list-unreleased>(1)"
 #. type: Plain text
 #: ../doc/devscripts.1:115
 msgid "searches for packages marked UNRELEASED in their changelog."
-msgstr ""
+msgstr "recherche les paquets marqués UNRELEASED dans leur changelog."
 
 #. type: IP
 #: ../doc/devscripts.1:115
 #, no-wrap
 msgid "I<ltnu (Long Time No Upload)>(1)"
-msgstr ""
+msgstr "I<ltnu (Long Time No Upload)>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:117
-#, fuzzy
-#| msgid ""
-#| "List all uploads of packages by the given uploader or maintainer and "
-#| "display them ordered by the last upload [postgresql-client]"
 msgid ""
 "List all uploads of packages by the given uploader or maintainer and display "
 "them ordered by the last upload of that package, oldest uploads first."
 msgstr ""
 "Afficher la liste de tous les envois de paquets d'un uploader ou d'un "
-"responsable, et les afficher à partir du dernier envoi [postgresql-client]"
+"responsable, et les afficher à partir du dernier envoi."
 
 #. type: IP
 #: ../doc/devscripts.1:117
@@ -14362,10 +14330,8 @@ msgstr "B<manpage-alert>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:119
-#, fuzzy
-#| msgid "locate binaries without corresponding manpages [man-db]"
 msgid "locate binaries without corresponding manpages. [man-db]"
-msgstr "trouver des programmes sans page de manuel [man-db]"
+msgstr "trouver des programmes sans page de manuel. [man-db]"
 
 #. type: IP
 #: ../doc/devscripts.1:119
@@ -14375,10 +14341,8 @@ msgstr "B<mass-bug>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:121
-#, fuzzy
-#| msgid "mass-file bug reports [bsd-mailx | mailx]"
 msgid "mass-file bug reports. [bsd-mailx | mailx]"
-msgstr "soumettre en masse des rapports de bogue [bsd-mailx | mailx]"
+msgstr "soumettre en masse des rapports de bogue. [bsd-mailx | mailx]"
 
 #. type: IP
 #: ../doc/devscripts.1:121
@@ -14388,16 +14352,12 @@ msgstr "B<mergechanges>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:123
-#, fuzzy
-#| msgid ""
-#| "merge .changes files from the same release but built on different "
-#| "architectures"
 msgid ""
 "merge .changes files from the same release but built on different "
 "architectures."
 msgstr ""
 "fusionner les fichiers .changes d'une même version mais construits sur "
-"plusieurs architectures"
+"plusieurs architectures."
 
 #. type: IP
 #: ../doc/devscripts.1:123
@@ -14407,11 +14367,6 @@ msgstr "B<mk-build-deps>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:125
-#, fuzzy
-#| msgid ""
-#| "given a package name and/or control file, generate a binary package which "
-#| "may be installed to satisfy the build-dependencies of the given package "
-#| "[equivs]"
 msgid ""
 "Given a package name and/or control file, generate a binary package which "
 "may be installed to satisfy the build-dependencies of the given package. "
@@ -14419,7 +14374,7 @@ msgid ""
 msgstr ""
 "à partir d'un nom de paquet ou d'un fichier « control », créer un paquet "
 "binaire qui peut être installé pour satisfaire les dépendances de "
-"construction d'un paquet [equivs]"
+"construction d'un paquet. [equivs]"
 
 #. type: IP
 #: ../doc/devscripts.1:125
@@ -14429,16 +14384,13 @@ msgstr "B<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:127
-#, fuzzy
-#| msgid ""
-#| "rename upstream tarball, optionally changing the compression and removing "
-#| "unwanted files [unzip, xz-utils, file]"
 msgid ""
 "Rename upstream tarball, optionally changing the compression and removing "
 "unwanted files.  [libfile-which-perl, unzip, xz-utils, file]"
 msgstr ""
 "Renommer l’archive amont, en modifiant éventuellement la compression et en "
-"supprimant les fichiers non désirés [unzip, xz-utils, file]"
+"supprimant les fichiers non désirés. [libfile-which-perl, unzip, xz-utils, "
+"file]"
 
 #. type: IP
 #: ../doc/devscripts.1:127
@@ -14448,10 +14400,8 @@ msgstr "B<namecheck>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:129
-#, fuzzy
-#| msgid "check project names are not already taken"
 msgid "Check project names are not already taken."
-msgstr "vérifier la disponibilité des noms de projet"
+msgstr "vérifier la disponibilité des noms de projet."
 
 #. type: IP
 #: ../doc/devscripts.1:129
@@ -14461,17 +14411,13 @@ msgstr "B<nmudiff>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:131
-#, fuzzy
-#| msgid ""
-#| "mail a diff of the current package against the previous version to the "
-#| "BTS to assist in tracking NMUs [patchutils, mutt]"
 msgid ""
 "prepare a diff of this version (presumably an NMU against the previously "
 "released version (as per the changelog) and submit the diff to the BTS. "
 "[patchutils, mutt]"
 msgstr ""
-"envoyer un correctif du paquet en cours par rapport à la version précédente "
-"vers le BTS pour aider au suivi des NMU [patchutils, mutt]"
+"prépare un différentiel de cette version (présumée NMU) et de la précédente "
+"(d'après de changelog) et l'envoie vers le BTS. [patchutils, mutt]"
 
 #. type: IP
 #: ../doc/devscripts.1:131
@@ -14481,16 +14427,12 @@ msgstr "B<origtargz>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:133
-#, fuzzy
-#| msgid ""
-#| "fetch the orig tarball of a Debian package from various sources, and "
-#| "unpack it"
 msgid ""
 "fetch the orig tarball of a Debian package from various sources, and unpack "
 "it."
 msgstr ""
 "récupérer l'archive amont d'un paquet Debian depuis divers sources, et la "
-"dépaqueter"
+"dépaqueter."
 
 #. type: IP
 #: ../doc/devscripts.1:133
@@ -14500,16 +14442,12 @@ msgstr "B<plotchangelog>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:135
-#, fuzzy
-#| msgid ""
-#| "view a nice plot of the data in a changelog file [libtimedate-perl, "
-#| "gnuplot]"
 msgid ""
 "display information from a changelog graphically using gnuplot. [libtimedate-"
 "perl, gnuplot]"
 msgstr ""
-"afficher sous forme graphique les données d'un fichier I<changelog> "
-"[libtimedate-perl, gnuplot]"
+"afficher sous forme graphique les données d'un fichier changelog en "
+"utilisant gnuplot. [libtimedate-perl, gnuplot]"
 
 #. type: IP
 #: ../doc/devscripts.1:135
@@ -14519,13 +14457,12 @@ msgstr "B<pts-subscribe>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:137
-#, fuzzy
-#| msgid ""
-#| "subscribe to the PTS for a limited period of time [bsd-mailx | mailx, at]"
 msgid ""
 "subscribe to the PTS (Package Tracking System) for a limited period of time. "
 "[bsd-mailx | mailx, at]"
-msgstr "s'abonner au PTS pendant un temps limité [bsd-mailx | mailx, at]"
+msgstr ""
+"s'abonner au PTS (Package Tracking System) pour un temps limité. [bsd-mailx "
+"| mailx, at]"
 
 #. type: IP
 #: ../doc/devscripts.1:137
@@ -14535,14 +14472,11 @@ msgstr "B<rc-alert>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "list installed packages which have release-critical bugs [wget | curl]"
 msgid ""
 "list installed packages which have release-critical bugs.  [wget | curl]"
 msgstr ""
 "afficher la liste des paquets installés ayant des bogues empêchant leur "
-"intégration dans la prochaine distribution [wget | curl]"
+"intégration dans la prochaine distribution. [wget | curl]"
 
 #. type: IP
 #: ../doc/devscripts.1:139
@@ -14552,15 +14486,11 @@ msgstr "B<rmadison>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:141
-#, fuzzy
-#| msgid ""
-#| "remotely query the Debian archive database about packages [liburi-perl, "
-#| "wget | curl]"
 msgid ""
 "remotely query the Debian archive database about packages.  [liburi-perl, "
 "wget | curl]"
 msgstr ""
-"interroger à distance la base de données de l'archive Debian  [liburi-perl, "
+"interroger à distance la base de données de l'archive Debian. [liburi-perl, "
 "wget | curl]"
 
 #. type: IP
@@ -14571,10 +14501,8 @@ msgstr "B<sadt>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:143
-#, fuzzy
-#| msgid "run DEP-8 tests [python3-debian]"
 msgid "run DEP-8 tests. [python3-debian]"
-msgstr "exécuter des tests DEP-8 [python3-debian]"
+msgstr "exécuter des tests DEP-8. [python3-debian]"
 
 #. type: IP
 #: ../doc/devscripts.1:143
@@ -14584,13 +14512,10 @@ msgstr "B<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:145
-#, fuzzy
-#| msgid ""
-#| "output a list of files which are not common source files [python3-magic]"
 msgid ""
 "output a list of files which are not common source files. [python3-magic]"
 msgstr ""
-"afficher une liste de fichiers qui ne sont pas des fichiers source usuels "
+"afficher une liste de fichiers qui ne sont pas des fichiers source usuels. "
 "[python3-magic]"
 
 #. type: IP
@@ -14606,6 +14531,10 @@ msgid ""
 "supports calculating the paths for branches and tags in a repository "
 "independent fashion. Used by debcommit to generate svn tags. [subversion]"
 msgstr ""
+"Imprime le chemin d'accès au référentiel Subversion d'une extraction "
+"Subversion. Prend également en charge le calcul des chemins des branches et "
+"des balises de manière indépendante du référentiel. Utilisé par debcommit "
+"pour générer des tags svn. [subversion]"
 
 #. type: IP
 #: ../doc/devscripts.1:147
@@ -14615,17 +14544,13 @@ msgstr "B<tagpending>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:149
-#, fuzzy
-#| msgid ""
-#| "run from a Debian source tree and tag bugs that are to be closed in the "
-#| "latest changelog as pending [libsoap-lite-perl]"
 msgid ""
 "runs from a Debian source tree and tags bugs that are to be closed in the "
 "latest changelog as pending. [libsoap-lite-perl]"
 msgstr ""
 "exécuter depuis une arborescence source Debian et placer l'étiquette "
 "« pending » sur tous les bogues à fermer dans le dernier groupe d'entrée du "
-"changelog [libsoap-lite-perl]"
+"changelog. [libsoap-lite-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:149
@@ -14635,16 +14560,12 @@ msgstr "B<transition-check>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:151
-#, fuzzy
-#| msgid ""
-#| "check a list of source packages for involvement in transitions for which "
-#| "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
 msgid ""
 "Check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked.  [libwww-perl, libyaml-syck-perl]"
 msgstr ""
 "vérifier si l'un des paquets source listés est impliqué dans une transition "
-"pour laquelle les envois sont bloqués actuellement [libwww-perl, libyaml-"
+"pour laquelle les envois sont bloqués actuellement. [libwww-perl, libyaml-"
 "syck-perl]"
 
 #. type: IP
@@ -14664,6 +14585,15 @@ msgid ""
 "known. [file, gpgv | gpgv2, gnupg | gnupg2, libfile-which-perl, liblwp-"
 "protocol-https-perl, libmoo-perl, libwww-perl, unzip, xz-utils]*"
 msgstr ""
+"Analyse et télécharge automatiquement les mises à jour en amont. Uscan peut "
+"également appeler un programme tel que uupdate pour tenter de mettre à jour "
+"la version Debianisée en fonction de la nouvelle mise à jour. Bien que uscan "
+"puisse être utilisé pour publier automatiquement la version mise à jour, il "
+"est probablement préférable de ne pas le faire sans tests. Uscan peut "
+"également vérifier les signatures OpenPGP détachées si la clé de signature "
+"en amont est connue. [file, gpgv | gpgv2, gnupg | gnupg2, libfile-which-"
+"perl, liblwp-protocole-https-perl, libmoo-perl, libwww-perl, unzip, xz-"
+"utils] *"
 
 #. type: IP
 #: ../doc/devscripts.1:153
@@ -14678,6 +14608,10 @@ msgid ""
 "will be of help if you have to update your package.  It will try to apply "
 "the latest diffs to your package and tell you how successful it was. [patch]"
 msgstr ""
+"Mets à jour le paquet avec une archive ou des correctifs d'un auteur amont. "
+"Cela vous aidera si vous devez mettre à jour votre paquet. Il essaie "
+"d’appliquer les dernières différences à votre paquet et vous reporte son "
+"résultat. [patch]"
 
 #. type: IP
 #: ../doc/devscripts.1:155
@@ -14687,15 +14621,11 @@ msgstr "B<what-patch>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:157
-#, fuzzy
-#| msgid ""
-#| "determine what patch system, if any, a source package is using "
-#| "[patchutils]"
 msgid ""
 "determine what patch system, if any, a source package is using.  [patchutils]"
 msgstr ""
 "déterminer le système de correctifs, s'il existe, utilisé par un paquet "
-"source [patchutils]"
+"source. [patchutils]"
 
 #. type: IP
 #: ../doc/devscripts.1:157
@@ -14705,10 +14635,8 @@ msgstr "B<whodepends>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:159
-#, fuzzy
-#| msgid "check which maintainers' packages depend on a package"
 msgid "check which maintainers' packages depend on a package."
-msgstr "vérifier quels paquets (et responsables) dépendent d'un autre paquet"
+msgstr "vérifier quels paquets (et responsables) dépendent d'un autre paquet."
 
 #. type: IP
 #: ../doc/devscripts.1:159
@@ -14718,16 +14646,12 @@ msgstr "B<who-permits-upload>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:161
-#, fuzzy
-#| msgid ""
-#| "Retrieve information about Debian Maintainer access control lists [gnupg "
-#| "| gnupg2, libencode-locale-perl, libwww-perl, debian-keyring]"
 msgid ""
 "Retrieve information about Debian Maintainer access control lists. [gnupg | "
 "gnupg2, libencode-locale-perl, libwww-perl, debian-keyring]"
 msgstr ""
 "Récupérer des renseignements sur les listes de contrôle d’accès de "
-"mainteneurs Debian [gnupg | gnupg2, libencode-locale-perl, libwww-perl, "
+"mainteneurs Debian. [gnupg | gnupg2, libencode-locale-perl, libwww-perl, "
 "debian-keyring]"
 
 #. type: IP
@@ -14738,16 +14662,12 @@ msgstr "B<who-uploads>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:163
-#, fuzzy
-#| msgid ""
-#| "determine the most recent uploaders of a package to the Debian archive "
-#| "[gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive. "
 "[gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
 msgstr ""
 "identifier les dernières personnes ayant envoyé un paquet donné vers "
-"l'archive Debian [gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
+"l'archive Debian. [gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
 
 #. type: IP
 #: ../doc/devscripts.1:163
@@ -14757,14 +14677,10 @@ msgstr "B<wnpp-alert>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:165
-#, fuzzy
-#| msgid ""
-#| "list installed packages which are orphaned or up for adoption [wget | "
-#| "curl]"
 msgid ""
 "list installed packages which are orphaned or up for adoption.  [wget | curl]"
 msgstr ""
-"afficher la liste des paquets installés offerts à l'adoption ou orphelins "
+"afficher la liste des paquets installés offerts à l'adoption ou orphelins. "
 "[wget | curl]"
 
 #. type: IP
@@ -14775,16 +14691,12 @@ msgstr "B<wnpp-check>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:167
-#, fuzzy
-#| msgid ""
-#| "check whether there is an open request for packaging or intention to "
-#| "package bug for a package [wget | curl]"
 msgid ""
 "check whether there is an open request for packaging or intention to package "
 "bug for a package. [wget | curl]"
 msgstr ""
 "Vérifier si un bogue du type paquet demandé (RFP) ou paquet en cours de "
-"travail (ITP) est ouvert pour un paquet [wget | curl]"
+"travail (ITP) est ouvert pour un paquet. [wget | curl]"
 
 #. type: IP
 #: ../doc/devscripts.1:167
@@ -14794,11 +14706,9 @@ msgstr "B<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:168
-#, fuzzy
-#| msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgid "wrap long lines and sort items in packaging files.  [python3-debian]"
 msgstr ""
-"couper les lignes longues et trier les items des fichiers d'empaquetage "
+"couper les lignes longues et trier les items des fichiers d'empaquetage. "
 "[python3-debian]"
 
 #. type: textblock
@@ -18444,19 +18354,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:36
-#, fuzzy
-#| msgid ""
-#| "Use B<mutt>(1) for editing and sending the message to the BTS (default "
-#| "behaviour).  This can be controlled using a configuration file option "
-#| "(see below)."
 msgid ""
 "Use B<mutt>(1) (or B<neomutt>(1)) for editing and sending the message to the "
 "BTS (default behaviour).  This can be controlled using a configuration file "
 "option (see below)."
 msgstr ""
-"Utiliser B<mutt>(1) pour modifier et envoyer le message au BTS (comportement "
-"par défaut). Cela peut être choisi par une option du fichier de "
-"configuration (voir plus bas)."
+"Utiliser B<mutt>(1) (ou B<neomutt>(1)) pour modifier et envoyer le message "
+"au BTS (comportement par défaut). Cela peut être choisi par une option du "
+"fichier de configuration (voir plus bas)."
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:41
@@ -18594,16 +18499,13 @@ msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:100
-#, fuzzy
-#| msgid ""
-#| "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> to "
-#| "compose and send the message or not, as described above."
 msgid ""
 "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> (or "
 "B<neomut>)to compose and send the message or not, as described above."
 msgstr ""
 "Peut être I<yes> (par défaut) ou I<no>, et indique s'il faut utiliser "
-"B<mutt> pour écrire et envoyer le message, tel que décrit ci-dessus."
+"B<mutt> (ou B<neomut>) pour écrire et envoyer le message, tel que décrit ci-"
+"dessus."
 
 #. type: TP
 #: ../scripts/nmudiff.1:100
