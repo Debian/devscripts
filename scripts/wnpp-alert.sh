@@ -81,20 +81,17 @@ if [ -d "$CACHEDIR" ]; then
     rm -f "$CACHEDIR"/orphaned "$CACHEDIR"/rfa_bypackage
 fi
 
-INSTALLED=`mktemp -t wnppalert-installed.XXXXXX`
-trap "rm -f '$INSTALLED'" 0 1 2 3 7 10 13 15
-WNPP=`mktemp -t wnppalert-wnpp.XXXXXX`
-WNPPTMP=`mktemp -t wnppalert-wnpp.XXXXXX`
-trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP'" 0 1 2 3 7 10 13 15
-WNPP_PACKAGES=`mktemp -t wnppalert-wnpp_packages.XXXXXX`
-trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
-  0 1 2 3 7 10 13 15
+INSTALLED=$(mktemp --tmpdir wnppalert-installed.XXXXXX)
+WNPP=$(mktemp --tmpdir wnppalert-wnpp.XXXXXX)
+WNPPTMP=$(mktemp --tmpdir wnppalert-wnpp.XXXXXX)
+WNPP_PACKAGES=$(mktemp --tmpdir wnppalert-wnpp_packages.XXXXXX)
+trap 'rm -f "$INSTALLED" "$WNPP" "$WNPPTMP" "$WNPP_PACKAGES"' EXIT
 
 if [ "x$1" = "x--diff" ] || [ "x$1" = "x-d" ]; then
     shift
-    WNPP_DIFF=`mktemp -t wnppalert-wnpp_diff.XXXXXX`
-    trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES' '$WNPP_DIFF'" \
-      0 1 2 3 7 10 13 15
+    WNPP_DIFF=$(mktemp --tmpdir wnppalert-wnpp_diff.XXXXXX)
+    trap 'rm -f "$INSTALLED" "$WNPP" "$WNPPTMP" "$WNPP_PACKAGES" "$WNPP_DIFF"' \
+        EXIT
 fi
 
 # Here's a really sly sed script.  Rather than first grepping for

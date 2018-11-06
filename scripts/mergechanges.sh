@@ -234,9 +234,9 @@ if test ${FILE} = 1; then
 fi
 
 # Temporary output
-OUTPUT=`tempfile`
-DESCFILE=`tempfile`
-trap "rm -f '${OUTPUT}' '${DESCFILE}'" 0 1 2 3 7 10 13 15
+OUTPUT=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
+DESCFILE=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
+trap 'rm -f "${OUTPUT}" "${DESCFILE}"' EXIT
 
 if test $(echo "${DESCRIPTIONS}" | wc -l) -ne 0; then
     echo "Description: " > "${DESCFILE}"

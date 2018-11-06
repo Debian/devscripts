@@ -89,9 +89,9 @@ stamp=[[:digit:]]+"
 
 getbuildlog() {
     BASE=$1
-    ALL_LOGS=`mktemp`
+    ALL_LOGS=$(mktemp --tmpdir getbuildlog.tmp.XXXXXXXXXX)
 
-    trap "rm -f $ALL_LOGS" EXIT INT QUIT TERM
+    trap 'rm -f "$ALL_LOGS"' EXIT
 
     wget -q -O $ALL_LOGS "$BASE/status/logs.php?pkg=$PACKAGE"
 

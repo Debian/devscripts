@@ -130,7 +130,7 @@ TEMPDIR=$(mktemp -dt cvs-debi.XXXXXXXX) || {
     exit 1
 }
 TEMPFILE=$TEMPDIR/cl-tmp
-trap "rm -f $TEMPFILE; rmdir $TEMPDIR" 0 1 2 3 7 10 13 15
+trap 'rm -f "$TEMPFILE"; rmdir "$TEMPDIR"' EXIT
 
 TAGOPT=
 

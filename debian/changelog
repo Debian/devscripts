@@ -20,6 +20,8 @@ devscripts (2.18.8) UNRELEASED; urgency=medium
     + Move devscripts.1 and devscripts.conf.5 from scripts/ to doc/.
     + Fix devscripts.1 generation, build it from README instead of d/control
       and move the genmanpage.pl script out of debian/.  Closes: #912971
+  * Fix the trap handling in multiple shell scripts.  Now they trap only EXIT,
+    and not a random set of the first 15 signals.  Closes: #911969
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Oct 2018 16:30:43 +0100
 
