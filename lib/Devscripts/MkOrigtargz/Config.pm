@@ -75,7 +75,7 @@ use constant keys => [
         undef,
         sub {
             return (0, "Unknown compression scheme $_[1]")
-              unless compression_is_supported($_[1]);
+              unless ($_[1] eq 'default' or compression_is_supported($_[1]));
             $_[0]->compression($_[1]);
         },
     ],

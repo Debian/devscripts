@@ -8,6 +8,7 @@ devscripts (2.18.8) UNRELEASED; urgency=medium
   * French translation update.
   * uscan:
     + Fix default compression suffix in git HEAD mode.  Closes: #912403; MR: !81
+  * Devscripts::Config: fix bad error handling
 
   [ Jérémy Lal ]
   * uscan:
