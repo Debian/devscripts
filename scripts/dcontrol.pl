@@ -177,10 +177,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # handle options
 GetOptions(
-    "d|debug"      => \$opt->{'debug'},
-    "s|show-suite" => \$opt->{'show-suite'},
-    "h|help"       => \$opt->{'help'},
-    "V|version"    => \$opt->{'version'},
+    "d|debug"        => \$opt->{'debug'},
+    "s|show-suite"   => \$opt->{'show-suite'},
+    "h|help"         => \$opt->{'help'},
+    "V|version"      => \$opt->{'version'},
     'noconf|no-conf' => \$opt->{'noconf'},
   )
   or die

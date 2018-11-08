@@ -266,7 +266,7 @@ my $opt_t                     = '';
 my $opt_allow_lower           = '';
 my $opt_auto_nmu              = 1;
 my $opt_force_save_on_release = 1;
-my $vendor                    = undef;
+my $opt_vendor                = undef;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -347,7 +347,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_auto_nmu    = $config_vars{'DEBCHANGE_AUTO_NMU'} eq 'yes';
     $opt_force_save_on_release
       = $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
-    $vendor = $config_vars{'DEBCHANGE_VENDOR'};
+    $opt_vendor = $config_vars{'DEBCHANGE_VENDOR'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -415,7 +415,7 @@ GetOptions(
     "empty"                  => \$opt_empty,
     "auto-nmu!"              => \$opt_auto_nmu,
     "force-save-on-release!" => \$opt_force_save_on_release,
-    "vendor=s"               => \$vendor,
+    "vendor=s"               => \$opt_vendor,
   )
   or die
 "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
@@ -438,13 +438,10 @@ if ($opt_help)    { usage;   exit 0; }
 if ($opt_version) { version; exit 0; }
 
 if ($check_dirname_level !~ /^[012]$/) {
-        fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
+    fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
 }
 if ($opt_release_heuristic !~ $opt_release_heuristic_re) {
     fatal "Allowed values for --release-heuristics are log and changelog.";
-}
-if (defined $vendor and $vendor eq '') {
-    fatal "Value for vendor must not be empty.";
 }
 
 # Only allow at most one non-help option
@@ -477,7 +474,10 @@ if (defined $opt_u) {
 }
 
 # See if we're Debian, Ubuntu or someone else, if we can
-if (not defined $vendor) {
+my $vendor;
+if (defined $opt_vendor && $opt_vendor) {
+    $vendor = $opt_vendor;
+} else {
     if (defined $opt_D) {
         # Try to guess the vendor based on the given distribution name
         my $distro = $opt_D;

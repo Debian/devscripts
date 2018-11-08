@@ -480,30 +480,31 @@ first option given on the command-line.
 
 # Start by setting default values
 
-my $offlinemode = 0;
-my $caching     = 1;
-my $cachemode   = 'min';
+my $offlinemode  = 0;
+my $caching      = 1;
+my $cachemode    = 'min';
 my $cachemode_re = '^(full|mbox|min)$';
-my $refreshmode = 0;
-my $updatemode  = 0;
-my $mailreader  = 'mutt -f %s';
-my $muttcmd     = 'mutt -H %s';
-my $sendmailcmd = '/usr/sbin/sendmail';
-my $smtphost    = '';
-my $smtpuser    = '';
-my $smtppass    = '';
-my $smtphelo    = '';
-my $noaction    = 0;
+my $refreshmode  = 0;
+my $updatemode   = 0;
+my $mailreader   = 'mutt -f %s';
+my $muttcmd      = 'mutt -H %s';
+my $sendmailcmd  = '/usr/sbin/sendmail';
+my $smtphost     = '';
+my $smtpuser     = '';
+my $smtppass     = '';
+my $smtphelo     = '';
+my $noaction     = 0;
+
 # regexp for mailers which require a -t option
-my $sendmail_t       = '^/usr/sbin/sendmail$|^/usr/sbin/exim';
-my $includeresolved  = 1;
-my $requestack       = 1;
-my $interactive_re   = '^(force|no|yes)$';
-my $interactive      = 'no';
-my $ccemail          = "";
-my $toolname         = "";
-my $btsserver        = 'https://bugs.debian.org';
-my $use_mutt         = 0;
+my $sendmail_t      = '^/usr/sbin/sendmail$|^/usr/sbin/exim';
+my $includeresolved = 1;
+my $requestack      = 1;
+my $interactive_re  = '^(force|no|yes)$';
+my $interactive     = 'no';
+my $ccemail         = "";
+my $toolname        = "";
+my $btsserver       = 'https://bugs.debian.org';
+my $use_mutt        = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -587,22 +588,22 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
-    $offlinemode      = $config_vars{'BTS_OFFLINE'} eq 'yes'          ? 1 : 0;
-    $caching          = $config_vars{'BTS_CACHE'} eq 'no'             ? 0 : 1;
-    $cachemode        = $config_vars{'BTS_CACHE_MODE'};
-    $refreshmode      = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes'    ? 1 : 0;
-    $updatemode       = $config_vars{'BTS_ONLY_NEW'} eq 'yes'         ? 1 : 0;
-    $mailreader       = $config_vars{'BTS_MAIL_READER'};
-    $sendmailcmd      = $config_vars{'BTS_SENDMAIL_COMMAND'};
-    $smtphost         = $config_vars{'BTS_SMTP_HOST'};
-    $smtpuser         = $config_vars{'BTS_SMTP_AUTH_USERNAME'};
-    $smtppass         = $config_vars{'BTS_SMTP_AUTH_PASSWORD'};
-    $smtphelo         = $config_vars{'BTS_SMTP_HELO'};
-    $includeresolved  = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
-    $requestack       = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
-    $interactive      = $config_vars{'BTS_INTERACTIVE'};
-    $ccemail          = $config_vars{'BTS_DEFAULT_CC'};
-    $btsserver        = $config_vars{'BTS_SERVER'};
+    $offlinemode     = $config_vars{'BTS_OFFLINE'} eq 'yes'          ? 1 : 0;
+    $caching         = $config_vars{'BTS_CACHE'} eq 'no'             ? 0 : 1;
+    $cachemode       = $config_vars{'BTS_CACHE_MODE'};
+    $refreshmode     = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes'    ? 1 : 0;
+    $updatemode      = $config_vars{'BTS_ONLY_NEW'} eq 'yes'         ? 1 : 0;
+    $mailreader      = $config_vars{'BTS_MAIL_READER'};
+    $sendmailcmd     = $config_vars{'BTS_SENDMAIL_COMMAND'};
+    $smtphost        = $config_vars{'BTS_SMTP_HOST'};
+    $smtpuser        = $config_vars{'BTS_SMTP_AUTH_USERNAME'};
+    $smtppass        = $config_vars{'BTS_SMTP_AUTH_PASSWORD'};
+    $smtphelo        = $config_vars{'BTS_SMTP_HELO'};
+    $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
+    $requestack      = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
+    $interactive     = $config_vars{'BTS_INTERACTIVE'};
+    $ccemail         = $config_vars{'BTS_DEFAULT_CC'};
+    $btsserver       = $config_vars{'BTS_SERVER'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -651,11 +652,11 @@ GetOptions(
     "i|interactive"             => sub { $interactive = 'yes'; },
     "no-interactive"            => sub { $interactive = 'no'; },
     "force-interactive"         => sub { $interactive = 'force'; },
-    "use-default-cc!"   => \$use_default_cc,
-    "toolname=s"        => \$toolname,
-    "bts-server=s"      => \$btsserver,
-    "mutt!"             => \$opt_mutt,
-    "soap-timeout:i"    => \$opt_soap_timeout,
+    "use-default-cc!"           => \$use_default_cc,
+    "toolname=s"                => \$toolname,
+    "bts-server=s"              => \$btsserver,
+    "mutt!"                     => \$opt_mutt,
+    "soap-timeout:i"            => \$opt_soap_timeout,
   )
   or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
