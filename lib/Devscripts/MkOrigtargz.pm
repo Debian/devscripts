@@ -210,7 +210,7 @@ sub make_orig_targz {
         $deletecount = scalar(@to_delete);
     }
 
-    if ($deletecount) {
+    if ($deletecount or $self->config->force_repack) {
         $destfilebase = sprintf "%s_%s%s.%s.tar", $self->config->package,
           $self->config->version, $self->config->repack_suffix,
           $self->config->orig;
@@ -226,7 +226,7 @@ sub make_orig_targz {
     }
 
     # Actually do the unpack, remove, pack cycle
-    if ($do_repack || $deletecount) {
+    if ($do_repack || $deletecount || $self->config->force_repack) {
         $destfile ||= $self->fix_dest_file($destfiletar);
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
@@ -389,7 +389,8 @@ sub make_orig_targz {
     } else {
         if (   $self->config->upstream_type eq 'zip'
             or $do_repack
-            or $deletecount) {
+            or $deletecount
+            or $self->config->force_repack) {
             print "Successfully repacked $upstream_nice as $destfile_nice";
         } elsif ($self->config->mode eq "symlink") {
             print "Successfully symlinked $upstream_nice to $destfile_nice";
