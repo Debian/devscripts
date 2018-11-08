@@ -9,8 +9,8 @@ devscripts (2.18.8) UNRELEASED; urgency=medium
   * uscan:
     + Fix default compression suffix in git HEAD mode.  Closes: #912403; MR: !81
   * Devscripts::Config:
-    - fix bad error handling and improve tests
-    - fix array values if .devscripts (space separated)
+    - Fix bad error handling and improve tests.
+    - Fix handling of array values (space-separated values) in .devscripts.
 
   [ Jérémy Lal ]
   * uscan:
@@ -25,8 +25,28 @@ devscripts (2.18.8) UNRELEASED; urgency=medium
       and move the genmanpage.pl script out of debian/.  Closes: #912971
   * Fix the trap handling in multiple shell scripts.  Now they trap only EXIT,
     and not a random set of the first 15 signals.  Closes: #911969
+  * dcontrol:
+    + document --no-conf also in the manpage.
 
- -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Oct 2018 16:30:43 +0100
+  [ Nicolas Boulenguez ]
+  * Makefile:
+    + Remove some obsolete build flags from scripts/Makefile.
+    + Include dpkg-dev Makefile snippet instead of calling dpkg-vendor(1).
+    + Clean the pylint cache directory.
+  * bts:
+    + Ensure consistency of the regex validating cache mode.
+    + Let a boolean test consider all false values instead of only 0.
+    + Replace 2 redundant booleans with an enumeration of 3 cases.
+  * dcontrol:
+    + Accept the --no-conf option.
+  * debchange:
+    + Fix auto_nmu (getoptions uses 0/1, not yes/no).
+    + Small code cleanup.
+    + Check command line value for log heuristic
+  * debuild:
+    + Only set --rootcmd from an user explicit choice.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Thu, 08 Nov 2018 14:47:21 +0100
 
 devscripts (2.18.7) unstable; urgency=medium
 
