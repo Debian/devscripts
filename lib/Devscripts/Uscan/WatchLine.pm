@@ -150,7 +150,7 @@ foreach (qw(sites basedirs patterns)) {
 foreach (qw(parse_result search_result)) {
     has $_ => (is => 'rw', default => sub { {} });
 }
-foreach (qw(upstream_url newfile_base)) {
+foreach (qw(force_repack type upstream_url newfile_base)) {
     has $_ => (is => 'rw');
 }
 
@@ -312,6 +312,22 @@ following keys:
 # Then the patterns matched will be checked to find the one with the
 # greatest version number (as determined by the (...) group), using the
 # Debian version number comparison algorithm described below.
+
+sub BUILD {
+    my ($self, $args) = @_;
+    if ($self->watch_version > 3) {
+        my $line = $self->line;
+        if ($line =~ s/^opt(?:ion)?s\s*=\s*//) {
+            unless ($line =~ s/^".*?"(?:\s+|$)//) {
+                $line =~ s/^[^"\s]\S*(?:\s+|$)//;
+            }
+        }
+        my ($base, $filepattern, $lastversion, $action) = split /\s+/, $line,
+          4;
+        $self->type($lastversion);
+    }
+    return $self;
+}
 
 sub parse {
     my ($self) = @_;
@@ -538,7 +554,7 @@ EOF
 
         # Set $lastversion to the numeric last version
         # Update $self->versionmode (its default "newer")
-        if (!length($lastversion) or $lastversion eq 'debian') {
+        if (!length($lastversion) or $lastversion =~ /^(group|debian)$/) {
             if (!defined $self->pkg_version) {
                 uscan_warn "Unable to determine the current version\n"
                   . "  in $watchfile, skipping:\n  $self->{line}";
@@ -925,7 +941,7 @@ sub search {
 
         # Old-style heuristics
         if ($newversion =~ /^\D*(\d+\.(?:\d+\.)*\d+)\D*$/) {
-            $newversion = $1;
+            $self->search_result->{newversion} = $1;
         } else {
             uscan_warn <<"EOF";
 $progname warning: In $self->{watchfile}, couldn\'t determine a
@@ -1508,7 +1524,8 @@ sub mkorigtargz {
         push @ARGV, "--signature-file",
           "$self->{config}->{destdir}/$self->{search_result}->{sigfile}"
           if ($self->signature_available != 0);
-        push @ARGV, "--repack" if $self->repack;
+        push @ARGV, "--repack"       if $self->repack;
+        push @ARGV, "--force-repack" if $self->force_repack;
         push @ARGV, "--component", $self->component
           if $self->component;
         push @ARGV, "--compression",    $self->compression;
