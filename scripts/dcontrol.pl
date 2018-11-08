@@ -261,6 +261,10 @@ Add headers showing which distribution the control file is from.
 
 Print URL queried.
 
+=item B<--noconf>, B<--no-conf>
+
+Ignore all configuration files (must be the first option).
+
 =item B<-h>, B<--help>
 
 Show a help message.
