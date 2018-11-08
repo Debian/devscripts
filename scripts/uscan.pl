@@ -1248,7 +1248,7 @@ npmjs.org modules are published in JSON files. Here is a way to read them:
 
 =head2 grouped package
 
-Some node modules are splitted into multiple little upstream package. Here is
+Some node modules are split into multiple little upstream package. Here is
 a way to group them:
 
   version=4
