@@ -1417,11 +1417,11 @@ Use only traditional uscan output format. (default)
 
 Download the new upstream release. (default)
 
-=item B<--force-download>, B<--dd>
+=item B<--force-download>, B<-dd>
 
 Download the new upstream release even if up-to-date. (may not overwrite the local file)
 
-=item B<--overwrite-download>, B<--ddd>
+=item B<--overwrite-download>, B<-ddd>
 
 Download the new upstream release even if up-to-date. (may overwrite the local file)
 
@@ -1632,8 +1632,19 @@ variables are:
 
 =item B<USCAN_DOWNLOAD>
 
-If this is set to B<no>, then newer upstream files will not be downloaded; this
-is equivalent to the B<--no-download> options.
+Download or report only:
+
+=over
+
+=item B<no>: equivalent to B<--no-download>, newer upstream files will
+not be downloaded.
+
+=item B<yes>: equivalent to B<--download>, newer upstream files will
+be downloaded. This is the default behavior.
+
+See also B<--force-download> and B<--overwrite-download>.
+
+=back
 
 =item B<USCAN_SAFE>
 

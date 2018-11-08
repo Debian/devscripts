@@ -223,9 +223,10 @@ sub parse_conf_files {
         foreach my $key (@$keys) {
             my ($kname, $name, $check, $default) = @$key;
             next unless ($name);
+            $kname //= '';
             $kname =~ s/^\-\-//;
             $kname =~ s/-/_/g;
-            $kname =~ s/[!\|=].*$//;
+            $kname =~ s/[!|=+].*$//;
             # Case 1: nothing in conf files, set default
             next unless (length $config_vars{$name});
             if (defined $check) {
@@ -288,7 +289,8 @@ sub parse_command_line {
     }
     foreach my $key (@$keys) {
         my ($kname, $tmp, $check, $default) = @$key;
-        $kname =~ s/[!\|=].*$//;
+        next unless ($kname);
+        $kname =~ s/[!|=+].*$//;
         my $name = $kname;
         $kname =~ s/-/_/g;
         if (defined $opts->{$name}) {
