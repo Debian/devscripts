@@ -221,6 +221,10 @@ file. (Used with pgpmode=previous)
 =item * B<ignore> does not restrict the version of the secondary
 tarballs. (Maybe useful for MUT)
 
+=item * B<group> requires the downloading upstream tarball to be newer than
+the version obtained from F<debian/changelog>. Package version is the
+concatenation of all "group" upstream version.
+
 =back
 
 =item * I<script> is executed at the end of B<uscan> execution with appropriate
@@ -501,7 +505,8 @@ npmjs.com:
 
   version=4
   opts="searchmode=plain" \
-   https://registry.npmjs.org/aes-js https://registry.npmjs.com/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
+   https://registry.npmjs.org/aes-js \
+   https://registry.npmjs.org/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
 
 =back
 
@@ -1231,6 +1236,37 @@ watch file for this site without using the redirector.
 
 Sites which used to be hosted on the Google Code service should have migrated
 to elsewhere (github?).  Please look for the newer upstream site if available.
+
+=head2 npmjs.org (node modules)
+
+npmjs.org modules are published in JSON files. Here is a way to read them:
+
+  version=4
+  opts="searchmode=plain" \
+   https://registry.npmjs.org/aes-js \
+   https://registry.npmjs.org/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
+
+=head2 grouped package
+
+Some node modules are splitted into multiple little upstream package. Here is
+a way to group them:
+
+  version=4
+  opts="searchmode=plain,pgpmode=none" \
+    https://registry.npmjs.org/mongodb \
+    https://registry.npmjs.org/mongodb/-/mongodb-(\d[\d\.]*)@ARCHIVE_EXT@ group
+  opts="searchmode=plain,pgpmode=none,component=bson" \
+    https://registry.npmjs.org/bson \
+    https://registry.npmjs.org/bson/-/bson-(\d[\d\.]*)@ARCHIVE_EXT@ group
+  opts="searchmode=plain,pgpmode=none,component=mongodb-core" \
+    https://registry.npmjs.org/mongodb-core \
+    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\d[\d\.]*)@ARCHIVE_EXT@ group
+  opts="searchmode=plain,pgpmode=none,component=requireoptional" \
+    https://registry.npmjs.org/require_optional \
+    https://registry.npmjs.org/require_optional/-/require_optional-(\d[\d\.]*)@ARCHIVE_EXT@ group
+
+Package version is then the concatenation of upstream versions separated by
+"+~". If you use a repack suffix, you must set it in each line.
 
 =head2 direct access to the git repository (tags)
 

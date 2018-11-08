@@ -297,32 +297,33 @@ helperWatch() {
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
     cd $TMPDIR
     $DEBUGLSLR
-    UTARBALL=${PKG}-${VERNEW}.tar.gz
+    UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
-        UTARSIG=${PKG}-${VERNEW}.tar.gz.sig
+        UTARSIG=${PKG}-${UVERSION:-${VERNEW}}.tar.gz.sig
         if [ ! -f $UTARSIG ]; then
-            UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
+            UTARSIG=${PKG}-${UVERSION:-${VERNEW}}.tar.gz.asc
         fi
         STARSIG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK.asc
         assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
         assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
     for cpnt in $COMPONENTS; do
-        UTARBALL=${cpnt}-${VERNEW}.tar.gz
+        UTARBALL=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz
         STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK
         assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
         assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
         if [ "$PGP" = "pgp" ]; then
-            UTARSIG=${cpnt}-${VERNEW}.tar.gz.sig
+            UTARSIG=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz.sig
             if [ ! -f $UTARSIG ]; then
-                UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
+                UTARSIG=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz.asc
             fi
             STARSIG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
             assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
-            assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+	    # Skipping this: signature link skipped when upstream file is repacked
+            #assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
         fi
     done
     # check uupdate
@@ -674,14 +675,17 @@ siteWebNonNativeMUT() {
 <a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
 <a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
 <a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz.asc">Latest sig</a> <br />
 <a href="/0.0/bar/ooo/bar-0.0.tar.gz">Very old</a> <br/ >
 <a href="/1.0/bar/ooo/bar-1.0.tar.gz">A bit OLD</a> <br />
 <a href="/2.0/bar/ooo/bar-2.0.tar.gz">Latest</a> <br />
 <a href="/3.0/bar/ooo/bar-3.0.tar.gz">OOPS Latest</a> <br />
+<a href="/3.0/bar/ooo/bar-3.0.tar.gz.asc">Latest sig</a> <br />
 <a href="/0.0/baz/ooo/baz-0.0.tar.gz">Very old</a> <br/ >
 <a href="/1.0/baz/ooo/baz-1.0.tar.gz">A bit OLD</a> <br />
 <a href="/2.0/baz/ooo/baz-2.0.tar.gz">Latest</a> <br />
 <a href="/3.0/baz/ooo/baz-3.0.tar.gz">OOPS Latest</a> <br />
+<a href="/3.0/baz/ooo/baz-3.0.tar.gz.asc">Latest sig</a> <br />
 </body>
 <html>
 END
@@ -1042,5 +1046,50 @@ opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@
     helperWatch siteWebNonNativeMUT
 }
 
+# Group test without signatures
+testWatch4WebNonNativeGroup() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group uupdate'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
+}
+
+# Group test with pgpsigurlmangle
+testWatch4WebNonNativeGroupSigned() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    WATCHLINE='
+opts="pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group uupdate'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
+}
+
+# Group test with pgpmode next/previous
+testWatch4WebNonNativeGroupSignedNext() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    SIGMODE=ASC
+    WATCHLINE='
+opts="pgpmode=next" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="pgpmode=previous" @@@url@@@/ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@.asc previous
+opts="component=bar,pgpmode=next" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,pgpmode=previous" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@.asc previous
+opts="component=baz,pgpmode=next" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,pgpmode=previous" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@.asc previous'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
+}
 
 . shunit2
