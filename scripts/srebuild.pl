@@ -191,7 +191,8 @@ sub parse_buildinfo {
     if (not defined($checksums)) {
         die "need Checksums-Sha256 field";
     }
-    my $environ = $cdata->{"Build-Environment"};
+    my $environ
+      = $cdata->{"Build-Environment"} || $cdata->{"Installed-Build-Depends"};
     if (not defined($environ)) {
         die "need Build-Environment field";
     }
@@ -287,7 +288,8 @@ foreach my $pkg (@environ) {
     my $hash = undef;
     if (scalar @{ $json_text->{result} } == 1) {
         if (@{ $json_text->{result} }[0]->{architecture} ne "all") {
-            die "expected arch:all\n";
+            print STDERR
+"expected arch:all, not $json_text->{result}->[0]->{architecture} for $pkg->{name}\n";
         }
         $hash = ${ $json_text->{result} }[0]->{hash};
     } else {
