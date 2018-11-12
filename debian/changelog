@@ -22,6 +22,9 @@ devscripts (2.18.10) unstable; urgency=medium
       each component separately).  MR: !84
     + Use gpgv in all signature verification.  Closes: #913665; MR: !88
     + Force UTC for the date of the last git commit.  Closes: #910762; MR: !89
+  * Devscripts::Config:
+    + Add --conf-file
+  * Add Devscripts::JSONCache, Perl object cache library to store values.
 
   [ Mattia Rizzolo ]
   * wrap-and-sort:
