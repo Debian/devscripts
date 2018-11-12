@@ -47,7 +47,6 @@ GEN_MAN1S += \
 	ltnu.1 \
 	mk-origtargz.1 \
 	reproducible-check.1 \
-	srebuild.1 \
 	uscan.1 \
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
