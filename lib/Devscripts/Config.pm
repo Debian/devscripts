@@ -191,20 +191,39 @@ sub set_default {
 
 sub parse_conf_files {
     my ($self) = @_;
-    if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
-        $self->modified_conf_msg("  (no configuration files read)");
-        shift @ARGV;
-        return $self;
+
+    my @cfg_files = @config_files;
+    if (@ARGV) {
+        if ($ARGV[0] =~ /^--no-?conf$/) {
+            $self->modified_conf_msg("  (no configuration files read)");
+            shift @ARGV;
+            return $self;
+        }
+        my @tmp;
+        while ($ARGV[0] and $ARGV[0] =~ s/^--conf-?file(?:=(.+))?//) {
+            shift @ARGV;
+            my $file = $1 || shift(@ARGV);
+            if ($file) {
+                unless ($file =~ s/^\+//) {
+                    @cfg_files = ();
+                }
+                push @tmp, $file;
+            } else {
+                return ds_die
+                  "Unable to parse --conf-file option, aborting parsing";
+            }
+        }
+        push @cfg_files, @tmp;
     }
 
-    @config_files = grep { -r $_ } @config_files;
+    @cfg_files = grep { -r $_ } @cfg_files;
     my $keys = $self->keys;
-    if (@config_files) {
+    if (@cfg_files) {
         my @key_names = map { $_->[1] ? $_->[1] : () } @$keys;
         my %config_vars;
 
         my $shell_cmd
-          = 'for file in ' . join(" ", @config_files) . '; do . $file; done;';
+          = 'for file in ' . join(" ", @cfg_files) . '; do . $file; done;';
 
         # Read back values
         foreach my $var (@key_names) {
