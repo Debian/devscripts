@@ -24,6 +24,8 @@ devscripts (2.18.10) unstable; urgency=medium
     + Force UTC for the date of the last git commit.  Closes: #910762; MR: !89
   * Devscripts::Config:
     + Add --conf-file
+  * Devscripts::Output:
+    + Add ds_prompt
   * Add Devscripts::JSONCache, Perl object cache library to store values.
 
   [ Mattia Rizzolo ]
