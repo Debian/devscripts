@@ -27,6 +27,8 @@ devscripts (2.18.10) unstable; urgency=medium
   * Devscripts::Output:
     + Add ds_prompt
   * Add Devscripts::JSONCache, Perl object cache library to store values.
+  * salsa: new tool to manage salsa.debian.org repositories.
+    Closes: #890594; MR: !70
 
   [ Mattia Rizzolo ]
   * wrap-and-sort:
