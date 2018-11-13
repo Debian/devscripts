@@ -63,7 +63,7 @@ test_scripts:
 install_scripts:
 	$(MAKE) -C scripts/ install DESTDIR=$(DESTDIR)
 
-clean_doc:
+clean_doc: clean_translated_manpages
 	$(MAKE) -C doc clean
 install_doc:
 	$(MAKE) -C doc install DESTDIR=$(DESTDIR)
