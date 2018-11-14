@@ -180,11 +180,11 @@ if ($base_dist ne $dpkg_map{$dpkg_version}) {
 
 # test if all checksums in the buildinfo file check out
 
-foreach my $fname ($checksums->get_files()) {
-    # Re-adding existing files to the checksum object is the current way to
-    # ask Dpkg to check the checksums for us
-    $checksums->add_from_file((dirname($buildinfo)) . '/' . $fname);
-}
+#foreach my $fname ($checksums->get_files()) {
+#    # Re-adding existing files to the checksum object is the current way to
+#    # ask Dpkg to check the checksums for us
+#    $checksums->add_from_file((dirname($buildinfo)) . '/' . $fname);
+#}
 
 # setup a temporary apt directory
 
