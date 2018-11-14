@@ -1,6 +1,8 @@
 devscripts (2.18.10) UNRELEASED; urgency=medium
 
-  * 
+  [ Daniel Kahn Gillmor ]
+  * uscan:
+    + Use gpgv instead of gpg for git tag verification.  MR: !82
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 13 Nov 2018 19:00:00 +0100
 

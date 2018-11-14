@@ -162,10 +162,9 @@ sub verify_git {
 
     unless (
         uscan_exec_no_fail(
-            $self->{gpg},
+            $self->{gpgv},
             '--homedir' => $self->{gpghome},
             '--keyring' => $self->{keyring},
-            '--verify',
             "$dir/sig", "$dir/txt"
         ) >> 8 == 0
     ) {
