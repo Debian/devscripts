@@ -1266,7 +1266,7 @@ a way to group them:
     https://registry.npmjs.org/require_optional/-/require_optional-(\d[\d\.]*)@ARCHIVE_EXT@ group
 
 Package version is then the concatenation of upstream versions separated by
-"+~". If you use a repack suffix, you must set it in each line.
+"+~".
 
 =head2 direct access to the git repository (tags)
 
