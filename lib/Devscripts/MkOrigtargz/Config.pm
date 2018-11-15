@@ -11,6 +11,7 @@ use File::Which;
 use Moo;
 
 use constant default_compression => 'xz';
+
 # regexp-assemble << END
 # tar\.gz
 # tgz
@@ -34,6 +35,7 @@ has compression    => (is => 'rw');
 has copyright_file => (is => 'rw');
 has directory      => (is => 'rw');
 has exclude_file   => (is => 'rw');
+has force_repack   => (is => 'rw');
 has package        => (is => 'rw');
 has signature      => (is => 'rw');
 has signature_file => (is => 'rw');
@@ -66,7 +68,8 @@ use constant keys => [
         }
     ],
     ['directory|C=s'],
-    ['exclude-file=s',   undef, undef, sub { [] }],
+    ['exclude-file=s', undef, undef, sub { [] }],
+    ['force-repack'],
     ['copyright-file=s', undef, undef, sub { [] }],
     ['signature=i',      undef, undef, 0],
     ['signature-file=s', undef, undef, ''],
@@ -75,7 +78,7 @@ use constant keys => [
         undef,
         sub {
             return (0, "Unknown compression scheme $_[1]")
-              unless compression_is_supported($_[1]);
+              unless ($_[1] eq 'default' or compression_is_supported($_[1]));
             $_[0]->compression($_[1]);
         },
     ],
@@ -108,6 +111,7 @@ use constant rules => [
     sub {
         my ($self) = @_;
         unless (defined $self->package) {
+
             # get package name
             my $c = Dpkg::Changelog::Debian->new(range => { count => 1 });
             $c->load('debian/changelog');
@@ -191,6 +195,7 @@ use constant rules => [
     # Default compression
     sub {
         my ($self) = @_;
+
         # Case 1: format is 1.0
         if (-r 'debian/source/format') {
             open F, 'debian/source/format';
@@ -207,6 +212,7 @@ use constant rules => [
             $self->compression('gzip');
             $self->repack(1) unless ($self->upstream_comp eq 'gzip');
         } elsif ($self->upstream_type eq 'tar') {
+
             # Uncompressed tar
             if (!$self->upstream_comp) {
                 $self->repack(1);

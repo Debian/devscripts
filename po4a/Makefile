@@ -7,18 +7,18 @@ all: translate
 	@$(MAKE) -C . transform
 transform: $(GEN_TR_MAN1S)
 
-translate: ../scripts/devscripts.1
+translate: ../doc/devscripts.1
 	po4a --previous --no-backups --keep=0 devscripts-po4a.conf
 	touch translate
 
-clean: ../scripts/devscripts.1
+clean: ../doc/devscripts.1
 	po4a --previous --rm-translations --no-backups devscripts-po4a.conf
 	rm -f $(GEN_TR_MAN1S) translate
 	rm -rf de fr
 
-../scripts/devscripts.1:
-	# po4a translate and clean need ../scripts/devscripts.1, rebuild it
-	$(MAKE) -C ../scripts/ devscripts.1
+../doc/devscripts.1:
+	# po4a translate and clean need ../doc/devscripts.1, rebuild it
+	$(MAKE) -C ../doc devscripts.1
 
 de/%.de.1: de/%.de.pl translate
 	podchecker $<

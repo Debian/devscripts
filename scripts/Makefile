@@ -1,5 +1,6 @@
 
 include ../Makefile.common
+include /usr/share/dpkg/vendor.mk
 DESTDIR =
 
 define \n
@@ -8,14 +9,10 @@ define \n
 endef
 
 VERSION_FILE = ../version
-VERSION := $(shell cat $(VERSION_FILE))
+VERSION = $(shell cat $(VERSION_FILE))
 
 PL_FILES := $(wildcard *.pl)
 SH_FILES = $(wildcard *.sh)
-CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
-CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
-CFLAGS += -std=c99
-LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 PL_CHECKS = $(patsubst %.pl,%.pl_check,$(PL_FILES))
@@ -47,7 +44,6 @@ PKGNAMES := \
 
 GEN_MAN1S += \
 	debrepro.1 \
-	devscripts.1 \
 	ltnu.1 \
 	mk-origtargz.1 \
 	reproducible-check.1 \
@@ -63,7 +59,7 @@ $(VERSION_FILE):
 debchange: debchange.pl $(VERSION_FILE)
 	cp $< $@
 	sed -i "s/###VERSION###/$(VERSION)/" $@
-ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
+ifeq ($(DEB_VENDOR),Ubuntu)
 # On Ubuntu always default to targeting the release that it's built on,
 # not the current devel release, since its primary use on stable releases
 # will be for preparing PPA uploads.
@@ -100,14 +96,6 @@ test_pl: $(PL_CHECKS)
 test_py: $(VERSION_FILE)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
-# There is a slight chance this gets called twice, once here from here and once
-# from ../po4a/Makefile. Treat files with care.
-PID := $(shell echo $$$$-$$PPID)
-devscripts.1: devscripts.1.in
-	cat $< > $@.$(PID)
-	perl ../debian/genmanpage.pl >> $@.$(PID)
-	mv $@.$(PID) $@
-
 reproducible-check.1: reproducible-check
 	help2man \
 		--name="Reports on the reproducible status of installed packages" \
@@ -125,7 +113,7 @@ clean:
 	python3 setup.py clean -a
 	find -name '*.pyc' -delete
 	find -name __pycache__ -delete
-	rm -rf devscripts.egg-info $(BC_BUILD_DIR)
+	rm -rf devscripts.egg-info $(BC_BUILD_DIR) .pylint.d
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 

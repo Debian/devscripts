@@ -33,7 +33,7 @@ NUM_SIGNED=0
 signingdir=""
 remotefilesdir=""
 
-trap "cleanup_tmpdir" EXIT HUP INT QUIT KILL SEGV PIPE TERM
+trap cleanup_tmpdir EXIT
 
 # --- Functions
 

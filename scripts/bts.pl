@@ -480,29 +480,31 @@ first option given on the command-line.
 
 # Start by setting default values
 
-my $offlinemode = 0;
-my $caching     = 1;
-my $cachemode   = 'min';
-my $refreshmode = 0;
-my $updatemode  = 0;
-my $mailreader  = 'mutt -f %s';
-my $muttcmd     = 'mutt -H %s';
-my $sendmailcmd = '/usr/sbin/sendmail';
-my $smtphost    = '';
-my $smtpuser    = '';
-my $smtppass    = '';
-my $smtphelo    = '';
-my $noaction    = 0;
+my $offlinemode  = 0;
+my $caching      = 1;
+my $cachemode    = 'min';
+my $cachemode_re = '^(full|mbox|min)$';
+my $refreshmode  = 0;
+my $updatemode   = 0;
+my $mailreader   = 'mutt -f %s';
+my $muttcmd      = 'mutt -H %s';
+my $sendmailcmd  = '/usr/sbin/sendmail';
+my $smtphost     = '';
+my $smtpuser     = '';
+my $smtppass     = '';
+my $smtphelo     = '';
+my $noaction     = 0;
+
 # regexp for mailers which require a -t option
-my $sendmail_t       = '^/usr/sbin/sendmail$|^/usr/sbin/exim';
-my $includeresolved  = 1;
-my $requestack       = 1;
-my $interactive      = 0;
-my $forceinteractive = 0;
-my $ccemail          = "";
-my $toolname         = "";
-my $btsserver        = 'https://bugs.debian.org';
-my $use_mutt         = 0;
+my $sendmail_t      = '^/usr/sbin/sendmail$|^/usr/sbin/exim';
+my $includeresolved = 1;
+my $requestack      = 1;
+my $interactive_re  = '^(force|no|yes)$';
+my $interactive     = 'no';
+my $ccemail         = "";
+my $toolname        = "";
+my $btsserver       = 'https://bugs.debian.org';
+my $use_mutt        = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -549,7 +551,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'BTS_OFFLINE'} = 'no';
     $config_vars{'BTS_CACHE'} =~ /^(yes|no)$/
       or $config_vars{'BTS_CACHE'} = 'yes';
-    $config_vars{'BTS_CACHE_MODE'} =~ /^(min|mbox|full)$/
+    $config_vars{'BTS_CACHE_MODE'} =~ $cachemode_re
       or $config_vars{'BTS_CACHE_MODE'} = 'min';
     $config_vars{'BTS_FORCE_REFRESH'} =~ /^(yes|no)$/
       or $config_vars{'BTS_FORCE_REFRESH'} = 'no';
@@ -563,7 +565,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'BTS_INCLUDE_RESOLVED'} = 'yes';
     $config_vars{'BTS_SUPPRESS_ACKS'} =~ /^(yes|no)$/
       or $config_vars{'BTS_SUPPRESS_ACKS'} = 'no';
-    $config_vars{'BTS_INTERACTIVE'} =~ /^(yes|no|force)$/
+    $config_vars{'BTS_INTERACTIVE'} =~ $interactive_re
       or $config_vars{'BTS_INTERACTIVE'} = 'no';
 
     if (!length $config_vars{'BTS_SMTP_HOST'}
@@ -586,23 +588,22 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
-    $offlinemode      = $config_vars{'BTS_OFFLINE'} eq 'yes'          ? 1 : 0;
-    $caching          = $config_vars{'BTS_CACHE'} eq 'no'             ? 0 : 1;
-    $cachemode        = $config_vars{'BTS_CACHE_MODE'};
-    $refreshmode      = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes'    ? 1 : 0;
-    $updatemode       = $config_vars{'BTS_ONLY_NEW'} eq 'yes'         ? 1 : 0;
-    $mailreader       = $config_vars{'BTS_MAIL_READER'};
-    $sendmailcmd      = $config_vars{'BTS_SENDMAIL_COMMAND'};
-    $smtphost         = $config_vars{'BTS_SMTP_HOST'};
-    $smtpuser         = $config_vars{'BTS_SMTP_AUTH_USERNAME'};
-    $smtppass         = $config_vars{'BTS_SMTP_AUTH_PASSWORD'};
-    $smtphelo         = $config_vars{'BTS_SMTP_HELO'};
-    $includeresolved  = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
-    $requestack       = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
-    $interactive      = $config_vars{'BTS_INTERACTIVE'} eq 'no'       ? 0 : 1;
-    $forceinteractive = $config_vars{'BTS_INTERACTIVE'} eq 'force'    ? 1 : 0;
-    $ccemail          = $config_vars{'BTS_DEFAULT_CC'};
-    $btsserver        = $config_vars{'BTS_SERVER'};
+    $offlinemode     = $config_vars{'BTS_OFFLINE'} eq 'yes'          ? 1 : 0;
+    $caching         = $config_vars{'BTS_CACHE'} eq 'no'             ? 0 : 1;
+    $cachemode       = $config_vars{'BTS_CACHE_MODE'};
+    $refreshmode     = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes'    ? 1 : 0;
+    $updatemode      = $config_vars{'BTS_ONLY_NEW'} eq 'yes'         ? 1 : 0;
+    $mailreader      = $config_vars{'BTS_MAIL_READER'};
+    $sendmailcmd     = $config_vars{'BTS_SENDMAIL_COMMAND'};
+    $smtphost        = $config_vars{'BTS_SMTP_HOST'};
+    $smtpuser        = $config_vars{'BTS_SMTP_AUTH_USERNAME'};
+    $smtppass        = $config_vars{'BTS_SMTP_AUTH_PASSWORD'};
+    $smtphelo        = $config_vars{'BTS_SMTP_HELO'};
+    $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
+    $requestack      = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
+    $interactive     = $config_vars{'BTS_INTERACTIVE'};
+    $ccemail         = $config_vars{'BTS_DEFAULT_CC'};
+    $btsserver       = $config_vars{'BTS_SERVER'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -648,14 +649,14 @@ GetOptions(
     "noconf|no-conf"            => \$opt_noconf,
     "include-resolved!"         => \$includeresolved,
     "ack!"                      => \$requestack,
-    "i|interactive"             => \$interactive,
-    "no-interactive"    => sub { $interactive = 0; $forceinteractive = 0; },
-    "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
-    "use-default-cc!"   => \$use_default_cc,
-    "toolname=s"        => \$toolname,
-    "bts-server=s"      => \$btsserver,
-    "mutt!"             => \$opt_mutt,
-    "soap-timeout:i"    => \$opt_soap_timeout,
+    "i|interactive"             => sub { $interactive = 'yes'; },
+    "no-interactive"            => sub { $interactive = 'no'; },
+    "force-interactive"         => sub { $interactive = 'force'; },
+    "use-default-cc!"           => \$use_default_cc,
+    "toolname=s"                => \$toolname,
+    "bts-server=s"              => \$btsserver,
+    "mutt!"                     => \$opt_mutt,
+    "soap-timeout:i"            => \$opt_soap_timeout,
   )
   or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
@@ -736,7 +737,7 @@ if ($opt_sendmail) {
 }
 
 if ($opt_cachemode) {
-    if ($opt_cachemode =~ /^(min|mbox|full)$/) {
+    if ($opt_cachemode =~ $cachemode_re) {
         $cachemode = $opt_cachemode;
     } else {
         warn
@@ -1288,7 +1289,7 @@ sub bts_done {
     # Force interactive mode since done mails shouldn't be sent without an
     # explanation
     if (not $use_mutt) {
-        $forceinteractive = 1;
+        $interactive = 'force';
     }
 
     # Include the submitter in the email, so we act like a mail to -done
@@ -2266,7 +2267,7 @@ sub bts_cache {
         ($updatemode, $sub_updatemode) = ($sub_updatemode, $updatemode);
     }
     if (defined $sub_cachemode) {
-        if ($sub_cachemode =~ /^(min|mbox|full)$/) {
+        if ($sub_cachemode =~ $cachemode_re) {
             ($cachemode, $sub_cachemode) = ($sub_cachemode, $cachemode);
         } else {
             warn
@@ -2663,7 +2664,7 @@ sub send_mail {
     my $message = fold_from_header("From: $from") . "\n";
     $message .= "To: $to\n"               if length $to;
     $message .= "Cc: $cc\n"               if length $cc;
-    $message .= "X-Debbugs-No-Ack: Yes\n" if $requestack == 0;
+    $message .= "X-Debbugs-No-Ack: Yes\n" if not $requestack;
     $message
       .= "Subject: $subject\n"
       . "Date: $date\n"
@@ -2805,7 +2806,7 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if ($forceinteractive) {
+    if ($interactive eq 'force') {
         $ccemail .= ", " if length $ccemail;
         $ccemail .= generate_packages_cc();
     }
@@ -2849,7 +2850,7 @@ sub mailbtsall {
 
         $header = "To: $btsemail\n";
         $header .= "Cc: $ccemail\n"          if length $ccemail;
-        $header .= "X-Debbugs-No-Ack: Yes\n" if $requestack == 0;
+        $header .= "X-Debbugs-No-Ack: Yes\n" if not $requestack;
         $header .= "Subject: $subject\n"
           . "User-Agent: devscripts bts/$version$toolname\n" . "\n";
 
@@ -2893,9 +2894,9 @@ sub confirmmail {
 
     return ($header, $body) if $noaction;
 
-    $body = edit($body) if $forceinteractive;
+    $body = edit($body) if $interactive eq 'force';
     my $setHeader = 0;
-    if ($interactive) {
+    if ($interactive ne 'no') {
         while (1) {
             print "\n", $header, "\n", $body, "\n---\n";
             print "OK to send? [Y/n/e] ";
@@ -2908,8 +2909,8 @@ sub confirmmail {
             } elsif (/^e/i) {
                 # Since the user has chosen to edit the message, we go ahead
                 # and add the $ccpackages Ccs (if they haven't already been
-                # added due to $forceinteractive).
-                if (!$forceinteractive && !$setHeader) {
+                # added due to interactive).
+                if ($interactive ne 'force' && !$setHeader) {
                     $setHeader = 1;
                     my $ccs = generate_packages_cc();
                     if ($header =~ m/^Cc: (.*?)$/m) {
@@ -2931,7 +2932,7 @@ sub addfooter() {
     my $body = shift;
 
     $body .= "thanks\n";
-    if ($forceinteractive) {
+    if ($interactive eq 'force') {
         if (-r $ENV{'HOME'} . "/.signature") {
             if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
                 $body .= "-- \n";

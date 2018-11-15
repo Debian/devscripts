@@ -8,6 +8,7 @@ PREFIX = /usr
 BINDIR = $(PREFIX)/bin
 DOCDIR = $(PREFIX)/share/doc/devscripts
 MAN1DIR = $(PREFIX)/share/man/man1
+MAN5DIR = $(PREFIX)/share/man/man5
 PERLMOD_DIR = $(shell perl -MConfig -e 'print $$Config{vendorlib}')
 DATA_DIR = $(PREFIX)/share/devscripts
 TEMPLATES_DIR = $(DATA_DIR)/templates

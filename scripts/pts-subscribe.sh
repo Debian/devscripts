@@ -163,8 +163,8 @@ else
 	fi
 
 	cd /
-	TEMPFILE=$(mktemp) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
-	trap "rm -f '$TEMPFILE'" 0 1 2 3 7 10 13 15
+	TEMPFILE=$(mktemp --tmpdir pts-subscribe.tmp.XXXXXXXXXX) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
+	trap 'rm -f "$TEMPFILE"' EXIT
 	echo "echo 'unsubscribe $pkg $DEBEMAIL' | mail pts@qa.debian.org" | \
 	    at $PTS_UNTIL 2>$TEMPFILE
 	grep '^job ' $TEMPFILE | sed -e 's/^/Unsubscription will be sent by "at" as /'

@@ -50,7 +50,7 @@ FILE="$2"
 
 DSCDIR=$(dirname "$DSC")
 WORKDIR=$(mktemp -d --tmpdir dscextract.XXXXXX)
-trap "rm -rf $WORKDIR" 0 2 3 15
+trap 'rm -rf "$WORKDIR"' EXIT
 
 if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	DIFFGZ=$(echo "$DIFFGZ" | cut -d ' ' -f 4 | head -n 1)

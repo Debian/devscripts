@@ -166,6 +166,11 @@ B<--compression>), recompress it.
 If the file has to be modified, because of B<Files-Excluded>, append I<suffix>
 to the upstream version.
 
+=item B<--force-repack>
+
+Recompress even if file is compressed using the desired format and no files
+were deleted.
+
 =item B<-c>, B<--component> I<componentname>
 
 Use <componentname> as the component name for the secondary upstream tarball.

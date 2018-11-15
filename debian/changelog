@@ -1,3 +1,63 @@
+devscripts (2.18.9) unstable; urgency=medium
+
+  * Fix FTBFS due to a missing dependency in the Makefile.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 13 Nov 2018 13:52:35 +0100
+
+devscripts (2.18.8) unstable; urgency=medium
+
+  [ Reiner Herrmann ]
+  * nmudiff:
+    + Check for neomutt if mutt is not available.  Closes: #912083
+
+  [ Xavier Guimard ]
+  * French translation update.
+  * uscan:
+    + Fix default compression suffix in git HEAD mode.  Closes: #912403; MR: !81
+    + Re-enable -dd and -ddd and fix documentation.  MR: !78
+    + Support of grouped upstream sources.  Closes: #899073; MR: !80
+  * mk-origtargz:
+    + Add --force-repack option.
+  * Devscripts::Config:
+    + Fix bad error handling and improve tests.
+    + Fix handling of array values (space-separated values) in .devscripts.
+
+  [ Jérémy Lal ]
+  * uscan:
+    + Fix missing parenthesis.  Closes: #913008
+
+  [ Mattia Rizzolo ]
+  * doc:
+    + Move the instructions to build/install/clean the doc/ directory into a
+      Makefile in that directory.
+    + Move devscripts.1 and devscripts.conf.5 from scripts/ to doc/.
+    + Fix devscripts.1 generation, build it from README instead of d/control
+      and move the genmanpage.pl script out of debian/.  Closes: #912971
+  * Fix the trap handling in multiple shell scripts.  Now they trap only EXIT,
+    and not a random set of the first 15 signals.  Closes: #911969
+  * dcontrol:
+    + Document --no-conf also in the manpage.
+
+  [ Nicolas Boulenguez ]
+  * Makefile:
+    + Remove some obsolete build flags from scripts/Makefile.
+    + Include dpkg-dev Makefile snippet instead of calling dpkg-vendor(1).
+    + Clean the pylint cache directory.
+  * bts:
+    + Ensure consistency of the regex validating cache mode.
+    + Let a boolean test consider all false values instead of only 0.
+    + Replace 2 redundant booleans with an enumeration of 3 cases.
+  * dcontrol:
+    + Accept the --no-conf option.
+  * debchange:
+    + Fix auto_nmu (getoptions uses 0/1, not yes/no).
+    + Small code cleanup.
+    + Check command line value for log heuristic
+  * debuild:
+    + Only set --rootcmd from an user explicit choice.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 12 Nov 2018 18:03:59 +0100
+
 devscripts (2.18.7~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.

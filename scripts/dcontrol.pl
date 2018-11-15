@@ -72,6 +72,7 @@ Query package and source control files for all Debian distributions.
 Options:
     -s --show-suite  Add headers for distribution the control file is from
     -d --debug       Print URL queried
+    --noconf --no-conf Ignore configuration files (must be first option).
 
 Modifiers:
     =version         Exact version match
@@ -176,10 +177,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # handle options
 GetOptions(
-    "d|debug"      => \$opt->{'debug'},
-    "s|show-suite" => \$opt->{'show-suite'},
-    "h|help"       => \$opt->{'help'},
-    "V|version"    => \$opt->{'version'},
+    "d|debug"        => \$opt->{'debug'},
+    "s|show-suite"   => \$opt->{'show-suite'},
+    "h|help"         => \$opt->{'help'},
+    "V|version"      => \$opt->{'version'},
+    'noconf|no-conf' => \$opt->{'noconf'},
   )
   or die
   "$progname: unrecognised option. Run $progname --help for more details.\n";
@@ -258,6 +260,10 @@ Add headers showing which distribution the control file is from.
 =item B<-d>, B<--debug>
 
 Print URL queried.
+
+=item B<--noconf>, B<--no-conf>
+
+Ignore all configuration files (must be the first option).
 
 =item B<-h>, B<--help>
 

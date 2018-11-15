@@ -68,12 +68,10 @@ else
     exit 1
 fi
 
-WNPP=`mktemp -t wnppcheck-wnpp.XXXXXX`
-WNPPTMP=`mktemp -t wnppcheck-wnpp.XXXXXX`
-trap "rm -f '$WNPP' '$WNPPTMP'" 0 1 2 3 7 10 13 15
-WNPP_PACKAGES=`mktemp -t wnppcheck-wnpp_packages.XXXXXX`
-trap "rm -f '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
-  0 1 2 3 7 10 13 15
+WNPP=$(mktemp --tmpdir wnppcheck-wnpp.XXXXXX)
+WNPPTMP=$(mktemp --tmpdir wnppcheck-wnpp.XXXXXX)
+WNPP_PACKAGES=$(mktemp --tmpdir wnppcheck-wnpp_packages.XXXXXX)
+trap 'rm -f "$WNPP" "$WNPPTMP" "$WNPP_PACKAGES"' EXIT
 
 # Here's a really sly sed script.  Rather than first grepping for
 # matching lines and then processing them, this attempts to sed

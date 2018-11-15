@@ -142,6 +142,7 @@ has signature => (
 has watchfile => (is => 'ro', required => 1);    # usually debian/watch
 
 # Internal attributes
+has group         => (is => 'rw', default => sub { [] });
 has origcount     => (is => 'rw');
 has origtars      => (is => 'rw', default => sub { [] });
 has status        => (is => 'rw', default => sub { 0 });
@@ -152,25 +153,27 @@ has watchlines    => (is => 'rw', default => sub { [] });
 has shared => (
     is      => 'rw',
     lazy    => 1,
-    default => sub {
-        {
-            bare                        => $_[0]->bare,
-            components                  => [],
-            common_newversion           => undef,
-            common_mangled_newversion   => undef,
-            download                    => $_[0]->download,
-            download_version            => undef,
-            origcount                   => undef,
-            origtars                    => [],
-            previous_download_available => undef,
-            previous_newversion         => undef,
-            previous_newfile_base       => undef,
-            previous_sigfile_base       => undef,
-            signature                   => $_[0]->signature,
-            uscanlog                    => undef,
-        };
-    },
+    default => \&new_shared,
 );
+
+sub new_shared {
+    return {
+        bare                        => $_[0]->bare,
+        components                  => [],
+        common_newversion           => undef,
+        common_mangled_newversion   => undef,
+        download                    => $_[0]->download,
+        download_version            => undef,
+        origcount                   => undef,
+        origtars                    => [],
+        previous_download_available => undef,
+        previous_newversion         => undef,
+        previous_newfile_base       => undef,
+        previous_sigfile_base       => undef,
+        signature                   => $_[0]->signature,
+        uscanlog                    => undef,
+    };
+}
 has keyring => (
     is      => 'ro',
     default => sub { Devscripts::Uscan::Keyring->new });
@@ -192,6 +195,7 @@ sub BUILD {
         return 1;
     }
 
+    my $lineNumber = 0;
     while (<WATCH>) {
         next if /^\s*\#/;
         next if /^\s*$/;
@@ -267,7 +271,7 @@ sub BUILD {
         s/\@SIGNATURE_EXT\@/SIGNATURE_EXT/ge;
         s/\@DEB_EXT\@/DEB_EXT/ge;
 
-        push @{ $self->watchlines }, Devscripts::Uscan::WatchLine->new({
+        my $line = Devscripts::Uscan::WatchLine->new({
                 # Shared between lines
                 config     => $self->config,
                 downloader => $self->downloader,
@@ -282,6 +286,10 @@ sub BUILD {
                 watch_version => $watch_version,
                 watchfile     => $self->watchfile,
         });
+        push @{ $self->group }, $lineNumber
+          if ($line->type and $line->type eq 'group');
+        push @{ $self->watchlines }, $line;
+        $lineNumber++;
     }
 
     close WATCH
@@ -292,13 +300,79 @@ sub BUILD {
 
 sub process_lines {
     my ($self) = shift;
+    return $self->process_group if (@{ $self->group });
     foreach (@{ $self->watchlines }) {
 
         # search newfile and newversion
         my $res = $_->process;
-        $self->status($res);
+        $self->status($res) if ($res);
     }
     return $self->{status};
+}
+
+sub process_group {
+    my ($self) = @_;
+    # Build version
+    my @cur_versions = split /\+~/, $self->pkg_version;
+    my @new_versions;
+    my $download    = 0;
+    my $repack      = 0;
+    my $last_shared = $self->shared;
+    my $last_comp_version;
+    # Isolate component and following lines
+    foreach my $line (@{ $self->watchlines }) {
+        if ($line->type and $line->type eq 'group') {
+            $last_shared       = $self->new_shared;
+            $last_comp_version = shift @cur_versions;
+        }
+        $line->shared($last_shared);
+        $line->pkg_version($last_comp_version || 0);
+    }
+    # Check if download is needed
+    foreach my $line (@{ $self->watchlines }) {
+        next unless ($line->type eq 'group');
+        # Stop on error
+        if (   $line->parse
+            or $line->search
+            or $line->get_upstream_url
+            or $line->get_newfile_base
+            or $line->cmp_versions) {
+            $self->{status} += $line->status;
+            return $self->{status};
+        }
+        push @new_versions, $line->search_result->{newversion};
+        $download = $line->shared->{download}
+          if ($line->shared->{download} > $download);
+        $repack = 1 if ($line->repack);
+    }
+    my $last_version = join '+~', @new_versions;
+    foreach my $line (@{ $self->watchlines }) {
+        # Set same $download for all
+        $line->shared->{download} = $download;
+        # Non "group" lines where not intialized
+        if ($line->type eq 'group') {
+            $line->force_repack($repack);
+        } else {
+            if (   $line->parse
+                or $line->search
+                or $line->get_upstream_url
+                or $line->get_newfile_base
+                or $line->cmp_versions) {
+                $self->{status} += $line->status;
+                return $self->{status};
+            }
+        }
+        if ($line->download_file_and_sig) {
+            $self->{status} += $line->status;
+            return $self->{status};
+        }
+        $line->shared->{common_mangled_newversion} = $last_version;
+        if ($line->mkorigtargz) {
+            $self->{status} += $line->status;
+            return $self->{status};
+        }
+    }
+    return 0;
 }
 
 1;

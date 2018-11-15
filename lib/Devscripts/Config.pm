@@ -178,7 +178,14 @@ sub set_default {
         $kname =~ s/^\-\-//;
         $kname =~ s/-/_/g;
         $kname =~ s/[!\|=].*$//;
-        $self->{$kname} = $default;
+        if (ref $default) {
+            unless (ref $default eq 'CODE') {
+                die "Default value must be a sub ($kname)";
+            }
+            $self->{$kname} = $default->();
+        } else {
+            $self->{$kname} = $default;
+        }
     }
 }
 
@@ -209,39 +216,46 @@ sub parse_conf_files {
             wait_child => 1,
             to_string  => \$shell_out
         );
-        @config_vars{@key_names}
-          = map { s/^\s*(\S.*?)\s*/$1/ ? $_ : undef } split /\n/,
-          $shell_out, -1;
+        @config_vars{@key_names} = map { s/^\s*(.*?)\s*/$1/ ? $_ : undef }
+          split(/\n/, $shell_out, -1);
 
         # Check validity and set value
         foreach my $key (@$keys) {
             my ($kname, $name, $check, $default) = @$key;
             next unless ($name);
+            $kname //= '';
             $kname =~ s/^\-\-//;
             $kname =~ s/-/_/g;
-            $kname =~ s/[!\|=].*$//;
+            $kname =~ s/[!|=+].*$//;
             # Case 1: nothing in conf files, set default
-            next unless (defined $config_vars{$name});
+            next unless (length $config_vars{$name});
             if (defined $check) {
                 if (not(ref $check)) {
                     $check
                       = $self->_subs_check($check, $kname, $name, $default);
                 }
                 if (ref $check eq 'CODE') {
-                    my $res = $check->($self, $config_vars{$name}, $kname);
+                    my ($res, $msg)
+                      = $check->($self, $config_vars{$name}, $kname);
+                    ds_warn $msg unless ($res);
+                    next;
                 } elsif (ref $check eq 'Regexp') {
-                    if ($config_vars{$name} =~ $check) {
-                        $self->{$kname} = $config_vars{$name};
-                        $self->{modified_conf_msg}
-                          .= "  $name=$config_vars{$name}\n";
-                    } else {
+                    unless ($config_vars{$name} =~ $check) {
                         ds_warn("Bad $name value $config_vars{$name}");
+                        next;
                     }
                 } else {
-                    $self->die("Unknown check type for $name");
+                    ds_die("Unknown check type for $name");
+                    return undef;
                 }
-            } else {
-                $self->{$kname} = $config_vars{$name};
+            }
+            $self->{$kname} = $config_vars{$name};
+            $self->{modified_conf_msg} .= "  $name=$config_vars{$name}\n";
+            if (ref $default and ref($default->()) eq 'ARRAY') {
+                my @tmp = ($config_vars{$name} =~ /\s+"([^"]*)"\s+/g);
+                $config_vars{$name} =~ s/\s+"([^"]*)"\s+/ /g;
+                push @tmp, split(/\s+/, $config_vars{$name});
+                $self->{$kname} = \@tmp;
             }
         }
     }
@@ -266,8 +280,6 @@ sub parse_command_line {
         if ($_->[3] and ref($_->[3])) {
             my $kname = $_->[0];
             $kname =~ s/[!\|=].*$//;
-            die "Default value must be a sub ($kname)"
-              unless (ref($_->[3]) eq 'CODE');
             $opts->{$kname} = $_->[3]->();
         }
     }
@@ -277,18 +289,20 @@ sub parse_command_line {
     }
     foreach my $key (@$keys) {
         my ($kname, $tmp, $check, $default) = @$key;
-        $kname =~ s/[!\|=].*$//;
+        next unless ($kname);
+        $kname =~ s/[!|=+].*$//;
         my $name = $kname;
         $kname =~ s/-/_/g;
         if (defined $opts->{$name}) {
+            next if (ref $opts->{$name} and !@{ $opts->{$name} });
             if (defined $check) {
                 if (not(ref $check)) {
                     $check
                       = $self->_subs_check($check, $kname, $name, $default);
                 }
                 if (ref $check eq 'CODE') {
-                    my $res = $check->($self, $opts->{$name}, $kname);
-                    return 1 unless ($res);
+                    my ($res, $msg) = $check->($self, $opts->{$name}, $kname);
+                    ds_die "Bad value for $name: $msg" unless ($res);
                 } elsif (ref $check eq 'Regexp') {
                     if ($opts->{$name} =~ $check) {
                         $self->{$kname} = $opts->{$name};

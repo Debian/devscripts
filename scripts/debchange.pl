@@ -258,12 +258,13 @@ my $check_dirname_regex       = 'PACKAGE(-.+)?';
 my $opt_p                     = 0;
 my $opt_query                 = 1;
 my $opt_release_heuristic     = 'changelog';
+my $opt_release_heuristic_re  = '^(changelog|log)$';
 my $opt_multimaint            = 1;
 my $opt_multimaint_merge      = 0;
 my $opt_tz                    = undef;
 my $opt_t                     = '';
 my $opt_allow_lower           = '';
-my $opt_auto_nmu              = 'yes';
+my $opt_auto_nmu              = 1;
 my $opt_force_save_on_release = 1;
 my $opt_vendor                = undef;
 
@@ -312,7 +313,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'DEBCHANGE_QUERY_BTS'} = 'yes';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
       or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = 1;
-    $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ /^(log|changelog)$/
+    $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ $opt_release_heuristic_re
       or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} = 'changelog';
     $config_vars{'DEBCHANGE_MULTIMAINT'} =~ /^(yes|no)$/
       or $config_vars{'DEBCHANGE_MULTIMAINT'} = 'yes';
@@ -343,7 +344,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_t = ($config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1)
       if $config_vars{'DEBCHANGE_MAINTTRAILER'};
     $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
-    $opt_auto_nmu    = $config_vars{'DEBCHANGE_AUTO_NMU'};
+    $opt_auto_nmu    = $config_vars{'DEBCHANGE_AUTO_NMU'} eq 'yes';
     $opt_force_save_on_release
       = $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
     $opt_vendor = $config_vars{'DEBCHANGE_VENDOR'};
@@ -363,7 +364,7 @@ my (
     $opt_package, @closes
 );
 my ($opt_news);
-my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
+my ($opt_noconf, $opt_empty);
 
 Getopt::Long::Configure('bundling');
 GetOptions(
@@ -406,8 +407,8 @@ GetOptions(
     "m|maintmaint"           => \$opt_m,
     "M|controlmaint"         => \$opt_M,
     "t|mainttrailer!"        => \$opt_t,
-    "check-dirname-level=s"  => \$opt_level,
-    "check-dirname-regex=s"  => \$opt_regex,
+    "check-dirname-level=s"  => \$check_dirname_level,
+    "check-dirname-regex=s"  => \$check_dirname_regex,
     "noconf"                 => \$opt_noconf,
     "no-conf"                => \$opt_noconf,
     "release-heuristic=s"    => \$opt_release_heuristic,
@@ -436,14 +437,12 @@ if ($opt_noconf) {
 if ($opt_help)    { usage;   exit 0; }
 if ($opt_version) { version; exit 0; }
 
-if (defined $opt_level) {
-    if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
-    else {
-        fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
-    }
+if ($check_dirname_level !~ /^[012]$/) {
+    fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
 }
-
-if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
+if ($opt_release_heuristic !~ $opt_release_heuristic_re) {
+    fatal "Allowed values for --release-heuristics are log and changelog.";
+}
 
 # Only allow at most one non-help option
 fatal
@@ -883,7 +882,7 @@ if ($opt_M) {
 #####
 
 if (
-        $opt_auto_nmu eq 'yes'
+        $opt_auto_nmu
     and !$opt_v
     and !$opt_l
     and !$opt_s
