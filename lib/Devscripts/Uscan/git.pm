@@ -78,18 +78,21 @@ sub git_search {
                 return undef;
             }
         } else {
+            my $tmp = $ENV{TZ};
+            $ENV{TZ} = 'UTC';
             spawn(
                 exec => [
                     'git',
 "--git-dir=$self->{downloader}->{destdir}/$self->{gitrepo_dir}",
                     'log',
                     '-1',
-                    "--date=format:$self->{date}",
+                    "--date=format-local:$self->{date}",
                     "--pretty=$self->{pretty}"
                 ],
                 wait_child => 1,
                 to_string  => \$newversion
             );
+            $ENV{TZ} = $tmp;
             chomp($newversion);
         }
     }
