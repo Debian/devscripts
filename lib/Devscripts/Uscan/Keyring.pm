@@ -102,12 +102,10 @@ sub verify {
         "Verifying OpenPGP self signature of $newfile and extract $sigfile");
     unless (
         uscan_exec_no_fail(
-            $self->{gpg},
+            $self->{gpgv},
             '--homedir' => $self->{gpghome},
-            '--no-options', '-q', '--batch', '--no-default-keyring',
             '--keyring' => $self->{keyring},
-            '--trust-model', 'always', '--decrypt',
-            '-o' => "$sigfile",
+            '-o'        => "$sigfile",
             "$newfile"
         ) >> 8 == 0
     ) {
