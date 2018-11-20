@@ -19,6 +19,15 @@ devscripts (2.18.10) UNRELEASED; urgency=medium
   * wrap-and-sort:
     + Avoid crashing on non-unicode locales.  Closes: #914181
 
+  [ James McCoy ]
+  * Devscripts::Packages:
+    + Parse "dpkg --status" instead of /var/lib/dpkg/status.
+  * Devscripts::PackageDeps:
+    + Add fromStatus() to parse "dpkg --status", leaving new() to parse other
+      similar files.
+  * dpkg-depcheck:
+    + Use Devscripts::PackageDeps->fromStatus.
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 13 Nov 2018 19:00:00 +0100
 
 devscripts (2.18.9) unstable; urgency=medium

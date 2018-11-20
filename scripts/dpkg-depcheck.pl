@@ -246,7 +246,7 @@ my @used_ess_files;
 
 # Exclude essential and build-essential packages?
 if ($opts{"pkgs"} ne 'all') {
-    $packagedeps = new Devscripts::PackageDeps('/var/lib/dpkg/status');
+    $packagedeps = Devscripts::PackageDeps->fromStatus();
     my @essential = PackagesMatch('^Essential: yes$');
     my @essential_packages
       = $packagedeps->full_dependencies('build-essential', @essential);
