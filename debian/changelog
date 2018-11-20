@@ -14,6 +14,7 @@ devscripts (2.18.10) UNRELEASED; urgency=medium
     + Change "group" version build: version is the grouping of each component
       version after mk-origtargz changes (i.e. a repack suffix can be added to
       each component separately).  MR: !84
+    + Use gpgv in all signature verification.  Closes: #913665; MR: !88
 
   [ Mattia Rizzolo ]
   * wrap-and-sort:
