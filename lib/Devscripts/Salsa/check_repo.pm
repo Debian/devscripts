@@ -56,7 +56,7 @@ sub _check_repo {
         }
         # Webhooks (from Devscripts::Salsa::Hooks)
         my $hooks = $self->enabled_hooks($id);
-        # IRC
+        # KGB
         if ($self->config->kgb and not $hooks->{kgb}) {
             push @err, "kgb missing";
         } elsif ($self->config->kgb
@@ -69,10 +69,32 @@ sub _check_repo {
         } elsif ($self->config->disable_kgb and $hooks->{kgb}) {
             push @err, "kgb enabled";
         }
+        # Email-on-push
+        if ($self->config->email
+            and not($hooks->{email} and %{ $hooks->{email} })) {
+            push @err, "email-on-push missing";
+        } elsif ($self->config->email
+            and $hooks->{email}->{recipients} ne
+            join(' ', @{ $self->config->email_recipient })) {
+            push @err, "bad email recipients " . $hooks->{email}->{recipients};
+        } elsif ($self->config->disable_kgb and $hooks->{kgb}) {
+            push @err, "email-on-push enabled";
+        }
+        # Irker
+        if ($self->config->irker and not $hooks->{irker}) {
+            push @err, "irker missing";
+        } elsif ($self->config->irker
+            and $hooks->{irker}->{recipients} ne '#'
+            . $self->config->irc_channel) {
+            push @err, "bad irc channel: " . $hooks->{irker}->{recipients};
+        } elsif ($self->config->disable_irker and $hooks->{irker}) {
+            push @err, "irker enabled";
+        }
         # Tagpending
         if ($self->config->tagpending and not $hooks->{tagpending}) {
             push @err, "tagpending missing";
-        } elsif ($self->config->disable_tagpending and $hooks->{tagpending}) {
+        } elsif ($self->config->disable_tagpending
+            and $hooks->{tagpending}) {
             push @err, "tagpending enabled";
         }
         # report errors

@@ -10,11 +10,13 @@ extends 'Devscripts::Config';
 # Declare accessors for each option
 foreach (qw(
     all api_url cache_file command desc desc_pattern dest_branch rename_head
-    disable_issues disable_kgb disable_mr disable_tagpending enable_issues
-    enable_mr irc_channel git_server_url kgb_server_url kgb mr_allow_squash
-    mr_desc mr_dst_branch mr_dst_project mr_remove_source_branch mr_src_branch
-    mr_src_project mr_title no_fail path private_token skip source_branch group
-    group_id user user_id tagpending tagpending_server_url
+    disable_irker disable_issues disable_kgb disable_mr disable_tagpending
+    enable_issues enable_mr irc_channel git_server_url irker irker_server_url
+    irker_host irker_port kgb kgb_server_url mr_allow_squash mr_desc mr_dst_branch
+    mr_dst_project mr_remove_source_branch mr_src_branch mr_src_project
+    mr_title no_fail path private_token skip source_branch group group_id user
+    user_id tagpending tagpending_server_url email email_recipient
+    disable_email
     )
 ) {
     has $_ => (is => 'rw');
@@ -75,8 +77,10 @@ use constant keys => [
             open F, $v;
             my $s = join '', <F>;
             close F;
-            if ($s =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(\S+)$/m) {
-                $self->private_token($1);
+            if ($s
+                =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(["'])?(\w+)\1?$/m
+            ) {
+                $self->private_token($2);
                 return 1;
             } else {
                 return (0, "No token found in file $v");
@@ -104,13 +108,20 @@ use constant keys => [
     ],
     ['no-skip', undef, sub { $_[0]->skip([]); $_[0]->skip_file(undef); }],
     ['desc!', 'SALSA_DESC', 'bool'],
-    ['desc-pattern=s',    'SALSA_DESC_PATTERN',   qr/\w/, 'Debian package %p'],
-    ['enable-issues!',    'SALSA_ENABLE_ISSUES',  'bool'],
-    ['disable-issues!',   'SALSA_DISABLE_ISSUES', 'bool'],
-    ['enable-mr!',        'SALSA_ENABLE_MR',      'bool'],
-    ['disable-mr!',       'SALSA_DISABLE_MR',     'bool'],
-    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL',    qr/\w/],
-    ['kgb!',              'SALSA_KGB',            'bool'],
+    ['desc-pattern=s',  'SALSA_DESC_PATTERN',   qr/\w/, 'Debian package %p'],
+    ['enable-issues!',  'SALSA_ENABLE_ISSUES',  'bool'],
+    ['disable-issues!', 'SALSA_DISABLE_ISSUES', 'bool'],
+    ['email!',          'SALSA_EMAIL',          'bool'],
+    ['disable-email!'],
+    ['email-recipient=s', 'SALSA_EMAIL_RECIPIENTS', undef, sub { [] },],
+    ['enable-mr!',        'SALSA_ENABLE_MR',        'bool'],
+    ['disable-mr!',       'SALSA_DISABLE_MR',       'bool'],
+    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL',      qr/\w/],
+    ['irker!',            'SALSA_IRKER',            'bool'],
+    ['irker-host=s', 'SALSA_IRKER_HOST', undef, 'ruprecht.snow-crash.org'],
+    ['irker-port=s', 'SALSA_IRKER_PORT', qr/^\d*$/],
+    ['disable-irker!'],
+    ['kgb!', 'SALSA_KGB', 'bool'],
     ['disable-kgb!'],
     ['no-fail', 'SALSA_NO_FAIL', 'bool'],
     ['rename-head'],
@@ -137,6 +148,10 @@ use constant keys => [
     [
         'git-server-url=s', 'SALSA_GIT_SERVER_URL',
         qr/^\S+\@\S+/,      'git@salsa.debian.org:'
+    ],
+    [
+        'irker-server-url=s', 'SALSA_IRKER_SERVER_URL',
+        qr'^ircs?://',        'ircs://irc.oftc.net:6697/'
     ],
     [
         'kgb-server-url=s', 'SALSA_KGB_SERVER_URL',
@@ -187,6 +202,12 @@ use constant rules => [
         if ($_[0]->user and $_[0]->user_id) {
             ds_warn("Both --user-id and --user are set, ignore --user");
             $_[0]->user(undef);
+        }
+        return 1;
+    },
+    sub {
+        if ($_[0]->email and not @{ $_[0]->email_recipient }) {
+            return (0, '--email-recipient needed with --email');
         }
         return 1;
     },

@@ -164,6 +164,10 @@ sub api {
             my $res = eval { $projects[$id - 1]->{hooks} };
             return ($res ? (200, $res) : (404));
         },
+        GET => qr{^projects/(\d+)/services/(\w+)} => sub {
+            my ($req, $id, $service) = @_;
+            return 404;
+        },
         GET => qr{^projects$} => sub {
             my ($req) = @_;
             return (200, \@projects) unless ($req->[1] =~ /search=([^&]+)/);

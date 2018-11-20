@@ -535,6 +535,19 @@ full path).
 
 C<.devscripts> value: B<SALSA_DESC_PATTERN>
 
+=item B<--email>, B<--no-email>, B<--disable-email>
+
+Enable, ignore or disable email-on-push.
+
+C<.devscripts> value: B<SALSA_EMAIL>
+
+=item B<--email-recipients>
+
+Email-on-push recipient. Can be used more than one time.
+
+C<.devscripts> value: B<SALSA_EMAIL_RECIPIENTS> (use spaces to separate
+multiples recipients)
+
 =item B<--enable-issues>, B<--no-enable-issues>, B<--disable-issues>,
 B<--no-disable-issues>
 
@@ -550,11 +563,29 @@ C<.devscripts> values: B<SALSA_ENABLE_MR>, B<SALSA_DISABLE_MR>
 
 =item B<--irc-channel>
 
-IRC channel for KGB.
+IRC channel for KGB or Irker.
 
 C<.devscript> value: B<SALSA_IRC_CHANNEL>
 
-=item B<--kgb>, B<--no-kgb>, B<--disable-kgb>, <--no-disable-kgb>
+=item B<--irker>, B<--no-irker>, B<--disable-irker>
+
+Enable, ignore or disable Irker service
+
+C<.devscripts> values: B<SALSA_IRKER>
+
+=item B<--irker-host>
+
+Irker host. Default: ruprecht.snow-crash.org
+
+C<.devscripts> values: B<SALSA_IRKER_HOST>
+
+=item B<--irker-port>
+
+Irker host. Default: empty (default value)
+
+C<.devscripts> values: B<SALSA_IRKER_PORT>
+
+=item B<--kgb>, B<--no-kgb>, B<--disable-kgb>
 
 Enable, ignore or disable KGB webhook.
 
@@ -583,8 +614,7 @@ C<.devscripts> value: B<SALSA_DEST_BRANCH>
 
 =back
 
-=item B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>,
-B<--no-disable-tagpending>
+=item B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>
 
 Enable, ignore or disable "tagpending" webhook.
 
@@ -663,6 +693,12 @@ C<.devscripts> value: B<SALSA_API_URL>
 Default to "git@salsa.debian.org:"
 
 C<.devscripts> value: B<SALSA_GIT_SERVER_URL>
+
+=item B<--irker-server-url>
+
+Default to "ircs://irc.oftc.net:6697/"
+
+C<.devscripts> value: B<SALSA_IRKER_SERVER_URL>
 
 =item B<--kgb-server-url>
 

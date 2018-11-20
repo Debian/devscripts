@@ -10,7 +10,11 @@ sub add_hooks {
     if (   $self->config->kgb
         or $self->config->disable_kgb
         or $self->config->tagpending
-        or $self->config->disable_tagpending) {
+        or $self->config->disable_tagpending
+        or $self->config->irker
+        or $self->config->disable_irker
+        or $self->config->email
+        or $self->config->disable_email) {
         my $hooks = $self->enabled_hooks($repo_id);
         # KGB hook (IRC)
         if ($self->config->kgb or $self->config->disable_kgb) {
@@ -44,6 +48,64 @@ sub add_hooks {
                     });
                 ds_verbose "KGB hook added to project $repo_id (channel: "
                   . $self->config->irc_channel . ')';
+            }
+        }
+        # Irker hook (IRC)
+        if ($self->config->irker or $self->config->disable_irker) {
+            unless ($self->config->irc_channel or $self->config->disable_irker)
+            {
+                ds_warn "--irker needs --irc-channel";
+                return 1;
+            }
+            if ($hooks->{irker}) {
+                no warnings;
+                ds_warn
+"Deleting old irker (redirected to $hooks->{irker}->{recipients})";
+                $self->api->delete_project_service($repo_id, 'irker');
+            }
+            if ($self->config->irc_channel
+                and not $self->config->disable_irker) {
+                # TODO: if useful, add parameters for this options
+                $self->api->edit_project_service(
+                    $repo_id, 'irker',
+                    {
+                        active      => 1,
+                        server_host => $self->config->irker_host,
+                        (
+                            $self->config->irker_port
+                            ? (server_port => $self->config->irker_port)
+                            : ()
+                        ),
+                        default_irc_uri   => $self->config->irker_server_url,
+                        recipients        => '#' . $self->config->irc_channel,
+                        colorize_messages => 1,
+                    });
+                ds_verbose "Irker hook added to project $repo_id (channel: "
+                  . $self->config->irc_channel . ')';
+            }
+        }
+        # email on push
+        if ($self->config->email or $self->config->disable_email) {
+            if ($hooks->{email}) {
+                no warnings;
+                ds_warn
+"Deleting old email-on-push (redirected to $hooks->{email}->{recipients})";
+                $self->api->delete_project_service($repo_id, 'emails-on-push');
+            }
+            if (@{ $self->config->email_recipient }
+                and not $self->config->disable_email) {
+                # TODO: if useful, add parameters for this options
+                $self->api->edit_project_service(
+                    $repo_id,
+                    'emails-on-push',
+                    {
+                        recipients =>
+                          join(' ', @{ $self->config->email_recipient }),
+                    });
+                no warnings;
+                ds_verbose
+                  "Email-on-push hook added to project $repo_id (recipients: "
+                  . join(' ', @{ $self->config->email_recipient }) . ')';
             }
         }
         # Tagpending hook
@@ -85,6 +147,13 @@ sub enabled_hooks {
             url => $_->{url},
           }
           if $_->{url} =~ /\Q$self->{config}->{tagpending_server_url}\E/;
+    }
+    if (    $_ = $self->api->project_service($repo_id, 'emails-on-push')
+        and $_->{active}) {
+        $res->{email} = $_->{properties};
+    }
+    if ($_ = $self->api->project_service($repo_id, 'irker') and $_->{active}) {
+        $res->{irker} = $_->{properties};
     }
     return $res;
 }

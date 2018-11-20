@@ -19,6 +19,7 @@ _salsa_completion () {
     opts+=" --mr-dst_branch --mr-dst_project --mr-remove-source-branch"
     opts+=" --no-remove-source-branch --mr-src-branch --mr-src-project"
     opts+=" --kgb --no-kgb --irc-channel --path --tagpending"
+    opts+=" --irker --no-irker --disable-irker --no-disable-irker"
     opts+=" --no-tagpending --no-fail --rename-head --token --token-file"
     opts+=" --user --user-id --verbose"
     local commands=" add_user check_repo checkout co create_repo del_repo"
