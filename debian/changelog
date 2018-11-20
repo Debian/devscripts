@@ -22,12 +22,12 @@ devscripts (2.18.10) UNRELEASED; urgency=medium
 
   [ James McCoy ]
   * Devscripts::Packages:
-    + Parse "dpkg --status" instead of /var/lib/dpkg/status.
+    + Parse "dpkg --status" instead of /var/lib/dpkg/status.  MR: !87
   * Devscripts::PackageDeps:
     + Add fromStatus() to parse "dpkg --status", leaving new() to parse other
-      similar files.
+      similar files.  MR: !87
   * dpkg-depcheck:
-    + Use Devscripts::PackageDeps->fromStatus.
+    + Use Devscripts::PackageDeps->fromStatus.  MR: !87
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 13 Nov 2018 19:00:00 +0100
 
