@@ -108,27 +108,48 @@ use constant keys => [
     ],
     ['no-skip', undef, sub { $_[0]->skip([]); $_[0]->skip_file(undef); }],
     ['desc!', 'SALSA_DESC', 'bool'],
-    ['desc-pattern=s',  'SALSA_DESC_PATTERN',   qr/\w/, 'Debian package %p'],
-    ['enable-issues!',  'SALSA_ENABLE_ISSUES',  'bool'],
-    ['disable-issues!', 'SALSA_DISABLE_ISSUES', 'bool'],
-    ['email!',          'SALSA_EMAIL',          'bool'],
+    ['desc-pattern=s', 'SALSA_DESC_PATTERN', qr/\w/, 'Debian package %p'],
+    ['enable-issues!'],
+    ['disable-issues!'],
+    [
+        undef, 'SALSA_ENABLE_ISSUES',
+        sub { $_[0]->enable($_[1], 'enable_issues', 'disable_issues'); }
+    ],
+    ['email!'],
     ['disable-email!'],
+    [
+        undef, 'SALSA_EMAIL',
+        sub { $_[0]->enable($_[1], 'email', 'disable_email'); }
+    ],
     ['email-recipient=s', 'SALSA_EMAIL_RECIPIENTS', undef, sub { [] },],
-    ['enable-mr!',        'SALSA_ENABLE_MR',        'bool'],
-    ['disable-mr!',       'SALSA_DISABLE_MR',       'bool'],
-    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL',      qr/\w/],
-    ['irker!',            'SALSA_IRKER',            'bool'],
+    ['enable-mr!'],
+    ['disable-mr!'],
+    [
+        undef, 'SALSA_ENABLE_MR',
+        sub { $_[0]->enable($_[1], 'enable_mr', 'disable_mr'); }
+    ],
+    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL', qr/\w/],
+    ['irker!'],
+    ['disable-irker!'],
+    [
+        undef, 'SALSA_IRKER',
+        sub { $_[0]->enable($_[1], 'enable_irker', 'disable_irker'); }
+    ],
     ['irker-host=s', 'SALSA_IRKER_HOST', undef, 'ruprecht.snow-crash.org'],
     ['irker-port=s', 'SALSA_IRKER_PORT', qr/^\d*$/],
-    ['disable-irker!'],
-    ['kgb!', 'SALSA_KGB', 'bool'],
+    ['kgb!'],
     ['disable-kgb!'],
+    [undef, 'SALSA_KGB', sub { $_[0]->enable($_[1], 'kgb', 'disable_kgb'); }],
     ['no-fail', 'SALSA_NO_FAIL', 'bool'],
     ['rename-head'],
     ['source-branch=s', 'SALSA_SOURCE_BRANCH', undef, 'master'],
     ['dest-branch=s',   'SALSA_DEST_BRANCH',   undef, 'debian/master'],
-    ['tagpending!',     'SALSA_TAGPENDING',    'bool'],
+    ['tagpending!'],
     ['disable-tagpending!'],
+    [
+        undef, 'SALSA_TAGPENDING',
+        sub { $_[0]->enable($_[1], 'tagpending', 'disable_tagpending'); }
+    ],
 
     # Merge requests options
     ['mr-allow-squash!', 'SALSA_MR_ALLOW_SQUASH', 'bool', 1],
@@ -236,4 +257,22 @@ sub info {
         :                    return (0, "Bad $key value"));
     $ds_yes = $nv;
 }
+
+sub enable {
+    my ($self, $v, $en, $dis) = @_;
+    $v = lc($v);
+    if ($v eq 'ignore') {
+        $self->{$en} = $self->{$dis} = 0;
+    } elsif ($v eq 'yes') {
+        $self->{$en}  = 1;
+        $self->{$dis} = 0;
+    } elsif ($v eq 'no') {
+        $self->{$en}  = 0;
+        $self->{$dis} = 1;
+    } else {
+        return (0, "Bad value for SALSA_" . uc($en));
+    }
+    return 1;
+}
+
 1;

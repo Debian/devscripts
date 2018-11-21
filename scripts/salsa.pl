@@ -539,7 +539,7 @@ C<.devscripts> value: B<SALSA_DESC_PATTERN>
 
 Enable, ignore or disable email-on-push.
 
-C<.devscripts> value: B<SALSA_EMAIL> (yes/no)
+C<.devscripts> value: B<SALSA_EMAIL> (yes/ignore/no, default: ignore)
 
 =item B<--email-recipient>
 
@@ -557,13 +557,13 @@ B<--no-disable-issues>
 
 Enable, ignore or disable issues.
 
-C<.devscripts> values: B<SALSA_ENABLE_ISSUES>, B<SALSA_DISABLE_ISSUES> (yes/no)
+C<.devscripts> values: B<SALSA_ENABLE_ISSUES> (yes/ignore/no, default: ignore)
 
 =item B<--enable-mr>, B<--no-enable-mr>, B<--disable-mr>, B<--no-disable-mr>
 
 Enable, ignore or disable merge requests.
 
-C<.devscripts> values: B<SALSA_ENABLE_MR>, B<SALSA_DISABLE_MR> (yes/no)
+C<.devscripts> values: B<SALSA_ENABLE_MR> (yes/ignore/no, default: ignore)
 
 =item B<--irc-channel>
 
@@ -575,7 +575,7 @@ C<.devscript> value: B<SALSA_IRC_CHANNEL>
 
 Enable, ignore or disable Irker service
 
-C<.devscripts> values: B<SALSA_IRKER> (yes/no)
+C<.devscripts> values: B<SALSA_IRKER> (yes/ignore/no, default: ignore)
 
 =item B<--irker-host>
 
@@ -593,7 +593,7 @@ C<.devscripts> values: B<SALSA_IRKER_PORT>
 
 Enable, ignore or disable KGB webhook.
 
-C<.devscripts> value: B<SALSA_KGB> (yes/no)
+C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)
 
 =item B<--no-fail>
 
@@ -622,7 +622,7 @@ C<.devscripts> value: B<SALSA_DEST_BRANCH>
 
 Enable, ignore or disable "tagpending" webhook.
 
-C<.devscripts> value: B<SALSA_TAGPENDING> (yes/no)
+C<.devscripts> value: B<SALSA_TAGPENDING> (yes/ignore/no, default: ignore)
 
 =back
 

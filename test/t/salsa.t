@@ -41,12 +41,12 @@ EOF
 sub run {
     my ($result, $out, @list) = @_;
     @ARGV = ('--no-cache', @list);
-    my $res;
+    my ($res,$salsa);
     combined_like(
         sub {
-            $res = Devscripts::Salsa->new({ api => $api });
-            $res->config->git_server_url($gitdir . '/');
-            $res = $res->run;
+            $salsa = Devscripts::Salsa->new({ api => $api });
+            $salsa->config->git_server_url($gitdir . '/');
+            $res = $salsa->run;
         },
         $out,
         "command: " . join(' ', @list));
