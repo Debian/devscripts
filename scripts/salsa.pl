@@ -453,7 +453,7 @@ then you can fix B<SALSA_GROUP_ID> in C<~/.js.conf>
 
 Prompt before sensible changes.
 
-C<.devscripts> value: B<SALSA_INFO>
+C<.devscripts> value: B<SALSA_INFO> (yes/no)
 
 =item B<--path>
 
@@ -490,7 +490,7 @@ Enable verbose output.
 
 Never ask for consent.
 
-C<.devscripts> value: B<SALSA_YES>
+C<.devscripts> value: B<SALSA_YES> (yes/no)
 
 =back
 
@@ -525,7 +525,7 @@ C<.devscripts> value: B<SALSA_SKIP_FILE>
 
 Configure repo description using pattern given in B<desc-pattern>
 
-C<.devscripts> value: B<SALSA_DESC>
+C<.devscripts> value: B<SALSA_DESC> (yes/no)
 
 =item B<--desc-pattern>
 
@@ -539,11 +539,15 @@ C<.devscripts> value: B<SALSA_DESC_PATTERN>
 
 Enable, ignore or disable email-on-push.
 
-C<.devscripts> value: B<SALSA_EMAIL>
+C<.devscripts> value: B<SALSA_EMAIL> (yes/no)
 
-=item B<--email-recipients>
+=item B<--email-recipient>
 
-Email-on-push recipient. Can be used more than one time.
+Email-on-push recipient. Can be multi valued:
+
+  $ salsa update_safe myrepo \
+        --email-recipient foo@foobar.org \
+        --email-recipient bar@foobar.org
 
 C<.devscripts> value: B<SALSA_EMAIL_RECIPIENTS> (use spaces to separate
 multiples recipients)
@@ -553,13 +557,13 @@ B<--no-disable-issues>
 
 Enable, ignore or disable issues.
 
-C<.devscripts> values: B<SALSA_ENABLE_ISSUES>, B<SALSA_DISABLE_ISSUES>
+C<.devscripts> values: B<SALSA_ENABLE_ISSUES>, B<SALSA_DISABLE_ISSUES> (yes/no)
 
 =item B<--enable-mr>, B<--no-enable-mr>, B<--disable-mr>, B<--no-disable-mr>
 
 Enable, ignore or disable merge requests.
 
-C<.devscripts> values: B<SALSA_ENABLE_MR>, B<SALSA_DISABLE_MR>
+C<.devscripts> values: B<SALSA_ENABLE_MR>, B<SALSA_DISABLE_MR> (yes/no)
 
 =item B<--irc-channel>
 
@@ -571,7 +575,7 @@ C<.devscript> value: B<SALSA_IRC_CHANNEL>
 
 Enable, ignore or disable Irker service
 
-C<.devscripts> values: B<SALSA_IRKER>
+C<.devscripts> values: B<SALSA_IRKER> (yes/no)
 
 =item B<--irker-host>
 
@@ -589,13 +593,13 @@ C<.devscripts> values: B<SALSA_IRKER_PORT>
 
 Enable, ignore or disable KGB webhook.
 
-C<.devscripts> value: B<SALSA_KGB>
+C<.devscripts> value: B<SALSA_KGB> (yes/no)
 
 =item B<--no-fail>
 
 Don't stop on error when using B<update_repo> with B<--all>.
 
-C<.devscripts> value: B<SALSA_NO_FAIL>
+C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)
 
 =item B<--rename-head>
 
@@ -618,7 +622,7 @@ C<.devscripts> value: B<SALSA_DEST_BRANCH>
 
 Enable, ignore or disable "tagpending" webhook.
 
-C<.devscripts> value: B<SALSA_TAGPENDING>
+C<.devscripts> value: B<SALSA_TAGPENDING> (yes/no)
 
 =back
 
@@ -668,13 +672,13 @@ B<git remote --verbose show>.
 
 Allow upstream project to squash your commits, this is the default.
 
-C<.devscripts> value: B<SALSA_MR_ALLOW_SQUASH>
+C<.devscripts> value: B<SALSA_MR_ALLOW_SQUASH> (yes/no)
 
 =item B<--mr-remove-source-branch>, B<--no-mr-remove-source-branch>
 
 Remove source branch if merge request is accepted. Default: no.
 
-C<.devscripts> value: B<SALSA_MR_REMOVE_SOURCE_BRANCH>
+C<.devscripts> value: B<SALSA_MR_REMOVE_SOURCE_BRANCH> (yes/no)
 
 =back
 
