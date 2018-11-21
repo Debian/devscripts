@@ -134,25 +134,34 @@ sub add_hooks {
 
 sub enabled_hooks {
     my ($self, $repo_id) = @_;
-    my $hooks = $self->api->project_hooks($repo_id);
-    my $res   = {};
-    foreach (@{$hooks}) {
-        $res->{kgb} = {
-            id  => $_->{id},
-            url => $_->{url},
-          }
-          if $_->{url} =~ /\Q$self->{config}->{kgb_server_url}\E/;
-        $res->{tagpending} = {
-            id  => $_->{id},
-            url => $_->{url},
-          }
-          if $_->{url} =~ /\Q$self->{config}->{tagpending_server_url}\E/;
+    my $hooks;
+    my $res = {};
+    if (   $self->config->kgb
+        or $self->config->disable_kgb
+        or $self->config->tagpending
+        or $self->config->disable_tagpending) {
+        $hooks = $self->api->project_hooks($repo_id);
+        foreach (@{$hooks}) {
+            $res->{kgb} = {
+                id  => $_->{id},
+                url => $_->{url},
+              }
+              if $_->{url} =~ /\Q$self->{config}->{kgb_server_url}\E/;
+            $res->{tagpending} = {
+                id  => $_->{id},
+                url => $_->{url},
+              }
+              if $_->{url} =~ /\Q$self->{config}->{tagpending_server_url}\E/;
+        }
     }
-    if (    $_ = $self->api->project_service($repo_id, 'emails-on-push')
+    if (    ($self->config->email or $self->config->disable_email)
+        and $_ = $self->api->project_service($repo_id, 'emails-on-push')
         and $_->{active}) {
         $res->{email} = $_->{properties};
     }
-    if ($_ = $self->api->project_service($repo_id, 'irker') and $_->{active}) {
+    if (    ($self->config->irker or $self->config->disable_irker)
+        and $_ = $self->api->project_service($repo_id, 'irker')
+        and $_->{active}) {
         $res->{irker} = $_->{properties};
     }
     return $res;
