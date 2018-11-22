@@ -39,7 +39,8 @@ sub create_repo {
         return 1;
     }
     ds_warn "Project $repo->{web_url} created";
-    $self->add_hooks($repo->{id});
+    $reponame =~ s#^.*/##;
+    $self->add_hooks($repo->{id}, $reponame);
     return 0;
 }
 

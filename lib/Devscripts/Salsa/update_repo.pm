@@ -53,11 +53,13 @@ sub _update_repo {
                     });
                 $configparams->{default_branch} = $self->config->dest_branch;
             }
+            my $str = $_->[1];
             # apply new parameters
             $self->api->edit_project($id,
                 { %$configparams, $self->desc($_->[1]) });
             # add hooks if needed
-            $self->add_hooks($id);
+            $str =~ s#^.*/##;
+            $self->add_hooks($id, $str);
             # delete old branch if --rename-head
             if ($self->config->rename_head) {
                 $self->api->delete_branch($id, $self->config->source_branch);

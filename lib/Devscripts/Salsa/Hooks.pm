@@ -6,7 +6,7 @@ use Devscripts::Output;
 use Moo::Role;
 
 sub add_hooks {
-    my ($self, $repo_id) = @_;
+    my ($self, $repo_id, $repo) = @_;
     if (   $self->config->kgb
         or $self->config->disable_kgb
         or $self->config->tagpending
@@ -105,8 +105,9 @@ sub add_hooks {
                     $repo_id,
                     'emails-on-push',
                     {
-                        recipients =>
-                          join(' ', @{ $self->config->email_recipient }),
+                        recipients => join(' ',
+                            map { s/%p/$repo/; $_ }
+                              @{ $self->config->email_recipient }),
                     });
                 no warnings;
                 ds_verbose

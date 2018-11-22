@@ -549,6 +549,8 @@ Email-on-push recipient. Can be multi valued:
         --email-recipient foo@foobar.org \
         --email-recipient bar@foobar.org
 
+If recipient value contains "%p", it is replaced by project name.
+
 C<.devscripts> value: B<SALSA_EMAIL_RECIPIENTS> (use spaces to separate
 multiples recipients)
 
@@ -567,18 +569,18 @@ C<.devscripts> values: B<SALSA_ENABLE_MR> (yes/ignore/no, default: ignore)
 
 =item B<--irc-channel>
 
-IRC channel for KGB or Irker. Can me used more than one time only with
+IRC channel for KGB or Irker. Can be used more than one time only with
 B<--irker>.
 
-B<Important>: channel must not include the first "#". If salsa find a channel
-starting with "#", it will consider that channel starts with 2 "#"!
+B<Important>: channel must not include the first "#". If salsa finds a channel
+starting with "#", it will consider that the channel starts with 2 "#"!
 
 C<.devscript> value: B<SALSA_IRC_CHANNEL>.
 
 Multiple values must be space separated.
 
 Since configuration files are read using B<sh>, be careful when using "#": you
-must enclode the channel with quotes, else B<sh> will consider it as a comment
+must enclose the channel with quotes, else B<sh> will consider it as a comment
 and will ignore this value.
 
 =item B<--irker>, B<--no-irker>, B<--disable-irker>
