@@ -567,9 +567,19 @@ C<.devscripts> values: B<SALSA_ENABLE_MR> (yes/ignore/no, default: ignore)
 
 =item B<--irc-channel>
 
-IRC channel for KGB or Irker.
+IRC channel for KGB or Irker. Can me used more than one time only with
+B<--irker>.
 
-C<.devscript> value: B<SALSA_IRC_CHANNEL>
+B<Important>: channel must not include the first "#". If salsa find a channel
+starting with "#", it will consider that channel starts with 2 "#"!
+
+C<.devscript> value: B<SALSA_IRC_CHANNEL>.
+
+Multiple values must be space separated.
+
+Since configuration files are read using B<sh>, be careful when using "#": you
+must enclode the channel with quotes, else B<sh> will consider it as a comment
+and will ignore this value.
 
 =item B<--irker>, B<--no-irker>, B<--disable-irker>
 

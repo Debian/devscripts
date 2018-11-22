@@ -18,22 +18,26 @@ sub add_hooks {
         my $hooks = $self->enabled_hooks($repo_id);
         # KGB hook (IRC)
         if ($self->config->kgb or $self->config->disable_kgb) {
-            unless ($self->config->irc_channel or $self->config->disable_kgb) {
+            unless ($self->config->irc_channel->[0]
+                or $self->config->disable_kgb) {
                 ds_warn "--kgb needs --irc-channel";
                 return 1;
+            }
+            if ($self->config->irc_channel->[1]) {
+                ds_warn "KGB accepts only one --irc-channel value,";
             }
             if ($hooks->{kgb}) {
                 ds_warn "Deleting old kgb (was $hooks->{kgb}->{url})";
                 $self->api->delete_project_hook($repo_id, $hooks->{kgb}->{id});
             }
-            if ($self->config->irc_channel and not $self->config->disable_kgb)
-            {
+            if ($self->config->irc_channel->[0]
+                and not $self->config->disable_kgb) {
                 # TODO: if useful, add parameters for this options
                 $self->api->create_project_hook(
                     $repo_id,
                     {
                         url => $self->config->kgb_server_url
-                          . $self->config->irc_channel,
+                          . $self->config->irc_channel->[0],
                         push_events                => 1,
                         issues_events              => 1,
                         confidential_issues_events => 0,
@@ -47,13 +51,13 @@ sub add_hooks {
                         wiki_page_events      => 1,
                     });
                 ds_verbose "KGB hook added to project $repo_id (channel: "
-                  . $self->config->irc_channel . ')';
+                  . $self->config->irc_channel->[0] . ')';
             }
         }
         # Irker hook (IRC)
         if ($self->config->irker or $self->config->disable_irker) {
-            unless ($self->config->irc_channel or $self->config->disable_irker)
-            {
+            unless ($self->config->irc_channel->[0]
+                or $self->config->disable_irker) {
                 ds_warn "--irker needs --irc-channel";
                 return 1;
             }
@@ -63,9 +67,11 @@ sub add_hooks {
 "Deleting old irker (redirected to $hooks->{irker}->{recipients})";
                 $self->api->delete_project_service($repo_id, 'irker');
             }
-            if ($self->config->irc_channel
+            if ($self->config->irc_channel->[0]
                 and not $self->config->disable_irker) {
                 # TODO: if useful, add parameters for this options
+                my $ch = join(' ',
+                    map { '#' . $_ } @{ $self->config->irc_channel });
                 $self->api->edit_project_service(
                     $repo_id, 'irker',
                     {
@@ -77,11 +83,11 @@ sub add_hooks {
                             : ()
                         ),
                         default_irc_uri   => $self->config->irker_server_url,
-                        recipients        => '#' . $self->config->irc_channel,
+                        recipients        => $ch,
                         colorize_messages => 1,
                     });
-                ds_verbose "Irker hook added to project $repo_id (channel: "
-                  . $self->config->irc_channel . ')';
+                ds_verbose
+                  "Irker hook added to project $repo_id (channel: $ch)";
             }
         }
         # email on push

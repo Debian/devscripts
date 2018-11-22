@@ -128,7 +128,7 @@ use constant keys => [
         undef, 'SALSA_ENABLE_MR',
         sub { $_[0]->enable($_[1], 'enable_mr', 'disable_mr'); }
     ],
-    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL', qr/\w/],
+    ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL', undef, sub { [] }],
     ['irker!'],
     ['disable-irker!'],
     [
@@ -229,6 +229,21 @@ use constant rules => [
     sub {
         if ($_[0]->email and not @{ $_[0]->email_recipient }) {
             return (0, '--email-recipient needed with --email');
+        }
+        return 1;
+    },
+    sub {
+        if (@{ $_[0]->irc_channel }) {
+            foreach (@{ $_[0]->irc_channel }) {
+                if (/^#/) {
+                    return (1,
+"# found in --irc-channel, assuming double hash is wanted"
+                    );
+                }
+            }
+            if ($_[0]->irc_channel->[1] and $_[0]->kgb) {
+                return (0, "Only one IRC channel is accepted with --kgb");
+            }
         }
         return 1;
     },

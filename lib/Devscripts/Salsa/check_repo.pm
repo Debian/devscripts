@@ -61,7 +61,7 @@ sub _check_repo {
             push @err, "kgb missing";
         } elsif ($self->config->kgb
             and $hooks->{kgb}->{url} ne $self->config->kgb_server_url
-            . $self->config->irc_channel) {
+            . $self->config->irc_channel->[0]) {
             push @err,
               "bad irc channel: "
               . substr($hooks->{kgb}->{url},
@@ -83,9 +83,14 @@ sub _check_repo {
         # Irker
         if ($self->config->irker and not $hooks->{irker}) {
             push @err, "irker missing";
-        } elsif ($self->config->irker
-            and $hooks->{irker}->{recipients} ne '#'
-            . $self->config->irc_channel) {
+        } elsif (
+            $self->config->irker
+            and $hooks->{irker}->{recipients} ne join(
+                ' ',
+                map {
+                    "#$_"
+                } @{ $self->config->irc_channel })
+        ) {
             push @err, "bad irc channel: " . $hooks->{irker}->{recipients};
         } elsif ($self->config->disable_irker and $hooks->{irker}) {
             push @err, "irker enabled";
