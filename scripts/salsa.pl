@@ -613,10 +613,12 @@ Don't stop on error when using B<update_repo> with B<--all>.
 
 C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)
 
-=item B<--rename-head>
+=item B<--rename-head>, B<--no-rename-head>
 
 Rename HEAD branch given by B<--source-branch> into B<--dest-branch> and change
 "default branch" of project. Works only with B<update_repo>.
+
+C<.devscripts> value: B<SALSA_RENAME_HEAD> (yes/no)
 
 =over
 

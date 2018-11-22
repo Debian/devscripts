@@ -43,15 +43,23 @@ sub _update_repo {
         ds_verbose "Configuring $_->[1]";
         eval {
             my $id = $_->[0];
+            my $project;
             # 1 - creates new branch if --rename-head
             if ($self->config->rename_head) {
-                $self->api->create_branch(
-                    $id,
-                    {
-                        ref    => $self->config->source_branch,
-                        branch => $self->config->dest_branch,
-                    });
-                $configparams->{default_branch} = $self->config->dest_branch;
+                my $project = $self->api->project($_->[0]);
+                if ($project->{default_branch} ne $self->config->dest_branch) {
+                    $self->api->create_branch(
+                        $id,
+                        {
+                            ref    => $self->config->source_branch,
+                            branch => $self->config->dest_branch,
+                        });
+                    $configparams->{default_branch}
+                      = $self->config->dest_branch;
+                } else {
+                    ds_verbose "Head already renamed for $_->[1]";
+                    $project = undef;
+                }
             }
             my $str = $_->[1];
             # apply new parameters
@@ -61,7 +69,7 @@ sub _update_repo {
             $str =~ s#^.*/##;
             $self->add_hooks($id, $str);
             # delete old branch if --rename-head
-            if ($self->config->rename_head) {
+            if ($project) {
                 $self->api->delete_branch($id, $self->config->source_branch);
             }
             ds_verbose "Project $id updated";
