@@ -41,38 +41,15 @@ sub _update_repo {
     return @repos unless (ref $repos[0]);    # get_repo returns 1 when fails
     foreach (@repos) {
         ds_verbose "Configuring $_->[1]";
+        my $id  = $_->[0];
+        my $str = $_->[1];
         eval {
-            my $id = $_->[0];
-            my $project;
-            # 1 - creates new branch if --rename-head
-            if ($self->config->rename_head) {
-                my $project = $self->api->project($_->[0]);
-                if ($project->{default_branch} ne $self->config->dest_branch) {
-                    $self->api->create_branch(
-                        $id,
-                        {
-                            ref    => $self->config->source_branch,
-                            branch => $self->config->dest_branch,
-                        });
-                    $configparams->{default_branch}
-                      = $self->config->dest_branch;
-                } else {
-                    ds_verbose "Head already renamed for $_->[1]";
-                    $project = undef;
-                }
-            }
-            my $str = $_->[1];
             # apply new parameters
             $self->api->edit_project($id,
                 { %$configparams, $self->desc($_->[1]) });
             # add hooks if needed
             $str =~ s#^.*/##;
             $self->add_hooks($id, $str);
-            # delete old branch if --rename-head
-            if ($project) {
-                $self->api->delete_branch($id, $self->config->source_branch);
-            }
-            ds_verbose "Project $id updated";
         };
         if ($@) {
             $res++;
@@ -80,11 +57,54 @@ sub _update_repo {
                 ds_verbose $@;
                 ds_warn
 "update_repo has failed for $_->[1]. Use --verbose to see errors\n";
+                next;
             } else {
                 ds_warn $@;
                 return 1;
             }
+        } elsif ($self->config->rename_head) {
+            # 1 - creates new branch if --rename-head
+            my $project = $self->api->project($_->[0]);
+            if ($project->{default_branch} ne $self->config->dest_branch) {
+                eval {
+                    $self->api->create_branch(
+                        $id,
+                        {
+                            ref    => $self->config->source_branch,
+                            branch => $self->config->dest_branch,
+                        });
+                };
+                if ($@) {
+                    ds_debug $@ if ($@);
+                    $project = undef;
+                }
+
+                eval {
+                    $self->api->edit_project($id,
+                        { default_branch => $self->config->dest_branch });
+                    # delete old branch only if "create_branch" succeed
+                    if ($project) {
+                        $self->api->delete_branch($id,
+                            $self->config->source_branch);
+                    }
+                };
+                if ($@) {
+                    $res++;
+                    if ($self->config->no_fail) {
+                        ds_verbose $@;
+                        ds_warn
+"Branch rename has failed for $_->[1]. Use --verbose to see errors\n";
+                        next;
+                    } else {
+                        ds_warn $@;
+                        return 1;
+                    }
+                }
+            } else {
+                ds_verbose "Head already renamed for $_->[1]";
+            }
         }
+        ds_verbose "Project $id updated";
     }
     return $res;
 }
