@@ -34,6 +34,7 @@ EOF
 EOF
     system "git add *";
     system "git commit -a -m 'Salsa test'";
+    system "git checkout -b dev";
     chdir $pwd;
     return $tmpdir;
 }
@@ -41,7 +42,7 @@ EOF
 sub run {
     my ($result, $out, @list) = @_;
     @ARGV = ('--no-cache', @list);
-    my ($res,$salsa);
+    my ($res, $salsa);
     combined_like(
         sub {
             $salsa = Devscripts::Salsa->new({ api => $api });
@@ -51,6 +52,15 @@ sub run {
         $out,
         "command: " . join(' ', @list));
     ok($res =~ /^$result$/i, " result is $result");
+}
+
+sub run_debug {
+    my ($result, $out, @list) = @_;
+    @ARGV = ('--no-cache', @list);
+    my ($res, $salsa);
+    $salsa = Devscripts::Salsa->new({ api => $api });
+    $salsa->config->git_server_url($gitdir . '/');
+    $res = $salsa->run;
 }
 
 SKIP: {
@@ -84,6 +94,9 @@ SKIP: {
     run(0, qr/foobar\s*:\s*OK/s,
         'update_safe', '--kgb', '--irc=debian', '--tagpending', 'foobar');
     run(0, qr{Full path\s*:\s*me/foobar}, 'search', 'foobar');
+    run(0, qr{Configuring foobar},
+        'rename_branch', 'foobar', '--source-branch=dev',
+        '--dest-branch=dev2');
 }
 
 done_testing;

@@ -212,6 +212,12 @@ sub api {
             push @{ $_->{hooks} }, $content;
             return 200, {};
         },
+        POST => qr{^projects/(\d+)/repository/branches} => sub {
+            return 200, {};
+        },
+        DELETE => qr{^projects/(\d+)/repository/branches/([\w\-\.]+)$} => sub {
+            return 200, {};
+        },
     );
     return $api;
 }

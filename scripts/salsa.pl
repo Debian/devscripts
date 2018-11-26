@@ -307,6 +307,11 @@ Examples:
   salsa --user yadd push_repo ./test
   salsa --group js-team --kgb --irc-channel=devscripts push_repo .
 
+=item B<rename_branch>
+
+Rename branch given in B<--source-branch> with name given in B<--dest-branch>.
+You can use B<--no-fail> and B<--all> options here.
+
 =item B<search>, B<search_project>, B<search_repo>
 
 Search for a project using given string. Shows name, owner id and other
