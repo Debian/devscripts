@@ -1,5 +1,21 @@
 package Devscripts::Salsa;
 
+=head1 NAME
+
+Devscripts::Salsa - salsa(1) base object
+
+=head1 SYNOPSIS
+
+  use Devscripts::Salsa;
+  exit Devscripts::Salsa->new->run
+
+=head1 DESCRIPTION
+
+Devscripts::Salsa provides salsa(1) command launcher and some common utilities
+methods.
+
+=cut
+
 use strict;
 
 use Devscripts::Output;
@@ -24,10 +40,22 @@ use constant cmd_aliases => {
     mrs         => 'merge_requests',
 };
 
+=head1 ACCESSORS
+
+=over
+
+=item B<config> : Devscripts::Salsa::Config object (parsed)
+
+=cut
+
 has config => (
     is      => 'rw',
     default => sub { Devscripts::Salsa::Config->new->parse },
 );
+
+=item B<cache> : Devscripts::JSONCache object
+
+=cut
 
 # File cache to avoid polling Gitlab too much
 # (used to store ids, paths and names)
@@ -65,7 +93,10 @@ has projectCache => (
     default => sub { {} },
 );
 
-# GitLab API
+=item B<api>: GitLab::API::v4 object
+
+=cut
+
 has api => (
     is      => 'rw',
     lazy    => 1,
@@ -82,6 +113,22 @@ has api => (
         return $r;
     },
 );
+
+=item User or group in use
+
+=over
+
+=item B<username>
+
+=item B<user_id>
+
+=item B<group_id>
+
+=item B<group_path>
+
+=back
+
+=cut
 
 # Accessors that resolve names, ids or paths
 has username => (
@@ -128,7 +175,16 @@ has group_path => (
     },
 );
 
-# Main method: launch command
+=back
+
+=head1 METHODS
+
+=over
+
+=item B<run>: main method, load and run command and return Unix result code.
+
+=cut
+
 sub run {
     my ($self, $args) = @_;
     binmode STDOUT, ':utf8';
@@ -147,7 +203,16 @@ sub run {
     return $self->$command(@ARGV);
 }
 
-# Utilities
+=back
+
+=head2 Utilities
+
+=over
+
+=item B<levels_name>, B<levels_code>: convert strings to GitLab level codes
+(owner, maintainer, developer, reporter and guest)
+
+=cut
 
 sub levels_name {
     my $res = {
@@ -173,6 +238,10 @@ sub levels_code {
         $GITLAB_ACCESS_LEVEL_OWNER     => 'owner',
     }->{ $_[1] };
 }
+
+=item B<username2id>, B<id2username>: convert username to an id an reverse
+
+=cut
 
 sub username2id {
     my ($self, $user) = @_;
@@ -207,6 +276,10 @@ sub id2username {
     $self->cache->{user}->{$id} = $res;
     return $res;
 }
+
+=item B<group2id>: convert group name to id
+
+=cut
 
 sub group2id {
     my ($self, $name) = @_;
@@ -243,6 +316,10 @@ END
     return $self->group_id($groups->[0]->{id});
 }
 
+=item B<project2id>: get id of a project.
+
+=cut
+
 sub project2id {
     my ($self, $project) = @_;
     return $project if ($project =~ /^\d+$/);
@@ -265,6 +342,10 @@ sub project2id {
     return $res;
 }
 
+=item B<project2path>: get full path of a project
+
+=cut
+
 sub project2path {
     my ($self, $project) = @_;
     return $project if ($project =~ m#/#);
@@ -273,6 +354,10 @@ sub project2path {
     ds_verbose "Project $project => $path/$project";
     return "$path/$project";
 }
+
+=item B<main_path>: build path using given group or user
+
+=cut
 
 sub main_path {
     my ($self) = @_;
@@ -300,3 +385,13 @@ sub GitLab::API::v4::group_without_projects {
 }
 
 1;
+
+=back
+
+=head1 AUTHOR
+
+Xavier Guimard E<lt>yadd@debian.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>
