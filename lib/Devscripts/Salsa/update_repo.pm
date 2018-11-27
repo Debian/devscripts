@@ -64,7 +64,7 @@ sub _update_repo {
             }
         } elsif ($self->config->rename_head) {
             # 1 - creates new branch if --rename-head
-            my $project = $self->api->project($_->[0]);
+            my $project = $self->api->project($id);
             if ($project->{default_branch} ne $self->config->dest_branch) {
                 eval {
                     $self->api->create_branch(
@@ -101,10 +101,10 @@ sub _update_repo {
                     }
                 }
             } else {
-                ds_verbose "Head already renamed for $_->[1]";
+                ds_verbose "Head already renamed for $str";
             }
         }
-        ds_verbose "Project $id updated";
+        ds_verbose "Project $str updated";
     }
     return $res;
 }
