@@ -366,7 +366,7 @@ for (split(/\n/, $ctrl->{Files})) {
         my $deb = $1;
         $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
         # don't want other archs' .debs:
-        next unless $deb =~ /[_+]($arch|all)[\.+]/;
+        next unless $deb =~ /[_+]($arch|all)[\.+]/ || $progname eq 'debc';
         my $pkg = $deb;
         $pkg =~ s/_.*$//;
 
