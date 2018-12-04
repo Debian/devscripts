@@ -32,6 +32,8 @@ use filetest 'access';
 use Cwd;
 use Dpkg::Control;
 use Dpkg::Changelog::Parse qw(changelog_parse);
+use IPC::Run qw(run);
+use IO::Handle;
 
 my $progname = basename($0, '.pl');    # the '.pl' is for when we're debugging
 my $modified_conf_msg;
@@ -242,6 +244,12 @@ if ($? != 0 or !$arch) {
 }
 chomp $arch;
 
+my @foreign_architectures;
+unless ($opt_a || $opt_t || $progname eq 'debc') {
+    @foreign_architectures
+      = map { chomp; $_ } `dpkg --print-foreign-architectures`;
+}
+
 my $chdir = 0;
 
 if (!defined $changes) {
@@ -363,12 +371,23 @@ for (split(/\n/, $ctrl->{Files})) {
     # udebs are only supported for debc
     if (   (($progname eq 'debi') && (/ (\S*\.deb)$/))
         || (($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
-        my $deb = $1;
-        $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
-        # don't want other archs' .debs:
-        next unless $deb =~ /[_+]($arch|all)[\.+]/ || $progname eq 'debc';
-        my $pkg = $deb;
-        $pkg =~ s/_.*$//;
+        my $deb    = $1;
+        my $stdout = IO::Handle->new();
+        run(['dpkg-deb', '-f', $deb], '>pipe', \*$stdout);
+        my $fields = Dpkg::Control->new(name => $deb, type => CTRL_PKG_DEB);
+        $fields->parse($stdout, $deb);
+        my $pkg = $fields->{Package};
+
+        # don't want to install other archs' .debs, unless they are
+        # Multi-Arch: same:
+        next
+          unless (
+               $progname eq 'debc'
+            || $fields->{Architecture} eq 'all'
+            || $fields->{Architecture} eq $arch
+            || (($fields->{'Multi-Arch'} || 'no') eq 'same'
+                && grep { $_ eq $fields->{Architecture} }
+                @foreign_architectures));
 
         if (@ARGV) {
             if (exists $pkgs{$pkg}) {
