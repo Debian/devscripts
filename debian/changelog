@@ -1,6 +1,24 @@
 devscripts (2.18.11) UNRELEASED; urgency=medium
 
-  *
+  [ Xavier Guimard ]
+  * Devscripts::Config:
+    + Add --conf-file
+  * Devscripts::Output:
+    + Add ds_prompt
+  * Add Devscripts::JSONCache, Perl object cache library to store values.
+  * salsa: new tool to manage salsa.debian.org repositories:
+    + Add commands to manage users in salsa groups
+    + Add commands to contribute (fork and merge_request)
+    + Add commands to manage repositories
+      - Description
+      - KGB configuration
+      - Tagpending configuration
+    + Updates asked by pkg-security group:
+      - Irker configuration
+      - Email-on-push configuration + macro to use repo name in mail
+      - Option to rename head (default: from master to debian/master, see
+        dep14)
+    Closes: #890594; MR: !70
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 05 Dec 2018 18:05:56 +0100
 
@@ -22,13 +40,6 @@ devscripts (2.18.10) unstable; urgency=medium
       each component separately).  MR: !84
     + Use gpgv in all signature verification.  Closes: #913665; MR: !88
     + Force UTC for the date of the last git commit.  Closes: #910762; MR: !89
-  * Devscripts::Config:
-    + Add --conf-file
-  * Devscripts::Output:
-    + Add ds_prompt
-  * Add Devscripts::JSONCache, Perl object cache library to store values.
-  * salsa: new tool to manage salsa.debian.org repositories.
-    Closes: #890594; MR: !70
 
   [ Mattia Rizzolo ]
   * wrap-and-sort:
