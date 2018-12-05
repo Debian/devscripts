@@ -1,6 +1,18 @@
 devscripts (2.18.11) UNRELEASED; urgency=medium
 
-  *
+  [ Xavier Guimard ]
+  * Devscripts::Config:
+    + Support a new --conf-file option to add extra configuration files.
+  * Devscripts::Output:
+    + Add a new ds_prompt() function.
+  * Add Devscripts::JSONCache, Perl object cache library to store values.
+  * salsa: new tool to manage salsa.debian.org repositories with:
+    + commands to manage users in salsa groups,
+    + commands to contribute (create fork and merge_request),
+    + commands to manage repositories: configure project description, KGB
+      webhook, tagpending webhook, Irker, Email-on-push, default HEAD (i.e.
+      from the default "master" to "debian/master" for DEP-14 migrations).
+  * Closes: #890594; MR: !70
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 05 Dec 2018 18:05:56 +0100
 

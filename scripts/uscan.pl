@@ -1422,6 +1422,26 @@ For the basic usage, B<uscan> does not require to set these options.
 
 =over
 
+=item B<--conffile>, B<--conf-file>
+
+Add or replace default configuration files (C</etc/devscripts.conf> and
+C<~/.devscripts>). This can only be used as the first option given on the
+command-line.
+
+=over
+
+=item replace:
+
+  uscan --conf-file test.conf --verbose
+
+=item add:
+
+  uscan --conf-file +test.conf --verbose
+
+If one B<--conf-file> has no C<+>, default configuration files are ignored.
+
+=back
+
 =item B<--no-conf>, B<--noconf>
 
 Don't read any configuration files. This can only be used as the first option

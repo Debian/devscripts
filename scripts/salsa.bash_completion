@@ -1,0 +1,51 @@
+# /usr/share/bash-completion/completions/salsa
+# Bash command completion for ‘salsa(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+shopt -s progcomp
+
+_salsa_completion () {
+    COMPREPLY=()
+
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    local opts="--help --skip --skip-file -C --chdir --debug"
+    opts+=" --all --conf-file --no-conf --desc --no-desc --desc-pattern"
+    opts+=" --disable-kgb --disable-tagpending --group --group-id"
+    opts+=" --enable-issues --no-enable-issues --disable-issues"
+    opts+=" --enable-mr --no-enable-mr --disable-mr"
+    opts+=" --mr-allow-squash --no-mr-allow-squash --mr-desc --mr-title"
+    opts+=" --mr-dst_branch --mr-dst_project --mr-remove-source-branch"
+    opts+=" --no-remove-source-branch --mr-src-branch --mr-src-project"
+    opts+=" --kgb --no-kgb --irc-channel --path --tagpending"
+    opts+=" --irker --no-irker --disable-irker --no-disable-irker"
+    opts+=" --no-tagpending --no-fail --rename-head --token --token-file"
+    opts+=" --user --user-id --verbose"
+    local commands=" add_user check_repo checkout co create_repo del_repo"
+    commands+=" del_user group list_groups list_repos ls"
+    commands+=" fork forks merge_request merge_requests mr mrs"
+    commands+=" protect_branch protected_branches purge_cache push_repo"
+    commands+=" search_group search_project search_user"
+    commands+=" update_repo update_safe update_user whoami"
+    case "${prev}" in
+      --api-url) ;&
+      --desc-pattern) ;&
+      --irc-channel) ;&
+      --path) ;&
+      --group-id) ;&
+      --user-id)
+	  COMPREPLY=()
+        ;;
+      *)
+        if [[ "$cur" == -* ]]; then
+            COMPREPLY=( $( compgen -W "$opts" -- $cur ) )
+        else
+            COMPREPLY=( $( compgen -W "$commands" -- $cur ) )
+        fi
+	;;
+    esac
+    return 0
+}
+
+complete -F _salsa_completion salsa

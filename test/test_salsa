@@ -1,0 +1,105 @@
+#!/usr/bin/perl
+
+use strict;
+use lib '../lib';
+use Test::More;
+
+my $skip;
+
+BEGIN {
+    my $cwd = `pwd`;
+    chomp $cwd;
+    eval "use File::Temp 'tempdir';"
+      . "use Test::Output;use GitLab::API::v4;"
+      . "use lib '$cwd/../lib'";
+    $skip = $@ ? 1 : 0;
+}
+
+sub run {
+    my ($result, $out, @list) = @_;
+    @ARGV = @list;
+    my $res;
+    combined_like(
+        sub {
+            $res = Devscripts::Salsa->new->run;
+        },
+        $out,
+        "command: " . join(' ', @list));
+    ok($res =~ /^$result$/i, " result is $result");
+}
+
+sub mkDebianDir {
+    my $tmpdir = tempdir(CLEANUP => 1);
+    chdir $tmpdir;
+    system "git init";
+    mkdir 'debian';
+    open F, ">debian/changelog";
+    print F <<EOF;
+foobar (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd\@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+EOF
+    close F;
+    open F, ">README.md";
+    print F <<EOF;
+# Salsa test
+EOF
+    system "git add *";
+    system "git commit -a -m 'Salsa test'";
+}
+
+SKIP: {
+    skip "Missing dependencies" if ($skip);
+    use_ok 'Devscripts::Salsa';
+    $Devscripts::Output::die_on_error = 0;
+
+    # Search methods
+    run(0, qr/Id.*\nUsername.*/s,        'whoami');
+    run(0, qr/Id.*\nName/s,              'search_group', 'js-team');
+    run(0, qr/Id.*\nName/s,              'search_group', '2666');
+    run(0, qr/Id.*\nName/s,              'search_group', 'perl-team/modules');
+    run(0, qr/Id.*\nUsername\s*: yadd/s, 'search_user', 'yadd');
+    run(0, qr/Id.*\nUsername\s*: yadd/s, 'search_user', 'yad');
+    run(0, qr/Id.*\nUsername\s*: yadd/s, 'search_user', '3818');
+    run(0, qr/Id.*\nName\s*: qa/s,       'search_project', 'qa');
+    run(0, qr/Id.*\nName\s*: qa/s,       'search_project', '1417');
+    run(0, qr/Id.*\nName\s*: qa/s,       'search_project', 'qa/qa');
+    run(0, qr/Id.*\nUsername.*/s,        '--group', 'perl-team', 'group');
+    run(0, qr/Id.*\nName/s,              '--group', 'perl-team', 'list_repos');
+    run(0, qr/Id.*\nName/s,              'list_groups');
+    run(0, qr/Id.*\n\tName/s,        'forks', 'qa/qa');
+    run(0, qr/^debian\/devscripts/m, 'mrs',   'debian/devscripts');
+    run(0, qr/^devscripts/m,         'mrs',   'devscripts', '--group-id', 2);
+    run(0, qr/master.*Maintainer.*Developers/m,
+        'protected_branches', 'debian/devscripts');
+
+    # checkout
+    {
+        my $tmpdir = tempdir(CLEANUP => 1);
+        run(0, qr/gbp:info/, 'co', '-C', $tmpdir,
+            'debian/libapache2-mod-fcgid');
+        ok(
+            -d "$tmpdir/libapache2-mod-fcgid/.git",
+            ' libapache2-mod-fcgid cloned'
+        );
+        run(0, qr/gbp:info/, 'checkout', '-C', $tmpdir, '--group=qa', 'qa');
+        ok(-d "$tmpdir/qa/.git", ' qa cloned');
+    }
+
+    # push_repo, update_repo and del_repo
+    if ($ARGV[0] eq '--full') {
+        mkDebianDir;
+        run(0, qr/Project .*created/s,
+            'push_repo', '.', '--verbose', '--kgb', '--irc=devscripts');
+        diag "Verify that foobar appears in #devscripts channel";
+        run(0, qr/Project .*updated/s,
+            'update_repo', 'foobar', '--rename-head');
+        run(1, qr/update_repo has failed for foobar/s,
+            'update_repo', 'foobar', '--rename-head', '--no-fail');
+        run(0, qr/Project .*foobar deleted/s,
+            '--verbose', 'del_repo', 'foobar');
+    }
+}
+done_testing;
