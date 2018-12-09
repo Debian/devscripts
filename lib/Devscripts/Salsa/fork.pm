@@ -6,7 +6,7 @@ use Devscripts::Output;
 use Dpkg::IPC;
 use Moo::Role;
 
-with 'Devscripts::Salsa::chechout';
+with 'Devscripts::Salsa::checkout';
 
 sub fork {
     my ($self, $project) = @_;
@@ -14,7 +14,7 @@ sub fork {
     $self->api->fork_project($project, { namespace => $path });
     my $p = $project;
     $p =~ s#.*/##;
-    $self->chechout($p);
+    $self->checkout($p);
     chdir $p;
     spawn(
         exec => [
