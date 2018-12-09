@@ -180,7 +180,7 @@ For a group:
 
 List forks of project(s).
 
-  mysalsa forks qa/qa debian/devscripts
+  salsa forks qa/qa debian/devscripts
 
 Project can be set using full path or using B<--group>/B<--group-id> or
 B<--user>/B<--user-id>, else it is searched in current user namespace.
