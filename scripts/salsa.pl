@@ -294,7 +294,7 @@ B<push_repo> executes the following steps:
 
 =item gets project name using debian/changelog file;
 
-=item lanches B<git remote add upstream ...>;
+=item launches B<git remote add upstream ...>;
 
 =item launches B<create_repo>;
 
@@ -434,7 +434,7 @@ then you can fix B<SALSA_GROUP> in C<~/.js.conf>
 
 =item B<--group-id>
 
-Team id to use. Use C<salsa search_group name> to find it.
+Group id to use. Use C<salsa search_group name> to find it.
 
 C<.devscripts> value: B<SALSA_GROUP_ID>
 
@@ -598,13 +598,13 @@ C<.devscripts> values: B<SALSA_IRKER> (yes/ignore/no, default: ignore)
 
 Irker host. Default: ruprecht.snow-crash.org
 
-C<.devscripts> values: B<SALSA_IRKER_HOST>
+C<.devscripts> value: B<SALSA_IRKER_HOST>
 
 =item B<--irker-port>
 
 Irker host. Default: empty (default value)
 
-C<.devscripts> values: B<SALSA_IRKER_PORT>
+C<.devscripts> value: B<SALSA_IRKER_PORT>
 
 =item B<--kgb>, B<--no-kgb>, B<--disable-kgb>
 
