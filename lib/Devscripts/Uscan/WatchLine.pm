@@ -23,6 +23,7 @@ use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
 use Dpkg::Version;
 use File::Basename;
+use File::Copy;
 use File::Spec::Functions qw/catfile/;
 use HTTP::Headers;
 use Moo;
@@ -104,6 +105,9 @@ has versionmode => (
     lazy    => 1,
     default => sub { 'newer' },
 );
+
+has destfile => (is => 'rw');
+has sigfile  => (is => 'rw');
 
 # 2 - Line options read/write attributes
 
@@ -1376,6 +1380,7 @@ sub download_file_and_sig {
         uscan_verbose
           "Use $self->{newfile_base} as upstream package (pgpmode=previous)";
     }
+    $self->sigfile("$self->{config}->{destdir}/$sigfile") if ($sigfile);
 
     # 6.3 verify signature
     #
@@ -1668,6 +1673,7 @@ sub mkorigtargz {
         dehs_verbose "Executing user specified script:\n   @cmd\n"
           . $actioncmdmsg;
     }
+    $self->destfile($path);
 
     return 0;
 }

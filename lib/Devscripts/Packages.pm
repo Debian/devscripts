@@ -22,6 +22,8 @@ use strict;
 use warnings;
 use Carp;
 use Dpkg::Control;
+use Dpkg::IPC;
+use FileHandle;
 
 BEGIN {
     use Exporter ();
@@ -228,12 +230,18 @@ sub PackagesMatch ($) {
     my $match   = $_[0];
     my @matches = ();
 
-    open STATUS, '/var/lib/dpkg/status'
-      or croak("Can't read /var/lib/dpkg/status: $!");
+    my $fout = FileHandle->new;
+    my $pid  = spawn(
+        exec    => ['dpkg', '--status'],
+        to_pipe => $fout
+    );
+    unless (defined $pid) {
+        croak("Unable to run \"dpkg --status\": $!");
+    }
 
     my $ctrl;
     while (defined($ctrl = Dpkg::Control->new())
-        && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
+        && $ctrl->parse($fout, 'dpkg --status')) {
         if ("$ctrl" =~ m/$match/m) {
             my $package = $ctrl->{Package};
             if ($ctrl->{Architecture} ne 'all' && multiarch) {
@@ -244,7 +252,7 @@ sub PackagesMatch ($) {
         undef $ctrl;
     }
 
-    close STATUS or croak("Problem reading /var/lib/dpkg/status: $!");
+    wait_child($pid, cmdline => 'dpkg --status', nocheck => 1);
     return @matches;
 }
 
@@ -253,13 +261,19 @@ sub PackagesMatch ($) {
 sub InstalledPackages ($) {
     my $source = $_[0];
 
-    open STATUS, '/var/lib/dpkg/status'
-      or croak("Can't read /var/lib/dpkg/status: $!");
+    my $fout = FileHandle->new;
+    my $pid  = spawn(
+        exec    => ['dpkg', '--status'],
+        to_pipe => $fout
+    );
+    unless (defined $pid) {
+        croak("Unable to run \"dpkg --status\": $!");
+    }
 
     my $ctrl;
     my %matches;
     while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
-        && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
+        && $ctrl->parse($fout, 'dpkg --status')) {
         if ($ctrl->{Status} !~ /^install\s+ok\s+installed$/) {
             next;
         }
@@ -277,7 +291,7 @@ sub InstalledPackages ($) {
         undef $ctrl;
     }
 
-    close STATUS or croak("Problem reading /var/lib/dpkg/status: $!");
+    wait_child($pid, cmdline => 'dpkg --status', nocheck => 1);
 
     return \%matches;
 }

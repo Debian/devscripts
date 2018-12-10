@@ -172,15 +172,15 @@ class Install:
 
 def remove_trailing_whitespaces(filename, args):
     assert os.path.isfile(filename), "%s does not exist." % (filename)
-    with open(filename, "r+") as file_object:
+    with open(filename, "br+") as file_object:
         content = file_object.read()
         if not content:
             return True
-        new_content = content.strip() + "\n"
-        new_content = "\n".join(
+        new_content = content.strip() + b"\n"
+        new_content = b"\n".join(
             [
                 line.rstrip()
-                for line in new_content.split('\n')
+                for line in new_content.split(b'\n')
             ],
         )
         if new_content != content:

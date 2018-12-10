@@ -316,7 +316,6 @@ sub process_group {
     my @cur_versions = split /\+~/, $self->pkg_version;
     my @new_versions;
     my $download    = 0;
-    my $repack      = 0;
     my $last_shared = $self->shared;
     my $last_comp_version;
     # Isolate component and following lines
@@ -340,19 +339,14 @@ sub process_group {
             $self->{status} += $line->status;
             return $self->{status};
         }
-        push @new_versions, $line->search_result->{newversion};
         $download = $line->shared->{download}
           if ($line->shared->{download} > $download);
-        $repack = 1 if ($line->repack);
     }
-    my $last_version = join '+~', @new_versions;
     foreach my $line (@{ $self->watchlines }) {
         # Set same $download for all
         $line->shared->{download} = $download;
         # Non "group" lines where not intialized
-        if ($line->type eq 'group') {
-            $line->force_repack($repack);
-        } else {
+        unless ($line->type eq 'group') {
             if (   $line->parse
                 or $line->search
                 or $line->get_upstream_url
@@ -366,10 +360,23 @@ sub process_group {
             $self->{status} += $line->status;
             return $self->{status};
         }
-        $line->shared->{common_mangled_newversion} = $last_version;
         if ($line->mkorigtargz) {
             $self->{status} += $line->status;
             return $self->{status};
+        }
+        push @new_versions, $line->shared->{common_mangled_newversion}
+          if ($line->type eq 'group');
+    }
+    my $last_version = join '+~', @new_versions;
+    foreach my $line (@{ $self->watchlines }) {
+        my $path = $line->destfile or next;
+        my $ver = $line->shared->{common_mangled_newversion};
+        $path =~ s/\Q$ver\E/$last_version/;
+        print STDERR "mv $line->{destfile} to $path\n";
+        rename $line->{destfile}, $path;
+        if ($line->signature_available) {
+            rename "$line->{destfile}.asc", "$path.asc";
+            rename "$line->{destfile}.sig", "$path.sig";
         }
     }
     return 0;

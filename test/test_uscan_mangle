@@ -1056,8 +1056,22 @@ testWatch4WebNonNativeGroup() {
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
-opts="component=baz,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group uupdate'
+opts="component=baz,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group'
     helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
+}
+
+# Group test with repack suffix
+testWatch4WebNonNativeGroupRepackSuffix() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,repacksuffix=+ds,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+ds+~3.0
 }
 
 # Group test with pgpsigurlmangle
@@ -1070,7 +1084,7 @@ testWatch4WebNonNativeGroupSigned() {
     WATCHLINE='
 opts="pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
-opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group uupdate'
+opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group'
     helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
 }
 

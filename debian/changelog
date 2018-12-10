@@ -1,3 +1,37 @@
+devscripts (2.18.10) unstable; urgency=medium
+
+  [ Daniel Kahn Gillmor ]
+  * uscan:
+    + Use gpgv instead of gpg for git tag verification.  MR: !82
+
+  [ Emilio Pozuelo Monfort ]
+  * uscan:
+    + Fix mkorigtargz for watch version 4 with non-default destdir
+      and a defined action.  MR: !83
+
+  [ Xavier Guimard ]
+  * uscan:
+    + Change "group" version build: version is the grouping of each component
+      version after mk-origtargz changes (i.e. a repack suffix can be added to
+      each component separately).  MR: !84
+    + Use gpgv in all signature verification.  Closes: #913665; MR: !88
+    + Force UTC for the date of the last git commit.  Closes: #910762; MR: !89
+
+  [ Mattia Rizzolo ]
+  * wrap-and-sort:
+    + Avoid crashing on non-unicode locales.  Closes: #914181
+
+  [ James McCoy ]
+  * Devscripts::Packages:
+    + Parse "dpkg --status" instead of /var/lib/dpkg/status.  MR: !87
+  * Devscripts::PackageDeps:
+    + Add fromStatus() to parse "dpkg --status", leaving new() to parse other
+      similar files.  MR: !87
+  * dpkg-depcheck:
+    + Use Devscripts::PackageDeps->fromStatus.  MR: !87
+
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 05 Dec 2018 17:59:12 +0100
+
 devscripts (2.18.9~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.

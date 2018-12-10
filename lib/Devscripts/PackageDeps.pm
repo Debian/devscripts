@@ -24,12 +24,15 @@ package Devscripts::PackageDeps;
 use strict;
 use Carp;
 use Dpkg::Control;
+use Dpkg::IPC;
+use FileHandle;
 require 5.006_000;
 
 # This reads in a package file list, such as /var/lib/dpkg/status,
-# and parses it.
+# and parses it.  Using /var/lib/dpkg/status is deprecated in favor of
+# fromStatus().
 
-# Syntax: new Devscripts::PackageDeps($filename)
+# Syntax: Devscripts::PackageDeps->new($filename)
 
 sub new ($$) {
     my $this     = shift;
@@ -43,7 +46,42 @@ sub new ($$) {
     }
 
     bless($self, $class);
-    $self->parse($filename);
+
+    my $fh = FileHandle->new($filename, 'r');
+    unless (defined $fh) {
+        croak("Unable to load $filename: $!");
+    }
+    $self->parse($fh, $filename);
+    $fh->close or croak("Problems encountered reading $filename: $!");
+
+    return $self;
+}
+
+# This reads in dpkg's status information and parses it.
+
+# Syntax: Devscripts::PackageDeps->fromStatus()
+
+sub fromStatus ($) {
+    my $this = shift;
+    my $class = ref($this) || $this;
+
+    my $self = {};
+
+    bless($self, $class);
+
+    my $fh  = FileHandle->new;
+    my $pid = spawn(
+        exec    => ['dpkg', '--status'],
+        to_pipe => $fh
+    );
+    unless (defined $pid) {
+        croak("Unable to run 'dpkg --status': $!");
+    }
+
+    $self->parse($fh, 'dpkg --status');
+
+    wait_child($pid, cmdline => 'dpkg --status', nocheck => 1);
+
     return $self;
 }
 
@@ -59,20 +97,15 @@ sub multiarch () {
     return $multiarch;
 }
 
-sub parse ($$) {
+sub parse ($$$) {
     my $self     = shift;
+    my $fh       = shift;
     my $filename = shift;
-
-    if (!defined $filename) {
-        croak("requires filename as parameter");
-    }
-    open PACKAGE_FILE, $filename
-      or croak("Unable to load $filename: $!");
 
     my $ctrl;
   PACKAGE_ENTRY:
     while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
-        && $ctrl->parse(\*PACKAGE_FILE, $filename)) {
+        && $ctrl->parse($fh, $filename)) {
 
         # So we've got a package
         my $pkg  = $ctrl->{Package};
@@ -108,8 +141,6 @@ sub parse ($$) {
         }
         undef $ctrl;
     }
-    close PACKAGE_FILE
-      or croak("Problems encountered reading $filename: $!");
 }
 
 # Get direct dependency information for a specified package
