@@ -4,7 +4,8 @@ printf "\n--- /etc/devscripts.conf ---\n" >&3
 
 if [ -f /etc/devscripts.conf ]; then
     egrep '^[^#]' /etc/devscripts.conf | \
-	egrep -v "^\s*BTS_SMTP_AUTH_" >&3
+	egrep -v "^\s*BTS_SMTP_AUTH_" | \
+	egrep -v "^\s*SALSA.*TOKEN" >&3
 else
     echo "Not present" >&3
 fi
@@ -13,7 +14,8 @@ printf "\n--- ~/.devscripts ---\n" >&3
 
 if [ -f ~/.devscripts ]; then
     egrep '^[^#]' ~/.devscripts | \
-	egrep -v "^\s*BTS_SMTP_AUTH_" >&3
+	egrep -v "^\s*BTS_SMTP_AUTH_" | \
+	egrep -v "^\s*SALSA.*TOKEN" >&3
 else
     echo "Not present" >&3
 fi
