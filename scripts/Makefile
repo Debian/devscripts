@@ -92,11 +92,7 @@ test_sh: $(SH_CHECKS)
 
 test_pl: $(PL_CHECKS)
 %.pl_check: %
-	# Skip syntax for salsa since Gitlab::API::v4 isn't available in
-	# debian 9
-	if test "$<" != "salsa"; then \
-		perl -I ../lib -c $<; \
-	fi
+	perl -I ../lib -c $<; \
 
 test_py: $(VERSION_FILE)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))

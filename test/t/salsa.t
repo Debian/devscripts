@@ -18,6 +18,8 @@ sub mkDebianDir {
     my $tmpdir = tempdir(CLEANUP => 1);
     chdir $tmpdir;
     system "git init";
+    system "git config user.name 'Joe Developer'";
+    system 'git config user.email "jd@debian.org"';
     mkdir 'debian';
     open F, ">debian/changelog";
     print F <<EOF;
