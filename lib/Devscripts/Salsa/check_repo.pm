@@ -31,8 +31,9 @@ sub _check_repo {
     foreach my $repo (@repos) {
         my ($id, $name) = @$repo;
         my @err;
-        my $project = $self->api->project($id);
+        my $project = eval { $self->api->project($id) };
         unless ($project) {
+            ds_debug $@;
             ds_warn "Project $name not found";
             next;
         }
