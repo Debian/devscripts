@@ -332,7 +332,7 @@ sub project2id {
     unless ($project =~ /^\d+$/) {
         eval { $res = $self->api->project($project)->{id}; };
         if ($@) {
-            ds_verbose $@;
+            ds_debug $@;
             ds_warn "Project $project not found:";
             return undef;
         }
