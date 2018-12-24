@@ -364,8 +364,7 @@ sub process_group {
             $self->{status} += $line->status;
             return $self->{status};
         }
-        push @new_versions,
-             $line->shared->{common_mangled_newversion}
+        push @new_versions, $line->shared->{common_mangled_newversion}
           || $line->shared->{common_newversion}
           || ()
           if ($line->type eq 'group');
