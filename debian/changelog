@@ -11,6 +11,8 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
     + Fix mr bug when colors are activated.  MR: !92
     + Fix bad warning on unexistent project and downgrade messages to debug
       level.
+  * uscan:
+    + Fix warning when grouped package is up to date.
   * French translation update.
 
   [ Benjamin Drung ]
