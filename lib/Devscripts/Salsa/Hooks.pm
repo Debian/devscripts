@@ -194,6 +194,9 @@ sub desc {
     } elsif ($self->config->enable_mr) {
         push @res, merge_requests_enabled => 1;
     }
+    if ($self->config->ci_config_path) {
+        push @res, ci_config_path => $self->config->ci_config_path;
+    }
     return @res;
 }
 
