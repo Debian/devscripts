@@ -4,6 +4,10 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * Upload to unstable.
   * d/control:
     + Add debhelper to Suggests.  Thanks Simon Quigley for the suggestion.
+  * debchange:
+    + Add patch from Stuart Prescott to fix the autodetection of NMU in case
+      the person running dch is listed in the first line under a wrapped
+      Uploaders field.  Closes: #915393
 
   [ Xavier Guimard ]
   * salsa:

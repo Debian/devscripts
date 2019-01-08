@@ -914,8 +914,9 @@ if (
         my $parser = Dpkg::Control->new(type => CTRL_INFO_SRC);
         $parser->load('debian/control');
         my $uploader   = decode_utf8($parser->{Uploaders}) || '';
+        $uploader =~ s/^\s+//;
         my $maintainer = decode_utf8($parser->{Maintainer});
-        my @uploaders  = split(/,\s*/, $uploader);
+        my @uploaders  = split(/\s*,\s*/, $uploader);
 
         my $packager = "$MAINTAINER <$EMAIL>";
 
