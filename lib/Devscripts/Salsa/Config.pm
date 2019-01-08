@@ -16,7 +16,7 @@ foreach (qw(
     mr_dst_project mr_remove_source_branch mr_src_branch mr_src_project
     mr_title no_fail path private_token skip source_branch group group_id user
     user_id tagpending tagpending_server_url email email_recipient
-    disable_email
+    disable_email ci_config_path
     )
 ) {
     has $_ => (is => 'rw');
@@ -107,7 +107,8 @@ use constant keys => [
         }
     ],
     ['no-skip', undef, sub { $_[0]->skip([]); $_[0]->skip_file(undef); }],
-    ['desc!', 'SALSA_DESC', 'bool'],
+    ['ci-config-path=s', 'SALSA_CI_CONFIG_PATH', qr/\./],
+    ['desc!',            'SALSA_DESC',           'bool'],
     ['desc-pattern=s', 'SALSA_DESC_PATTERN', qr/\w/, 'Debian package %p'],
     ['enable-issues!'],
     ['disable-issues!'],

@@ -526,6 +526,14 @@ C<.devscripts> value: B<SALSA_SKIP_FILE>
 
 =back
 
+=item B<--ci-config-path>
+
+Configure configuration file path of GitLab CI. Default: empty. Example:
+
+  salsa update_safe --ci-config-path debian/.gitlab-ci.yml debian/devscripts
+
+C<.devscripts> value: B<SALSA_CI_CONFIG_PATH>
+
 =item B<--desc> B<--no-desc>
 
 Configure repo description using pattern given in B<desc-pattern>

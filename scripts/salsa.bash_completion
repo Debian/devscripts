@@ -14,7 +14,7 @@ _salsa_completion () {
     opts+=" --all --conf-file --no-conf --desc --no-desc --desc-pattern"
     opts+=" --disable-kgb --disable-tagpending --group --group-id"
     opts+=" --enable-issues --no-enable-issues --disable-issues"
-    opts+=" --enable-mr --no-enable-mr --disable-mr"
+    opts+=" --enable-mr --no-enable-mr --disable-mr --ci-config-path"
     opts+=" --mr-allow-squash --no-mr-allow-squash --mr-desc --mr-title"
     opts+=" --mr-dst_branch --mr-dst_project --mr-remove-source-branch"
     opts+=" --no-remove-source-branch --mr-src-branch --mr-src-project"
