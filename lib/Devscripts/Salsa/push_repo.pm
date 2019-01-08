@@ -48,7 +48,14 @@ sub push_repo {
         wait_child => 1,
     );
     my $res = $self->create_repo($reponame);
-    return $res if $res;
+    if ($res) {
+        return 1
+          unless (
+            ds_prompt(
+"Project already exists, do you want to try to push local repo? (y/N) "
+            ) =~ accept
+          );
+    }
     spawn(
         exec =>
           ['git', 'push', '--all', '--verbose', '--set-upstream', 'origin'],

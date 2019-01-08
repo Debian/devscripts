@@ -33,9 +33,9 @@ sub create_repo {
               . ". Continue (Y/n) "
         ) =~ refuse
       );
-    my $repo = $self->api->create_project($opts);
-    unless ($repo) {
-        ds_warn "Project not created";
+    my $repo = eval { $self->api->create_project($opts) };
+    if ($@ or !$repo) {
+        ds_warn "Project not created: $@";
         return 1;
     }
     ds_warn "Project $repo->{web_url} created";
