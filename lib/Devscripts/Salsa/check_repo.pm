@@ -30,6 +30,7 @@ sub _check_repo {
     return @repos unless (ref $repos[0]);
     foreach my $repo (@repos) {
         my ($id, $name) = @$repo;
+        ds_debug "Checking $name ($id)";
         my @err;
         my $project = eval { $self->api->project($id) };
         unless ($project) {
@@ -57,6 +58,10 @@ sub _check_repo {
         }
         # Webhooks (from Devscripts::Salsa::Hooks)
         my $hooks = $self->enabled_hooks($id);
+        unless (defined $hooks) {
+            ds_warn "Unable to get $name hooks";
+            next;
+        }
         # KGB
         if ($self->config->kgb and not $hooks->{kgb}) {
             push @err, "kgb missing";

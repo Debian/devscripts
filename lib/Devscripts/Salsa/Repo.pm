@@ -11,6 +11,7 @@ sub get_repo {
     my ($self, $prompt, @reponames) = @_;
     my @repos;
     if ($self->config->all and @reponames == 0) {
+        ds_debug "--all is set";
         my $projects;
         # This rule disallow trying to configure all "Debian" projects:
         #  - Debian id is 2
