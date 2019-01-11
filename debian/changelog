@@ -24,6 +24,8 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
     + push_repo: allow to push even if the project already exists.  MR: !97
   * uscan:
     + Fix warning when grouped package is up to date.
+    + Fix dehs output when using --report with pgpmode next/previous.
+      Closes: #918994; ME: !99
   * French translation update.
 
   [ Benjamin Drung ]
