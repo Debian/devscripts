@@ -25,7 +25,8 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * uscan:
     + Fix warning when grouped package is up to date.
     + Fix dehs output when using --report with pgpmode next/previous.
-      Closes: #918994; ME: !99
+      Closes: #918994; MR: !99
+    + Fix dehs output for grouped packages.  MR: !99
   * French translation update.
 
   [ Benjamin Drung ]

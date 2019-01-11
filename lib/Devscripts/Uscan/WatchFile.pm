@@ -314,7 +314,7 @@ sub process_group {
     my ($self) = @_;
     # Build version
     my @cur_versions = split /\+~/, $self->pkg_version;
-    my @new_versions;
+    my (@new_versions, @last_debian_mangled_uversions, @last_versions);
     my $download    = 0;
     my $last_shared = $self->shared;
     my $last_comp_version;
@@ -364,12 +364,22 @@ sub process_group {
             $self->{status} += $line->status;
             return $self->{status};
         }
-        push @new_versions, $line->shared->{common_mangled_newversion}
-          || $line->shared->{common_newversion}
-          || ()
-          if ($line->type eq 'group');
+        if ($line->type eq 'group') {
+            push @new_versions, $line->shared->{common_mangled_newversion}
+              || $line->shared->{common_newversion}
+              || ();
+            push @last_versions, $line->shared->{lastversion};
+            push @last_debian_mangled_uversions,
+              $line->shared->{mangled_lastversion};
+        }
     }
     my $last_version = join '+~', @new_versions;
+    $dehs_tags->{'upstream-version'} = $last_version;
+    $dehs_tags->{'debian-uversion'} = join('+~', @last_versions)
+      if (grep { $_ } @last_versions);
+    $dehs_tags->{'debian-mangled-uversion'} = join '+~',
+      @last_debian_mangled_uversions
+      if (grep { $_ } @last_debian_mangled_uversions);
     foreach my $line (@{ $self->watchlines }) {
         my $path = $line->destfile or next;
         my $ver = $line->shared->{common_mangled_newversion};
