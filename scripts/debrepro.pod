@@ -76,7 +76,7 @@ Both I<$LC_ALL> and I<$LANG> will be different across the two builds.
 
 I<$TZ> will be different across builds.
 
-=item filesystem-ordering
+=item B<filesystem-ordering>
 
 If B<disorderfs> is installed, both builds will be done under a disorderfs
 overlay directory. This will cause filesystem listing operations to be return
