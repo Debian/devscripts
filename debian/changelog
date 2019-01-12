@@ -6,6 +6,7 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
     + Add debhelper to Suggests.  Thanks Simon Quigley for the suggestion.
     + Restrict the Build-Depends on git to >= 1:2.7.0 (to use `git log
       --date=format-local:`), that is not available on kbsd yet.
+    + Bump debhelper compat level to 12, using the new debhelper-compat format.
   * debchange:
     + Add patch from Stuart Prescott to fix the autodetection of NMU in case
       the person running dch is listed in the first line under a wrapped
