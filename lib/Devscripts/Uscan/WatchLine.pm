@@ -343,7 +343,7 @@ sub parse {
 
     my $watchfile = $self->watchfile;
     my ($action, $base, $basedir, $filepattern, $lastversion, $pattern, $site);
-    $dehs_tags = { package => $self->pkg };
+    $dehs_tags->{package} = $self->pkg;
 
     # Start parsing the watch line
     if ($self->watch_version == 1) {
@@ -1042,7 +1042,7 @@ sub cmp_versions {
     $dehs_tags->{'debian-uversion'} = $self->parse_result->{lastversion};
     $dehs_tags->{'debian-mangled-uversion'} = $mangled_lastversion;
     $dehs_tags->{'upstream-version'} = $self->search_result->{newversion};
-    $dehs_tags->{'upstream-url'}     = $self->upstream_url;
+    $dehs_tags->{'upstream-url'} //= $self->upstream_url;
 
     my $mangled_ver
       = Dpkg::Version->new("1:${mangled_lastversion}-0", check => 0);
