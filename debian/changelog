@@ -1,3 +1,11 @@
+devscripts (2.19.2) unstable; urgency=medium
+
+  * d/postinst:
+    + Re-add accidentally removed code that installs /etc/devscripts.conf
+      during the first installation.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:37:26 +0100
+
 devscripts (2.19.1) unstable; urgency=medium
 
   [ Mattia Rizzolo ]

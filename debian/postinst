@@ -1,0 +1,9 @@
+#! /bin/sh
+
+set -e
+
+if [ "$1" = configure ] && [ -z "$2" ] && [ ! -f /etc/devscripts.conf ]; then
+    cp /usr/share/devscripts/conf.default /etc/devscripts.conf
+fi
+
+#DEBHELPER#
