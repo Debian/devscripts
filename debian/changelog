@@ -8,11 +8,13 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
       --date=format-local:`), that is not available on kbsd yet.
     + Bump debhelper compat level to 12, using the new debhelper-compat format.
     + Bump Standards-Version to 4.3.0, no changes needed.
+  * d/lintian-overrides:
+    + Add some lintian overrides for uses-dpkg-database-directly.  MR: !95
+    + Add a lintian override for binary-package-depends-on-toolchain-package.
   * debchange:
     + Add patch from Stuart Prescott to fix the autodetection of NMU in case
       the person running dch is listed in the first line under a wrapped
       Uploaders field.  Closes: #915393
-  * Add some lintian overrides for uses-dpkg-database-directly.  MR: !95
   * tests/test_debrepro:
     + Skip testing filesystem-ordering, as that may fail if disorderfs is
       installed but the fuse kernel module is not loaded.

@@ -7,3 +7,8 @@ devscripts: uses-dpkg-database-directly usr/bin/chdist
 # Keep the explicit status path as a fallback for too old version of dpkg;
 # the fallback can be dropped once we require dpkg >= 1.19.1
 devscripts: uses-dpkg-database-directly usr/share/perl5/Devscripts/PackageDeps.pm
+
+# Yes, this is perfectly fine.
+# It's a suggestion to all the people interested in Debian development to
+# install debhelper in their host system...
+devscripts: binary-package-depends-on-toolchain-package suggests: debhelper
