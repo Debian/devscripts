@@ -12,6 +12,9 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
       the person running dch is listed in the first line under a wrapped
       Uploaders field.  Closes: #915393
   * Add some lintian overrides for uses-dpkg-database-directly.  MR: !95
+  * tests/test_debrepro:
+    + Skip testing filesystem-ordering, as that may fail if disorderfs is
+      installed but the fuse kernel module is not loaded.
 
   [ Xavier Guimard ]
   * salsa:

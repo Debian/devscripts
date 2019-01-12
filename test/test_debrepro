@@ -25,10 +25,10 @@ if [ "$ARCHITECTURE" = "hurd-i386" ]; then
 fi
 
 if test "${1:-}" = --installed; then
-    debrepro="debrepro"
+    debrepro="debrepro --skip filesystem-ordering"
     shift
 else
-    debrepro="${0%/*}/../scripts/debrepro.sh"
+    debrepro="${0%/*}/../scripts/debrepro.sh --skip filesystem-ordering"
 fi
 
 samples="${0%/*}/debrepro"
