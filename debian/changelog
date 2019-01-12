@@ -15,6 +15,7 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * tests/test_debrepro:
     + Skip testing filesystem-ordering, as that may fail if disorderfs is
       installed but the fuse kernel module is not loaded.
+  * Move manual calls to dpkg-maintscript-helper to d/maintscripts.
 
   [ Xavier Guimard ]
   * salsa:
@@ -27,7 +28,7 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
     + Add libgitlab-api-v4-perl and libtest-output-perl in build dependencies
       and d/tests/control to enable the salsa unit tests.  MR: !94
     + Add a --ci-config-path option.  MR: !96
-    + push_repo: allow to push even if the project already exists.  MR: !97
+    + push_repo: allow pushing even if the project already exists.  MR: !97
     + Skip project in update_repo if hooks are not available.
   * uscan:
     + Fix warning when grouped package is up to date.
