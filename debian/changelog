@@ -1,4 +1,4 @@
-devscripts (2.18.12) UNRELEASED; urgency=medium
+devscripts (2.19.1) unstable; urgency=medium
 
   [ Mattia Rizzolo ]
   * Upload to unstable.
@@ -11,6 +11,9 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * d/lintian-overrides:
     + Add some lintian overrides for uses-dpkg-database-directly.  MR: !95
     + Add a lintian override for binary-package-depends-on-toolchain-package.
+  * Move manual calls to dpkg-maintscript-helper to d/maintscripts.
+  * Remove the whole postinst script, dealing with updates to the configuration
+    file from very ancient versions.  Thank you lintian for opening my eyes.
   * debchange:
     + Add patch from Stuart Prescott to fix the autodetection of NMU in case
       the person running dch is listed in the first line under a wrapped
@@ -18,9 +21,6 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * tests/test_debrepro:
     + Skip testing filesystem-ordering, as that may fail if disorderfs is
       installed but the fuse kernel module is not loaded.
-  * Move manual calls to dpkg-maintscript-helper to d/maintscripts.
-  * Remove the whole postinst script, dealing with updates to the configuration
-    file from very ancient versions.  Thank you lintian for opening my eyes.
 
   [ Xavier Guimard ]
   * salsa:
@@ -46,7 +46,7 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
   * wrap-and-sort:
     + Also sort debian/tests/control.
 
- -- Mattia Rizzolo <mattia@debian.org>  Fri, 07 Dec 2018 19:49:34 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:18:58 +0100
 
 devscripts (2.18.11) experimental; urgency=medium
 
