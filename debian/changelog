@@ -8,6 +8,7 @@ devscripts (2.18.12) UNRELEASED; urgency=medium
     + Add patch from Stuart Prescott to fix the autodetection of NMU in case
       the person running dch is listed in the first line under a wrapped
       Uploaders field.  Closes: #915393
+  * Add some lintian overrides for uses-dpkg-database-directly.  MR: !95
 
   [ Xavier Guimard ]
   * salsa:

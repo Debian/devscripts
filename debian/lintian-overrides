@@ -1,2 +1,9 @@
 # "debsnap: grab packages from https://snapshot.debian.org" isn't a homepage
 devscripts: description-possibly-contains-homepage https://snapshot.debian.org
+
+# Needs to hardcode /var/lib/status to be able to create an empty file;
+# blocked on the dpkg bug https://bugs.debian.org/914515
+devscripts: uses-dpkg-database-directly usr/bin/chdist
+# Keep the explicit status path as a fallback for too old version of dpkg;
+# the fallback can be dropped once we require dpkg >= 1.19.1
+devscripts: uses-dpkg-database-directly usr/share/perl5/Devscripts/PackageDeps.pm
