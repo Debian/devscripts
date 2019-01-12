@@ -16,6 +16,7 @@ sub add_hooks {
         or $self->config->email
         or $self->config->disable_email) {
         my $hooks = $self->enabled_hooks($repo_id);
+        return 1 unless (defined $hooks);
         # KGB hook (IRC)
         if ($self->config->kgb or $self->config->disable_kgb) {
             unless ($self->config->irc_channel->[0]
@@ -147,7 +148,11 @@ sub enabled_hooks {
         or $self->config->disable_kgb
         or $self->config->tagpending
         or $self->config->disable_tagpending) {
-        $hooks = $self->api->project_hooks($repo_id);
+        $hooks = eval { $self->api->project_hooks($repo_id) };
+        if ($@) {
+            ds_warn "Unable to check hooks for project $repo_id";
+            return undef;
+        }
         foreach (@{$hooks}) {
             $res->{kgb} = {
                 id  => $_->{id},
