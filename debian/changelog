@@ -1,7 +1,15 @@
 devscripts (2.19.3) UNRELEASED; urgency=medium
 
+  [ Mattia Rizzolo ]
   * grep-excuses:
     + Add a patch from Niels Thykier to fix a possible crash.  Closes: #919191
+
+  [ Simon McVittie ]
+  * debc/debi:
+    + List packages of any architecture.
+    + Consider installing foreign 'Multi-Arch: same' packages, as long as they
+      belong of a known foreign architecture.
+    + Closes: #915668; MR: !93
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:41:40 +0100
 
