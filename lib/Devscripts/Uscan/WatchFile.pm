@@ -368,22 +368,33 @@ sub process_group {
             push @new_versions, $line->shared->{common_mangled_newversion}
               || $line->shared->{common_newversion}
               || ();
-            push @last_versions, $line->shared->{lastversion};
+            push @last_versions, $line->parse_result->{lastversion};
             push @last_debian_mangled_uversions,
-              $line->shared->{mangled_lastversion};
+              $line->parse_result->{mangled_lastversion};
         }
     }
-    my $last_version = join '+~', @new_versions;
-    $dehs_tags->{'upstream-version'} = $last_version;
+    my $new_version = join '+~', @new_versions;
+    $dehs_tags->{'upstream-version'} = $new_version;
     $dehs_tags->{'debian-uversion'} = join('+~', @last_versions)
       if (grep { $_ } @last_versions);
     $dehs_tags->{'debian-mangled-uversion'} = join '+~',
       @last_debian_mangled_uversions
       if (grep { $_ } @last_debian_mangled_uversions);
+    my $mangled_ver
+      = Dpkg::Version->new("1:" . $dehs_tags->{'debian-uversion'} . "-0",
+        check => 0);
+    my $upstream_ver = Dpkg::Version->new("1:$new_version-0", check => 0);
+    if ($mangled_ver == $upstream_ver) {
+        $dehs_tags->{'status'} = "up to date";
+    } elsif ($mangled_ver > $upstream_ver) {
+        $dehs_tags->{'status'} = "only older package available";
+    } else {
+        $dehs_tags->{'status'} = "newer package available";
+    }
     foreach my $line (@{ $self->watchlines }) {
         my $path = $line->destfile or next;
         my $ver = $line->shared->{common_mangled_newversion};
-        $path =~ s/\Q$ver\E/$last_version/;
+        $path =~ s/\Q$ver\E/$new_version/;
         print STDERR "mv $line->{destfile} to $path\n";
         rename $line->{destfile}, $path;
         if ($line->signature_available) {
