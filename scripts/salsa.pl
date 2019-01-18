@@ -43,10 +43,16 @@ or
 
   SALSA_TOKEN_FILE=~/.dpt.conf
 
-If you choose to link another file, it must contain a line with something like:
+If you choose to link another file using SALSA_TOKEN_FILE, it must contain a
+line with one of (no differences):
 
   <anything>SALSA_PRIVATE_TOKEN=xxxx
   <anything>SALSA_TOKEN=xxxx
+
+This allows for example to use dpt(1) configuration file (~/.dpt.conf) which
+contains:
+
+  DPT_SALSA_PRIVATE_TOKEN=abcdefghi
 
 =head1 COMMANDS
 
