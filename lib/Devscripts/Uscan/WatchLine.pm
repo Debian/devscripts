@@ -1039,9 +1039,9 @@ sub cmp_versions {
           = $self->search_result->{newversion};
     }
 
-    $dehs_tags->{'debian-uversion'} = $self->parse_result->{lastversion};
-    $dehs_tags->{'debian-mangled-uversion'} = $mangled_lastversion;
-    $dehs_tags->{'upstream-version'} = $self->search_result->{newversion};
+    $dehs_tags->{'debian-uversion'} //= $self->parse_result->{lastversion};
+    $dehs_tags->{'debian-mangled-uversion'} //= $mangled_lastversion;
+    $dehs_tags->{'upstream-version'} //= $self->search_result->{newversion};
     $dehs_tags->{'upstream-url'} //= $self->upstream_url;
 
     my $mangled_ver
@@ -1081,7 +1081,7 @@ sub cmp_versions {
             # be on our system or may not be
             uscan_msg "   => Newer package available from\n"
               . "      $self->{upstream_url}";
-            $dehs_tags->{'status'} = "newer package available";
+            $dehs_tags->{'status'} //= "newer package available";
             $main::found++;
         } elsif ($compver eq 'same') {
             uscan_verbose "Newest version of $self->{pkg} on remote site is "
@@ -1094,7 +1094,7 @@ sub cmp_versions {
               );
             uscan_verbose "   => Package is up to date for from\n"
               . "      $self->{upstream_url}";
-            $dehs_tags->{'status'} = "up to date";
+            $dehs_tags->{'status'} //= "up to date";
             if ($self->shared->{download} > 1) {
 
                 # 2=force-download or 3=overwrite-download
@@ -1115,7 +1115,7 @@ sub cmp_versions {
               );
             uscan_verbose "   => Only older package available from\n"
               . "      $self->{upstream_url}";
-            $dehs_tags->{'status'} = "only older package available";
+            $dehs_tags->{'status'} //= "only older package available";
             if ($self->shared->{download} > 1) {
                 uscan_verbose "   => Forcing download as requested";
                 $main::found++;
@@ -1127,7 +1127,7 @@ sub cmp_versions {
         uscan_msg "Newest version of $self->{pkg} on remote site is "
           . $self->search_result->{newversion}
           . ", ignore local version";
-        $dehs_tags->{'status'} = "package available";
+        $dehs_tags->{'status'} //= "package available";
         $main::found++;
     } else {    # same/previous -- secondary-tarball or signature-file
         uscan_die "strange ... <version> stanza = same/previous "
