@@ -238,7 +238,7 @@ OUTPUT=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
 DESCFILE=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
 trap 'rm -f "${OUTPUT}" "${DESCFILE}"' EXIT
 
-if test $(echo "${DESCRIPTIONS}" | wc -l) -ne 0; then
+if test -n "${DESCRIPTIONS}"; then
     echo "Description: " > "${DESCFILE}"
     echo "${DESCRIPTIONS}" >> "${DESCFILE}"
 fi
