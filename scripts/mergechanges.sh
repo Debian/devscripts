@@ -238,11 +238,6 @@ OUTPUT=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
 DESCFILE=$(mktemp --tmpdir mergechanges.tmp.XXXXXXXXXX)
 trap 'rm -f "${OUTPUT}" "${DESCFILE}"' EXIT
 
-if test -n "${DESCRIPTIONS}"; then
-    echo "Description: " > "${DESCFILE}"
-    echo "${DESCRIPTIONS}" >> "${DESCFILE}"
-fi
-
 # Copy one of the files to ${OUTPUT}, nuking any PGP signature
 if $(grep -q "BEGIN PGP SIGNED MESSAGE" "$1"); then
     perl -ne 'next if 1../^$/; next if /^$/..1; print' "$1" > ${OUTPUT}
@@ -250,8 +245,96 @@ else
     cp "$1" ${OUTPUT}
 fi
 
-# Replace the Architecture: field, nuke the value of Checksums-*: and Files:,
-# and insert the Description: field before the Changes: field
+# Combine the Binary: and Description: fields. This is straightforward,
+# unless we want to exclude some binary packages, in which case we need
+# more thought.
+BINARY=$(grep -h "^Binary: " "$@" | sed -e "s,^Binary: ,," | tr ' ' '\n' | sort -u)
+if test ${REMOVE_ARCHDEP} = 1 && test ${REMOVE_INDEP} = 1; then
+    BINARY=
+    DESCRIPTIONS=
+elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
+    keep_binaries=$(
+        grep -E -h "^ [0-9a-f]{32} [0-9]+" "$@" | while read -r line; do
+            file="${line##* }"
+            case "$line" in
+                (*.dsc|*.diff.gz|*.tar.*|*.buildinfo)
+                    # source or buildinfo
+                    ;;
+                (*_all.deb|*_all.udeb)
+                    # architecture-indep
+                    package="${file%%_*}"
+
+                    if ! echo "$BINARY" | grep -q -x -F "$package"; then
+                        echo "Error: $package not found in Binary field" >&2
+                        echo "$line" >&2
+                        exit 1
+                    fi
+
+                    if test ${REMOVE_INDEP} != 1; then
+                        echo "$package"
+                    fi
+                    ;;
+                (*.deb|*.udeb)
+                    # architecture-specific
+                    package="${file%%_*}"
+
+                    if ! echo "$BINARY" | grep -q -x -F "$package"; then
+                        echo "Error: $package not found in Binary field" >&2
+                        echo "$line" >&2
+                        exit 1
+                    fi
+
+                    if test ${REMOVE_ARCHDEP} != 1; then
+                        echo "$package"
+                    fi
+                    ;;
+                (*)
+                    echo "Unrecognised file, is it architecture-dependent?" >&2
+                    echo "$line" >&2
+                    exit 1
+                    ;;
+            esac
+        done \
+    | tr '\n' ' ')
+
+    BINARY=$(
+        echo "$BINARY" |
+        while read -r line; do
+            if echo " $keep_binaries" | grep -q -F " $line "; then
+                echo "$line";
+            fi
+        done
+    )
+    DESCRIPTIONS=$(
+        echo "$DESCRIPTIONS" |
+        while read -r line; do
+            line="$(echo "$line" | sed -e 's/^ *//')"
+            package="${line%% *}"
+            if echo " $keep_binaries" | grep -q -F " $package "; then
+                echo " $line";
+            fi
+        done
+    )
+fi
+BINARY=$(echo "$BINARY" | tr '\n' ' ' | sed 's/ $//')
+
+if test -n "${DESCRIPTIONS}"; then
+    echo "Description: " > "${DESCFILE}"
+    echo "${DESCRIPTIONS}" >> "${DESCFILE}"
+fi
+
+if [ -n "$BINARY" ]; then
+    BINARY="Binary: $BINARY\\n"
+fi
+
+# Modify the output to be the merged version:
+# * Replace the Architecture: and Binary: fields
+# * Nuke the value of Checksums-*: and Files:
+# * Insert the Description: field before the Changes: field
+#
+# We print Binary directly after Source instead of directly replacing
+# Binary, because with dpkg 1.19.3, if the first .changes file is
+# source-only, it won't have a Binary field at all.
 eval "awk -- '/^[^ ]/{ deleting=0 }
     /^ /{
         if (!deleting) {
@@ -260,6 +343,8 @@ eval "awk -- '/^[^ ]/{ deleting=0 }
         next
     }
     /^Architecture: /{printf \"%s ${ARCHS}\\n\", \$1; next}
+    /^Source: /{print; printf \"${BINARY}\"; next}
+    /^Binary: /{next}
     /^Changes:/{
         field=\$0
         while ((getline < \"${DESCFILE}\") > 0) {
