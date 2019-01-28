@@ -1,0 +1,497 @@
+#!/usr/bin/perl
+
+# Copyright 2019 Simon McVittie
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd);
+use Data::Dumper;
+use File::Temp qw(tempdir);
+use IPC::Run qw(run);
+use Test::More;
+
+use Dpkg::Control;
+
+my $srcdir = getcwd;
+my $top_srcdir = getcwd . '/..';
+my $mergechanges = "$top_srcdir/scripts/mergechanges.sh";
+
+if (defined $1 && $1 eq '--installed') {
+    $mergechanges = 'mergechanges';
+}
+
+my $tmp = tempdir(CLEANUP => 1);
+my $stdout;
+my $stderr;
+my $fh;
+my $merged;
+my $all = 'xdg-desktop-portal_1.2.0-1_all.changes';
+my $amd64 = 'xdg-desktop-portal_1.2.0-1_amd64.changes';
+my $source = 'xdg-desktop-portal_1.2.0-1_source.changes';
+my %controls;
+my @words;
+my @lines;
+
+sub verbose_run {
+    my $argv = shift;
+    diag("Running: @{$argv}");
+    return run($argv, @_);
+}
+
+sub capture {
+    my $output;
+    my $argv = shift;
+    ok(verbose_run($argv, '>', \$output), "@{$argv}");
+    chomp $output;
+    return $output;
+}
+
+sub uniq {
+    my %seen;
+    my @ret;
+    foreach my $member (@_) {
+        push @ret, $member unless defined $seen{$member};
+        $seen{$member} = 1;
+    }
+    return @ret;
+}
+
+sub verbose_is_deeply {
+    diag Dumper($_[0], $_[1]);
+    is_deeply(@_);
+}
+
+foreach my $name ($all, $amd64, $source) {
+    $controls{$name} = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+    $controls{$name}->load("mergechanges/$name");
+}
+
+diag('Help');
+$stdout = capture([
+    $mergechanges,
+    '--help',
+]);
+like($stdout, qr{Usage:});
+
+diag('Version');
+$stdout = capture([
+    $mergechanges,
+    '--version',
+]);
+like($stdout, qr{devscripts package});
+
+diag('Simple merge');
+$stdout = capture([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/$amd64",
+    "mergechanges/$source",
+]);
+#diag $stdout;
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+@words = sort split / /, $merged->{Binary};
+is_deeply(\@words, [sort qw(
+        xdg-desktop-portal
+        xdg-desktop-portal-dbgsym
+        xdg-desktop-portal-dev
+        xdg-desktop-portal-tests
+        xdg-desktop-portal-tests-dbgsym
+)]);
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(amd64 all source)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+                (split /\n/, $controls{$amd64}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Files}),
+                (split /\n/, $controls{$amd64}->{Files}),
+                (split /\n/, $controls{$source}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{'Checksums-Sha1'}),
+                (split /\n/, $controls{$amd64}->{'Checksums-Sha1'}),
+                (split /\n/, $controls{$source}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{'Checksums-Sha256'}),
+                (split /\n/, $controls{$amd64}->{'Checksums-Sha256'}),
+                (split /\n/, $controls{$source}->{'Checksums-Sha256'}),
+))]);
+
+diag('Source only');
+$stdout = capture([
+    $mergechanges,
+    '-S',
+    "mergechanges/$all",
+    "mergechanges/$amd64",
+    "mergechanges/$source",
+]);
+#diag $stdout;
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, undef);
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(source)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+is($merged->{Description}, undef);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha256'}),
+))]);
+
+diag('Indep only');
+$stdout = capture([
+    $mergechanges,
+    '-i',
+    "mergechanges/$all",
+    "mergechanges/$amd64",
+    "mergechanges/$source",
+]);
+#diag $stdout;
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, 'xdg-desktop-portal-dev');
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all source)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{Files}),
+                (split /\n/, $controls{$all}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha1'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha256'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha256'}),
+))]);
+
+diag('To file');
+ok(run(['cp', "mergechanges/$source", "$tmp/source.changes"]));
+$stdout = capture([
+    $mergechanges,
+    '-f',
+    "$tmp/source.changes",
+    "mergechanges/$all",
+]);
+ok(-e "$tmp/source.changes");
+is($stdout, '');
+#system("cat", "$tmp/xdg-desktop-portal_1.2.0-1_multi.changes");
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+$merged->load("$tmp/xdg-desktop-portal_1.2.0-1_multi.changes");
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, 'xdg-desktop-portal-dev');
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all source)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{Files}),
+                (split /\n/, $controls{$all}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha1'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha256'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha256'}),
+))]);
+
+diag('Deleting');
+ok(run(['cp', "mergechanges/$source", "$tmp/source.changes"]));
+ok(run(['cp', "mergechanges/$all", "$tmp/all.changes"]));
+$stdout = capture([
+    $mergechanges,
+    '-d',
+    '-f',
+    "$tmp/source.changes",
+    "$tmp/all.changes",
+]);
+ok(! -e "$tmp/source.changes");
+ok(! -e "$tmp/all.changes");
+is($stdout, '');
+#system("cat", "$tmp/xdg-desktop-portal_1.2.0-1_multi.changes");
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+$merged->load("$tmp/xdg-desktop-portal_1.2.0-1_multi.changes");
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, 'xdg-desktop-portal-dev');
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all source)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{Files}),
+                (split /\n/, $controls{$all}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha1'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$source}->{'Checksums-Sha256'}),
+                (split /\n/, $controls{$all}->{'Checksums-Sha256'}),
+))]);
+
+diag('Merge with itself');
+$stdout = capture([
+    $mergechanges,
+    '--indep',
+    "mergechanges/$all",
+    "mergechanges/$all",
+]);
+#diag $stdout;
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+is($merged->{Format}, $controls{$source}->{Format});
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, 'xdg-desktop-portal-dev');
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Files}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{'Checksums-Sha1'}),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{'Checksums-Sha256'}),
+))]);
+
+diag('Format 1.7 and 1.8 are compatible');
+$stdout = capture([
+    $mergechanges,
+    '--indep',
+    "mergechanges/$all",
+    "mergechanges/format-1.7.changes",
+]);
+diag $stdout;
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+# Formats 1.8 and 1.7 merge to 1.7
+is($merged->{Format}, '1.7');
+is($merged->{Date}, $controls{$source}->{Date});
+is($merged->{Source}, $controls{$source}->{Source});
+is($merged->{Binary}, 'xdg-desktop-portal-dev');
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all)]);
+is($merged->{Version}, $controls{$source}->{Version});
+is($merged->{Distribution}, $controls{$source}->{Distribution});
+is($merged->{Urgency}, $controls{$source}->{Urgency});
+is($merged->{Maintainer}, $controls{$source}->{Maintainer});
+is($merged->{'Changed-By'}, $controls{$source}->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Description}),
+))]);
+is($merged->{Changes}, $controls{$source}->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+                (split /\n/, $controls{$all}->{Files}),
+))]);
+# Format 1.7 didn't have Checksums-*
+is($merged->{'Checksums-Sha1'}, undef);
+is($merged->{'Checksums-Sha256'}, undef);
+
+diag('Only one');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$source",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Not enough parameters});
+
+diag('ENOENT');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$source",
+    "mergechanges/does-not-exist.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{ERROR: Cannot read mergechanges/does-not-exist\.changes});
+
+diag('Different description');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/different-description.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Error: Descriptions do not match});
+
+diag('Different format');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/unsupported-format.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Error: Changes files have different Format fields});
+
+diag('Different source package');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/different-source.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Error: Source packages do not match});
+
+diag('Different version');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/different-version.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{ERROR: Version numbers do not match});
+
+diag('Unsupported checksums');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/$all",
+    "mergechanges/unsupported-checksum.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Error: Unsupported checksum fields});
+
+diag('Unsupported format');
+ok(! verbose_run([
+    $mergechanges,
+    "mergechanges/unsupported-format.changes",
+    "mergechanges/unsupported-format.changes",
+], '>', \$stdout, '2>', \$stderr));
+is($stdout, '');
+like($stderr, qr{Error: Changes files use unknown Format});
+
+done_testing;
+
+# vim:set sts=4 sw=4 et:

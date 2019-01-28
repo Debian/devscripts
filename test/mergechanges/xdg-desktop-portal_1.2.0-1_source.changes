@@ -1,0 +1,64 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sat, 26 Jan 2019 18:31:50 +0000
+Source: xdg-desktop-portal
+Architecture: source
+Version: 1.2.0-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Changed-By: Simon McVittie <smcv@debian.org>
+Changes:
+ xdg-desktop-portal (1.2.0-1) unstable; urgency=medium
+ .
+   [ Simon McVittie ]
+   * New upstream stable release
+   * d/watch: Only watch for stable releases
+   * d/p/Revert-Stop-building-the-icon-validator.patch,
+     d/p/validate-icon-Add-a-define-for-bwrap.patch,
+     d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-git-.patch:
+     Build a copy of the icon validator from Flatpak git master.
+     We don't want to rely on a version of Flatpak that isn't
+     stable yet.
+     - d/p/notification-Handle-non-existing-directories.patch,
+       d/p/notification-bind-mount-etc-ld.so.cache-to-the-sandbox.patch:
+       Remove, no longer necessary
+   * d/upstream/metadata: Add DEP-12 metadata
+   * Release to unstable
+ .
+   [ Jeremy Bicha ]
+   * Don't enable remote desktop support on Ubuntu. See LP bug 1802533
+Checksums-Sha1:
+ 356dc96c9d57de0a4f36cd16c4015b1aee1931fd 2431 xdg-desktop-portal_1.2.0-1.dsc
+ 925661053e97c9aa849f8e8a5e7f2caf46e314f4 405856 xdg-desktop-portal_1.2.0.orig.tar.xz
+ 68f06ca08739e30ed8fc957e9fad318cdd73a3e4 8532 xdg-desktop-portal_1.2.0-1.debian.tar.xz
+ d724848c560528a0e1d7c5f575b3d1e490d189b7 10038 xdg-desktop-portal_1.2.0-1_source.buildinfo
+Checksums-Sha256:
+ b8c53f9d574d9eff13d331ca3f2975f52ac52eb78bd10ff8f15b756abd397b09 2431 xdg-desktop-portal_1.2.0-1.dsc
+ c9a4d6c415417aed3231ebc6c9a4091b90199bea4295aab311ce3dab4032e194 405856 xdg-desktop-portal_1.2.0.orig.tar.xz
+ c838e919bec5039a74ca7d247954394be8db9f9a8945a0efe4b95a5ae16117ba 8532 xdg-desktop-portal_1.2.0-1.debian.tar.xz
+ f221172b9b2eeaaf7c1b26cb3a434dc15c11acfd61c63bb4e2572982cd58d4bd 10038 xdg-desktop-portal_1.2.0-1_source.buildinfo
+Files:
+ 6f812573ffabcba64622290d8fac6705 2431 admin optional xdg-desktop-portal_1.2.0-1.dsc
+ 8e85078478065f9592b0606bc32c5675 405856 admin optional xdg-desktop-portal_1.2.0.orig.tar.xz
+ 74f3ddd00060d2b7992a41592728bf95 8532 admin optional xdg-desktop-portal_1.2.0-1.debian.tar.xz
+ 0a70ad5592ac53bb4648261766a47c4b 10038 admin optional xdg-desktop-portal_1.2.0-1_source.buildinfo
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEENuxaZEik9e95vv6Y4FrhR4+BTE8FAlxMydIACgkQ4FrhR4+B
+TE8NWA/6AsokGe0NZqhoY91+MtFHmaN/M4iyL9shyHBZxMUJRyeDNmo2jJkIMDSX
+OSHdptyybVfk31O3L58Ev9jXNG5lw2J31IXMrt4UYiGjJXdyq7IQyqHIrzrjBBCk
+fcghcT8PFMHBtTaOHyj4sKo9jAK9tH53ZRK242PebZt3Fdn1FUneVpn7GSI3d78M
++kzx0I7Z334rAAvAe8IkSDyYHfi+bJ9gchJaWt2LD2sulh77W4HqaxtSE+4H+7UR
+2eAP8FuI3Q6gg90VTDR0y4mOvvNfzZ1jN6R8J9mR8qwTIbpbZCju1oO1jOOuGQSL
+05aeWGqNsdl2vjDr4TsraDv4dkdCQhF6EdWWIreKCQQL5Zh5p9t+z2LOITcRbd2Q
+1PcR1vJJLzkpT9M7DSWDRbJ+iWsDjuUIsr1d6dMs+AGVWaPnFytIUxExreEdn7Ul
+GJXLWsYg4AmePNoXWJch24G3S/pn5L9Am0Ikuwze9LFR+GJTtYyPytBjtXE/jysx
+F2tdJUl/h29xLzw0kIMm0+vj0/ln2RUP3KIBNcXS+ekP2Grte6LKgfq9kNRTfePx
+gfGmz+6stAcnTnoJBX/hkBAujQL6nkU+ZPakakn10GJabTwhEtMH0OQksKUKDMKB
+1plr19l5RNZTGwmJ5KTK2CBVs3Ctzgz66l1YgexZWhr3PWv/bhE=
+=hcT2
+-----END PGP SIGNATURE-----
