@@ -134,7 +134,7 @@ use constant keys => [
     ['disable-irker!'],
     [
         undef, 'SALSA_IRKER',
-        sub { $_[0]->enable($_[1], 'enable_irker', 'disable_irker'); }
+        sub { $_[0]->enable($_[1], 'irker', 'disable_irker'); }
     ],
     ['irker-host=s', 'SALSA_IRKER_HOST', undef, 'ruprecht.snow-crash.org'],
     ['irker-port=s', 'SALSA_IRKER_PORT', qr/^\d*$/],

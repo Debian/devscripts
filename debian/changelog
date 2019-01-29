@@ -18,6 +18,7 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
   [ Xavier Guimard ]
   * salsa:
     + Slightly improve the documentation.  Closes: #919402; MR: !100
+    + Fix misinterpretation of SALSA_IRKER in devscripts.conf.
   * uscan:  MR: !101
     + Fix dehs output with components with the "ignore" version.
     + Fix dehs output when "group" is used.
