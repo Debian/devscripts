@@ -83,7 +83,7 @@ sub _check_repo {
             and $hooks->{email}->{recipients} ne
             join(' ', @{ $self->config->email_recipient })) {
             push @err, "bad email recipients " . $hooks->{email}->{recipients};
-        } elsif ($self->config->disable_kgb and $hooks->{kgb}) {
+        } elsif ($self->config->disable_email and $hooks->{kgb}) {
             push @err, "email-on-push enabled";
         }
         # Irker
