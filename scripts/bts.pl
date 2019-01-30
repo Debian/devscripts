@@ -38,7 +38,7 @@ package main;
 
 =head1 NAME
 
-bts - developers' command line interface to the BTS
+bts - developers' command line interface to the Debian Bug Tracking System
 
 =cut
 
