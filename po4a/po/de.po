@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2019-01-12 19:45+0100\n"
+"POT-Creation-Date: 2019-01-30 01:33+0100\n"
 "PO-Revision-Date: 2019-01-27 10:18+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -219,7 +219,7 @@ msgstr ""
 #: ../scripts/nmudiff.1:21 ../scripts/origtargz.pl:96
 #: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
 #: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:272 ../scripts/sadt.pod:42
-#: ../scripts/salsa.pl:361 ../doc/suspicious-source.1:34
+#: ../scripts/salsa.pl:367 ../doc/suspicious-source.1:34
 #: ../scripts/tagpending.pl:94 ../scripts/transition-check.pl:42
 #: ../scripts/uupdate.1:54 ../doc/what-patch.1:15 ../scripts/whodepends.1:10
 #: ../scripts/who-uploads.1:15 ../scripts/who-permits-upload.pl:62
@@ -359,7 +359,7 @@ msgstr ""
 #: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:112
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
-#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:761
+#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:767
 #: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:1944
 #: ../scripts/uupdate.1:189 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:167 ../scripts/wnpp-alert.1:29
@@ -413,7 +413,7 @@ msgstr ""
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
 #: ../scripts/nmudiff.1:116 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
-#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:765
+#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:771
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
 #: ../scripts/uscan.pl:1948 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
@@ -561,7 +561,10 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:41
-msgid "bts - developers' command line interface to the BTS"
+#, fuzzy
+#| msgid "bts - developers' command line interface to the BTS"
+msgid ""
+"bts - developers' command line interface to the Debian Bug Tracking System"
 msgstr "bts - Befehlszeilenschnittstelle der Entwickler zum BTS"
 
 #. type: textblock
@@ -1263,7 +1266,7 @@ msgstr ""
 #: ../scripts/debrelease.1:95 ../scripts/debsign.1:95 ../scripts/debuild.1:258
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
 #: ../scripts/grep-excuses.1:15 ../scripts/mass-bug.pl:112
-#: ../scripts/nmudiff.1:69 ../scripts/rmadison.pl:335 ../scripts/salsa.pl:406
+#: ../scripts/nmudiff.1:69 ../scripts/rmadison.pl:335 ../scripts/salsa.pl:412
 #: ../scripts/uscan.pl:1445 ../scripts/uupdate.1:56 ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
@@ -1285,7 +1288,7 @@ msgstr ""
 "Befehlszeile angegebene Option benutzt werden."
 
 #. type: =head1
-#: ../scripts/bts.pl:839 ../scripts/chdist.pl:55 ../scripts/salsa.pl:51
+#: ../scripts/bts.pl:839 ../scripts/chdist.pl:55 ../scripts/salsa.pl:57
 msgid "COMMANDS"
 msgstr "BEFEHLE"
 
@@ -10615,7 +10618,7 @@ msgstr ""
 "Binärdateien betroffen sind."
 
 #. type: textblock
-#: ../scripts/debrepro.pod:107 ../scripts/salsa.pl:305
+#: ../scripts/debrepro.pod:107 ../scripts/salsa.pl:311
 msgid "Examples:"
 msgstr "Beispiele:"
 
@@ -14965,7 +14968,7 @@ msgid "Allow SSL connections to untrusted hosts."
 msgstr "erlaubt SSL-Verbindungen zu nicht vetrauenswürdigen Rechnern."
 
 #. type: =item
-#: ../scripts/dget.pl:673 ../scripts/salsa.pl:380
+#: ../scripts/dget.pl:673 ../scripts/salsa.pl:386
 msgid "B<--no-cache>"
 msgstr "B<--no-cache>"
 
@@ -15999,7 +16002,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dscverify.1:33 ../scripts/plotchangelog.1:78
-#: ../scripts/salsa.pl:490 ../scripts/uupdate.1:98
+#: ../scripts/salsa.pl:496 ../scripts/uupdate.1:98
 #, no-wrap
 msgid "B<--verbose>"
 msgstr "B<--verbose>"
@@ -16440,7 +16443,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/grep-excuses.1:40 ../scripts/hardening-check.pl:549
-#: ../scripts/salsa.pl:411
+#: ../scripts/salsa.pl:417
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
@@ -16828,7 +16831,7 @@ msgid "Kees Cook <kees@debian.org>"
 msgstr "Kees Cook <kees@debian.org>"
 
 #. type: =head1
-#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:769
+#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:775
 msgid "COPYRIGHT AND LICENSE"
 msgstr "COPYRIGHT UND LIZENZ"
 
@@ -17405,7 +17408,7 @@ msgstr ""
 "setzen."
 
 #. type: =item
-#: ../scripts/mass-bug.pl:90 ../scripts/salsa.pl:477
+#: ../scripts/mass-bug.pl:90 ../scripts/salsa.pl:483
 msgid "B<--user>"
 msgstr "B<--user>"
 
@@ -20210,8 +20213,8 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:38 ../scripts/salsa.pl:42 ../scripts/salsa.pl:429
-#: ../scripts/salsa.pl:449
+#: ../scripts/salsa.pl:38 ../scripts/salsa.pl:42 ../scripts/salsa.pl:435
+#: ../scripts/salsa.pl:455
 msgid "or"
 msgstr ""
 
@@ -20234,12 +20237,12 @@ msgstr ""
 #. type: textblock
 #: ../scripts/salsa.pl:46
 msgid ""
-"If you choose to link another file, it must contain a line with something "
-"like:"
+"If you choose to link another file using SALSA_TOKEN_FILE, it must contain a "
+"line with one of (no differences):"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:48
+#: ../scripts/salsa.pl:49
 #, no-wrap
 msgid ""
 "  <anything>SALSA_PRIVATE_TOKEN=xxxx\n"
@@ -20247,24 +20250,39 @@ msgid ""
 "\n"
 msgstr ""
 
+#. type: textblock
+#: ../scripts/salsa.pl:52
+msgid ""
+"This allows for example to use dpt(1) configuration file (~/.dpt.conf) which "
+"contains:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:55
+#, no-wrap
+msgid ""
+"  DPT_SALSA_PRIVATE_TOKEN=abcdefghi\n"
+"\n"
+msgstr ""
+
 #. type: =head2
-#: ../scripts/salsa.pl:53
+#: ../scripts/salsa.pl:59
 msgid "Managing users and groups"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:57
+#: ../scripts/salsa.pl:63
 #, fuzzy
 msgid "B<add_user>"
 msgstr "B<user>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:59
+#: ../scripts/salsa.pl:65
 msgid "Add a user to a group."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:61
+#: ../scripts/salsa.pl:67
 #, no-wrap
 msgid ""
 "  salsa --group js-group add_user guest foouser\n"
@@ -20274,25 +20292,25 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:65 ../scripts/salsa.pl:109
+#: ../scripts/salsa.pl:71 ../scripts/salsa.pl:115
 msgid ""
 "First argument is the GitLab's access levels: guest, reporter, developer, "
 "maintainer, owner."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:68
+#: ../scripts/salsa.pl:74
 #, fuzzy
 msgid "B<del_user>"
 msgstr "B<user>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:70
+#: ../scripts/salsa.pl:76
 msgid "Remove a user from a group"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:72
+#: ../scripts/salsa.pl:78
 #, no-wrap
 msgid ""
 "  salsa --group js-team del_user foouser\n"
@@ -20301,29 +20319,29 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:75
+#: ../scripts/salsa.pl:81
 #, fuzzy
 msgid "B<list_groups>"
 msgstr "B<list>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:77
+#: ../scripts/salsa.pl:83
 msgid ""
 "List sub groups of current one if group is set, groups of current user else."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:80
+#: ../scripts/salsa.pl:86
 msgid "B<group>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:82
+#: ../scripts/salsa.pl:88
 msgid "Show group members."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:84
+#: ../scripts/salsa.pl:90
 #, no-wrap
 msgid ""
 "  salsa --group js-team group\n"
@@ -20332,19 +20350,19 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:87
+#: ../scripts/salsa.pl:93
 #, fuzzy
 msgid "B<search_group>"
 msgstr "B<archpath>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:89
+#: ../scripts/salsa.pl:95
 msgid ""
 "Search for a group using given string. Shows group id and other information."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:92
+#: ../scripts/salsa.pl:98
 #, no-wrap
 msgid ""
 "  salsa search_group perl-team\n"
@@ -20354,19 +20372,19 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:96
+#: ../scripts/salsa.pl:102
 #, fuzzy
 msgid "B<search_user>"
 msgstr "B<user>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:98
+#: ../scripts/salsa.pl:104
 msgid ""
 "Search for a user using given string. Shows user id and other information."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:100
+#: ../scripts/salsa.pl:106
 #, no-wrap
 msgid ""
 "  salsa search_user yadd\n"
@@ -20374,18 +20392,18 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:102
+#: ../scripts/salsa.pl:108
 #, fuzzy
 msgid "B<update_user>"
 msgstr "B<user>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:104
+#: ../scripts/salsa.pl:110
 msgid "Update user role in a group."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:106
+#: ../scripts/salsa.pl:112
 #, no-wrap
 msgid ""
 "  salsa --group-id 1234 update_user guest foouser\n"
@@ -20394,17 +20412,17 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:112
+#: ../scripts/salsa.pl:118
 msgid "B<whoami>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:114
+#: ../scripts/salsa.pl:120
 msgid "Gives information on the token owner"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:116
+#: ../scripts/salsa.pl:122
 #, no-wrap
 msgid ""
 "  salsa whoami\n"
@@ -20412,12 +20430,12 @@ msgid ""
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:120
+#: ../scripts/salsa.pl:126
 msgid "Managing repositories"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:122
+#: ../scripts/salsa.pl:128
 msgid ""
 "One of C<--group>, C<--group-id>, C<--user> or C<--user-id> is required to "
 "manage repositories. If both are set, salsa warns and only C<--user>/C<--"
@@ -20426,12 +20444,12 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:129
+#: ../scripts/salsa.pl:135
 msgid "B<check_repo>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:131
+#: ../scripts/salsa.pl:137
 msgid ""
 "Verify that repo(s) are well configured. It works exactly like "
 "B<update_repo> except that it does not modify anything but just lists "
@@ -20439,7 +20457,7 @@ msgid ""
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:135
+#: ../scripts/salsa.pl:141
 #, no-wrap
 msgid ""
 "  salsa --user yadd --tagpending --kgb --irc=devscripts check_repo test\n"
@@ -20449,19 +20467,19 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:139
+#: ../scripts/salsa.pl:145
 #, fuzzy
 msgid "B<checkout> or B<co>"
 msgstr "B<debcheckout> B<--help>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:141
+#: ../scripts/salsa.pl:147
 msgid ""
 "Clone repo in current dir. If directory already exists, update local repo."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:144
+#: ../scripts/salsa.pl:150
 #, no-wrap
 msgid ""
 "  salsa --user yadd co devscripts\n"
@@ -20471,20 +20489,20 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:148
+#: ../scripts/salsa.pl:154
 #, fuzzy
 msgid "B<create_repo>"
 msgstr "B<--create>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:150
+#: ../scripts/salsa.pl:156
 msgid ""
 "Create public empty project. If C<--group>/C<--group-id> is set, project is "
 "created in group directory, else in user directory."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:153
+#: ../scripts/salsa.pl:159
 #, no-wrap
 msgid ""
 "  salsa --user yadd create_repo test\n"
@@ -20493,30 +20511,30 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:156
+#: ../scripts/salsa.pl:162
 msgid "B<del_repo>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:158
+#: ../scripts/salsa.pl:164
 #, fuzzy
 msgid "Delete a repository."
 msgstr "verwendet nur das Depot."
 
 #. type: =item
-#: ../scripts/salsa.pl:160
+#: ../scripts/salsa.pl:166
 msgid "B<fork>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:162
+#: ../scripts/salsa.pl:168
 msgid ""
 "Forks a project in group/user repository and set \"upstream\" to original "
 "project. Example:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:165
+#: ../scripts/salsa.pl:171
 #, no-wrap
 msgid ""
 "  $ salsa fork js-team/node-mongodb --verbose\n"
@@ -20532,12 +20550,12 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:175
+#: ../scripts/salsa.pl:181
 msgid "For a group:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:177
+#: ../scripts/salsa.pl:183
 #, no-wrap
 msgid ""
 "  salsa fork --group js-team user/node-foo\n"
@@ -20545,17 +20563,17 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:179
+#: ../scripts/salsa.pl:185
 msgid "B<forks>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:181
+#: ../scripts/salsa.pl:187
 msgid "List forks of project(s)."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:183
+#: ../scripts/salsa.pl:189
 #, no-wrap
 msgid ""
 "  salsa forks qa/qa debian/devscripts\n"
@@ -20563,27 +20581,27 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:185 ../scripts/salsa.pl:244
+#: ../scripts/salsa.pl:191 ../scripts/salsa.pl:250
 msgid ""
 "Project can be set using full path or using B<--group>/B<--group-id> or B<--"
 "user>/B<--user-id>, else it is searched in current user namespace."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:188
+#: ../scripts/salsa.pl:194
 #, fuzzy
 msgid "B<ls> or B<list_repos>"
 msgstr "B<-l>, B<--list-files>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:190
+#: ../scripts/salsa.pl:196
 msgid ""
 "Shows project owned by user or group. If Second argument exists, search only "
 "matching projects"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:193
+#: ../scripts/salsa.pl:199
 #, no-wrap
 msgid ""
 "  salsa --group js-team list_repos\n"
@@ -20592,18 +20610,18 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:196
+#: ../scripts/salsa.pl:202
 #, fuzzy
 msgid "B<merge_request>, B<mr>"
 msgstr "B<--release>, B<-r>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:198
+#: ../scripts/salsa.pl:204
 msgid "Creates a merge request."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:200
+#: ../scripts/salsa.pl:206
 msgid ""
 "Suppose you created a fork using B<salsa fork>, modify some things in a new "
 "branch using one commit and want to propose it to original project I<(branch "
@@ -20611,7 +20629,7 @@ msgid ""
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:204
+#: ../scripts/salsa.pl:210
 #, no-wrap
 msgid ""
 "  salsa mr\n"
@@ -20619,13 +20637,13 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:206
+#: ../scripts/salsa.pl:212
 #, fuzzy
 msgid "Other example:"
 msgstr "Beispiele:"
 
 #. type: verbatim
-#: ../scripts/salsa.pl:208
+#: ../scripts/salsa.pl:214
 #, no-wrap
 msgid ""
 "  salsa mr --mr-dst-project debian/foo --mr-dst-branch debian/master\n"
@@ -20633,12 +20651,12 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:210
+#: ../scripts/salsa.pl:216
 msgid "or simply"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:212
+#: ../scripts/salsa.pl:218
 #, no-wrap
 msgid ""
 "  salsa mr debian/foo debian/master\n"
@@ -20646,36 +20664,36 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:214
+#: ../scripts/salsa.pl:220
 msgid ""
 "Note that unless destination project has been set using command line, "
 "B<salsa merge_request> will search it in the following order:"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:219
+#: ../scripts/salsa.pl:225
 msgid "using GitLab API: salsa will detect from where this project was forked"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:221
+#: ../scripts/salsa.pl:227
 msgid "using \"upstream\" origin"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:223
+#: ../scripts/salsa.pl:229
 msgid "else salsa will use source project as destination project"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:227
+#: ../scripts/salsa.pl:233
 msgid ""
 "To force salsa to use source project as destination project, you can use "
 "\"same\":"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:230
+#: ../scripts/salsa.pl:236
 #, no-wrap
 msgid ""
 "  salsa mr --mr-dst-project same\n"
@@ -20685,28 +20703,28 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:234
+#: ../scripts/salsa.pl:240
 msgid ""
 "New merge request will be created using last commit title and description."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:236
+#: ../scripts/salsa.pl:242
 msgid "See B<--mr-*> options for more."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:238
+#: ../scripts/salsa.pl:244
 msgid "B<merge_requests>, B<mrs>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:240
+#: ../scripts/salsa.pl:246
 msgid "List opened merge requests for project(s)"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:242
+#: ../scripts/salsa.pl:248
 #, no-wrap
 msgid ""
 "  salsa mrs qa/qa debian/devscripts\n"
@@ -20714,23 +20732,23 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:247
+#: ../scripts/salsa.pl:253
 #, fuzzy
 msgid "B<protect_branch>"
 msgstr "B<archpath> I<Zweig>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:249
+#: ../scripts/salsa.pl:255
 msgid "Protect/unprotect a branch."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:253
+#: ../scripts/salsa.pl:259
 msgid "Set protection"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:255
+#: ../scripts/salsa.pl:261
 #, no-wrap
 msgid ""
 "  #                                    project      branch merge push\n"
@@ -20739,42 +20757,42 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:258
+#: ../scripts/salsa.pl:264
 msgid "\"merge\" and \"push\" can be one of:"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:262
+#: ../scripts/salsa.pl:268
 msgid "B<o>, B<owner>: owner only"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:264
+#: ../scripts/salsa.pl:270
 msgid "B<m>, B<maintainer>: B<o> + maintainers allowed"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:266
+#: ../scripts/salsa.pl:272
 msgid "B<d>, B<developer>: B<m> + developers allowed"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:268
+#: ../scripts/salsa.pl:274
 msgid "B<r>, B<reporter>: B<d> + reporters allowed"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:270
+#: ../scripts/salsa.pl:276
 msgid "B<g>, B<guest>: B<r> + guest allowed"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:274
+#: ../scripts/salsa.pl:280
 msgid "Unprotect"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:276
+#: ../scripts/salsa.pl:282
 #, no-wrap
 msgid ""
 "  salsa --group js-team protect_branch node-mongodb master no\n"
@@ -20782,18 +20800,18 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:280
+#: ../scripts/salsa.pl:286
 #, fuzzy
 msgid "B<protected_branches>"
 msgstr "B<svnpath branches>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:282
+#: ../scripts/salsa.pl:288
 msgid "List protected branches"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:284
+#: ../scripts/salsa.pl:290
 #, no-wrap
 msgid ""
 "  salsa --group js-team protected_branches node-mongodb\n"
@@ -20801,44 +20819,44 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:286
+#: ../scripts/salsa.pl:292
 msgid "B<push_repo>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:288
+#: ../scripts/salsa.pl:294
 msgid ""
 "Create a new project from a local Debian source directory configured with "
 "git."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:291
+#: ../scripts/salsa.pl:297
 msgid "B<push_repo> executes the following steps:"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:295
+#: ../scripts/salsa.pl:301
 msgid "gets project name using debian/changelog file;"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:297
+#: ../scripts/salsa.pl:303
 msgid "launches B<git remote add upstream ...>;"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:299
+#: ../scripts/salsa.pl:305
 msgid "launches B<create_repo>;"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:301
+#: ../scripts/salsa.pl:307
 msgid "pushes local repo."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:307
+#: ../scripts/salsa.pl:313
 #, no-wrap
 msgid ""
 "  salsa --user yadd push_repo ./test\n"
@@ -20847,33 +20865,33 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:310
+#: ../scripts/salsa.pl:316
 #, fuzzy
 msgid "B<rename_branch>"
 msgstr "B<--rename>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:312
+#: ../scripts/salsa.pl:318
 msgid ""
 "Rename branch given in B<--source-branch> with name given in B<--dest-"
 "branch>.  You can use B<--no-fail> and B<--all> options here."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:315
+#: ../scripts/salsa.pl:321
 #, fuzzy
 msgid "B<search>, B<search_project>, B<search_repo>"
 msgstr "B<--search=>I<Suchtyp>, B<-s> I<Suchtyp>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:317
+#: ../scripts/salsa.pl:323
 msgid ""
 "Search for a project using given string. Shows name, owner id and other "
 "information."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:320
+#: ../scripts/salsa.pl:326
 #, no-wrap
 msgid ""
 "  salsa search devscripts\n"
@@ -20883,20 +20901,20 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:324
+#: ../scripts/salsa.pl:330
 #, fuzzy
 msgid "B<update_repo>"
 msgstr "B<date>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:326
+#: ../scripts/salsa.pl:332
 msgid ""
 "Configure repo(s) using parameters given to command line.  A repo name has "
 "to be given unless B<--all> is set. Prefer to use B<update_safe>."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:330
+#: ../scripts/salsa.pl:336
 #, no-wrap
 msgid ""
 "  salsa --user yadd --tagpending --kgb --irc=devscripts update_repo test\n"
@@ -20907,7 +20925,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:335
+#: ../scripts/salsa.pl:341
 msgid ""
 "By default when using B<--all>, salsa will fail on first error. If you want "
 "to continue, set B<--no-fail>. In this case, salsa will display a warning "
@@ -20916,20 +20934,20 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:340
+#: ../scripts/salsa.pl:346
 #, fuzzy
 msgid "B<update_safe>"
 msgstr "B<date>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:342
+#: ../scripts/salsa.pl:348
 msgid ""
 "Launch B<check_repo> an ask before launching B<update_repo> (unless B<--"
 "yes>)."
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:344
+#: ../scripts/salsa.pl:350
 #, no-wrap
 msgid ""
 "  salsa --user yadd --tagpending --kgb --irc=devscripts update_safe test\n"
@@ -20940,40 +20958,40 @@ msgid ""
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:351
+#: ../scripts/salsa.pl:357
 msgid "Other"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:355
+#: ../scripts/salsa.pl:361
 #, fuzzy
 msgid "B<purge_cache>"
 msgstr "B<--cache>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:357
+#: ../scripts/salsa.pl:363
 msgid "Empty local cache."
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:363
+#: ../scripts/salsa.pl:369
 #, fuzzy
 msgid "General options"
 msgstr "B<andere Optionen>"
 
 #. type: =item
-#: ../scripts/salsa.pl:367
+#: ../scripts/salsa.pl:373
 #, fuzzy
 msgid "B<-C>, B<--chdir>"
 msgstr "B<-C>, B<--confirm>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:369
+#: ../scripts/salsa.pl:375
 msgid "Change directory before launching command"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:371
+#: ../scripts/salsa.pl:377
 #, no-wrap
 msgid ""
 "  salsa -C ~/debian co debian/libapache2-mod-fcgid\n"
@@ -20981,36 +20999,36 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:373
+#: ../scripts/salsa.pl:379
 #, fuzzy
 msgid "B<--cache-file>"
 msgstr "B<--cache>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:375
+#: ../scripts/salsa.pl:381
 msgid ""
 "File to store cached values. Default to B<~/.cache/salsa.json>. An empty "
 "value disables cache."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:378
+#: ../scripts/salsa.pl:384
 msgid "C<.devscripts> value: B<SALSA_CACHE_FILE>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:382
+#: ../scripts/salsa.pl:388
 msgid "Disable cache usage. Same as B<--cache-file ''>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:384 ../scripts/uscan.pl:1425
+#: ../scripts/salsa.pl:390 ../scripts/uscan.pl:1425
 #, fuzzy
 msgid "B<--conffile>, B<--conf-file>"
 msgstr "B<--no-conf>, B<--noconf>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:386 ../scripts/uscan.pl:1427
+#: ../scripts/salsa.pl:392 ../scripts/uscan.pl:1427
 #, fuzzy
 msgid ""
 "Add or replace default configuration files (C</etc/devscripts.conf> and C<~/."
@@ -21021,12 +21039,12 @@ msgstr ""
 "Befehlszeile angegebene Option benutzt werden."
 
 #. type: =item
-#: ../scripts/salsa.pl:392 ../scripts/uscan.pl:1433
+#: ../scripts/salsa.pl:398 ../scripts/uscan.pl:1433
 msgid "replace:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:394
+#: ../scripts/salsa.pl:400
 #, no-wrap
 msgid ""
 "  salsa --conf-file test.conf <command>...\n"
@@ -21035,12 +21053,12 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:397 ../scripts/uscan.pl:1437
+#: ../scripts/salsa.pl:403 ../scripts/uscan.pl:1437
 msgid "add:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:399
+#: ../scripts/salsa.pl:405
 #, no-wrap
 msgid ""
 "  salsa --conf-file +test.conf <command>...\n"
@@ -21049,13 +21067,13 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:402 ../scripts/uscan.pl:1441
+#: ../scripts/salsa.pl:408 ../scripts/uscan.pl:1441
 msgid ""
 "If one B<--conf-file> has no C<+>, default configuration files are ignored."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:408 ../scripts/uscan.pl:1447
+#: ../scripts/salsa.pl:414 ../scripts/uscan.pl:1447
 msgid ""
 "Don't read any configuration files. This can only be used as the first "
 "option given on the command-line."
@@ -21064,28 +21082,28 @@ msgstr ""
 "Befehlszeile angegebene Option benutzt werden."
 
 #. type: textblock
-#: ../scripts/salsa.pl:413
+#: ../scripts/salsa.pl:419
 msgid "Enable debugging output"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:415
+#: ../scripts/salsa.pl:421
 #, fuzzy
 msgid "B<--group>"
 msgstr "B<--repl>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:417
+#: ../scripts/salsa.pl:423
 msgid "Team to use. Use C<salsa search_group name> to find it."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:419
+#: ../scripts/salsa.pl:425
 msgid "C<.devscripts> value: B<SALSA_GROUP>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:421
+#: ../scripts/salsa.pl:427
 msgid ""
 "Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every "
 "B<salsa> commands will be executed in group space, for example if you want "
@@ -21095,7 +21113,7 @@ msgid ""
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:427
+#: ../scripts/salsa.pl:433
 #, no-wrap
 msgid ""
 "  alias jsteam_admin=\"salsa --group js-team\"\n"
@@ -21103,7 +21121,7 @@ msgid ""
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:431 ../scripts/salsa.pl:451
+#: ../scripts/salsa.pl:437 ../scripts/salsa.pl:457
 #, no-wrap
 msgid ""
 "  alias jsteam_admin=\"salsa --conf-file ~/.js.conf\n"
@@ -21111,28 +21129,28 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:433
+#: ../scripts/salsa.pl:439
 msgid "then you can fix B<SALSA_GROUP> in C<~/.js.conf>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:435
+#: ../scripts/salsa.pl:441
 #, fuzzy
 msgid "B<--group-id>"
 msgstr "B<--build>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:437
+#: ../scripts/salsa.pl:443
 msgid "Group id to use. Use C<salsa search_group name> to find it."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:439
+#: ../scripts/salsa.pl:445
 msgid "C<.devscripts> value: B<SALSA_GROUP_ID>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:441
+#: ../scripts/salsa.pl:447
 msgid ""
 "Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. Every "
 "B<salsa> commands will be executed in group space, for example if you want "
@@ -21142,7 +21160,7 @@ msgid ""
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:447
+#: ../scripts/salsa.pl:453
 #, no-wrap
 msgid ""
 "  alias jsteam_admin=\"salsa --group-id 2666\"\n"
@@ -21150,72 +21168,72 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:453
+#: ../scripts/salsa.pl:459
 msgid "then you can fix B<SALSA_GROUP_ID> in C<~/.js.conf>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:455
-msgid "B<--help>: displays this manpage"
-msgstr ""
-
-#. type: =item
-#: ../scripts/salsa.pl:457
-#, fuzzy
-msgid "B<-i>, B<--info>"
-msgstr "B<-i>, B<--stdin>"
-
-#. type: textblock
-#: ../scripts/salsa.pl:459
-msgid "Prompt before sensible changes."
-msgstr ""
-
-#. type: textblock
 #: ../scripts/salsa.pl:461
-msgid "C<.devscripts> value: B<SALSA_INFO> (yes/no)"
+msgid "B<--help>: displays this manpage"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:463
 #, fuzzy
-msgid "B<--path>"
-msgstr "B<path>"
+msgid "B<-i>, B<--info>"
+msgstr "B<-i>, B<--stdin>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:465
-msgid "Repo path. Default to group or user path."
+msgid "Prompt before sensible changes."
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:467
-msgid "C<.devscripts> value: B<SALSA_REPO_PATH>"
+msgid "C<.devscripts> value: B<SALSA_INFO> (yes/no)"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:469
 #, fuzzy
+msgid "B<--path>"
+msgstr "B<path>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:471
+msgid "Repo path. Default to group or user path."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:473
+msgid "C<.devscripts> value: B<SALSA_REPO_PATH>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:475
+#, fuzzy
 msgid "B<--token>"
 msgstr "B<--team>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:471
+#: ../scripts/salsa.pl:477
 #, fuzzy
 msgid "Token value (see above)."
 msgstr "Einzelheiten finden Sie oben."
 
 #. type: =item
-#: ../scripts/salsa.pl:473
+#: ../scripts/salsa.pl:479
 #, fuzzy
 msgid "B<--token-file>"
 msgstr "B<-f>,B<--file>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:475
+#: ../scripts/salsa.pl:481
 msgid "File to find token (see above)."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:479
+#: ../scripts/salsa.pl:485
 msgid ""
 "Username to use. If neither B<--group>, B<--group-id>, B<--user> or B<--user-"
 "id> is set, salsa uses current user id (corresponding to salsa private "
@@ -21223,13 +21241,13 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:482
+#: ../scripts/salsa.pl:488
 #, fuzzy
 msgid "B<--user-id>"
 msgstr "B<--user>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:484
+#: ../scripts/salsa.pl:490
 msgid ""
 "User id to use. Use C<salsa search_user name> to find one. If neither B<--"
 "group>, B<--group-id>, B<--user> or B<--user-id> is set, salsa uses current "
@@ -21237,55 +21255,55 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:488
+#: ../scripts/salsa.pl:494
 msgid "C<.devscripts> value: B<SALSA_USER_ID>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:492
+#: ../scripts/salsa.pl:498
 #, fuzzy
 msgid "Enable verbose output."
 msgstr "erzeugt eine detaillierte Ausgabe."
 
 #. type: =item
-#: ../scripts/salsa.pl:494
+#: ../scripts/salsa.pl:500
 #, fuzzy
 msgid "B<--yes>"
 msgstr "B<--dehs>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:496
+#: ../scripts/salsa.pl:502
 msgid "Never ask for consent."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:498
+#: ../scripts/salsa.pl:504
 msgid "C<.devscripts> value: B<SALSA_YES> (yes/no)"
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:502
+#: ../scripts/salsa.pl:508
 msgid "Update/create repo options"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:506
+#: ../scripts/salsa.pl:512
 #, fuzzy
 msgid "B<--all>"
 msgstr "B<--ack>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:508
+#: ../scripts/salsa.pl:514
 msgid "When set, all project of group/user are affected by command."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:512
+#: ../scripts/salsa.pl:518
 msgid "B<--skip>: ignore project with B<--all>. Example:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:514
+#: ../scripts/salsa.pl:520
 #, no-wrap
 msgid ""
 "  salsa update_repo --tagpending --all --skip qa --skip devscripts\n"
@@ -21293,14 +21311,14 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:516
+#: ../scripts/salsa.pl:522
 msgid ""
 "C<.devscripts> value: B<SALSA_SKIP>. To set multiples values, use spaces.  "
 "Example"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:519
+#: ../scripts/salsa.pl:525
 #, no-wrap
 msgid ""
 "  SALSA_SKIP=qa devscripts\n"
@@ -21308,12 +21326,12 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:521
+#: ../scripts/salsa.pl:527
 msgid "B<--skip-file>: ignore projects in this file (1 project per line)"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:523
+#: ../scripts/salsa.pl:529
 #, no-wrap
 msgid ""
 "  salsa update_repo --tagpending --all --skip-file ~/.skip\n"
@@ -21321,23 +21339,23 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:525
+#: ../scripts/salsa.pl:531
 msgid "C<.devscripts> value: B<SALSA_SKIP_FILE>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:529
+#: ../scripts/salsa.pl:535
 msgid "B<--ci-config-path>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:531
+#: ../scripts/salsa.pl:537
 msgid ""
 "Configure configuration file path of GitLab CI. Default: empty. Example:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:533
+#: ../scripts/salsa.pl:539
 #, no-wrap
 msgid ""
 "  salsa update_safe --ci-config-path debian/.gitlab-ci.yml debian/devscripts\n"
@@ -21345,34 +21363,34 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:535
-msgid "C<.devscripts> value: B<SALSA_CI_CONFIG_PATH>"
-msgstr ""
-
-#. type: =item
-#: ../scripts/salsa.pl:537
-#, fuzzy
-msgid "B<--desc> B<--no-desc>"
-msgstr "B<--nodate>, B<--no-date>"
-
-#. type: textblock
-#: ../scripts/salsa.pl:539
-msgid "Configure repo description using pattern given in B<desc-pattern>"
-msgstr ""
-
-#. type: textblock
 #: ../scripts/salsa.pl:541
-msgid "C<.devscripts> value: B<SALSA_DESC> (yes/no)"
+msgid "C<.devscripts> value: B<SALSA_CI_CONFIG_PATH>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:543
 #, fuzzy
+msgid "B<--desc> B<--no-desc>"
+msgstr "B<--nodate>, B<--no-date>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:545
+msgid "Configure repo description using pattern given in B<desc-pattern>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:547
+msgid "C<.devscripts> value: B<SALSA_DESC> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:549
+#, fuzzy
 msgid "B<--desc-pattern>"
 msgstr "B<--date>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:545
+#: ../scripts/salsa.pl:551
 msgid ""
 "Repo description pattern. Default to \"Debian package %p\". \"%p\" is "
 "replaced by repo name, while %P is replaced by repo name given in command "
@@ -21380,38 +21398,38 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:549
+#: ../scripts/salsa.pl:555
 msgid "C<.devscripts> value: B<SALSA_DESC_PATTERN>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:551
+#: ../scripts/salsa.pl:557
 msgid "B<--email>, B<--no-email>, B<--disable-email>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:553
+#: ../scripts/salsa.pl:559
 msgid "Enable, ignore or disable email-on-push."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:555
+#: ../scripts/salsa.pl:561
 msgid "C<.devscripts> value: B<SALSA_EMAIL> (yes/ignore/no, default: ignore)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:557
+#: ../scripts/salsa.pl:563
 #, fuzzy
 msgid "B<--email-recipient>"
 msgstr "B<--exclude-component>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:559
+#: ../scripts/salsa.pl:565
 msgid "Email-on-push recipient. Can be multi valued:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:561
+#: ../scripts/salsa.pl:567
 #, no-wrap
 msgid ""
 "  $ salsa update_safe myrepo \\\n"
@@ -21421,67 +21439,67 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:565
+#: ../scripts/salsa.pl:571
 msgid "If recipient value contains \"%p\", it is replaced by project name."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:567
+#: ../scripts/salsa.pl:573
 msgid ""
 "C<.devscripts> value: B<SALSA_EMAIL_RECIPIENTS> (use spaces to separate "
 "multiples recipients)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:570
+#: ../scripts/salsa.pl:576
 msgid ""
 "B<--enable-issues>, B<--no-enable-issues>, B<--disable-issues>, B<--no-"
 "disable-issues>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:573
+#: ../scripts/salsa.pl:579
 msgid "Enable, ignore or disable issues."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:575
+#: ../scripts/salsa.pl:581
 msgid ""
 "C<.devscripts> values: B<SALSA_ENABLE_ISSUES> (yes/ignore/no, default: "
 "ignore)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:577
+#: ../scripts/salsa.pl:583
 msgid "B<--enable-mr>, B<--no-enable-mr>, B<--disable-mr>, B<--no-disable-mr>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:579
+#: ../scripts/salsa.pl:585
 msgid "Enable, ignore or disable merge requests."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:581
+#: ../scripts/salsa.pl:587
 msgid ""
 "C<.devscripts> values: B<SALSA_ENABLE_MR> (yes/ignore/no, default: ignore)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:583
+#: ../scripts/salsa.pl:589
 #, fuzzy
 msgid "B<--irc-channel>"
 msgstr "B<--list-changes>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:585
+#: ../scripts/salsa.pl:591
 msgid ""
 "IRC channel for KGB or Irker. Can be used more than one time only with B<--"
 "irker>."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:588
+#: ../scripts/salsa.pl:594
 msgid ""
 "B<Important>: channel must not include the first \"#\". If salsa finds a "
 "channel starting with \"#\", it will consider that the channel starts with 2 "
@@ -21489,17 +21507,17 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:591
+#: ../scripts/salsa.pl:597
 msgid "C<.devscript> value: B<SALSA_IRC_CHANNEL>."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:593
+#: ../scripts/salsa.pl:599
 msgid "Multiple values must be space separated."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:595
+#: ../scripts/salsa.pl:601
 msgid ""
 "Since configuration files are read using B<sh>, be careful when using \"#\": "
 "you must enclose the channel with quotes, else B<sh> will consider it as a "
@@ -21507,191 +21525,191 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:599
+#: ../scripts/salsa.pl:605
 msgid "B<--irker>, B<--no-irker>, B<--disable-irker>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:601
+#: ../scripts/salsa.pl:607
 msgid "Enable, ignore or disable Irker service"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:603
-msgid "C<.devscripts> values: B<SALSA_IRKER> (yes/ignore/no, default: ignore)"
-msgstr ""
-
-#. type: =item
-#: ../scripts/salsa.pl:605
-#, fuzzy
-msgid "B<--irker-host>"
-msgstr "B<--first>"
-
-#. type: textblock
-#: ../scripts/salsa.pl:607
-msgid "Irker host. Default: ruprecht.snow-crash.org"
-msgstr ""
-
-#. type: textblock
 #: ../scripts/salsa.pl:609
-msgid "C<.devscripts> value: B<SALSA_IRKER_HOST>"
+msgid "C<.devscripts> values: B<SALSA_IRKER> (yes/ignore/no, default: ignore)"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:611
 #, fuzzy
-msgid "B<--irker-port>"
-msgstr "B<--auto-ver-sort>"
+msgid "B<--irker-host>"
+msgstr "B<--first>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:613
-msgid "Irker host. Default: empty (default value)"
+msgid "Irker host. Default: ruprecht.snow-crash.org"
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:615
-msgid "C<.devscripts> value: B<SALSA_IRKER_PORT>"
+msgid "C<.devscripts> value: B<SALSA_IRKER_HOST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:617
-msgid "B<--kgb>, B<--no-kgb>, B<--disable-kgb>"
-msgstr ""
+#, fuzzy
+msgid "B<--irker-port>"
+msgstr "B<--auto-ver-sort>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:619
-msgid "Enable, ignore or disable KGB webhook."
+msgid "Irker host. Default: empty (default value)"
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:621
-msgid "C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)"
+msgid "C<.devscripts> value: B<SALSA_IRKER_PORT>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:623
-#, fuzzy
-msgid "B<--no-fail>"
-msgstr "B<--no-ack>"
+msgid "B<--kgb>, B<--no-kgb>, B<--disable-kgb>"
+msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:625
-msgid "Don't stop on error when using B<update_repo> with B<--all>."
+msgid "Enable, ignore or disable KGB webhook."
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:627
-msgid "C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)"
+msgid "C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:629
 #, fuzzy
+msgid "B<--no-fail>"
+msgstr "B<--no-ack>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:631
+msgid "Don't stop on error when using B<update_repo> with B<--all>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:633
+msgid "C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:635
+#, fuzzy
 msgid "B<--rename-head>, B<--no-rename-head>"
 msgstr "B<--cache>, B<--no-cache>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:631
+#: ../scripts/salsa.pl:637
 msgid ""
 "Rename HEAD branch given by B<--source-branch> into B<--dest-branch> and "
 "change \"default branch\" of project. Works only with B<update_repo>."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:634
+#: ../scripts/salsa.pl:640
 msgid "C<.devscripts> value: B<SALSA_RENAME_HEAD> (yes/no)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:638
+#: ../scripts/salsa.pl:644
 msgid "B<--source-branch>: default \"master\""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:640
+#: ../scripts/salsa.pl:646
 msgid "C<.devscripts> value: B<SALSA_SOURCE_BRANCH>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:642
+#: ../scripts/salsa.pl:648
 msgid "B<--dest-branch>: default \"debian/master\""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:644
+#: ../scripts/salsa.pl:650
 msgid "C<.devscripts> value: B<SALSA_DEST_BRANCH>"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:648
+#: ../scripts/salsa.pl:654
 msgid "B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:650
+#: ../scripts/salsa.pl:656
 msgid "Enable, ignore or disable \"tagpending\" webhook."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:652
+#: ../scripts/salsa.pl:658
 msgid ""
 "C<.devscripts> value: B<SALSA_TAGPENDING> (yes/ignore/no, default: ignore)"
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:656
+#: ../scripts/salsa.pl:662
 msgid "Merge requests options"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:660
+#: ../scripts/salsa.pl:666
 #, fuzzy
 msgid "B<--mr-title>"
 msgstr "B<--mutt>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:662
+#: ../scripts/salsa.pl:668
 msgid "Title for merge request. Default: last commit title."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:664
+#: ../scripts/salsa.pl:670
 #, fuzzy
 msgid "B<--mr-desc>"
 msgstr "B<--dsc>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:666
+#: ../scripts/salsa.pl:672
 msgid "Description of new MR. Default:"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:670
+#: ../scripts/salsa.pl:676
 msgid "empty if B<--mr-title> is set"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:672
+#: ../scripts/salsa.pl:678
 msgid "last commit description if any"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:676
+#: ../scripts/salsa.pl:682
 msgid "B<--mr-dst-branch> (or second command line argument)"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:678
+#: ../scripts/salsa.pl:684
 msgid "Destination branch. Default to \"master\"."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:680
+#: ../scripts/salsa.pl:686
 msgid "B<--mr-dst-project> (or first command line argument)"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:682
+#: ../scripts/salsa.pl:688
 msgid ""
 "Destination project. Default: project from which the current project was "
 "forked; or, if not found, \"upstream\" value found using B<git remote --"
@@ -21699,79 +21717,79 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:686
+#: ../scripts/salsa.pl:692
 msgid ""
 "If B<--mr-dst-project> is set to B<same>, salsa will use source project as "
 "destination."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:689
+#: ../scripts/salsa.pl:695
 #, fuzzy
 msgid "B<--mr-src-branch>"
 msgstr "B<--no-cache>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:691
+#: ../scripts/salsa.pl:697
 msgid "Source branch. Default: current branch."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:693
+#: ../scripts/salsa.pl:699
 #, fuzzy
 msgid "B<--mr-src-project>"
 msgstr "B<--force-repack>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:695
+#: ../scripts/salsa.pl:701
 msgid ""
 "Source project. Default: current project found using B<git remote --verbose "
 "show>."
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:698
+#: ../scripts/salsa.pl:704
 msgid "B<--mr-allow-squash>, B<--no-mr-allow-squash>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:700
+#: ../scripts/salsa.pl:706
 msgid "Allow upstream project to squash your commits, this is the default."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:702
+#: ../scripts/salsa.pl:708
 msgid "C<.devscripts> value: B<SALSA_MR_ALLOW_SQUASH> (yes/no)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:704
+#: ../scripts/salsa.pl:710
 msgid "B<--mr-remove-source-branch>, B<--no-mr-remove-source-branch>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:706
+#: ../scripts/salsa.pl:712
 msgid "Remove source branch if merge request is accepted. Default: no."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:708
+#: ../scripts/salsa.pl:714
 msgid "C<.devscripts> value: B<SALSA_MR_REMOVE_SOURCE_BRANCH> (yes/no)"
 msgstr ""
 
 #. type: =head2
-#: ../scripts/salsa.pl:712
+#: ../scripts/salsa.pl:718
 msgid "Options to manage other Gitlab instances"
 msgstr ""
 
 #. type: =item
-#: ../scripts/salsa.pl:716
+#: ../scripts/salsa.pl:722
 #, fuzzy
 msgid "B<--api-url>"
 msgstr "B<--bin-nmu>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:718
+#: ../scripts/salsa.pl:724
 #, fuzzy
 msgid "GitLab API. Default: L<https://salsa.debian.org/api/v4>."
 msgstr ""
@@ -21779,87 +21797,87 @@ msgstr ""
 "dcontrol>."
 
 #. type: textblock
-#: ../scripts/salsa.pl:720
-msgid "C<.devscripts> value: B<SALSA_API_URL>"
-msgstr ""
-
-#. type: =item
-#: ../scripts/salsa.pl:722
-#, fuzzy
-msgid "B<--git-server-url>"
-msgstr "B<--bts-server>"
-
-#. type: textblock
-#: ../scripts/salsa.pl:724
-msgid "Default to \"git@salsa.debian.org:\""
-msgstr ""
-
-#. type: textblock
 #: ../scripts/salsa.pl:726
-msgid "C<.devscripts> value: B<SALSA_GIT_SERVER_URL>"
+msgid "C<.devscripts> value: B<SALSA_API_URL>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:728
 #, fuzzy
-msgid "B<--irker-server-url>"
-msgstr "B<--preserve-env>"
+msgid "B<--git-server-url>"
+msgstr "B<--bts-server>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:730
-msgid "Default to \"ircs://irc.oftc.net:6697/\""
+msgid "Default to \"git@salsa.debian.org:\""
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:732
-msgid "C<.devscripts> value: B<SALSA_IRKER_SERVER_URL>"
+msgid "C<.devscripts> value: B<SALSA_GIT_SERVER_URL>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:734
 #, fuzzy
-msgid "B<--kgb-server-url>"
-msgstr "B<--bts-server>"
+msgid "B<--irker-server-url>"
+msgstr "B<--preserve-env>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:736
-msgid "Default to L<http://kgb.debian.net:9418/webhook/?channel=>"
+msgid "Default to \"ircs://irc.oftc.net:6697/\""
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:738
-msgid "C<.devscripts> value: B<SALSA_KGB_SERVER_URL>"
+msgid "C<.devscripts> value: B<SALSA_IRKER_SERVER_URL>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:740
 #, fuzzy
-msgid "B<--tagpending-server-url>"
+msgid "B<--kgb-server-url>"
 msgstr "B<--bts-server>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:742
-msgid "Default to L<https://webhook.salsa.debian.org/tagpending/>"
+msgid "Default to L<http://kgb.debian.net:9418/webhook/?channel=>"
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:744
-msgid "C<.devscripts> value: B<SALSA_TAGPENDING_SERVER_URL>"
+msgid "C<.devscripts> value: B<SALSA_KGB_SERVER_URL>"
 msgstr ""
 
-#. type: =head3
+#. type: =item
+#: ../scripts/salsa.pl:746
+#, fuzzy
+msgid "B<--tagpending-server-url>"
+msgstr "B<--bts-server>"
+
+#. type: textblock
 #: ../scripts/salsa.pl:748
-msgid "Configuration file example"
+msgid "Default to L<https://webhook.salsa.debian.org/tagpending/>"
 msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:750
+msgid "C<.devscripts> value: B<SALSA_TAGPENDING_SERVER_URL>"
+msgstr ""
+
+#. type: =head3
+#: ../scripts/salsa.pl:754
+msgid "Configuration file example"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:756
 msgid ""
 "Example to use salsa with L<https://gitlab.ow2.org> (group \"lemonldap-ng\"):"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:752
+#: ../scripts/salsa.pl:758
 #, no-wrap
 msgid ""
 "  SALSA_TOKEN=`cat ~/.ow2-gitlab-token`\n"
@@ -21870,12 +21888,12 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:757
+#: ../scripts/salsa.pl:763
 msgid "Then to use it, add something like this in your C<.bashrc> file:"
 msgstr ""
 
 #. type: verbatim
-#: ../scripts/salsa.pl:759
+#: ../scripts/salsa.pl:765
 #, no-wrap
 msgid ""
 "  alias llng_admin='salsa --conffile ~/.salsa-ow2.conf'\n"
@@ -21883,30 +21901,30 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:763
+#: ../scripts/salsa.pl:769
 msgid "B<dpt-salsa>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:767
+#: ../scripts/salsa.pl:773
 #, fuzzy
 msgid "Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 msgstr "David Paleino E<lt>dapal@debian.orgE<gt>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:771
+#: ../scripts/salsa.pl:777
 msgid "Copyright (C) 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:773
+#: ../scripts/salsa.pl:779
 msgid ""
 "It contains code formely found in L<dpt-salsa> I<(pkg-perl-tools)> copyright "
 "2018, gregor herrmann E<lt>gregoa@debian.orgE<gt>."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:776
+#: ../scripts/salsa.pl:782
 #, fuzzy
 msgid ""
 "This library is free software; you can redistribute it and/or modify it "
@@ -21919,7 +21937,7 @@ msgstr ""
 "Software Foundation veröffentlicht wurde, weitergeben und/oder ändern."
 
 #. type: textblock
-#: ../scripts/salsa.pl:781
+#: ../scripts/salsa.pl:787
 msgid ""
 "This program is distributed in the hope that it will be useful, but WITHOUT "
 "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
@@ -21928,7 +21946,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/salsa.pl:786
+#: ../scripts/salsa.pl:792
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "this program.  If not, see L<http://www.gnu.org/licenses/>."
