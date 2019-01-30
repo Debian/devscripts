@@ -25,6 +25,8 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
   * uscan:  MR: !101
     + Fix dehs output with components with the "ignore" version.
     + Fix dehs output when "group" is used.
+    + Avoid false positive warning on USCAN_SYMLINK value.
+      Closes: #920874; MR: !103
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:41:40 +0100
 
