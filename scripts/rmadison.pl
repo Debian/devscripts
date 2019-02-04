@@ -54,7 +54,7 @@ my %url_map = (
     'debian' => "https://api.ftp-master.debian.org/madison",
     'new'    => "https://api.ftp-master.debian.org/madison?s=new",
     'qa'     => "https://qa.debian.org/madison.php",
-    'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
+    'ubuntu' => "https://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd'    => 'https://qa.debian.org/cgi-bin/madison.cgi',
 );
 my $default_url = 'debian';
@@ -322,7 +322,7 @@ use I<URL> for the query. Supported shorthands are
  B<debian> https://api.ftp-master.debian.org/madison
  B<new> https://api.ftp-master.debian.org/madison?s=new
  B<qa> https://qa.debian.org/madison.php
- B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
+ B<ubuntu> https://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> https://qa.debian.org/cgi-bin/madison.cgi
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add

@@ -3,12 +3,15 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
   [ Chris Leick ]
   * po4a/po/de.po
     + new version of German translation
-  
+
   [ Mattia Rizzolo ]
   * grep-excuses:
     + Add a patch from Niels Thykier to fix a possible crash.  Closes: #919191
   * bts:
     + Expand the "BTS" acronym in the manpage synopsis.  Closes: #920870
+  * rmadison:
+    + Apply a patch from Jakub Wilk to use HTTPS with people.canonical.com.
+      Closes: #921378
 
   [ Simon McVittie ]
   * debc/debi:
