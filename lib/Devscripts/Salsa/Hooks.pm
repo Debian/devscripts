@@ -107,7 +107,7 @@ sub add_hooks {
                     'emails-on-push',
                     {
                         recipients => join(' ',
-                            map { s/%p/$repo/; $_ }
+                            map { my $a = $_; $a =~ s/%p/$repo/; $a }
                               @{ $self->config->email_recipient }),
                     });
                 no warnings;
