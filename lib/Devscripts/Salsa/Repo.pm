@@ -50,7 +50,7 @@ sub get_repo {
                 ds_prompt(
                         "You're going to configure "
                       . @repos
-                      . " projects, continue (N/y)?"
+                      . " projects. Continue (N/y) "
                 ) =~ accept
             ) {
                 ds_warn "Aborting";
