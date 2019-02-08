@@ -79,9 +79,18 @@ sub _check_repo {
         if ($self->config->email
             and not($hooks->{email} and %{ $hooks->{email} })) {
             push @err, "email-on-push missing";
-        } elsif ($self->config->email
-            and $hooks->{email}->{recipients} ne
-            join(' ', @{ $self->config->email_recipient })) {
+        } elsif (
+            $self->config->email
+            and $hooks->{email}->{recipients} ne join(
+                ' ',
+                map {
+                    my $a = $_;
+                    my $b = $name;
+                    $b =~ s#.*/##;
+                    $a =~ s/%p/$b/;
+                    $a
+                } @{ $self->config->email_recipient })
+        ) {
             push @err, "bad email recipients " . $hooks->{email}->{recipients};
         } elsif ($self->config->disable_email and $hooks->{kgb}) {
             push @err, "email-on-push enabled";
