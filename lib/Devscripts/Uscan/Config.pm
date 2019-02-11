@@ -181,9 +181,9 @@ use constant keys => [
         'USCAN_SYMLINK',
         sub {
             $_[0]->symlink(
-                  $_[1] =~ /^(no|0|rename)$/ ? $1
-                : $_[1] == 0                 ? 'no'
-                :                              'symlink'
+                  $_[1] =~ /^(no|0|rename)$/   ? $1
+                : $_[1] =~ /^(yes|1|symlink)$/ ? 'symlink'
+                :                                'no'
             );
             return 1;
         },
