@@ -1,0 +1,41 @@
+Format: 1.8
+Date: Sat, 26 Jan 2019 18:31:50 +0000
+Source: xdg-desktop-portal
+Binary: xdg-desktop-portal-dev
+Architecture: all
+Version: 1.2.0-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Changed-By: Simon McVittie <smcv@debian.org>
+Description:
+ xdg-desktop-portal-dev - desktop integration portal - development files
+Changes:
+ xdg-desktop-portal (1.2.0-1) unstable; urgency=medium
+ .
+   [ Simon McVittie ]
+   * New upstream stable release
+   * d/watch: Only watch for stable releases
+   * d/p/Revert-Stop-building-the-icon-validator.patch,
+     d/p/validate-icon-Add-a-define-for-bwrap.patch,
+     d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-git-.patch:
+     Build a copy of the icon validator from Flatpak git master.
+     We don't want to rely on a version of Flatpak that isn't
+     stable yet.
+     - d/p/notification-Handle-non-existing-directories.patch,
+       d/p/notification-bind-mount-etc-ld.so.cache-to-the-sandbox.patch:
+       Remove, no longer necessary
+   * d/upstream/metadata: Add DEP-12 metadata
+   * Release to unstable
+ .
+   [ Jeremy Bicha ]
+   * Don't enable remote desktop support on Ubuntu. See LP bug 1802533
+Checksums-Sha1:
+ 3c23c6796524c189e84e0196eb044f52f8fe917d 38992 xdg-desktop-portal-dev_1.2.0-1_all.deb
+ 62d26daeb56e96ff6639ff2ef0af18340ae7a605 9179 xdg-desktop-portal_1.2.0-1_all.buildinfo
+Checksums-Sha256:
+ f98a6c57e6b932d7c6bf8e38949f57206f4c6ded0156b0afaaebfc89d7d5b443 38992 xdg-desktop-portal-dev_1.2.0-1_all.deb
+ 3552acdfb12d65e325bd161bad6446185851defe83ecfa1562294cbf48615e59 9179 xdg-desktop-portal_1.2.0-1_all.buildinfo
+Files:
+ 16c46d8c8dc3f185d9aaaf4c43bcb97d 38992 admin optional xdg-desktop-portal-dev_1.2.0-1_all.deb
+ 5996887565ed2ec3a64280fbf1a29e13 9179 admin optional xdg-desktop-portal_1.2.0-1_all.buildinfo

@@ -1,0 +1,51 @@
+Format: 1.8
+Date: Sat, 26 Jan 2019 18:31:50 +0000
+Source: xdg-desktop-portal
+Binary: xdg-desktop-portal xdg-desktop-portal-dbgsym xdg-desktop-portal-tests xdg-desktop-portal-tests-dbgsym
+Architecture: amd64
+Version: 1.2.0-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Changed-By: Simon McVittie <smcv@debian.org>
+Description:
+ xdg-desktop-portal - desktop integration portal for Flatpak and Snap
+ xdg-desktop-portal-tests - desktop integration portal - automated tests
+Changes:
+ xdg-desktop-portal (1.2.0-1) unstable; urgency=medium
+ .
+   [ Simon McVittie ]
+   * New upstream stable release
+   * d/watch: Only watch for stable releases
+   * d/p/Revert-Stop-building-the-icon-validator.patch,
+     d/p/validate-icon-Add-a-define-for-bwrap.patch,
+     d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-git-.patch:
+     Build a copy of the icon validator from Flatpak git master.
+     We don't want to rely on a version of Flatpak that isn't
+     stable yet.
+     - d/p/notification-Handle-non-existing-directories.patch,
+       d/p/notification-bind-mount-etc-ld.so.cache-to-the-sandbox.patch:
+       Remove, no longer necessary
+   * d/upstream/metadata: Add DEP-12 metadata
+   * Release to unstable
+ .
+   [ Jeremy Bicha ]
+   * Don't enable remote desktop support on Ubuntu. See LP bug 1802533
+Checksums-Sha1:
+ da1f789d7921b4e44c0e843595d6c0766a22e52f 1153180 xdg-desktop-portal-dbgsym_1.2.0-1_amd64.deb
+ a1113c0c9de12b0b4dbf0a904d754be61bb54924 206988 xdg-desktop-portal-tests-dbgsym_1.2.0-1_amd64.deb
+ 0f9964de82fbf493d4d4a9d0bb8da8106e4f90f6 55556 xdg-desktop-portal-tests_1.2.0-1_amd64.deb
+ 07cf52da2e5cf3d76776a08e693362beccee6811 10078 xdg-desktop-portal_1.2.0-1_amd64.buildinfo
+ c1e43ea09f94d6fe3eb83d0410e3e80a9c63cf82 212204 xdg-desktop-portal_1.2.0-1_amd64.deb
+Checksums-Sha256:
+ e1997883023ce824c1e63320b6e2935986b70b4b363e826ee3f6018629a13086 1153180 xdg-desktop-portal-dbgsym_1.2.0-1_amd64.deb
+ bfadd137cf31bfa1b5b87af87bfdd861ad52c3a70dc135e50ceaa6986a2be844 206988 xdg-desktop-portal-tests-dbgsym_1.2.0-1_amd64.deb
+ 585e29127a00dc7feabdff72c2004b3c67c3fb528afd11e748e04ee7bf170ddb 55556 xdg-desktop-portal-tests_1.2.0-1_amd64.deb
+ 442ba784f7498395ec38e023194e2374e1607cefc5433f896c8cb5cf19f8a669 10078 xdg-desktop-portal_1.2.0-1_amd64.buildinfo
+ 6f2d1c73be324bfcdb3eea6bf1f3d2b78358989250c8334fca2fb2862c5986de 212204 xdg-desktop-portal_1.2.0-1_amd64.deb
+Files:
+ b4a88209842aa2ea031c2b41a9ba82c1 1153180 debug optional xdg-desktop-portal-dbgsym_1.2.0-1_amd64.deb
+ ca48de7155966c0b0cea5e30226506be 206988 debug optional xdg-desktop-portal-tests-dbgsym_1.2.0-1_amd64.deb
+ 9a497abe1208ed1504f057874b8c91da 55556 admin optional xdg-desktop-portal-tests_1.2.0-1_amd64.deb
+ cd99c019000a63b5cef9c2fc4213e89c 10078 admin optional xdg-desktop-portal_1.2.0-1_amd64.buildinfo
+ a4ed57a911718668b62a472db60729a9 212204 admin optional xdg-desktop-portal_1.2.0-1_amd64.deb
