@@ -32,6 +32,7 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
     + Fix the impossibility to delete email-on-push.
     + Fix email recipients afterglow when used with --all.
       Closes: #921640; MR: !104
+    + Die if project is missing in fork command.  Closes: #922079
   * uscan:  MR: !101
     + Fix dehs output with components with the "ignore" version.
     + Fix dehs output when "group" is used.

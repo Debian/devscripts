@@ -10,6 +10,10 @@ with 'Devscripts::Salsa::checkout';
 
 sub fork {
     my ($self, $project) = @_;
+    unless ($project) {
+        ds_warn "Project to fork is missing";
+        return 1;
+    }
     my $path = $self->main_path or return 1;
     $self->api->fork_project($project, { namespace => $path });
     my $p = $project;
