@@ -39,6 +39,7 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
     + Avoid false positive warning on USCAN_SYMLINK value.
       Closes: #920874; MR: !103
     + Fix exit code when component are used.  Closes: #922131; MR: !105
+    + Don't parse empty options.  Closes: #922132; MR: !105
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:41:40 +0100
 

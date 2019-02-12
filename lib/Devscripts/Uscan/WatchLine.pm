@@ -511,7 +511,7 @@ EOF
                     =~ /^\s*((?:d(?:ownloadurl|irversion)|(?:filenam|pag)e|[ou]version)mangle)\s*=\s*(.+?)\s*$/
                 ) {
                     $self->$1([split /;/, $2]);
-                } else {
+                } elsif ($opt =~ /\S/) {
                     uscan_warn "unrecognized option $opt";
                 }
             }
