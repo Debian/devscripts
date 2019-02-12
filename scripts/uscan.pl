@@ -2006,11 +2006,11 @@ if ($dehs) {
 }
 
 # Did we find any new upstream versions on our wanderings?
-our $found = 0;
+my $res = 0;
 
 my @wf = find_watch_files($config);
 foreach (@wf) {
-    process_watchfile(@$_);
+    $res ||= process_watchfile(@$_);
 
     # Are there any warnings to give if we're using dehs?
     dehs_output if ($dehs);
@@ -2021,7 +2021,8 @@ uscan_verbose "Scan finished";
 # Are there any warnings to give if we're using dehs?
 $dehs_end_output = 1;
 dehs_output if ($dehs);
-exit($found ? 0 : 1);
+
+exit($res ? $res : $found ? 0 : 1);
 
 #######################################################################
 # {{{ code 2: process watchfile by looping over watchline
