@@ -1065,7 +1065,7 @@ sub cmp_versions {
         uscan_msg "Newest version of $self->{pkg} on remote site is "
           . "$self->{search_result}->{newversion}, "
           . "specified download version is $self->{shared}->{download_version}";
-        $main::found++;
+        $found++ unless ($self->versionmode =~ /(?:same|ignore)/);
     } elsif ($self->versionmode eq 'newer') {
         if ($compver eq 'newer') {
             uscan_msg "Newest version of $self->{pkg} on remote site is "
@@ -1128,7 +1128,6 @@ sub cmp_versions {
           . $self->search_result->{newversion}
           . ", ignore local version";
         $dehs_tags->{'status'} //= "package available";
-        $main::found++;
     } else {    # same/previous -- secondary-tarball or signature-file
         uscan_die "strange ... <version> stanza = same/previous "
           . "should have defined \$download_version";
