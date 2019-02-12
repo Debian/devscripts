@@ -426,6 +426,7 @@ EOF
             }
             my @opts = split /,/, $opts;
             foreach my $opt (@opts) {
+                next unless ($opt =~ /\S/);
                 uscan_verbose "Parsing $opt";
                 if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
                     $self->downloader->pasv(1);
@@ -511,7 +512,7 @@ EOF
                     =~ /^\s*((?:d(?:ownloadurl|irversion)|(?:filenam|pag)e|[ou]version)mangle)\s*=\s*(.+?)\s*$/
                 ) {
                     $self->$1([split /;/, $2]);
-                } elsif ($opt =~ /\S/) {
+                } else {
                     uscan_warn "unrecognized option $opt";
                 }
             }
