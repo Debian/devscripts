@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2019-02-12 16:36+0100\n"
-"PO-Revision-Date: 2019-01-08 19:47+0100\n"
+"PO-Revision-Date: 2019-02-14 22:41+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -569,12 +569,11 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:41
-#, fuzzy
-#| msgid "bts - developers' command line interface to the BTS"
 msgid ""
 "bts - developers' command line interface to the Debian Bug Tracking System"
 msgstr ""
-"bts - Interface en ligne de commande pour le BTS, pour les développeurs"
+"bts - Interface en ligne de commande des dévelopeurs pour le système de "
+"bogues de Debian (BTS)"
 
 #. type: textblock
 #: ../scripts/bts.pl:218
@@ -13654,12 +13653,6 @@ msgstr "B<bts>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:37
-#, fuzzy
-#| msgid ""
-#| "A command-line tool for accessing the BTS, both to send mails to "
-#| "control@bts.debian.org and to access the web pages and SOAP interface of "
-#| "the BTS. [www-browser, libauthen-sasl-perl, libnet-smtps-perl, libsoap-"
-#| "lite-perl, liburi-perl, libwww-perl, bsd-mailx | mailx]"
 msgid ""
 "A command-line tool for accessing the Debian Bug Tracking System, both to "
 "send mails to control@bts.debian.org and to access the web pages and SOAP "
@@ -18344,6 +18337,8 @@ msgid ""
 "B<nmudiff> is the tool to be used while preparing a Non-Maintainer Upload "
 "(NMU) to notify the maintainer about the work being done."
 msgstr ""
+"B<nmudiff> est un outil à utiliser lorsqu'on prépare un Non-Mainteneur envoi "
+"(NMU) pour notifier au mainteneur qu'un travail est en cours."
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:19
@@ -19931,6 +19926,7 @@ msgstr "B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]"
 
 #. type: verbatim
 #: ../scripts/rmadison.pl:321
+#, no-wrap
 msgid ""
 "use I<URL> for the query. Supported shorthands are\n"
 " B<debian> https://api.ftp-master.debian.org/madison\n"
@@ -20305,16 +20301,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:46
-#, fuzzy
-#| msgid ""
-#| "If you choose to link another file, it must contain a line with something "
-#| "like:"
 msgid ""
 "If you choose to link another file using SALSA_TOKEN_FILE, it must contain a "
 "line with one of (no differences):"
 msgstr ""
-"Si un autre fichier est choisi, il doit contenir un ligne avec quelque chose "
-"comme :"
+"Si on choisit de lier un autre fichier en utilisant SALSA_TOKEN_FILE, il "
+"doit contenir un ligne avec au choix (aucune différence) :"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:49
@@ -20334,9 +20326,12 @@ msgid ""
 "This allows for example to use dpt(1) configuration file (~/.dpt.conf) which "
 "contains:"
 msgstr ""
+"Ceci permet par exemple d'utiliser le fichier de configuration de dpt(1) (~/."
+"dpt.conf) qui contient :"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:55
+#, no-wrap
 msgid ""
 "  DPT_SALSA_PRIVATE_TOKEN=abcdefghi\n"
 "\n"
