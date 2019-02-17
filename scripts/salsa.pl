@@ -193,7 +193,7 @@ B<--user>/B<--user-id>, else it is searched in current user namespace.
 
 =item B<ls> or B<list_repos>
 
-Shows project owned by user or group. If Second
+Shows projects owned by user or group. If second
 argument exists, search only matching projects
 
   salsa --group js-team list_repos
@@ -345,7 +345,7 @@ errors, set B<--verbose>.
 
 =item B<update_safe>
 
-Launch B<check_repo> an ask before launching B<update_repo> (unless B<--yes>).
+Launch B<check_repo> and ask before launching B<update_repo> (unless B<--yes>).
 
   salsa --user yadd --tagpending --kgb --irc=devscripts update_safe test
   salsa --group js-team update_safe --all
@@ -425,7 +425,7 @@ Team to use. Use C<salsa search_group name> to find it.
 C<.devscripts> value: B<SALSA_GROUP>
 
 Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every
-B<salsa> commands will be executed in group space, for example if you want to
+B<salsa> command will be executed in group space, for example if you want to
 propose a little change in a project using B<salsa fork> + B<salsa mr>, this
 "fork" will be done in group space unless you set a B<--user>/B<--user-id>.
 Prefer to use an alias in your C<.bashrc> file. Example:
@@ -445,7 +445,7 @@ Group id to use. Use C<salsa search_group name> to find it.
 C<.devscripts> value: B<SALSA_GROUP_ID>
 
 Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. Every
-B<salsa> commands will be executed in group space, for example if you want to
+B<salsa> command will be executed in group space, for example if you want to
 propose a little change in a project using B<salsa fork> + B<salsa mr>, this
 "fork" will be done in group space unless you set a B<--user>/B<--user-id>.
 Prefer to use an alias in your C<.bashrc> file. Example:
@@ -549,7 +549,7 @@ C<.devscripts> value: B<SALSA_DESC> (yes/no)
 =item B<--desc-pattern>
 
 Repo description pattern. Default to "Debian package %p". "%p" is replaced by
-repo name, while %P is replaced by repo name given in command (may contains
+repo name, while "%P" is replaced by repo name given in command (may contains
 full path).
 
 C<.devscripts> value: B<SALSA_DESC_PATTERN>
@@ -616,7 +616,7 @@ C<.devscripts> value: B<SALSA_IRKER_HOST>
 
 =item B<--irker-port>
 
-Irker host. Default: empty (default value)
+Irker port. Default: empty (default value)
 
 C<.devscripts> value: B<SALSA_IRKER_PORT>
 

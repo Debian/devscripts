@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-12 16:36+0100\n"
+"POT-Creation-Date: 2019-02-17 23:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16255,8 +16255,8 @@ msgstr ""
 #. type: textblock
 #: ../scripts/salsa.pl:196
 msgid ""
-"Shows project owned by user or group. If Second argument exists, search only "
-"matching projects"
+"Shows projects owned by user or group. If second argument exists, search "
+"only matching projects"
 msgstr ""
 
 #. type: verbatim
@@ -16592,7 +16592,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/salsa.pl:348
 msgid ""
-"Launch B<check_repo> an ask before launching B<update_repo> (unless "
+"Launch B<check_repo> and ask before launching B<update_repo> (unless "
 "B<--yes>)."
 msgstr ""
 
@@ -16744,9 +16744,9 @@ msgstr ""
 #: ../scripts/salsa.pl:427
 msgid ""
 "Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every "
-"B<salsa> commands will be executed in group space, for example if you want "
-"to propose a little change in a project using B<salsa fork> + B<salsa mr>, "
-"this \"fork\" will be done in group space unless you set a "
+"B<salsa> command will be executed in group space, for example if you want to "
+"propose a little change in a project using B<salsa fork> + B<salsa mr>, this "
+"\"fork\" will be done in group space unless you set a "
 "B<--user>/B<--user-id>.  Prefer to use an alias in your C<.bashrc> "
 "file. Example:"
 msgstr ""
@@ -16791,9 +16791,9 @@ msgstr ""
 #: ../scripts/salsa.pl:447
 msgid ""
 "Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. Every "
-"B<salsa> commands will be executed in group space, for example if you want "
-"to propose a little change in a project using B<salsa fork> + B<salsa mr>, "
-"this \"fork\" will be done in group space unless you set a "
+"B<salsa> command will be executed in group space, for example if you want to "
+"propose a little change in a project using B<salsa fork> + B<salsa mr>, this "
+"\"fork\" will be done in group space unless you set a "
 "B<--user>/B<--user-id>.  Prefer to use an alias in your C<.bashrc> "
 "file. Example:"
 msgstr ""
@@ -17021,8 +17021,8 @@ msgstr ""
 #: ../scripts/salsa.pl:551
 msgid ""
 "Repo description pattern. Default to \"Debian package %p\". \"%p\" is "
-"replaced by repo name, while %P is replaced by repo name given in command "
-"(may contains full path)."
+"replaced by repo name, while \"%P\" is replaced by repo name given in "
+"command (may contains full path)."
 msgstr ""
 
 #. type: textblock
@@ -17186,7 +17186,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:619
-msgid "Irker host. Default: empty (default value)"
+msgid "Irker port. Default: empty (default value)"
 msgstr ""
 
 #. type: textblock
