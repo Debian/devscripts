@@ -1,4 +1,4 @@
-devscripts (2.19.3) UNRELEASED; urgency=medium
+devscripts (2.19.3) unstable; urgency=medium
 
   [ Mattia Rizzolo ]
   * grep-excuses:
@@ -17,7 +17,7 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
     + Consider installing foreign 'Multi-Arch: same' packages, as long as they
       belong of a known foreign architecture.
     + Closes: #915668; MR: !93
-  * mergechanges: !102
+  * mergechanges: MR: !102
     + Merge Binary and Description fields.  Closes: #920470
     + Add a basic regression test.
 
@@ -44,7 +44,7 @@ devscripts (2.19.3) UNRELEASED; urgency=medium
   [ Reiner Herrmann ]
   * German translation update.
 
- -- Mattia Rizzolo <mattia@debian.org>  Sat, 12 Jan 2019 20:41:40 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 18 Feb 2019 06:45:37 +0100
 
 devscripts (2.19.2) unstable; urgency=medium
 
