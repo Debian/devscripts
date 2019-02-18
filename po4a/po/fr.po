@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2019-02-17 23:17+0100\n"
-"PO-Revision-Date: 2019-02-14 22:41+0100\n"
+"PO-Revision-Date: 2019-02-18 06:42+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -20730,10 +20730,6 @@ msgstr "B<ls> or B<list_repos>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:196
-#, fuzzy
-#| msgid ""
-#| "Shows project owned by user or group. If Second argument exists, search "
-#| "only matching projects"
 msgid ""
 "Shows projects owned by user or group. If second argument exists, search "
 "only matching projects"
@@ -21134,10 +21130,6 @@ msgstr "B<update_safe>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:348
-#, fuzzy
-#| msgid ""
-#| "Launch B<check_repo> an ask before launching B<update_repo> (unless B<--"
-#| "yes>)."
 msgid ""
 "Launch B<check_repo> and ask before launching B<update_repo> (unless B<--"
 "yes>)."
@@ -21314,14 +21306,6 @@ msgstr "Valeur C<.devscripts> : B<SALSA_GROUP>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:427
-#, fuzzy
-#| msgid ""
-#| "Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every "
-#| "B<salsa> commands will be executed in group space, for example if you "
-#| "want to propose a little change in a project using B<salsa fork> + "
-#| "B<salsa mr>, this \"fork\" will be done in group space unless you set a "
-#| "B<--user>/B<--user-id>.  Prefer to use an alias in your C<.bashrc> file. "
-#| "Example:"
 msgid ""
 "Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every "
 "B<salsa> command will be executed in group space, for example if you want to "
@@ -21378,14 +21362,6 @@ msgstr "Valeur C<.devscripts> : B<SALSA_GROUP_ID>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:447
-#, fuzzy
-#| msgid ""
-#| "Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. "
-#| "Every B<salsa> commands will be executed in group space, for example if "
-#| "you want to propose a little change in a project using B<salsa fork> + "
-#| "B<salsa mr>, this \"fork\" will be done in group space unless you set a "
-#| "B<--user>/B<--user-id>.  Prefer to use an alias in your C<.bashrc> file. "
-#| "Example:"
 msgid ""
 "Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. Every "
 "B<salsa> command will be executed in group space, for example if you want to "
@@ -21647,11 +21623,6 @@ msgstr "B<--desc-pattern>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:551
-#, fuzzy
-#| msgid ""
-#| "Repo description pattern. Default to \"Debian package %p\". \"%p\" is "
-#| "replaced by repo name, while %P is replaced by repo name given in command "
-#| "(may contains full path)."
 msgid ""
 "Repo description pattern. Default to \"Debian package %p\". \"%p\" is "
 "replaced by repo name, while \"%P\" is replaced by repo name given in "
@@ -21847,8 +21818,6 @@ msgstr "B<--irker-port>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:619
-#, fuzzy
-#| msgid "Irker host. Default: empty (default value)"
 msgid "Irker port. Default: empty (default value)"
 msgstr "Hôte Irker. Défaut : vide (valeur par défaut)"
 
