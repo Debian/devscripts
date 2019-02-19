@@ -60,6 +60,14 @@ contains:
 
 =over
 
+=item B<join>
+
+Request access to a group.
+
+  salsa join js-team
+  salsa join --group js-team
+  salsa join --group-id 1234
+
 =item B<add_user>
 
 Add a user to a group.

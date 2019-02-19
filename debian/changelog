@@ -5,6 +5,10 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Fix typo in documentation.  MR: !125
     + Remove redundant, misleading  string in a debug message.  MR: !126
 
+  [ Xavier Guimard ]
+  * salsa:
+    + add "join" command.  Closes: #921314;  MR: !108
+
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
