@@ -481,7 +481,16 @@ or
 
   alias jsteam_admin="salsa --conf-file ~/.js.conf
 
+or to use both .devscripts and .js.conf:
+
+  alias jsteam_admin="salsa --conf-file +~/.js.conf
+
 then you can fix B<SALSA_GROUP> in C<~/.js.conf>
+
+To enable bash completion for your alias, add this in your .bashrc file:
+
+  _completion_loader salsa
+  complete -F _salsa_completion jsteam_admin
 
 =item B<--group-id>
 
