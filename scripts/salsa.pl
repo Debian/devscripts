@@ -207,6 +207,31 @@ List forks of project(s).
 Project can be set using full path or using B<--group>/B<--group-id> or
 B<--user>/B<--user-id>, else it is searched in current user namespace.
 
+=item B<push>
+
+Push relevant packaging refs to origin Git remote. To be run from packaging
+working directory.
+
+  salsa push
+
+It pushes the following refs to the "origin" remote:
+
+=over
+
+=item "master" branch (or whatever is set to debian-branch in gbp.conf)
+
+=item "upstream" branch (or whatever is set to upstream-branch in gbp.conf)
+
+=item "pristine-tar" branch
+
+=item tags named "debian/*" (or whatever is set to debian-tag in gbp.conf)
+
+=item tags named "upstream/*" (or whatever is set to upstream-tag in gbp.conf)
+
+=item all tags, if the package's source format is "3.0 (native)"
+
+=back
+
 =item B<ls> or B<list_repos>
 
 Shows projects owned by user or group. If second

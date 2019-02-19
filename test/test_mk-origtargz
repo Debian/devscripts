@@ -455,9 +455,7 @@ testRepackXpi2XZ() {
 	makeZipFile
 	mv $TMPDIR/foo-0.1.zip $TMPDIR/foo-0.1.xpi
 	run_mk_origtargz "" "" \
-		"Unpacking foo-0.1.xpi
-Unpacked xpi file.
-Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
+		"Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
 		--package foo --version 0.1 foo-0.1.xpi
 	assertTrue "original xpi file does not exist" "[ -e $TMPDIR/foo-0.1.xpi ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"

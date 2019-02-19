@@ -12,7 +12,7 @@ sub ds_exec_no_fail {
         local $, = ' ';
         ds_verbose "Execute: @_...";
     }
-    run \@_;
+    run \@_, '>', '/dev/null';
     return $?;
 }
 
