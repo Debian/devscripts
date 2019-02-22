@@ -8,7 +8,8 @@ use Moo::Role;
 sub list_repos {
     my ($self, $match) = @_;
     my $projects;
-    my $opts = {
+    my $count = 0;
+    my $opts  = {
         order_by => 'name',
         sort     => 'asc',
         simple   => 1,
@@ -21,17 +22,18 @@ sub list_repos {
         $projects
           = $self->api->paginator('user_projects', $self->user_id, $opts);
     }
-    unless ($projects) {
-        ds_warn "No project found";
-        return 1;
-    }
     while ($_ = $projects->next) {
+        $count++;
         print <<END;
 Id  : $_->{id}
 Name: $_->{name}
 URL : $_->{web_url}
 
 END
+    }
+    unless ($count) {
+        ds_warn "No projects found";
+        return 1;
     }
     return 0;
 }
