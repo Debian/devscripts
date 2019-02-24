@@ -43,8 +43,10 @@ usage() {
     echo ""
     echo "Options:"
     echo ""
-    echo " -s,--skip VARIATION    Don't perform the named variation"
-    echo " -h,--help              Display this help message and exit"
+    echo " -b,--before-second-build COMMAND  Run COMMAND before second build"
+    echo "                                   (e.g. apply a patch)"
+    echo " -s,--skip VARIATION               Don't perform the named variation"
+    echo " -h,--help                         Display this help message and exit"
 }
 
 first_banner=y
