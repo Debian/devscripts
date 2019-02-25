@@ -4,6 +4,10 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   * debrepro:
     + include --before-second-build option in output of --help
 
+  [ Adam D. Barratt ]
+  * scripts/Makefile:
+    + fix building / testing of shell-based scripts.  Closes: #923271
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 19 Feb 2019 11:54:13 +0100
 
 devscripts (2.19.3) unstable; urgency=medium
