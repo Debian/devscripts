@@ -16,7 +16,7 @@ SH_FILES = $(wildcard *.sh)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 PL_CHECKS = $(patsubst %.pl,%.pl_check,$(PL_FILES))
-SH_CHECKS = $(patsubst %.pl,%.sh_check,$(SH_FILES))
+SH_CHECKS = $(patsubst %.sh,%.sh_check,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
 BC_BUILD_DIR:=bash_completion
 COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
@@ -56,6 +56,8 @@ scripts: $(SCRIPTS)
 
 $(VERSION_FILE):
 	$(MAKE) -C .. version
+
+%: %.sh
 
 debchange: debchange.pl $(VERSION_FILE)
 	cp $< $@
