@@ -8,6 +8,10 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   * scripts/Makefile:
     + fix building / testing of shell-based scripts.  Closes: #923271
 
+  [ Paul Wise ]
+  * chdist:
+    + Drop Dir::State::status as apt doesn't hard-code it since 1.3~pre3
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 19 Feb 2019 11:54:13 +0100
 
 devscripts (2.19.3) unstable; urgency=medium

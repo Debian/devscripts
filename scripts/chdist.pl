@@ -419,7 +419,6 @@ Apt {
 };
 
 Dir "$dir";
-Dir::State::status "$dir/var/lib/dpkg/status";
 EOF
     close FH;
 
