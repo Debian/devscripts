@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2019-02-28 18:01+0100\n"
-"PO-Revision-Date: 2019-02-18 06:42+0100\n"
+"PO-Revision-Date: 2019-02-28 18:11+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -20606,6 +20606,8 @@ msgid ""
 "You can clone more than one repository or all repositories of a group or a "
 "user:"
 msgstr ""
+"Il est possible de dupliquer plus d'un dépôt ou tous les dépôts d'un groupe "
+"ou d'un utilisateur :"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:157
@@ -20617,6 +20619,11 @@ msgid ""
 "  salsa co --all                           # All your repos\n"
 "\n"
 msgstr ""
+"  salsa --user yadd co devscripts autodep8\n"
+"  salsa co yadd/devscripts js-team/npm\n"
+"  salsa --group js-team co --all           # All js-team repos\n"
+"  salsa co --all                           # All your repos\n"
+"\n"
 
 #. type: =item
 #: ../scripts/salsa.pl:162
