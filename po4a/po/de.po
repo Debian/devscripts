@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2019-02-28 18:01+0100\n"
-"PO-Revision-Date: 2019-02-17 23:19+0100\n"
+"PO-Revision-Date: 2019-02-28 18:14+0100\n"
 "Last-Translator: Reiner Herrmann <reiner@reiner-h.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -20586,6 +20586,8 @@ msgid ""
 "You can clone more than one repository or all repositories of a group or a "
 "user:"
 msgstr ""
+"Um mehr als ein Depot oder alle Depots eines Benutzers oder einer Gruppe zu "
+"klonen:"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:157
@@ -20597,6 +20599,11 @@ msgid ""
 "  salsa co --all                           # All your repos\n"
 "\n"
 msgstr ""
+"  salsa --user yadd co devscripts autodep8\n"
+"  salsa co yadd/devscripts js-team/npm\n"
+"  salsa --group js-team co --all           # Alle Depots vom js-team\n"
+"  salsa co --all                           # Alle eigenen Depots\n"
+"\n"
 
 #. type: =item
 #: ../scripts/salsa.pl:162
