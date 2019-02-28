@@ -12,6 +12,10 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   * chdist:
     + Drop Dir::State::status as apt doesn't hard-code it since 1.3~pre3
 
+  [ Mattia Rizzolo ]
+  * Apply patch from Jakub Wilk to fix a weird spacing in devscripts(1).
+    Closes: #922975
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 19 Feb 2019 11:54:13 +0100
 
 devscripts (2.19.3) unstable; urgency=medium
