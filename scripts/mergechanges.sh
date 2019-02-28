@@ -293,9 +293,8 @@ elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
                     package="${file%%_*}"
 
                     if ! echo "$BINARY" | grep -q -x -F "$package"; then
-                        echo "Error: $package not found in Binary field" >&2
+                        echo "Warning: $package not found in Binary field" >&2
                         echo "$line" >&2
-                        exit 1
                     fi
 
                     if test ${REMOVE_INDEP} != 1; then
@@ -307,9 +306,8 @@ elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
                     package="${file%%_*}"
 
                     if ! echo "$BINARY" | grep -q -x -F "$package"; then
-                        echo "Error: $package not found in Binary field" >&2
+                        echo "Warning: $package not found in Binary field" >&2
                         echo "$line" >&2
-                        exit 1
                     fi
 
                     if test ${REMOVE_ARCHDEP} != 1; then
