@@ -7,17 +7,17 @@ use Moo::Role;
 
 sub merge_requests {
     my ($self, @reponames) = @_;
-    my $res = 0;
+    my $res = 1;
     unless (@reponames) {
         ds_warn "Repository name is missing";
         return 1;
     }
     foreach my $p (@reponames) {
-        my $id = $self->project2id($p);
+        my $id    = $self->project2id($p);
+        my $count = 0;
         unless ($id) {
             ds_warn "Project $_ not found";
-            $res++;
-            next;
+            return 1;
         }
         print "$p\n";
         my $mrs = $self->api->paginator(
@@ -26,11 +26,8 @@ sub merge_requests {
             {
                 state => 'opened',
             });
-        unless ($mrs) {
-            print "\n";
-            next;
-        }
         while ($_ = $mrs->next) {
+            $res = 0;
             my $status = $_->{work_in_progress} ? 'WIP' : $_->{merge_status};
             print <<END;
 \tId    : $_->{id}
@@ -40,6 +37,10 @@ sub merge_requests {
 \tUrl   : $_->{web_url}
 
 END
+        }
+        unless ($count) {
+            print "\n";
+            next;
         }
     }
     return $res;

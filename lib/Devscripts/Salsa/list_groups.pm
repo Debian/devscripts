@@ -8,7 +8,8 @@ use Moo::Role;
 sub list_groups {
     my ($self, $match) = @_;
     my $groups;
-    my $opts = {
+    my $count = 0;
+    my $opts  = {
         order_by => 'name',
         sort     => 'asc',
         ($match ? (search => $match) : ()),
@@ -19,18 +20,17 @@ sub list_groups {
     } else {
         $groups = $self->api->paginator('groups', $opts);
     }
-    eval {
-        while ($_ = $groups->next) {
-            my $parent = $_->{parent_id} ? "Parent id: $_->{parent_id}\n" : '';
-            print <<END;
+    while ($_ = $groups->next) {
+        $count++;
+        my $parent = $_->{parent_id} ? "Parent id: $_->{parent_id}\n" : '';
+        print <<END;
 Id       : $_->{id}
 Name     : $_->{name}
 Full path: $_->{full_path}
 $parent
 END
-        }
-    };
-    if ($@) {
+    }
+    unless ($count) {
         ds_warn "No groups found";
         return 1;
     }

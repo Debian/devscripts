@@ -17,6 +17,8 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
     Closes: #922975
 
   [ Xavier Guimard ]
+  * salsa:
+    + Return 1 when lists are empty.  MR: !110
   * uscan:
     + Fix bad check for "verbose" in Config.pm.  Closes: #923441; MR: !111
 
