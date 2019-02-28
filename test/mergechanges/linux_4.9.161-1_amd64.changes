@@ -1,0 +1,2016 @@
+Format: 1.8
+Date: Wed, 27 Feb 2019 22:21:01 +0100
+Source: linux
+Binary: linux-source-4.9 linux-support-4.9.0-9 linux-doc-4.9 linux-manual-4.9 linux-kbuild-4.9 linux-cpupower libcpupower1 libcpupower-dev linux-perf-4.9 libusbip-dev usbip hyperv-daemons linux-headers-4.9.0-9-common linux-headers-4.9.0-9-common-rt linux-libc-dev linux-headers-4.9.0-9-all linux-headers-4.9.0-9-all-alpha kernel-image-4.9.0-9-alpha-generic-di nic-modules-4.9.0-9-alpha-generic-di nic-wireless-modules-4.9.0-9-alpha-generic-di nic-shared-modules-4.9.0-9-alpha-generic-di serial-modules-4.9.0-9-alpha-generic-di usb-serial-modules-4.9.0-9-alpha-generic-di ppp-modules-4.9.0-9-alpha-generic-di pata-modules-4.9.0-9-alpha-generic-di cdrom-core-modules-4.9.0-9-alpha-generic-di scsi-core-modules-4.9.0-9-alpha-generic-di scsi-modules-4.9.0-9-alpha-generic-di loop-modules-4.9.0-9-alpha-generic-di btrfs-modules-4.9.0-9-alpha-generic-di ext4-modules-4.9.0-9-alpha-generic-di isofs-modules-4.9.0-9-alpha-generic-di jfs-modules-4.9.0-9-alpha-generic-di
+ xfs-modules-4.9.0-9-alpha-generic-di fat-modules-4.9.0-9-alpha-generic-di md-modules-4.9.0-9-alpha-generic-di multipath-modules-4.9.0-9-alpha-generic-di usb-modules-4.9.0-9-alpha-generic-di usb-storage-modules-4.9.0-9-alpha-generic-di fb-modules-4.9.0-9-alpha-generic-di input-modules-4.9.0-9-alpha-generic-di event-modules-4.9.0-9-alpha-generic-di mouse-modules-4.9.0-9-alpha-generic-di nic-pcmcia-modules-4.9.0-9-alpha-generic-di pcmcia-modules-4.9.0-9-alpha-generic-di nic-usb-modules-4.9.0-9-alpha-generic-di sata-modules-4.9.0-9-alpha-generic-di crc-modules-4.9.0-9-alpha-generic-di crypto-modules-4.9.0-9-alpha-generic-di crypto-dm-modules-4.9.0-9-alpha-generic-di ata-modules-4.9.0-9-alpha-generic-di nbd-modules-4.9.0-9-alpha-generic-di squashfs-modules-4.9.0-9-alpha-generic-di virtio-modules-4.9.0-9-alpha-generic-di zlib-modules-4.9.0-9-alpha-generic-di fuse-modules-4.9.0-9-alpha-generic-di srm-modules-4.9.0-9-alpha-generic-di linux-image-4.9.0-9-alpha-generic
+ linux-headers-4.9.0-9-alpha-generic linux-image-4.9.0-9-alpha-generic-dbg linux-image-4.9.0-9-alpha-smp linux-headers-4.9.0-9-alpha-smp linux-image-4.9.0-9-alpha-smp-dbg linux-headers-4.9.0-9-all-amd64 kernel-image-4.9.0-9-amd64-di nic-modules-4.9.0-9-amd64-di nic-wireless-modules-4.9.0-9-amd64-di nic-shared-modules-4.9.0-9-amd64-di serial-modules-4.9.0-9-amd64-di usb-serial-modules-4.9.0-9-amd64-di ppp-modules-4.9.0-9-amd64-di pata-modules-4.9.0-9-amd64-di cdrom-core-modules-4.9.0-9-amd64-di firewire-core-modules-4.9.0-9-amd64-di scsi-core-modules-4.9.0-9-amd64-di scsi-modules-4.9.0-9-amd64-di loop-modules-4.9.0-9-amd64-di btrfs-modules-4.9.0-9-amd64-di ext4-modules-4.9.0-9-amd64-di isofs-modules-4.9.0-9-amd64-di jfs-modules-4.9.0-9-amd64-di ntfs-modules-4.9.0-9-amd64-di xfs-modules-4.9.0-9-amd64-di fat-modules-4.9.0-9-amd64-di md-modules-4.9.0-9-amd64-di multipath-modules-4.9.0-9-amd64-di usb-modules-4.9.0-9-amd64-di usb-storage-modules-4.9.0-9-amd64-di
+ pcmcia-storage-modules-4.9.0-9-amd64-di fb-modules-4.9.0-9-amd64-di input-modules-4.9.0-9-amd64-di event-modules-4.9.0-9-amd64-di mouse-modules-4.9.0-9-amd64-di nic-pcmcia-modules-4.9.0-9-amd64-di pcmcia-modules-4.9.0-9-amd64-di nic-usb-modules-4.9.0-9-amd64-di sata-modules-4.9.0-9-amd64-di acpi-modules-4.9.0-9-amd64-di i2c-modules-4.9.0-9-amd64-di crc-modules-4.9.0-9-amd64-di crypto-modules-4.9.0-9-amd64-di crypto-dm-modules-4.9.0-9-amd64-di efi-modules-4.9.0-9-amd64-di ata-modules-4.9.0-9-amd64-di mmc-core-modules-4.9.0-9-amd64-di mmc-modules-4.9.0-9-amd64-di nbd-modules-4.9.0-9-amd64-di squashfs-modules-4.9.0-9-amd64-di speakup-modules-4.9.0-9-amd64-di virtio-modules-4.9.0-9-amd64-di uinput-modules-4.9.0-9-amd64-di sound-modules-4.9.0-9-amd64-di hyperv-modules-4.9.0-9-amd64-di udf-modules-4.9.0-9-amd64-di fuse-modules-4.9.0-9-amd64-di linux-image-4.9.0-9-amd64 linux-headers-4.9.0-9-amd64 linux-image-4.9.0-9-amd64-dbg linux-image-4.9.0-9-rt-amd64
+ linux-headers-4.9.0-9-rt-amd64 linux-image-4.9.0-9-rt-amd64-dbg linux-headers-4.9.0-9-all-arm64 kernel-image-4.9.0-9-arm64-di nic-modules-4.9.0-9-arm64-di nic-wireless-modules-4.9.0-9-arm64-di nic-shared-modules-4.9.0-9-arm64-di ppp-modules-4.9.0-9-arm64-di cdrom-core-modules-4.9.0-9-arm64-di scsi-core-modules-4.9.0-9-arm64-di scsi-modules-4.9.0-9-arm64-di loop-modules-4.9.0-9-arm64-di btrfs-modules-4.9.0-9-arm64-di ext4-modules-4.9.0-9-arm64-di isofs-modules-4.9.0-9-arm64-di jfs-modules-4.9.0-9-arm64-di xfs-modules-4.9.0-9-arm64-di fat-modules-4.9.0-9-arm64-di md-modules-4.9.0-9-arm64-di multipath-modules-4.9.0-9-arm64-di usb-modules-4.9.0-9-arm64-di usb-storage-modules-4.9.0-9-arm64-di fb-modules-4.9.0-9-arm64-di input-modules-4.9.0-9-arm64-di event-modules-4.9.0-9-arm64-di nic-usb-modules-4.9.0-9-arm64-di sata-modules-4.9.0-9-arm64-di i2c-modules-4.9.0-9-arm64-di crc-modules-4.9.0-9-arm64-di crypto-modules-4.9.0-9-arm64-di crypto-dm-modules-4.9.0-9-arm64-di
+ efi-modules-4.9.0-9-arm64-di ata-modules-4.9.0-9-arm64-di mmc-modules-4.9.0-9-arm64-di nbd-modules-4.9.0-9-arm64-di squashfs-modules-4.9.0-9-arm64-di virtio-modules-4.9.0-9-arm64-di uinput-modules-4.9.0-9-arm64-di leds-modules-4.9.0-9-arm64-di udf-modules-4.9.0-9-arm64-di fuse-modules-4.9.0-9-arm64-di linux-image-4.9.0-9-arm64 linux-headers-4.9.0-9-arm64 linux-image-4.9.0-9-arm64-dbg linux-headers-4.9.0-9-all-armel kernel-image-4.9.0-9-marvell-di nic-modules-4.9.0-9-marvell-di nic-shared-modules-4.9.0-9-marvell-di usb-serial-modules-4.9.0-9-marvell-di ppp-modules-4.9.0-9-marvell-di cdrom-core-modules-4.9.0-9-marvell-di scsi-core-modules-4.9.0-9-marvell-di loop-modules-4.9.0-9-marvell-di ipv6-modules-4.9.0-9-marvell-di btrfs-modules-4.9.0-9-marvell-di ext4-modules-4.9.0-9-marvell-di isofs-modules-4.9.0-9-marvell-di jffs2-modules-4.9.0-9-marvell-di jfs-modules-4.9.0-9-marvell-di fat-modules-4.9.0-9-marvell-di minix-modules-4.9.0-9-marvell-di
+ md-modules-4.9.0-9-marvell-di multipath-modules-4.9.0-9-marvell-di usb-modules-4.9.0-9-marvell-di usb-storage-modules-4.9.0-9-marvell-di fb-modules-4.9.0-9-marvell-di input-modules-4.9.0-9-marvell-di event-modules-4.9.0-9-marvell-di mouse-modules-4.9.0-9-marvell-di nic-usb-modules-4.9.0-9-marvell-di sata-modules-4.9.0-9-marvell-di crc-modules-4.9.0-9-marvell-di crypto-modules-4.9.0-9-marvell-di crypto-dm-modules-4.9.0-9-marvell-di mmc-modules-4.9.0-9-marvell-di nbd-modules-4.9.0-9-marvell-di squashfs-modules-4.9.0-9-marvell-di uinput-modules-4.9.0-9-marvell-di zlib-modules-4.9.0-9-marvell-di leds-modules-4.9.0-9-marvell-di udf-modules-4.9.0-9-marvell-di fuse-modules-4.9.0-9-marvell-di mtd-modules-4.9.0-9-marvell-di linux-image-4.9.0-9-marvell linux-headers-4.9.0-9-marvell linux-image-4.9.0-9-marvell-dbg linux-headers-4.9.0-9-all-armhf kernel-image-4.9.0-9-armmp-di nic-modules-4.9.0-9-armmp-di nic-wireless-modules-4.9.0-9-armmp-di nic-shared-modules-4.9.0-9-armmp-di
+ ppp-modules-4.9.0-9-armmp-di pata-modules-4.9.0-9-armmp-di scsi-core-modules-4.9.0-9-armmp-di scsi-modules-4.9.0-9-armmp-di loop-modules-4.9.0-9-armmp-di btrfs-modules-4.9.0-9-armmp-di ext4-modules-4.9.0-9-armmp-di isofs-modules-4.9.0-9-armmp-di jfs-modules-4.9.0-9-armmp-di fat-modules-4.9.0-9-armmp-di md-modules-4.9.0-9-armmp-di multipath-modules-4.9.0-9-armmp-di usb-modules-4.9.0-9-armmp-di usb-storage-modules-4.9.0-9-armmp-di fb-modules-4.9.0-9-armmp-di input-modules-4.9.0-9-armmp-di event-modules-4.9.0-9-armmp-di nic-usb-modules-4.9.0-9-armmp-di sata-modules-4.9.0-9-armmp-di i2c-modules-4.9.0-9-armmp-di crc-modules-4.9.0-9-armmp-di crypto-modules-4.9.0-9-armmp-di crypto-dm-modules-4.9.0-9-armmp-di efi-modules-4.9.0-9-armmp-di ata-modules-4.9.0-9-armmp-di mmc-modules-4.9.0-9-armmp-di nbd-modules-4.9.0-9-armmp-di squashfs-modules-4.9.0-9-armmp-di virtio-modules-4.9.0-9-armmp-di uinput-modules-4.9.0-9-armmp-di zlib-modules-4.9.0-9-armmp-di
+ leds-modules-4.9.0-9-armmp-di udf-modules-4.9.0-9-armmp-di fuse-modules-4.9.0-9-armmp-di mtd-modules-4.9.0-9-armmp-di linux-image-4.9.0-9-armmp linux-headers-4.9.0-9-armmp linux-image-4.9.0-9-armmp-dbg linux-image-4.9.0-9-armmp-lpae linux-headers-4.9.0-9-armmp-lpae linux-image-4.9.0-9-armmp-lpae-dbg linux-headers-4.9.0-9-all-hppa kernel-image-4.9.0-9-parisc-di nic-modules-4.9.0-9-parisc-di nic-shared-modules-4.9.0-9-parisc-di serial-modules-4.9.0-9-parisc-di usb-serial-modules-4.9.0-9-parisc-di ppp-modules-4.9.0-9-parisc-di pata-modules-4.9.0-9-parisc-di cdrom-core-modules-4.9.0-9-parisc-di scsi-core-modules-4.9.0-9-parisc-di scsi-modules-4.9.0-9-parisc-di loop-modules-4.9.0-9-parisc-di btrfs-modules-4.9.0-9-parisc-di ext4-modules-4.9.0-9-parisc-di isofs-modules-4.9.0-9-parisc-di jfs-modules-4.9.0-9-parisc-di xfs-modules-4.9.0-9-parisc-di fat-modules-4.9.0-9-parisc-di md-modules-4.9.0-9-parisc-di multipath-modules-4.9.0-9-parisc-di usb-modules-4.9.0-9-parisc-di
+ usb-storage-modules-4.9.0-9-parisc-di input-modules-4.9.0-9-parisc-di event-modules-4.9.0-9-parisc-di mouse-modules-4.9.0-9-parisc-di nic-usb-modules-4.9.0-9-parisc-di sata-modules-4.9.0-9-parisc-di crc-modules-4.9.0-9-parisc-di crypto-modules-4.9.0-9-parisc-di crypto-dm-modules-4.9.0-9-parisc-di ata-modules-4.9.0-9-parisc-di nbd-modules-4.9.0-9-parisc-di squashfs-modules-4.9.0-9-parisc-di virtio-modules-4.9.0-9-parisc-di zlib-modules-4.9.0-9-parisc-di fuse-modules-4.9.0-9-parisc-di kernel-image-4.9.0-9-parisc64-smp-di nic-modules-4.9.0-9-parisc64-smp-di nic-shared-modules-4.9.0-9-parisc64-smp-di serial-modules-4.9.0-9-parisc64-smp-di usb-serial-modules-4.9.0-9-parisc64-smp-di ppp-modules-4.9.0-9-parisc64-smp-di pata-modules-4.9.0-9-parisc64-smp-di cdrom-core-modules-4.9.0-9-parisc64-smp-di scsi-core-modules-4.9.0-9-parisc64-smp-di scsi-modules-4.9.0-9-parisc64-smp-di loop-modules-4.9.0-9-parisc64-smp-di btrfs-modules-4.9.0-9-parisc64-smp-di
+ ext4-modules-4.9.0-9-parisc64-smp-di isofs-modules-4.9.0-9-parisc64-smp-di jfs-modules-4.9.0-9-parisc64-smp-di xfs-modules-4.9.0-9-parisc64-smp-di fat-modules-4.9.0-9-parisc64-smp-di md-modules-4.9.0-9-parisc64-smp-di multipath-modules-4.9.0-9-parisc64-smp-di usb-modules-4.9.0-9-parisc64-smp-di usb-storage-modules-4.9.0-9-parisc64-smp-di fb-modules-4.9.0-9-parisc64-smp-di input-modules-4.9.0-9-parisc64-smp-di event-modules-4.9.0-9-parisc64-smp-di mouse-modules-4.9.0-9-parisc64-smp-di nic-usb-modules-4.9.0-9-parisc64-smp-di sata-modules-4.9.0-9-parisc64-smp-di crc-modules-4.9.0-9-parisc64-smp-di crypto-modules-4.9.0-9-parisc64-smp-di crypto-dm-modules-4.9.0-9-parisc64-smp-di ata-modules-4.9.0-9-parisc64-smp-di nbd-modules-4.9.0-9-parisc64-smp-di squashfs-modules-4.9.0-9-parisc64-smp-di virtio-modules-4.9.0-9-parisc64-smp-di zlib-modules-4.9.0-9-parisc64-smp-di fuse-modules-4.9.0-9-parisc64-smp-di linux-image-4.9.0-9-parisc linux-headers-4.9.0-9-parisc
+ linux-image-4.9.0-9-parisc-dbg linux-image-4.9.0-9-parisc64-smp linux-headers-4.9.0-9-parisc64-smp linux-image-4.9.0-9-parisc64-smp-dbg linux-headers-4.9.0-9-all-i386 kernel-image-4.9.0-9-686-di nic-modules-4.9.0-9-686-di nic-wireless-modules-4.9.0-9-686-di nic-shared-modules-4.9.0-9-686-di serial-modules-4.9.0-9-686-di usb-serial-modules-4.9.0-9-686-di ppp-modules-4.9.0-9-686-di pata-modules-4.9.0-9-686-di cdrom-core-modules-4.9.0-9-686-di firewire-core-modules-4.9.0-9-686-di scsi-core-modules-4.9.0-9-686-di scsi-modules-4.9.0-9-686-di loop-modules-4.9.0-9-686-di btrfs-modules-4.9.0-9-686-di ext4-modules-4.9.0-9-686-di isofs-modules-4.9.0-9-686-di jfs-modules-4.9.0-9-686-di ntfs-modules-4.9.0-9-686-di xfs-modules-4.9.0-9-686-di fat-modules-4.9.0-9-686-di md-modules-4.9.0-9-686-di multipath-modules-4.9.0-9-686-di usb-modules-4.9.0-9-686-di usb-storage-modules-4.9.0-9-686-di pcmcia-storage-modules-4.9.0-9-686-di fb-modules-4.9.0-9-686-di input-modules-4.9.0-9-686-di
+ event-modules-4.9.0-9-686-di mouse-modules-4.9.0-9-686-di nic-pcmcia-modules-4.9.0-9-686-di pcmcia-modules-4.9.0-9-686-di nic-usb-modules-4.9.0-9-686-di sata-modules-4.9.0-9-686-di acpi-modules-4.9.0-9-686-di i2c-modules-4.9.0-9-686-di crc-modules-4.9.0-9-686-di crypto-modules-4.9.0-9-686-di crypto-dm-modules-4.9.0-9-686-di efi-modules-4.9.0-9-686-di ata-modules-4.9.0-9-686-di mmc-core-modules-4.9.0-9-686-di mmc-modules-4.9.0-9-686-di nbd-modules-4.9.0-9-686-di squashfs-modules-4.9.0-9-686-di speakup-modules-4.9.0-9-686-di virtio-modules-4.9.0-9-686-di uinput-modules-4.9.0-9-686-di sound-modules-4.9.0-9-686-di hyperv-modules-4.9.0-9-686-di udf-modules-4.9.0-9-686-di fuse-modules-4.9.0-9-686-di kernel-image-4.9.0-9-686-pae-di nic-modules-4.9.0-9-686-pae-di nic-wireless-modules-4.9.0-9-686-pae-di nic-shared-modules-4.9.0-9-686-pae-di serial-modules-4.9.0-9-686-pae-di usb-serial-modules-4.9.0-9-686-pae-di ppp-modules-4.9.0-9-686-pae-di pata-modules-4.9.0-9-686-pae-di
+ cdrom-core-modules-4.9.0-9-686-pae-di firewire-core-modules-4.9.0-9-686-pae-di scsi-core-modules-4.9.0-9-686-pae-di scsi-modules-4.9.0-9-686-pae-di loop-modules-4.9.0-9-686-pae-di btrfs-modules-4.9.0-9-686-pae-di ext4-modules-4.9.0-9-686-pae-di isofs-modules-4.9.0-9-686-pae-di jfs-modules-4.9.0-9-686-pae-di ntfs-modules-4.9.0-9-686-pae-di xfs-modules-4.9.0-9-686-pae-di fat-modules-4.9.0-9-686-pae-di md-modules-4.9.0-9-686-pae-di multipath-modules-4.9.0-9-686-pae-di usb-modules-4.9.0-9-686-pae-di usb-storage-modules-4.9.0-9-686-pae-di pcmcia-storage-modules-4.9.0-9-686-pae-di fb-modules-4.9.0-9-686-pae-di input-modules-4.9.0-9-686-pae-di event-modules-4.9.0-9-686-pae-di mouse-modules-4.9.0-9-686-pae-di nic-pcmcia-modules-4.9.0-9-686-pae-di pcmcia-modules-4.9.0-9-686-pae-di nic-usb-modules-4.9.0-9-686-pae-di sata-modules-4.9.0-9-686-pae-di acpi-modules-4.9.0-9-686-pae-di i2c-modules-4.9.0-9-686-pae-di crc-modules-4.9.0-9-686-pae-di crypto-modules-4.9.0-9-686-pae-di
+ crypto-dm-modules-4.9.0-9-686-pae-di efi-modules-4.9.0-9-686-pae-di ata-modules-4.9.0-9-686-pae-di mmc-core-modules-4.9.0-9-686-pae-di mmc-modules-4.9.0-9-686-pae-di nbd-modules-4.9.0-9-686-pae-di squashfs-modules-4.9.0-9-686-pae-di speakup-modules-4.9.0-9-686-pae-di virtio-modules-4.9.0-9-686-pae-di uinput-modules-4.9.0-9-686-pae-di sound-modules-4.9.0-9-686-pae-di hyperv-modules-4.9.0-9-686-pae-di udf-modules-4.9.0-9-686-pae-di fuse-modules-4.9.0-9-686-pae-di linux-image-4.9.0-9-686 linux-headers-4.9.0-9-686 linux-image-4.9.0-9-686-dbg linux-image-4.9.0-9-686-pae linux-headers-4.9.0-9-686-pae linux-image-4.9.0-9-686-pae-dbg linux-image-4.9.0-9-rt-686-pae linux-headers-4.9.0-9-rt-686-pae linux-image-4.9.0-9-rt-686-pae-dbg linux-headers-4.9.0-9-all-m68k kernel-image-4.9.0-9-m68k-di nic-shared-modules-4.9.0-9-m68k-di ppp-modules-4.9.0-9-m68k-di cdrom-core-modules-4.9.0-9-m68k-di scsi-modules-4.9.0-9-m68k-di loop-modules-4.9.0-9-m68k-di btrfs-modules-4.9.0-9-m68k-di
+ ext4-modules-4.9.0-9-m68k-di isofs-modules-4.9.0-9-m68k-di fat-modules-4.9.0-9-m68k-di md-modules-4.9.0-9-m68k-di crc-modules-4.9.0-9-m68k-di crypto-modules-4.9.0-9-m68k-di nbd-modules-4.9.0-9-m68k-di squashfs-modules-4.9.0-9-m68k-di zlib-modules-4.9.0-9-m68k-di udf-modules-4.9.0-9-m68k-di fuse-modules-4.9.0-9-m68k-di linux-image-4.9.0-9-m68k linux-headers-4.9.0-9-m68k linux-image-4.9.0-9-m68k-dbg linux-headers-4.9.0-9-all-mips kernel-image-4.9.0-9-4kc-malta-di nic-modules-4.9.0-9-4kc-malta-di nic-wireless-modules-4.9.0-9-4kc-malta-di nic-shared-modules-4.9.0-9-4kc-malta-di usb-serial-modules-4.9.0-9-4kc-malta-di ppp-modules-4.9.0-9-4kc-malta-di pata-modules-4.9.0-9-4kc-malta-di cdrom-core-modules-4.9.0-9-4kc-malta-di scsi-core-modules-4.9.0-9-4kc-malta-di scsi-modules-4.9.0-9-4kc-malta-di loop-modules-4.9.0-9-4kc-malta-di btrfs-modules-4.9.0-9-4kc-malta-di ext4-modules-4.9.0-9-4kc-malta-di isofs-modules-4.9.0-9-4kc-malta-di jfs-modules-4.9.0-9-4kc-malta-di
+ ntfs-modules-4.9.0-9-4kc-malta-di xfs-modules-4.9.0-9-4kc-malta-di fat-modules-4.9.0-9-4kc-malta-di hfs-modules-4.9.0-9-4kc-malta-di affs-modules-4.9.0-9-4kc-malta-di minix-modules-4.9.0-9-4kc-malta-di md-modules-4.9.0-9-4kc-malta-di multipath-modules-4.9.0-9-4kc-malta-di usb-modules-4.9.0-9-4kc-malta-di usb-storage-modules-4.9.0-9-4kc-malta-di input-modules-4.9.0-9-4kc-malta-di event-modules-4.9.0-9-4kc-malta-di mouse-modules-4.9.0-9-4kc-malta-di nic-usb-modules-4.9.0-9-4kc-malta-di sata-modules-4.9.0-9-4kc-malta-di i2c-modules-4.9.0-9-4kc-malta-di crc-modules-4.9.0-9-4kc-malta-di crypto-modules-4.9.0-9-4kc-malta-di crypto-dm-modules-4.9.0-9-4kc-malta-di ata-modules-4.9.0-9-4kc-malta-di mmc-core-modules-4.9.0-9-4kc-malta-di mmc-modules-4.9.0-9-4kc-malta-di nbd-modules-4.9.0-9-4kc-malta-di squashfs-modules-4.9.0-9-4kc-malta-di virtio-modules-4.9.0-9-4kc-malta-di sound-modules-4.9.0-9-4kc-malta-di zlib-modules-4.9.0-9-4kc-malta-di udf-modules-4.9.0-9-4kc-malta-di
+ fuse-modules-4.9.0-9-4kc-malta-di kernel-image-4.9.0-9-octeon-di nic-modules-4.9.0-9-octeon-di nic-wireless-modules-4.9.0-9-octeon-di nic-shared-modules-4.9.0-9-octeon-di usb-serial-modules-4.9.0-9-octeon-di ppp-modules-4.9.0-9-octeon-di pata-modules-4.9.0-9-octeon-di cdrom-core-modules-4.9.0-9-octeon-di scsi-core-modules-4.9.0-9-octeon-di scsi-modules-4.9.0-9-octeon-di loop-modules-4.9.0-9-octeon-di btrfs-modules-4.9.0-9-octeon-di ext4-modules-4.9.0-9-octeon-di isofs-modules-4.9.0-9-octeon-di jfs-modules-4.9.0-9-octeon-di ntfs-modules-4.9.0-9-octeon-di xfs-modules-4.9.0-9-octeon-di fat-modules-4.9.0-9-octeon-di hfs-modules-4.9.0-9-octeon-di affs-modules-4.9.0-9-octeon-di minix-modules-4.9.0-9-octeon-di md-modules-4.9.0-9-octeon-di multipath-modules-4.9.0-9-octeon-di usb-modules-4.9.0-9-octeon-di usb-storage-modules-4.9.0-9-octeon-di input-modules-4.9.0-9-octeon-di event-modules-4.9.0-9-octeon-di nic-usb-modules-4.9.0-9-octeon-di sata-modules-4.9.0-9-octeon-di
+ crc-modules-4.9.0-9-octeon-di crypto-modules-4.9.0-9-octeon-di crypto-dm-modules-4.9.0-9-octeon-di nbd-modules-4.9.0-9-octeon-di squashfs-modules-4.9.0-9-octeon-di rtc-modules-4.9.0-9-octeon-di virtio-modules-4.9.0-9-octeon-di sound-modules-4.9.0-9-octeon-di zlib-modules-4.9.0-9-octeon-di udf-modules-4.9.0-9-octeon-di fuse-modules-4.9.0-9-octeon-di linux-image-4.9.0-9-4kc-malta linux-headers-4.9.0-9-4kc-malta linux-image-4.9.0-9-4kc-malta-dbg linux-image-4.9.0-9-5kc-malta linux-headers-4.9.0-9-5kc-malta linux-image-4.9.0-9-5kc-malta-dbg linux-image-4.9.0-9-octeon linux-headers-4.9.0-9-octeon linux-image-4.9.0-9-octeon-dbg linux-headers-4.9.0-9-all-mipsel kernel-image-4.9.0-9-loongson-3-di nic-modules-4.9.0-9-loongson-3-di nic-wireless-modules-4.9.0-9-loongson-3-di nic-shared-modules-4.9.0-9-loongson-3-di usb-serial-modules-4.9.0-9-loongson-3-di ppp-modules-4.9.0-9-loongson-3-di pata-modules-4.9.0-9-loongson-3-di cdrom-core-modules-4.9.0-9-loongson-3-di
+ firewire-core-modules-4.9.0-9-loongson-3-di scsi-core-modules-4.9.0-9-loongson-3-di scsi-modules-4.9.0-9-loongson-3-di loop-modules-4.9.0-9-loongson-3-di btrfs-modules-4.9.0-9-loongson-3-di ext4-modules-4.9.0-9-loongson-3-di isofs-modules-4.9.0-9-loongson-3-di jfs-modules-4.9.0-9-loongson-3-di ntfs-modules-4.9.0-9-loongson-3-di xfs-modules-4.9.0-9-loongson-3-di fat-modules-4.9.0-9-loongson-3-di hfs-modules-4.9.0-9-loongson-3-di affs-modules-4.9.0-9-loongson-3-di minix-modules-4.9.0-9-loongson-3-di nfs-modules-4.9.0-9-loongson-3-di md-modules-4.9.0-9-loongson-3-di multipath-modules-4.9.0-9-loongson-3-di usb-modules-4.9.0-9-loongson-3-di usb-storage-modules-4.9.0-9-loongson-3-di fb-modules-4.9.0-9-loongson-3-di input-modules-4.9.0-9-loongson-3-di event-modules-4.9.0-9-loongson-3-di nic-usb-modules-4.9.0-9-loongson-3-di sata-modules-4.9.0-9-loongson-3-di crc-modules-4.9.0-9-loongson-3-di crypto-modules-4.9.0-9-loongson-3-di crypto-dm-modules-4.9.0-9-loongson-3-di
+ ata-modules-4.9.0-9-loongson-3-di nbd-modules-4.9.0-9-loongson-3-di squashfs-modules-4.9.0-9-loongson-3-di speakup-modules-4.9.0-9-loongson-3-di virtio-modules-4.9.0-9-loongson-3-di sound-modules-4.9.0-9-loongson-3-di zlib-modules-4.9.0-9-loongson-3-di udf-modules-4.9.0-9-loongson-3-di fuse-modules-4.9.0-9-loongson-3-di linux-image-4.9.0-9-loongson-3 linux-headers-4.9.0-9-loongson-3 linux-image-4.9.0-9-loongson-3-dbg linux-headers-4.9.0-9-all-mips64 kernel-image-4.9.0-9-5kc-malta-di nic-modules-4.9.0-9-5kc-malta-di nic-wireless-modules-4.9.0-9-5kc-malta-di nic-shared-modules-4.9.0-9-5kc-malta-di usb-serial-modules-4.9.0-9-5kc-malta-di ppp-modules-4.9.0-9-5kc-malta-di pata-modules-4.9.0-9-5kc-malta-di cdrom-core-modules-4.9.0-9-5kc-malta-di scsi-core-modules-4.9.0-9-5kc-malta-di scsi-modules-4.9.0-9-5kc-malta-di loop-modules-4.9.0-9-5kc-malta-di btrfs-modules-4.9.0-9-5kc-malta-di ext4-modules-4.9.0-9-5kc-malta-di isofs-modules-4.9.0-9-5kc-malta-di
+ jfs-modules-4.9.0-9-5kc-malta-di ntfs-modules-4.9.0-9-5kc-malta-di xfs-modules-4.9.0-9-5kc-malta-di fat-modules-4.9.0-9-5kc-malta-di hfs-modules-4.9.0-9-5kc-malta-di affs-modules-4.9.0-9-5kc-malta-di minix-modules-4.9.0-9-5kc-malta-di md-modules-4.9.0-9-5kc-malta-di multipath-modules-4.9.0-9-5kc-malta-di usb-modules-4.9.0-9-5kc-malta-di usb-storage-modules-4.9.0-9-5kc-malta-di input-modules-4.9.0-9-5kc-malta-di event-modules-4.9.0-9-5kc-malta-di mouse-modules-4.9.0-9-5kc-malta-di nic-usb-modules-4.9.0-9-5kc-malta-di sata-modules-4.9.0-9-5kc-malta-di i2c-modules-4.9.0-9-5kc-malta-di crc-modules-4.9.0-9-5kc-malta-di crypto-modules-4.9.0-9-5kc-malta-di crypto-dm-modules-4.9.0-9-5kc-malta-di ata-modules-4.9.0-9-5kc-malta-di mmc-core-modules-4.9.0-9-5kc-malta-di mmc-modules-4.9.0-9-5kc-malta-di nbd-modules-4.9.0-9-5kc-malta-di squashfs-modules-4.9.0-9-5kc-malta-di virtio-modules-4.9.0-9-5kc-malta-di sound-modules-4.9.0-9-5kc-malta-di zlib-modules-4.9.0-9-5kc-malta-di
+ udf-modules-4.9.0-9-5kc-malta-di fuse-modules-4.9.0-9-5kc-malta-di linux-headers-4.9.0-9-all-mips64el linux-headers-4.9.0-9-all-powerpc kernel-image-4.9.0-9-powerpc-di nic-modules-4.9.0-9-powerpc-di nic-shared-modules-4.9.0-9-powerpc-di serial-modules-4.9.0-9-powerpc-di usb-serial-modules-4.9.0-9-powerpc-di ppp-modules-4.9.0-9-powerpc-di pata-modules-4.9.0-9-powerpc-di cdrom-core-modules-4.9.0-9-powerpc-di firewire-core-modules-4.9.0-9-powerpc-di scsi-core-modules-4.9.0-9-powerpc-di scsi-modules-4.9.0-9-powerpc-di loop-modules-4.9.0-9-powerpc-di btrfs-modules-4.9.0-9-powerpc-di ext4-modules-4.9.0-9-powerpc-di isofs-modules-4.9.0-9-powerpc-di jfs-modules-4.9.0-9-powerpc-di xfs-modules-4.9.0-9-powerpc-di fat-modules-4.9.0-9-powerpc-di hfs-modules-4.9.0-9-powerpc-di affs-modules-4.9.0-9-powerpc-di md-modules-4.9.0-9-powerpc-di multipath-modules-4.9.0-9-powerpc-di usb-modules-4.9.0-9-powerpc-di usb-storage-modules-4.9.0-9-powerpc-di
+ pcmcia-storage-modules-4.9.0-9-powerpc-di fb-modules-4.9.0-9-powerpc-di input-modules-4.9.0-9-powerpc-di event-modules-4.9.0-9-powerpc-di mouse-modules-4.9.0-9-powerpc-di nic-pcmcia-modules-4.9.0-9-powerpc-di pcmcia-modules-4.9.0-9-powerpc-di sata-modules-4.9.0-9-powerpc-di crc-modules-4.9.0-9-powerpc-di crypto-modules-4.9.0-9-powerpc-di crypto-dm-modules-4.9.0-9-powerpc-di ata-modules-4.9.0-9-powerpc-di nbd-modules-4.9.0-9-powerpc-di squashfs-modules-4.9.0-9-powerpc-di virtio-modules-4.9.0-9-powerpc-di uinput-modules-4.9.0-9-powerpc-di zlib-modules-4.9.0-9-powerpc-di udf-modules-4.9.0-9-powerpc-di fuse-modules-4.9.0-9-powerpc-di kernel-image-4.9.0-9-powerpc64-di nic-modules-4.9.0-9-powerpc64-di nic-shared-modules-4.9.0-9-powerpc64-di serial-modules-4.9.0-9-powerpc64-di usb-serial-modules-4.9.0-9-powerpc64-di ppp-modules-4.9.0-9-powerpc64-di pata-modules-4.9.0-9-powerpc64-di cdrom-core-modules-4.9.0-9-powerpc64-di firewire-core-modules-4.9.0-9-powerpc64-di
+ scsi-core-modules-4.9.0-9-powerpc64-di scsi-modules-4.9.0-9-powerpc64-di loop-modules-4.9.0-9-powerpc64-di btrfs-modules-4.9.0-9-powerpc64-di ext4-modules-4.9.0-9-powerpc64-di isofs-modules-4.9.0-9-powerpc64-di jfs-modules-4.9.0-9-powerpc64-di xfs-modules-4.9.0-9-powerpc64-di fat-modules-4.9.0-9-powerpc64-di hfs-modules-4.9.0-9-powerpc64-di affs-modules-4.9.0-9-powerpc64-di md-modules-4.9.0-9-powerpc64-di multipath-modules-4.9.0-9-powerpc64-di usb-modules-4.9.0-9-powerpc64-di usb-storage-modules-4.9.0-9-powerpc64-di pcmcia-storage-modules-4.9.0-9-powerpc64-di input-modules-4.9.0-9-powerpc64-di event-modules-4.9.0-9-powerpc64-di mouse-modules-4.9.0-9-powerpc64-di nic-pcmcia-modules-4.9.0-9-powerpc64-di pcmcia-modules-4.9.0-9-powerpc64-di sata-modules-4.9.0-9-powerpc64-di crc-modules-4.9.0-9-powerpc64-di crypto-modules-4.9.0-9-powerpc64-di crypto-dm-modules-4.9.0-9-powerpc64-di ata-modules-4.9.0-9-powerpc64-di nbd-modules-4.9.0-9-powerpc64-di
+ squashfs-modules-4.9.0-9-powerpc64-di virtio-modules-4.9.0-9-powerpc64-di uinput-modules-4.9.0-9-powerpc64-di udf-modules-4.9.0-9-powerpc64-di fuse-modules-4.9.0-9-powerpc64-di hypervisor-modules-4.9.0-9-powerpc64-di fancontrol-modules-4.9.0-9-powerpc64-di linux-image-4.9.0-9-powerpc linux-headers-4.9.0-9-powerpc linux-image-4.9.0-9-powerpc-dbg linux-image-4.9.0-9-powerpc-smp linux-headers-4.9.0-9-powerpc-smp linux-image-4.9.0-9-powerpc-smp-dbg linux-image-4.9.0-9-powerpc64 linux-headers-4.9.0-9-powerpc64 linux-image-4.9.0-9-powerpc64-dbg linux-headers-4.9.0-9-all-powerpcspe linux-image-4.9.0-9-powerpcspe linux-headers-4.9.0-9-powerpcspe linux-image-4.9.0-9-powerpcspe-dbg linux-headers-4.9.0-9-all-ppc64 linux-headers-4.9.0-9-all-ppc64el kernel-image-4.9.0-9-powerpc64le-di nic-modules-4.9.0-9-powerpc64le-di nic-shared-modules-4.9.0-9-powerpc64le-di serial-modules-4.9.0-9-powerpc64le-di usb-serial-modules-4.9.0-9-powerpc64le-di ppp-modules-4.9.0-9-powerpc64le-di
+ cdrom-core-modules-4.9.0-9-powerpc64le-di firewire-core-modules-4.9.0-9-powerpc64le-di scsi-core-modules-4.9.0-9-powerpc64le-di scsi-modules-4.9.0-9-powerpc64le-di loop-modules-4.9.0-9-powerpc64le-di btrfs-modules-4.9.0-9-powerpc64le-di ext4-modules-4.9.0-9-powerpc64le-di isofs-modules-4.9.0-9-powerpc64le-di jfs-modules-4.9.0-9-powerpc64le-di xfs-modules-4.9.0-9-powerpc64le-di fat-modules-4.9.0-9-powerpc64le-di md-modules-4.9.0-9-powerpc64le-di multipath-modules-4.9.0-9-powerpc64le-di usb-modules-4.9.0-9-powerpc64le-di usb-storage-modules-4.9.0-9-powerpc64le-di input-modules-4.9.0-9-powerpc64le-di event-modules-4.9.0-9-powerpc64le-di mouse-modules-4.9.0-9-powerpc64le-di sata-modules-4.9.0-9-powerpc64le-di crc-modules-4.9.0-9-powerpc64le-di crypto-modules-4.9.0-9-powerpc64le-di crypto-dm-modules-4.9.0-9-powerpc64le-di ata-modules-4.9.0-9-powerpc64le-di nbd-modules-4.9.0-9-powerpc64le-di squashfs-modules-4.9.0-9-powerpc64le-di virtio-modules-4.9.0-9-powerpc64le-di
+ uinput-modules-4.9.0-9-powerpc64le-di udf-modules-4.9.0-9-powerpc64le-di fuse-modules-4.9.0-9-powerpc64le-di hypervisor-modules-4.9.0-9-powerpc64le-di fancontrol-modules-4.9.0-9-powerpc64le-di linux-image-4.9.0-9-powerpc64le linux-headers-4.9.0-9-powerpc64le linux-image-4.9.0-9-powerpc64le-dbg linux-headers-4.9.0-9-all-s390x kernel-image-4.9.0-9-s390x-di nic-modules-4.9.0-9-s390x-di scsi-core-modules-4.9.0-9-s390x-di scsi-modules-4.9.0-9-s390x-di loop-modules-4.9.0-9-s390x-di btrfs-modules-4.9.0-9-s390x-di ext4-modules-4.9.0-9-s390x-di isofs-modules-4.9.0-9-s390x-di xfs-modules-4.9.0-9-s390x-di fat-modules-4.9.0-9-s390x-di md-modules-4.9.0-9-s390x-di multipath-modules-4.9.0-9-s390x-di crc-modules-4.9.0-9-s390x-di crypto-modules-4.9.0-9-s390x-di crypto-dm-modules-4.9.0-9-s390x-di nbd-modules-4.9.0-9-s390x-di virtio-modules-4.9.0-9-s390x-di zlib-modules-4.9.0-9-s390x-di udf-modules-4.9.0-9-s390x-di fuse-modules-4.9.0-9-s390x-di dasd-modules-4.9.0-9-s390x-di
+ dasd-extra-modules-4.9.0-9-s390x-di linux-image-4.9.0-9-s390x linux-headers-4.9.0-9-s390x linux-image-4.9.0-9-s390x-dbg linux-headers-4.9.0-9-all-sh4 kernel-image-4.9.0-9-sh7751r-di nic-modules-4.9.0-9-sh7751r-di usb-serial-modules-4.9.0-9-sh7751r-di ppp-modules-4.9.0-9-sh7751r-di pata-modules-4.9.0-9-sh7751r-di cdrom-core-modules-4.9.0-9-sh7751r-di firewire-core-modules-4.9.0-9-sh7751r-di loop-modules-4.9.0-9-sh7751r-di btrfs-modules-4.9.0-9-sh7751r-di ext4-modules-4.9.0-9-sh7751r-di isofs-modules-4.9.0-9-sh7751r-di jfs-modules-4.9.0-9-sh7751r-di xfs-modules-4.9.0-9-sh7751r-di fat-modules-4.9.0-9-sh7751r-di minix-modules-4.9.0-9-sh7751r-di md-modules-4.9.0-9-sh7751r-di multipath-modules-4.9.0-9-sh7751r-di usb-storage-modules-4.9.0-9-sh7751r-di nic-usb-modules-4.9.0-9-sh7751r-di sata-modules-4.9.0-9-sh7751r-di i2c-modules-4.9.0-9-sh7751r-di crc-modules-4.9.0-9-sh7751r-di crypto-modules-4.9.0-9-sh7751r-di crypto-dm-modules-4.9.0-9-sh7751r-di
+ nbd-modules-4.9.0-9-sh7751r-di squashfs-modules-4.9.0-9-sh7751r-di speakup-modules-4.9.0-9-sh7751r-di virtio-modules-4.9.0-9-sh7751r-di sound-modules-4.9.0-9-sh7751r-di zlib-modules-4.9.0-9-sh7751r-di udf-modules-4.9.0-9-sh7751r-di fuse-modules-4.9.0-9-sh7751r-di kernel-image-4.9.0-9-sh7785lcr-di nic-modules-4.9.0-9-sh7785lcr-di usb-serial-modules-4.9.0-9-sh7785lcr-di ppp-modules-4.9.0-9-sh7785lcr-di pata-modules-4.9.0-9-sh7785lcr-di cdrom-core-modules-4.9.0-9-sh7785lcr-di firewire-core-modules-4.9.0-9-sh7785lcr-di loop-modules-4.9.0-9-sh7785lcr-di btrfs-modules-4.9.0-9-sh7785lcr-di ext4-modules-4.9.0-9-sh7785lcr-di isofs-modules-4.9.0-9-sh7785lcr-di jfs-modules-4.9.0-9-sh7785lcr-di xfs-modules-4.9.0-9-sh7785lcr-di fat-modules-4.9.0-9-sh7785lcr-di minix-modules-4.9.0-9-sh7785lcr-di md-modules-4.9.0-9-sh7785lcr-di multipath-modules-4.9.0-9-sh7785lcr-di nic-usb-modules-4.9.0-9-sh7785lcr-di sata-modules-4.9.0-9-sh7785lcr-di crc-modules-4.9.0-9-sh7785lcr-di
+ crypto-modules-4.9.0-9-sh7785lcr-di crypto-dm-modules-4.9.0-9-sh7785lcr-di nbd-modules-4.9.0-9-sh7785lcr-di squashfs-modules-4.9.0-9-sh7785lcr-di speakup-modules-4.9.0-9-sh7785lcr-di sound-modules-4.9.0-9-sh7785lcr-di zlib-modules-4.9.0-9-sh7785lcr-di udf-modules-4.9.0-9-sh7785lcr-di fuse-modules-4.9.0-9-sh7785lcr-di linux-image-4.9.0-9-sh7751r linux-headers-4.9.0-9-sh7751r linux-image-4.9.0-9-sh7751r-dbg linux-image-4.9.0-9-sh7785lcr linux-headers-4.9.0-9-sh7785lcr linux-image-4.9.0-9-sh7785lcr-dbg linux-headers-4.9.0-9-all-sparc64 kernel-image-4.9.0-9-sparc64-di nic-modules-4.9.0-9-sparc64-di ppp-modules-4.9.0-9-sparc64-di pata-modules-4.9.0-9-sparc64-di cdrom-core-modules-4.9.0-9-sparc64-di scsi-core-modules-4.9.0-9-sparc64-di scsi-modules-4.9.0-9-sparc64-di btrfs-modules-4.9.0-9-sparc64-di ext4-modules-4.9.0-9-sparc64-di isofs-modules-4.9.0-9-sparc64-di jfs-modules-4.9.0-9-sparc64-di ufs-modules-4.9.0-9-sparc64-di xfs-modules-4.9.0-9-sparc64-di
+ fat-modules-4.9.0-9-sparc64-di md-modules-4.9.0-9-sparc64-di multipath-modules-4.9.0-9-sparc64-di usb-modules-4.9.0-9-sparc64-di usb-storage-modules-4.9.0-9-sparc64-di input-modules-4.9.0-9-sparc64-di sata-modules-4.9.0-9-sparc64-di crc-modules-4.9.0-9-sparc64-di crypto-modules-4.9.0-9-sparc64-di crypto-dm-modules-4.9.0-9-sparc64-di ata-modules-4.9.0-9-sparc64-di nbd-modules-4.9.0-9-sparc64-di squashfs-modules-4.9.0-9-sparc64-di virtio-modules-4.9.0-9-sparc64-di zlib-modules-4.9.0-9-sparc64-di udf-modules-4.9.0-9-sparc64-di fuse-modules-4.9.0-9-sparc64-di linux-image-4.9.0-9-sparc64 linux-headers-4.9.0-9-sparc64 linux-image-4.9.0-9-sparc64-dbg linux-image-4.9.0-9-sparc64-smp linux-headers-4.9.0-9-sparc64-smp linux-image-4.9.0-9-sparc64-smp-dbg linux-compiler-gcc-6-arm linux-compiler-gcc-6-s390
+ linux-compiler-gcc-6-x86
+Architecture: source amd64 all
+Version: 4.9.161-1
+Distribution: stretch
+Urgency: medium
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Changed-By: Salvatore Bonaccorso <carnil@debian.org>
+Description:
+ acpi-modules-4.9.0-9-686-di - ACPI support modules (udeb)
+ acpi-modules-4.9.0-9-686-pae-di - ACPI support modules (udeb)
+ acpi-modules-4.9.0-9-amd64-di - ACPI support modules (udeb)
+ affs-modules-4.9.0-9-4kc-malta-di - Amiga filesystem support (udeb)
+ affs-modules-4.9.0-9-5kc-malta-di - Amiga filesystem support (udeb)
+ affs-modules-4.9.0-9-loongson-3-di - Amiga filesystem support (udeb)
+ affs-modules-4.9.0-9-octeon-di - Amiga filesystem support (udeb)
+ affs-modules-4.9.0-9-powerpc-di - Amiga filesystem support (udeb)
+ affs-modules-4.9.0-9-powerpc64-di - Amiga filesystem support (udeb)
+ ata-modules-4.9.0-9-4kc-malta-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-5kc-malta-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-686-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-686-pae-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-alpha-generic-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-amd64-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-arm64-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-armmp-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-loongson-3-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-parisc-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-parisc64-smp-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-powerpc-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-powerpc64-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-powerpc64le-di - ATA disk modules (udeb)
+ ata-modules-4.9.0-9-sparc64-di - ATA disk modules (udeb)
+ btrfs-modules-4.9.0-9-4kc-malta-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-5kc-malta-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-686-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-686-pae-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-alpha-generic-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-amd64-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-arm64-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-armmp-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-loongson-3-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-m68k-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-marvell-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-octeon-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-parisc-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-parisc64-smp-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-powerpc-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-powerpc64-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-powerpc64le-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-s390x-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-sh7751r-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-sh7785lcr-di - BTRFS filesystem support (udeb)
+ btrfs-modules-4.9.0-9-sparc64-di - BTRFS filesystem support (udeb)
+ cdrom-core-modules-4.9.0-9-4kc-malta-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-5kc-malta-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-686-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-686-pae-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-alpha-generic-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-amd64-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-arm64-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-loongson-3-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-m68k-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-marvell-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-octeon-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-parisc-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-parisc64-smp-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-powerpc-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-powerpc64-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-powerpc64le-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-sh7751r-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-sh7785lcr-di - CDROM support (udeb)
+ cdrom-core-modules-4.9.0-9-sparc64-di - CDROM support (udeb)
+ crc-modules-4.9.0-9-4kc-malta-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-5kc-malta-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-686-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-686-pae-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-alpha-generic-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-amd64-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-arm64-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-armmp-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-loongson-3-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-m68k-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-marvell-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-octeon-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-parisc-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-parisc64-smp-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-powerpc-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-powerpc64-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-powerpc64le-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-s390x-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-sh7751r-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-sh7785lcr-di - CRC modules (udeb)
+ crc-modules-4.9.0-9-sparc64-di - CRC modules (udeb)
+ crypto-dm-modules-4.9.0-9-4kc-malta-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-5kc-malta-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-686-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-686-pae-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-alpha-generic-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-amd64-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-arm64-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-armmp-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-loongson-3-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-marvell-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-octeon-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-parisc-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-parisc64-smp-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-powerpc-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-powerpc64-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-powerpc64le-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-s390x-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-sh7751r-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-sh7785lcr-di - devicemapper crypto module (udeb)
+ crypto-dm-modules-4.9.0-9-sparc64-di - devicemapper crypto module (udeb)
+ crypto-modules-4.9.0-9-4kc-malta-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-5kc-malta-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-686-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-686-pae-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-alpha-generic-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-amd64-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-arm64-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-armmp-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-loongson-3-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-m68k-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-marvell-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-octeon-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-parisc-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-parisc64-smp-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-powerpc-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-powerpc64-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-powerpc64le-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-s390x-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-sh7751r-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-sh7785lcr-di - crypto modules (udeb)
+ crypto-modules-4.9.0-9-sparc64-di - crypto modules (udeb)
+ dasd-extra-modules-4.9.0-9-s390x-di - optional dasd DIAG support (udeb)
+ dasd-modules-4.9.0-9-s390x-di - dasd modules (udeb)
+ efi-modules-4.9.0-9-686-di - EFI modules (udeb)
+ efi-modules-4.9.0-9-686-pae-di - EFI modules (udeb)
+ efi-modules-4.9.0-9-amd64-di - EFI modules (udeb)
+ efi-modules-4.9.0-9-arm64-di - EFI modules (udeb)
+ efi-modules-4.9.0-9-armmp-di - EFI modules (udeb)
+ event-modules-4.9.0-9-4kc-malta-di - Event support (udeb)
+ event-modules-4.9.0-9-5kc-malta-di - Event support (udeb)
+ event-modules-4.9.0-9-686-di - Event support (udeb)
+ event-modules-4.9.0-9-686-pae-di - Event support (udeb)
+ event-modules-4.9.0-9-alpha-generic-di - Event support (udeb)
+ event-modules-4.9.0-9-amd64-di - Event support (udeb)
+ event-modules-4.9.0-9-arm64-di - Event support (udeb)
+ event-modules-4.9.0-9-armmp-di - Event support (udeb)
+ event-modules-4.9.0-9-loongson-3-di - Event support (udeb)
+ event-modules-4.9.0-9-marvell-di - Event support (udeb)
+ event-modules-4.9.0-9-octeon-di - Event support (udeb)
+ event-modules-4.9.0-9-parisc-di - Event support (udeb)
+ event-modules-4.9.0-9-parisc64-smp-di - Event support (udeb)
+ event-modules-4.9.0-9-powerpc-di - Event support (udeb)
+ event-modules-4.9.0-9-powerpc64-di - Event support (udeb)
+ event-modules-4.9.0-9-powerpc64le-di - Event support (udeb)
+ ext4-modules-4.9.0-9-4kc-malta-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-5kc-malta-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-686-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-686-pae-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-alpha-generic-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-amd64-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-arm64-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-armmp-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-loongson-3-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-m68k-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-marvell-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-octeon-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-parisc-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-parisc64-smp-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-powerpc-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-powerpc64-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-powerpc64le-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-s390x-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-sh7751r-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-sh7785lcr-di - ext2/ext3/ext4 filesystem support (udeb)
+ ext4-modules-4.9.0-9-sparc64-di - ext2/ext3/ext4 filesystem support (udeb)
+ fancontrol-modules-4.9.0-9-powerpc64-di - Apple powermac fancontrol modules (udeb)
+ fancontrol-modules-4.9.0-9-powerpc64le-di - Apple powermac fancontrol modules (udeb)
+ fat-modules-4.9.0-9-4kc-malta-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-5kc-malta-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-686-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-686-pae-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-alpha-generic-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-amd64-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-arm64-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-armmp-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-loongson-3-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-m68k-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-marvell-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-octeon-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-parisc-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-parisc64-smp-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-powerpc-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-powerpc64-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-powerpc64le-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-s390x-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-sh7751r-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-sh7785lcr-di - FAT filesystem support (udeb)
+ fat-modules-4.9.0-9-sparc64-di - FAT filesystem support (udeb)
+ fb-modules-4.9.0-9-686-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-686-pae-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-alpha-generic-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-amd64-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-arm64-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-armmp-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-loongson-3-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-marvell-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-parisc64-smp-di - Frame buffer support (udeb)
+ fb-modules-4.9.0-9-powerpc-di - Frame buffer support (udeb)
+ firewire-core-modules-4.9.0-9-686-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-686-pae-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-amd64-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-loongson-3-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-powerpc-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-powerpc64-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-powerpc64le-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-sh7751r-di - Core FireWire drivers (udeb)
+ firewire-core-modules-4.9.0-9-sh7785lcr-di - Core FireWire drivers (udeb)
+ fuse-modules-4.9.0-9-4kc-malta-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-5kc-malta-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-686-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-686-pae-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-alpha-generic-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-amd64-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-arm64-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-armmp-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-loongson-3-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-m68k-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-marvell-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-octeon-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-parisc-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-parisc64-smp-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-powerpc-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-powerpc64-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-powerpc64le-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-s390x-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-sh7751r-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-sh7785lcr-di - FUSE modules (udeb)
+ fuse-modules-4.9.0-9-sparc64-di - FUSE modules (udeb)
+ hfs-modules-4.9.0-9-4kc-malta-di - HFS filesystem support (udeb)
+ hfs-modules-4.9.0-9-5kc-malta-di - HFS filesystem support (udeb)
+ hfs-modules-4.9.0-9-loongson-3-di - HFS filesystem support (udeb)
+ hfs-modules-4.9.0-9-octeon-di - HFS filesystem support (udeb)
+ hfs-modules-4.9.0-9-powerpc-di - HFS filesystem support (udeb)
+ hfs-modules-4.9.0-9-powerpc64-di - HFS filesystem support (udeb)
+ hyperv-daemons - Support daemons for Linux running on Hyper-V
+ hyperv-modules-4.9.0-9-686-di - Hyper-V modules (udeb)
+ hyperv-modules-4.9.0-9-686-pae-di - Hyper-V modules (udeb)
+ hyperv-modules-4.9.0-9-amd64-di - Hyper-V modules (udeb)
+ hypervisor-modules-4.9.0-9-powerpc64-di - IBM 64bit hypervisor console modules (udeb)
+ hypervisor-modules-4.9.0-9-powerpc64le-di - IBM 64bit hypervisor console modules (udeb)
+ i2c-modules-4.9.0-9-4kc-malta-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-5kc-malta-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-686-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-686-pae-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-amd64-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-arm64-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-armmp-di - i2c support modules (udeb)
+ i2c-modules-4.9.0-9-sh7751r-di - i2c support modules (udeb)
+ input-modules-4.9.0-9-4kc-malta-di - Input devices support (udeb)
+ input-modules-4.9.0-9-5kc-malta-di - Input devices support (udeb)
+ input-modules-4.9.0-9-686-di - Input devices support (udeb)
+ input-modules-4.9.0-9-686-pae-di - Input devices support (udeb)
+ input-modules-4.9.0-9-alpha-generic-di - Input devices support (udeb)
+ input-modules-4.9.0-9-amd64-di - Input devices support (udeb)
+ input-modules-4.9.0-9-arm64-di - Input devices support (udeb)
+ input-modules-4.9.0-9-armmp-di - Input devices support (udeb)
+ input-modules-4.9.0-9-loongson-3-di - Input devices support (udeb)
+ input-modules-4.9.0-9-marvell-di - Input devices support (udeb)
+ input-modules-4.9.0-9-octeon-di - Input devices support (udeb)
+ input-modules-4.9.0-9-parisc-di - Input devices support (udeb)
+ input-modules-4.9.0-9-parisc64-smp-di - Input devices support (udeb)
+ input-modules-4.9.0-9-powerpc-di - Input devices support (udeb)
+ input-modules-4.9.0-9-powerpc64-di - Input devices support (udeb)
+ input-modules-4.9.0-9-powerpc64le-di - Input devices support (udeb)
+ input-modules-4.9.0-9-sparc64-di - Input devices support (udeb)
+ ipv6-modules-4.9.0-9-marvell-di - IPv6 driver (udeb)
+ isofs-modules-4.9.0-9-4kc-malta-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-5kc-malta-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-686-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-686-pae-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-alpha-generic-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-amd64-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-arm64-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-armmp-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-loongson-3-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-m68k-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-marvell-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-octeon-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-parisc-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-parisc64-smp-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-powerpc-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-powerpc64-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-powerpc64le-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-s390x-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-sh7751r-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-sh7785lcr-di - ISOFS filesystem support (udeb)
+ isofs-modules-4.9.0-9-sparc64-di - ISOFS filesystem support (udeb)
+ jffs2-modules-4.9.0-9-marvell-di - JFFS2 filesystem support (udeb)
+ jfs-modules-4.9.0-9-4kc-malta-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-5kc-malta-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-686-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-686-pae-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-alpha-generic-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-amd64-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-arm64-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-armmp-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-loongson-3-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-marvell-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-octeon-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-parisc-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-parisc64-smp-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-powerpc-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-powerpc64-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-powerpc64le-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-sh7751r-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-sh7785lcr-di - JFS filesystem support (udeb)
+ jfs-modules-4.9.0-9-sparc64-di - JFS filesystem support (udeb)
+ kernel-image-4.9.0-9-4kc-malta-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-5kc-malta-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-686-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-686-pae-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-alpha-generic-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-amd64-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-arm64-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-armmp-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-loongson-3-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-m68k-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-marvell-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-octeon-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-parisc-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-parisc64-smp-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-powerpc-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-powerpc64-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-powerpc64le-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-s390x-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-sh7751r-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-sh7785lcr-di - Linux kernel image and core modules for the Debian installer (udeb)
+ kernel-image-4.9.0-9-sparc64-di - Linux kernel image and core modules for the Debian installer (udeb)
+ leds-modules-4.9.0-9-arm64-di - LED modules (udeb)
+ leds-modules-4.9.0-9-armmp-di - LED modules (udeb)
+ leds-modules-4.9.0-9-marvell-di - LED modules (udeb)
+ libcpupower-dev - CPU frequency and voltage scaling tools for Linux (development fi
+ libcpupower1 - CPU frequency and voltage scaling tools for Linux (libraries)
+ libusbip-dev - USB device sharing system over IP network (development files)
+ linux-compiler-gcc-6-arm - Compiler for Linux on ARM (meta-package)
+ linux-compiler-gcc-6-s390 - Compiler for Linux on IBM zSeries (meta-package)
+ linux-compiler-gcc-6-x86 - Compiler for Linux on x86 (meta-package)
+ linux-cpupower - CPU power management tools for Linux
+ linux-doc-4.9 - Linux kernel specific documentation for version 4.9
+ linux-headers-4.9.0-9-4kc-malta - Header files for Linux 4.9.0-9-4kc-malta
+ linux-headers-4.9.0-9-5kc-malta - Header files for Linux 4.9.0-9-5kc-malta
+ linux-headers-4.9.0-9-686 - Header files for Linux 4.9.0-9-686
+ linux-headers-4.9.0-9-686-pae - Header files for Linux 4.9.0-9-686-pae
+ linux-headers-4.9.0-9-all - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-alpha - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-amd64 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-arm64 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-armel - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-armhf - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-hppa - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-i386 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-m68k - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-mips - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-mips64 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-mips64el - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-mipsel - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-powerpc - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-powerpcspe - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-ppc64 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-ppc64el - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-s390x - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-sh4 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-all-sparc64 - All header files for Linux 4.9 (meta-package)
+ linux-headers-4.9.0-9-alpha-generic - Header files for Linux 4.9.0-9-alpha-generic
+ linux-headers-4.9.0-9-alpha-smp - Header files for Linux 4.9.0-9-alpha-smp
+ linux-headers-4.9.0-9-amd64 - Header files for Linux 4.9.0-9-amd64
+ linux-headers-4.9.0-9-arm64 - Header files for Linux 4.9.0-9-arm64
+ linux-headers-4.9.0-9-armmp - Header files for Linux 4.9.0-9-armmp
+ linux-headers-4.9.0-9-armmp-lpae - Header files for Linux 4.9.0-9-armmp-lpae
+ linux-headers-4.9.0-9-common - Common header files for Linux 4.9.0-9
+ linux-headers-4.9.0-9-common-rt - Common header files for Linux 4.9.0-9-rt
+ linux-headers-4.9.0-9-loongson-3 - Header files for Linux 4.9.0-9-loongson-3
+ linux-headers-4.9.0-9-m68k - Header files for Linux 4.9.0-9-m68k
+ linux-headers-4.9.0-9-marvell - Header files for Linux 4.9.0-9-marvell
+ linux-headers-4.9.0-9-octeon - Header files for Linux 4.9.0-9-octeon
+ linux-headers-4.9.0-9-parisc - Header files for Linux 4.9.0-9-parisc
+ linux-headers-4.9.0-9-parisc64-smp - Header files for Linux 4.9.0-9-parisc64-smp
+ linux-headers-4.9.0-9-powerpc - Header files for Linux 4.9.0-9-powerpc
+ linux-headers-4.9.0-9-powerpc-smp - Header files for Linux 4.9.0-9-powerpc-smp
+ linux-headers-4.9.0-9-powerpc64 - Header files for Linux 4.9.0-9-powerpc64
+ linux-headers-4.9.0-9-powerpc64le - Header files for Linux 4.9.0-9-powerpc64le
+ linux-headers-4.9.0-9-powerpcspe - Header files for Linux 4.9.0-9-powerpcspe
+ linux-headers-4.9.0-9-rt-686-pae - Header files for Linux 4.9.0-9-rt-686-pae
+ linux-headers-4.9.0-9-rt-amd64 - Header files for Linux 4.9.0-9-rt-amd64
+ linux-headers-4.9.0-9-s390x - Header files for Linux 4.9.0-9-s390x
+ linux-headers-4.9.0-9-sh7751r - Header files for Linux 4.9.0-9-sh7751r
+ linux-headers-4.9.0-9-sh7785lcr - Header files for Linux 4.9.0-9-sh7785lcr
+ linux-headers-4.9.0-9-sparc64 - Header files for Linux 4.9.0-9-sparc64
+ linux-headers-4.9.0-9-sparc64-smp - Header files for Linux 4.9.0-9-sparc64-smp
+ linux-image-4.9.0-9-4kc-malta - Linux 4.9 for MIPS Malta
+ linux-image-4.9.0-9-4kc-malta-dbg - Debug symbols for linux-image-4.9.0-9-4kc-malta
+ linux-image-4.9.0-9-5kc-malta - Linux 4.9 for MIPS Malta (64-bit)
+ linux-image-4.9.0-9-5kc-malta-dbg - Debug symbols for linux-image-4.9.0-9-5kc-malta
+ linux-image-4.9.0-9-686 - Linux 4.9 for older PCs
+ linux-image-4.9.0-9-686-dbg - Debug symbols for linux-image-4.9.0-9-686
+ linux-image-4.9.0-9-686-pae - Linux 4.9 for modern PCs
+ linux-image-4.9.0-9-686-pae-dbg - Debug symbols for linux-image-4.9.0-9-686-pae
+ linux-image-4.9.0-9-alpha-generic - Linux 4.9 for Alpha
+ linux-image-4.9.0-9-alpha-generic-dbg - Debug symbols for linux-image-4.9.0-9-alpha-generic
+ linux-image-4.9.0-9-alpha-smp - Linux 4.9 for Alpha SMP
+ linux-image-4.9.0-9-alpha-smp-dbg - Debug symbols for linux-image-4.9.0-9-alpha-smp
+ linux-image-4.9.0-9-amd64 - Linux 4.9 for 64-bit PCs
+ linux-image-4.9.0-9-amd64-dbg - Debug symbols for linux-image-4.9.0-9-amd64
+ linux-image-4.9.0-9-arm64 - Linux 4.9 for 64-bit ARMv8 machines
+ linux-image-4.9.0-9-arm64-dbg - Debug symbols for linux-image-4.9.0-9-arm64
+ linux-image-4.9.0-9-armmp - Linux 4.9 for ARMv7 multiplatform compatible SoCs
+ linux-image-4.9.0-9-armmp-dbg - Debug symbols for linux-image-4.9.0-9-armmp
+ linux-image-4.9.0-9-armmp-lpae - Linux 4.9 for ARMv7 multiplatform compatible SoCs supporting LPAE
+ linux-image-4.9.0-9-armmp-lpae-dbg - Debug symbols for linux-image-4.9.0-9-armmp-lpae
+ linux-image-4.9.0-9-loongson-3 - Linux 4.9 for Loongson 3A/3B
+ linux-image-4.9.0-9-loongson-3-dbg - Debug symbols for linux-image-4.9.0-9-loongson-3
+ linux-image-4.9.0-9-m68k - Linux 4.9 for Motorola MC68020+ family
+ linux-image-4.9.0-9-m68k-dbg - Debug symbols for linux-image-4.9.0-9-m68k
+ linux-image-4.9.0-9-marvell - Linux 4.9 for Marvell Kirkwood/Orion
+ linux-image-4.9.0-9-marvell-dbg - Debug symbols for linux-image-4.9.0-9-marvell
+ linux-image-4.9.0-9-octeon - Linux 4.9 for Octeon
+ linux-image-4.9.0-9-octeon-dbg - Debug symbols for linux-image-4.9.0-9-octeon
+ linux-image-4.9.0-9-parisc - Linux 4.9 for 32-bit PA-RISC
+ linux-image-4.9.0-9-parisc-dbg - Debug symbols for linux-image-4.9.0-9-parisc
+ linux-image-4.9.0-9-parisc64-smp - Linux 4.9 for multiprocessor 64-bit PA-RISC
+ linux-image-4.9.0-9-parisc64-smp-dbg - Debug symbols for linux-image-4.9.0-9-parisc64-smp
+ linux-image-4.9.0-9-powerpc - Linux 4.9 for uniprocessor 32-bit PowerPC
+ linux-image-4.9.0-9-powerpc-dbg - Debug symbols for linux-image-4.9.0-9-powerpc
+ linux-image-4.9.0-9-powerpc-smp - Linux 4.9 for multiprocessor 32-bit PowerPC
+ linux-image-4.9.0-9-powerpc-smp-dbg - Debug symbols for linux-image-4.9.0-9-powerpc-smp
+ linux-image-4.9.0-9-powerpc64 - Linux 4.9 for 64-bit PowerPC
+ linux-image-4.9.0-9-powerpc64-dbg - Debug symbols for linux-image-4.9.0-9-powerpc64
+ linux-image-4.9.0-9-powerpc64le - Linux 4.9 for Little-endian 64-bit PowerPC
+ linux-image-4.9.0-9-powerpc64le-dbg - Debug symbols for linux-image-4.9.0-9-powerpc64le
+ linux-image-4.9.0-9-powerpcspe - Linux 4.9 for 32-bit PowerPC with SPE (instead of AltiVec) with S
+ linux-image-4.9.0-9-powerpcspe-dbg - Debug symbols for linux-image-4.9.0-9-powerpcspe
+ linux-image-4.9.0-9-rt-686-pae - Linux 4.9 for modern PCs, PREEMPT_RT
+ linux-image-4.9.0-9-rt-686-pae-dbg - Debug symbols for linux-image-4.9.0-9-rt-686-pae
+ linux-image-4.9.0-9-rt-amd64 - Linux 4.9 for 64-bit PCs, PREEMPT_RT
+ linux-image-4.9.0-9-rt-amd64-dbg - Debug symbols for linux-image-4.9.0-9-rt-amd64
+ linux-image-4.9.0-9-s390x - Linux 4.9 for IBM zSeries
+ linux-image-4.9.0-9-s390x-dbg - Debug symbols for linux-image-4.9.0-9-s390x
+ linux-image-4.9.0-9-sh7751r - Linux 4.9 for sh7751r
+ linux-image-4.9.0-9-sh7751r-dbg - Debug symbols for linux-image-4.9.0-9-sh7751r
+ linux-image-4.9.0-9-sh7785lcr - Linux 4.9 for sh7785lcr
+ linux-image-4.9.0-9-sh7785lcr-dbg - Debug symbols for linux-image-4.9.0-9-sh7785lcr
+ linux-image-4.9.0-9-sparc64 - Linux 4.9 for uniprocessor 64-bit UltraSPARC
+ linux-image-4.9.0-9-sparc64-dbg - Debug symbols for linux-image-4.9.0-9-sparc64
+ linux-image-4.9.0-9-sparc64-smp - Linux 4.9 for multiprocessor 64-bit UltraSPARC
+ linux-image-4.9.0-9-sparc64-smp-dbg - Debug symbols for linux-image-4.9.0-9-sparc64-smp
+ linux-kbuild-4.9 - Kbuild infrastructure for Linux 4.9
+ linux-libc-dev - Linux support headers for userspace development
+ linux-manual-4.9 - Linux kernel API manual pages for version 4.9
+ linux-perf-4.9 - Performance analysis tools for Linux 4.9
+ linux-source-4.9 - Linux kernel source for version 4.9 with Debian patches
+ linux-support-4.9.0-9 - Support files for Linux 4.9
+ loop-modules-4.9.0-9-4kc-malta-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-5kc-malta-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-686-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-686-pae-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-alpha-generic-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-amd64-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-arm64-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-armmp-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-loongson-3-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-m68k-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-marvell-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-octeon-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-parisc-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-parisc64-smp-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-powerpc-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-powerpc64-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-powerpc64le-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-s390x-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-sh7751r-di - Loopback filesystem support (udeb)
+ loop-modules-4.9.0-9-sh7785lcr-di - Loopback filesystem support (udeb)
+ md-modules-4.9.0-9-4kc-malta-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-5kc-malta-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-686-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-686-pae-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-alpha-generic-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-amd64-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-arm64-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-armmp-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-loongson-3-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-m68k-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-marvell-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-octeon-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-parisc-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-parisc64-smp-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-powerpc-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-powerpc64-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-powerpc64le-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-s390x-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-sh7751r-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-sh7785lcr-di - RAID and LVM support (udeb)
+ md-modules-4.9.0-9-sparc64-di - RAID and LVM support (udeb)
+ minix-modules-4.9.0-9-4kc-malta-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-5kc-malta-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-loongson-3-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-marvell-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-octeon-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-sh7751r-di - Minix filesystem support (udeb)
+ minix-modules-4.9.0-9-sh7785lcr-di - Minix filesystem support (udeb)
+ mmc-core-modules-4.9.0-9-4kc-malta-di - MMC/SD/SDIO core modules (udeb)
+ mmc-core-modules-4.9.0-9-5kc-malta-di - MMC/SD/SDIO core modules (udeb)
+ mmc-core-modules-4.9.0-9-686-di - MMC/SD/SDIO core modules (udeb)
+ mmc-core-modules-4.9.0-9-686-pae-di - MMC/SD/SDIO core modules (udeb)
+ mmc-core-modules-4.9.0-9-amd64-di - MMC/SD/SDIO core modules (udeb)
+ mmc-modules-4.9.0-9-4kc-malta-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-5kc-malta-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-686-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-686-pae-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-amd64-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-arm64-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-armmp-di - MMC/SD card modules (udeb)
+ mmc-modules-4.9.0-9-marvell-di - MMC/SD card modules (udeb)
+ mouse-modules-4.9.0-9-4kc-malta-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-5kc-malta-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-686-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-686-pae-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-alpha-generic-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-amd64-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-marvell-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-parisc-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-parisc64-smp-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-powerpc-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-powerpc64-di - Mouse support (udeb)
+ mouse-modules-4.9.0-9-powerpc64le-di - Mouse support (udeb)
+ mtd-modules-4.9.0-9-armmp-di - MTD modules (udeb)
+ mtd-modules-4.9.0-9-marvell-di - MTD modules (udeb)
+ multipath-modules-4.9.0-9-4kc-malta-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-5kc-malta-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-686-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-686-pae-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-alpha-generic-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-amd64-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-arm64-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-armmp-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-loongson-3-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-marvell-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-octeon-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-parisc-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-parisc64-smp-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-powerpc-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-powerpc64-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-powerpc64le-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-s390x-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-sh7751r-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-sh7785lcr-di - Multipath support (udeb)
+ multipath-modules-4.9.0-9-sparc64-di - Multipath support (udeb)
+ nbd-modules-4.9.0-9-4kc-malta-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-5kc-malta-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-686-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-686-pae-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-alpha-generic-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-amd64-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-arm64-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-armmp-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-loongson-3-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-m68k-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-marvell-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-octeon-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-parisc-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-parisc64-smp-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-powerpc-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-powerpc64-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-powerpc64le-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-s390x-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-sh7751r-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-sh7785lcr-di - Network Block Device modules (udeb)
+ nbd-modules-4.9.0-9-sparc64-di - Network Block Device modules (udeb)
+ nfs-modules-4.9.0-9-loongson-3-di - NFS filesystem support (udeb)
+ nic-modules-4.9.0-9-4kc-malta-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-5kc-malta-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-686-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-686-pae-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-alpha-generic-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-amd64-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-arm64-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-armmp-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-loongson-3-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-marvell-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-octeon-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-parisc-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-parisc64-smp-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-powerpc-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-powerpc64-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-powerpc64le-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-s390x-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-sh7751r-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-sh7785lcr-di - NIC drivers (udeb)
+ nic-modules-4.9.0-9-sparc64-di - Network card modules for Sparc kernels (udeb)
+ nic-pcmcia-modules-4.9.0-9-686-di - Common PCMCIA NIC drivers (udeb)
+ nic-pcmcia-modules-4.9.0-9-686-pae-di - Common PCMCIA NIC drivers (udeb)
+ nic-pcmcia-modules-4.9.0-9-alpha-generic-di - Common PCMCIA NIC drivers (udeb)
+ nic-pcmcia-modules-4.9.0-9-amd64-di - Common PCMCIA NIC drivers (udeb)
+ nic-pcmcia-modules-4.9.0-9-powerpc-di - Common PCMCIA NIC drivers (udeb)
+ nic-pcmcia-modules-4.9.0-9-powerpc64-di - Common PCMCIA NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-4kc-malta-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-5kc-malta-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-686-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-686-pae-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-alpha-generic-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-amd64-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-arm64-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-armmp-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-loongson-3-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-m68k-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-marvell-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-octeon-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-parisc-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-parisc64-smp-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-powerpc-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-powerpc64-di - Shared NIC drivers (udeb)
+ nic-shared-modules-4.9.0-9-powerpc64le-di - Shared NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-4kc-malta-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-5kc-malta-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-686-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-686-pae-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-alpha-generic-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-amd64-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-arm64-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-armmp-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-loongson-3-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-marvell-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-octeon-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-parisc-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-parisc64-smp-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-sh7751r-di - USB NIC drivers (udeb)
+ nic-usb-modules-4.9.0-9-sh7785lcr-di - USB NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-4kc-malta-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-5kc-malta-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-686-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-686-pae-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-alpha-generic-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-amd64-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-arm64-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-armmp-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-loongson-3-di - Wireless NIC drivers (udeb)
+ nic-wireless-modules-4.9.0-9-octeon-di - Wireless NIC drivers (udeb)
+ ntfs-modules-4.9.0-9-4kc-malta-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-5kc-malta-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-686-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-686-pae-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-amd64-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-loongson-3-di - NTFS filesystem support (udeb)
+ ntfs-modules-4.9.0-9-octeon-di - NTFS filesystem support (udeb)
+ pata-modules-4.9.0-9-4kc-malta-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-5kc-malta-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-686-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-686-pae-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-alpha-generic-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-amd64-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-armmp-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-loongson-3-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-octeon-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-parisc-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-parisc64-smp-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-powerpc-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-powerpc64-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-sh7751r-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-sh7785lcr-di - PATA drivers (udeb)
+ pata-modules-4.9.0-9-sparc64-di - PATA drivers (udeb)
+ pcmcia-modules-4.9.0-9-686-di - Common PCMCIA drivers (udeb)
+ pcmcia-modules-4.9.0-9-686-pae-di - Common PCMCIA drivers (udeb)
+ pcmcia-modules-4.9.0-9-alpha-generic-di - Common PCMCIA drivers (udeb)
+ pcmcia-modules-4.9.0-9-amd64-di - Common PCMCIA drivers (udeb)
+ pcmcia-modules-4.9.0-9-powerpc-di - Common PCMCIA drivers (udeb)
+ pcmcia-modules-4.9.0-9-powerpc64-di - Common PCMCIA drivers (udeb)
+ pcmcia-storage-modules-4.9.0-9-686-di - PCMCIA storage drivers (udeb)
+ pcmcia-storage-modules-4.9.0-9-686-pae-di - PCMCIA storage drivers (udeb)
+ pcmcia-storage-modules-4.9.0-9-amd64-di - PCMCIA storage drivers (udeb)
+ pcmcia-storage-modules-4.9.0-9-powerpc-di - PCMCIA storage drivers (udeb)
+ pcmcia-storage-modules-4.9.0-9-powerpc64-di - PCMCIA storage drivers (udeb)
+ ppp-modules-4.9.0-9-4kc-malta-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-5kc-malta-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-686-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-686-pae-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-alpha-generic-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-amd64-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-arm64-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-armmp-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-loongson-3-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-m68k-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-marvell-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-octeon-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-parisc-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-parisc64-smp-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-powerpc-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-powerpc64-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-powerpc64le-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-sh7751r-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-sh7785lcr-di - PPP drivers (udeb)
+ ppp-modules-4.9.0-9-sparc64-di - PPP drivers (udeb)
+ rtc-modules-4.9.0-9-octeon-di - RTC modules (udeb)
+ sata-modules-4.9.0-9-4kc-malta-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-5kc-malta-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-686-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-686-pae-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-alpha-generic-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-amd64-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-arm64-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-armmp-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-loongson-3-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-marvell-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-octeon-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-parisc-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-parisc64-smp-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-powerpc-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-powerpc64-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-powerpc64le-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-sh7751r-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-sh7785lcr-di - SATA drivers (udeb)
+ sata-modules-4.9.0-9-sparc64-di - SATA drivers (udeb)
+ scsi-core-modules-4.9.0-9-4kc-malta-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-5kc-malta-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-686-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-686-pae-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-alpha-generic-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-amd64-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-arm64-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-armmp-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-loongson-3-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-marvell-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-octeon-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-parisc-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-parisc64-smp-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-powerpc-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-powerpc64-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-powerpc64le-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-s390x-di - Core SCSI subsystem (udeb)
+ scsi-core-modules-4.9.0-9-sparc64-di - Core SCSI subsystem (udeb)
+ scsi-modules-4.9.0-9-4kc-malta-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-5kc-malta-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-686-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-686-pae-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-alpha-generic-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-amd64-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-arm64-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-armmp-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-loongson-3-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-m68k-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-octeon-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-parisc-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-parisc64-smp-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-powerpc-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-powerpc64-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-powerpc64le-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-s390x-di - SCSI drivers (udeb)
+ scsi-modules-4.9.0-9-sparc64-di - SCSI drivers (udeb)
+ serial-modules-4.9.0-9-686-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-686-pae-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-alpha-generic-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-amd64-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-parisc-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-parisc64-smp-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-powerpc-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-powerpc64-di - Serial drivers (udeb)
+ serial-modules-4.9.0-9-powerpc64le-di - Serial drivers (udeb)
+ sound-modules-4.9.0-9-4kc-malta-di - sound support (udeb)
+ sound-modules-4.9.0-9-5kc-malta-di - sound support (udeb)
+ sound-modules-4.9.0-9-686-di - sound support (udeb)
+ sound-modules-4.9.0-9-686-pae-di - sound support (udeb)
+ sound-modules-4.9.0-9-amd64-di - sound support (udeb)
+ sound-modules-4.9.0-9-loongson-3-di - sound support (udeb)
+ sound-modules-4.9.0-9-octeon-di - sound support (udeb)
+ sound-modules-4.9.0-9-sh7751r-di - sound support (udeb)
+ sound-modules-4.9.0-9-sh7785lcr-di - sound support (udeb)
+ speakup-modules-4.9.0-9-686-di - speakup modules (udeb)
+ speakup-modules-4.9.0-9-686-pae-di - speakup modules (udeb)
+ speakup-modules-4.9.0-9-amd64-di - speakup modules (udeb)
+ speakup-modules-4.9.0-9-loongson-3-di - speakup modules (udeb)
+ speakup-modules-4.9.0-9-sh7751r-di - speakup modules (udeb)
+ speakup-modules-4.9.0-9-sh7785lcr-di - speakup modules (udeb)
+ squashfs-modules-4.9.0-9-4kc-malta-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-5kc-malta-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-686-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-686-pae-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-alpha-generic-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-amd64-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-arm64-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-armmp-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-loongson-3-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-m68k-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-marvell-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-octeon-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-parisc-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-parisc64-smp-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-powerpc-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-powerpc64-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-powerpc64le-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-sh7751r-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-sh7785lcr-di - squashfs modules (udeb)
+ squashfs-modules-4.9.0-9-sparc64-di - squashfs modules (udeb)
+ srm-modules-4.9.0-9-alpha-generic-di - SRM modules (udeb)
+ udf-modules-4.9.0-9-4kc-malta-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-5kc-malta-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-686-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-686-pae-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-amd64-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-arm64-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-armmp-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-loongson-3-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-m68k-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-marvell-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-octeon-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-powerpc-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-powerpc64-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-powerpc64le-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-s390x-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-sh7751r-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-sh7785lcr-di - UDF modules (udeb)
+ udf-modules-4.9.0-9-sparc64-di - UDF modules (udeb)
+ ufs-modules-4.9.0-9-sparc64-di - UFS filesystem support (udeb)
+ uinput-modules-4.9.0-9-686-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-686-pae-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-amd64-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-arm64-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-armmp-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-marvell-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-powerpc-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-powerpc64-di - uinput support (udeb)
+ uinput-modules-4.9.0-9-powerpc64le-di - uinput support (udeb)
+ usb-modules-4.9.0-9-4kc-malta-di - USB support (udeb)
+ usb-modules-4.9.0-9-5kc-malta-di - USB support (udeb)
+ usb-modules-4.9.0-9-686-di - USB support (udeb)
+ usb-modules-4.9.0-9-686-pae-di - USB support (udeb)
+ usb-modules-4.9.0-9-alpha-generic-di - USB support (udeb)
+ usb-modules-4.9.0-9-amd64-di - USB support (udeb)
+ usb-modules-4.9.0-9-arm64-di - USB support (udeb)
+ usb-modules-4.9.0-9-armmp-di - USB support (udeb)
+ usb-modules-4.9.0-9-loongson-3-di - USB support (udeb)
+ usb-modules-4.9.0-9-marvell-di - USB support (udeb)
+ usb-modules-4.9.0-9-octeon-di - USB support (udeb)
+ usb-modules-4.9.0-9-parisc-di - USB support (udeb)
+ usb-modules-4.9.0-9-parisc64-smp-di - USB support (udeb)
+ usb-modules-4.9.0-9-powerpc-di - USB support (udeb)
+ usb-modules-4.9.0-9-powerpc64-di - USB support (udeb)
+ usb-modules-4.9.0-9-powerpc64le-di - USB support (udeb)
+ usb-modules-4.9.0-9-sparc64-di - USB support (udeb)
+ usb-serial-modules-4.9.0-9-4kc-malta-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-5kc-malta-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-686-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-686-pae-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-alpha-generic-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-amd64-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-loongson-3-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-marvell-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-octeon-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-parisc-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-parisc64-smp-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-powerpc-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-powerpc64-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-powerpc64le-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-sh7751r-di - USB serial drivers (udeb)
+ usb-serial-modules-4.9.0-9-sh7785lcr-di - USB serial drivers (udeb)
+ usb-storage-modules-4.9.0-9-4kc-malta-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-5kc-malta-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-686-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-686-pae-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-alpha-generic-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-amd64-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-arm64-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-armmp-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-loongson-3-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-marvell-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-octeon-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-parisc-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-parisc64-smp-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-powerpc-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-powerpc64-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-powerpc64le-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-sh7751r-di - USB storage support (udeb)
+ usb-storage-modules-4.9.0-9-sparc64-di - USB storage support (udeb)
+ usbip      - USB device sharing system over IP network
+ virtio-modules-4.9.0-9-4kc-malta-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-5kc-malta-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-686-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-686-pae-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-alpha-generic-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-amd64-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-arm64-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-armmp-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-loongson-3-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-octeon-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-parisc-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-parisc64-smp-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-powerpc-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-powerpc64-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-powerpc64le-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-s390x-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-sh7751r-di - virtio modules (udeb)
+ virtio-modules-4.9.0-9-sparc64-di - virtio modules (udeb)
+ xfs-modules-4.9.0-9-4kc-malta-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-5kc-malta-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-686-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-686-pae-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-alpha-generic-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-amd64-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-arm64-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-loongson-3-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-octeon-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-parisc-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-parisc64-smp-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-powerpc-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-powerpc64-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-powerpc64le-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-s390x-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-sh7751r-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-sh7785lcr-di - XFS filesystem support (udeb)
+ xfs-modules-4.9.0-9-sparc64-di - XFS filesystem support (udeb)
+ zlib-modules-4.9.0-9-4kc-malta-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-5kc-malta-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-alpha-generic-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-armmp-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-loongson-3-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-m68k-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-marvell-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-octeon-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-parisc-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-parisc64-smp-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-powerpc-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-s390x-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-sh7751r-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-sh7785lcr-di - zlib modules (udeb)
+ zlib-modules-4.9.0-9-sparc64-di - zlib modules (udeb)
+Closes: 904385 918103 922306
+Changes:
+ linux (4.9.161-1) stretch; urgency=medium
+ .
+   * New upstream stable update:
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.145
+     - [armhf] media: omap3isp: Unregister media device as first
+     - [amd64] iommu/vt-d: Fix NULL pointer dereference in prq_event_thread()
+     - brcmutil: really fix decoding channel info for 160 MHz bandwidth
+     - HID: input: Ignore battery reported by Symbol DS4308
+     - batman-adv: Expand merged fragment buffer for full packet
+     - bnx2x: Assign unique DMAE channel number for FW DMAE transactions.
+     - qed: Fix PTT leak in qed_drain()
+     - qed: Fix reading wrong value in loop condition
+     - net/mlx4_core: Zero out lkey field in SW2HW_MPT fw command
+     - net/mlx4_core: Fix uninitialized variable compilation warning
+     - net/mlx4: Fix UBSAN warning of signed integer overflow
+     - [amd64] iommu/vt-d: Use memunmap to free memremap
+     - team: no need to do team_notify_peers or team_mcast_rejoin when
+       disabling port
+     - mm: don't warn about allocations which stall for too long
+     - usb: quirk: add no-LPM quirk on SanDisk Ultra Flair device
+     - usb: appledisplay: Add 27" Apple Cinema Display
+     - USB: check usb_get_extra_descriptor for proper size (CVE-2018-20169)
+     - ALSA: usb-audio: Fix UAF decrement if card has no live interfaces in
+       card.c (CVE-2018-19824)
+     - [x86] ALSA: hda: Add support for AMD Stoney Ridge
+     - ALSA: pcm: Fix starvation on down_write_nonblock()
+     - ALSA: pcm: Call snd_pcm_unlink() conditionally at closing
+     - ALSA: pcm: Fix interval evaluation with openmin/max
+     - [x86] ALSA: hda/realtek - Fix speaker output regression on Thinkpad T570
+     - [s390x] virtio: avoid race on vcdev->config
+     - [s390x] virtio: fix race in ccw_io_helper()
+     - SUNRPC: Fix leak of krb5p encode pages
+     - [armhf] dmaengine: cppi41: delete channel from pending list when stop
+       channel
+     - xhci: Prevent U1/U2 link pm states if exit latency is too long
+     - swiotlb: clean up reporting
+     - vsock: lookup and setup guest_cid inside vhost_vsock_lock
+     - vhost/vsock: fix use-after-free in network stack callers
+       (CVE-2018-14625)
+     - cifs: Fix separator when building path from dentry
+     - staging: rtl8712: Fix possible buffer overrun
+     - tty: do not set TTY_IO_ERROR flag if console port
+     - mac80211_hwsim: Timer should be initialized before device registered
+     - mac80211: Clear beacon_int in ieee80211_do_stop
+     - mac80211: ignore tx status for PS stations in ieee80211_tx_status_ext
+     - mac80211: fix reordering of buffered broadcast packets
+     - mac80211: ignore NullFunc frames in the duplicate detection
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.146
+     - ipv6: Check available headroom in ip6_xmit() even without options
+     - net: 8139cp: fix a BUG triggered by changing mtu with network traffic
+     - net/mlx4_core: Correctly set PFC param if global pause is turned off.
+     - net: phy: don't allow __set_phy_supported to add unsupported modes
+     - net: Prevent invalid access to skb->prev in __qdisc_drop_all
+     - rtnetlink: ndo_dflt_fdb_dump() only work for ARPHRD_ETHER devices
+     - tcp: fix NULL ref in tail loss probe
+     - tun: forbid iface creation with rtnl ops
+     - neighbour: Avoid writing before skb->head in neigh_hh_output()
+     - [armhf] OMAP2+: prm44xx: Fix section annotation on
+       omap44xx_prm_enable_io_wakeup
+     - sysv: return 'err' instead of 0 in __sysv_write_inode
+     - [s390x] cpum_cf: Reject request for sampling in event initialization
+     - [armhf] ASoC: omap-abe-twl6040: Fix missing audio card caused by
+       deferred probing
+     - ASoC: dapm: Recalculate audio map forcely when card instantiated
+     - hwmon: (w83795) temp4_type has writable permission
+     - objtool: Fix double-free in .cold detection error path
+     - objtool: Fix segfault in .cold detection with -ffunction-sections
+     - Btrfs: send, fix infinite loop due to directory rename dependencies
+     - RDMA/mlx5: Fix fence type for IB_WR_LOCAL_INV WR
+     - [armhf] ASoC: omap-mcpdm: Add pm_qos handling to avoid under/overruns
+       with CPU_IDLE
+     - [armhf] ASoC: omap-dmic: Add pm_qos handling to avoid overruns with
+       CPU_IDLE
+     - exportfs: do not read dentry after free
+     - bpf: fix check of allowed specifiers in bpf_trace_printk
+     - ipvs: call ip_vs_dst_notifier earlier than ipv6_dev_notf
+     - [arm64] net: thunderx: fix NULL pointer dereference in nic_remove
+     - cachefiles: Fix page leak in cachefiles_read_backing_file while vmscan
+       is active
+     - igb: fix uninitialized variables
+     - ixgbe: recognize 1000BaseLX SFP modules as 1Gbps
+     - [arm64] net: hisilicon: remove unexpected free_netdev
+     - drm/ast: fixed reading monitor EDID not stable issue
+     - fscache: fix race between enablement and dropping of object
+     - ocfs2: fix deadlock caused by ocfs2_defrag_extent()
+     - hfs: do not free node before using
+     - hfsplus: do not free node before using
+     - ocfs2: fix potential use after free
+     - pstore: Convert console write to use ->write_buf
+     - staging: speakup: Replace strncpy with memcpy
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.147
+     - signal: Introduce COMPAT_SIGMINSTKSZ for use in compat_sys_sigaltstack
+       (Closes: #904385)
+     - timer/debug: Change /proc/timer_list from 0444 to 0400
+     - [armhf] pinctrl: sunxi: a83t: Fix IRQ offset typo for PH11
+     - aio: fix spectre gadget in lookup_ioctx
+     - [armhf] MMC: OMAP: fix broken MMC on OMAP15XX/OMAP5910/OMAP310
+     - [arm*] ARM: mmp/mmp2: fix cpu_is_mmp2() on mmp2-dt
+     - tracing: Fix memory leak in set_trigger_filter()
+     - tracing: Fix memory leak of instance function hash filters
+     - [powerpc*] msi: Fix NULL pointer access in teardown code
+     - Revert "drm/rockchip: Allow driver to be shutdown on reboot/kexec"
+     - [x86] drm/i915/execlists: Apply a full mb before execution for Braswell
+     - mac80211: don't WARN on bad WMM parameters from buggy APs
+     - mac80211: Fix condition validating WMM IE
+     - [amd64] IB/hfi1: Remove race conditions in user_sdma send path
+     - [x86] locking: Remove smp_read_barrier_depends() from
+       queued_spin_lock_slowpath()
+     - [x86] locking/qspinlock: Ensure node is initialised before updating
+       prev->next
+     - [x86] locking/qspinlock: Bound spinning on pending->locked transition in
+       slowpath
+     - [x86] locking/qspinlock: Merge 'struct __qspinlock' into 'struct
+       qspinlock'
+     - [x86] locking/qspinlock: Remove unbounded cmpxchg() loop from locking
+       slowpath
+     - [x86] locking/qspinlock: Remove duplicate clear_pending() function from
+       PV code
+     - [x86] locking/qspinlock: Kill cmpxchg() loop when claiming lock from
+       head of queue
+     - [x86] locking/qspinlock: Re-order code
+     - [x86] locking/qspinlock/x86: Increase _Q_PENDING_LOOPS upper bound
+     - [x86] locking/qspinlock, x86: Provide liveness guarantee
+     - [x86] locking/qspinlock: Fix build for anonymous union in older GCC
+       compilers
+     - mac80211_hwsim: fix module init error paths for netlink
+     - scsi: libiscsi: Fix NULL pointer dereference in iscsi_eh_session_reset
+     - [x86] scsi: vmw_pscsi: Rearrange code to avoid multiple calls to
+       free_irq during unload
+     - [x86] earlyprintk/efi: Fix infinite loop on some screen widths
+     - [arm64] drm/msm: Grab a vblank reference when waiting for commit_done
+     - bonding: fix 802.3ad state sent to partner when unbinding slave
+     - nfs: don't dirty kernel pages read by direct-io
+     - SUNRPC: Fix a potential race in xprt_connect()
+     - [arm64] clk: mvebu: Off by one bugs in cp110_of_clk_get()
+     - [armhf] Input: omap-keypad - fix keyboard debounce configuration
+     - libata: whitelist all SAMSUNG MZ7KM* solid-state disks
+     - [armhf] mv88e6060: disable hardware level MAC learning
+     - net/mlx4_en: Fix build break when CONFIG_INET is off
+     - bpf: check pending signals while verifying programs
+     - [arm*] 8814/1: mm: improve/fix ARM v7_dma_inv_range() unaligned address
+       handling
+     - [arm*] 8815/1: V7M: align v7m_dma_inv_range() with v7 counterpart
+     - drm/ast: Fix connector leak during driver unload
+     - cifs: In Kconfig CONFIG_CIFS_POSIX needs depends on legacy (insecure
+       cifs)
+     - vhost/vsock: fix reset orphans race with close timeout
+     - [x86] i2c: scmi: Fix probe error on devices with an empty SMB0001 ACPI
+       device node
+     - nvmet-rdma: fix response use after free
+     - [armhf] rtc: snvs: add a missing write sync
+     - [armhf] rtc: snvs: Add timeouts to avoid kernel lockups
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.148
+     - block: break discard submissions into the user defined size
+     - block: fix infinite loop if the device loses discard capability
+     - ib_srpt: Fix a use-after-free in __srpt_close_all_ch()
+     - USB: hso: Fix OOB memory access in hso_probe/hso_get_config_data
+       (CVE-2018-19985)
+     - xhci: Don't prevent USB2 bus suspend in state check intended for USB3
+       only
+     - USB: serial: option: add GosunCn ZTE WeLink ME3630
+     - USB: serial: option: add HP lt4132
+     - USB: serial: option: add Simcom SIM7500/SIM7600 (MBIM mode)
+     - USB: serial: option: add Fibocom NL668 series
+     - USB: serial: option: add Telit LN940 series
+     - mmc: core: Reset HPI enabled state during re-init and in case of errors
+     - mmc: core: Allow BKOPS and CACHE ctrl even if no HPI support
+     - mmc: core: Use a minimum 1600ms timeout when enabling CACHE ctrl
+     - [armhf] mmc: omap_hsmmc: fix DMA API warning
+     - [x86] Drivers: hv: vmbus: Return -EINVAL for the sys files for unopened
+       channels
+     - [x86] mtrr: Don't copy uninitialized gentry fields back to userspace
+     - [x86] fpu: Disable bottom halves while loading FPU registers
+     - ubifs: Handle re-linking of inodes correctly while recovery
+     - panic: avoid deadlocks in re-entrant console drivers
+     - proc/sysctl: don't return ENOMEM on lookup when a table is unregistering
+     - drm/ioctl: Fix Spectre v1 vulnerabilities
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.149
+     - ip6mr: Fix potential Spectre v1 vulnerability
+     - ipv4: Fix potential Spectre v1 vulnerability
+     - ax25: fix a use-after-free in ax25_fillin_cb()
+     - [ppc64el] ibmveth: fix DMA unmap error in ibmveth_xmit_start error path
+     - ieee802154: lowpan_header_create check must check daddr
+     - ipv6: explicitly initialize udp6_addr in udp_sock_create6()
+     - ipv6: tunnels: fix two use-after-free
+     - isdn: fix kernel-infoleak in capi_unlocked_ioctl
+     - net: ipv4: do not handle duplicate fragments as overlapping
+     - net: phy: Fix the issue that netif always links up after resuming
+     - netrom: fix locking in nr_find_socket()
+     - packet: validate address length
+     - packet: validate address length if non-zero
+     - sctp: initialize sin6_flowinfo for ipv6 addrs in sctp_inet6addr_event
+     - tipc: fix a double kfree_skb()
+     - vhost: make sure used idx is seen before log in vhost_add_used_n()
+     - [x86] VSOCK: Send reset control packet when socket is partially bound
+     - xen/netfront: tolerate frags with no data
+     - tipc: use lock_sock() in tipc_sk_reinit()
+     - tipc: compare remote and local protocols in tipc_udp_enable()
+     - gro_cell: add napi_disable in gro_cells_destroy
+     - net/mlx5e: Remove the false indication of software timestamping support
+     - net/mlx5: Typo fix in del_sw_hw_rule
+     - sock: Make sock->sk_stamp thread-safe
+     - ptr_ring: wrap back ->producer in __ptr_ring_swap_queue()
+     - ALSA: rme9652: Fix potential Spectre v1 vulnerability
+     - ALSA: emu10k1: Fix potential Spectre v1 vulnerabilities
+     - ALSA: pcm: Fix potential Spectre v1 vulnerability
+     - ALSA: emux: Fix potential Spectre v1 vulnerabilities
+     - ALSA: hda: add mute LED support for HP EliteBook 840 G4
+     - [arm64,armhf] ALSA: hda/tegra: clear pending irq handlers
+     - USB: serial: pl2303: add ids for Hewlett-Packard HP POS pole displays
+     - USB: serial: option: add Fibocom NL678 series
+     - qmi_wwan: apply SET_DTR quirk to the SIMCOM shared device ID
+     - Input: elan_i2c - add ACPI ID for touchpad in ASUS Aspire F5-573G
+     - [x86] KVM: Use jmp to invoke kvm_spurious_fault() from .fixup
+     - platform-msi: Free descriptors in platform_msi_domain_free()
+     - perf pmu: Suppress potential format-truncation warning
+     - ext4: fix possible use after free in ext4_quota_enable
+     - ext4: missing unlock/put_page() in ext4_try_to_write_inline_data()
+     - ext4: fix EXT4_IOC_GROUP_ADD ioctl
+     - ext4: include terminating u32 in size of xattr entries when expanding
+       inodes
+     - ext4: force inode writes when nfsd calls commit_metadata()
+     - [arm64,armhf] spi: bcm2835: Fix race on DMA termination
+     - [arm64,armhf] spi: bcm2835: Fix book-keeping of DMA termination
+     - [arm64,armhf] spi: bcm2835: Avoid finishing transfer prematurely in IRQ
+       mode
+     - [armhf] clk: rockchip: fix typo in rk3188 spdif_frac parent
+     - cdc-acm: fix abnormal DATA RX issue for Mediatek Preloader.
+     - f2fs: fix validation of the block count in sanity_check_raw_super
+     - media: vivid: free bitmap_cap when updating std/timings/etc.
+     - media: v4l2-tpg: array index could become negative
+     - [mips*] Ensure pmd_present() returns false after pmd_mknotpresent()
+     - [mips*] OCTEON: mark RGMII interface disabled on OCTEON III
+     - CIFS: Fix error mapping for SMB2_LOCK command which caused OFD lock problem
+     - [x86] kvm/vmx: do not use vm-exit instruction length for fast MMIO when
+       running nested
+     - [arm64] KVM: Avoid setting the upper 32 bits of VTCR_EL2 to 1
+     - [armhf] rtc: m41t80: Correct alarm month range with RTC reads
+     - [x86] tpm: tpm_i2c_nuvoton: use correct command duration for TPM 2.x
+     - [arm64,armhf] spi: bcm2835: Unbreak the build of esoteric configs
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.150
+     - [arm64] pinctrl: meson: fix pull enable register calculation
+     - Input: restore EV_ABS ABS_RESERVED
+     - xfrm: Fix bucket count reported to userspace
+     - netfilter: seqadj: re-load tcp header pointer after possible head
+       reallocation
+     - scsi: bnx2fc: Fix NULL dereference in error handling
+     - [armhf] Input: omap-keypad - fix idle configuration to not block SoC
+       idle states
+     - netfilter: ipset: do not call ipset_nest_end after nla_nest_cancel
+     - bnx2x: Clear fip MAC when fcoe offload support is disabled
+     - bnx2x: Remove configured vlans as part of unload sequence.
+     - bnx2x: Send update-svid ramrod with retry/poll flags enabled
+     - scsi: target: iscsi: cxgbit: fix csk leak
+     - scsi: target: iscsi: cxgbit: add missing spin_lock_init()
+     - [arm64] net: hns: Incorrect offset address used for some registers.
+     - [arm64] net: hns: All ports can not work when insmod hns ko after rmmod.
+     - [arm64] net: hns: Some registers use wrong address according to the
+       datasheet.
+     - [arm64] net: hns: Fixed bug that netdev was opened twice
+     - [arm64] net: hns: Clean rx fbd when ae stopped.
+     - [arm64] net: hns: Free irq when exit from abnormal branch
+     - [arm64] net: hns: Avoid net reset caused by pause frames storm
+     - [arm64] net: hns: Fix ntuple-filters status error.
+     - net: hns: Add mac pcs config when enable|disable mac
+     - SUNRPC: Fix a race with XPRT_CONNECTING
+     - lan78xx: Resolve issue with changing MAC address
+     - vxge: ensure data0 is initialized in when fetching firmware version
+       information
+     - net: netxen: fix a missing check and an uninitialized use
+     - [s390x] scsi: zfcp: fix posting too many status read buffers leading to
+       adapter shutdown
+     - libceph: fix CEPH_FEATURE_CEPHX_V2 check in calc_signature()
+     - fork: record start_time late
+     - hwpoison, memory_hotplug: allow hwpoisoned pages to be offlined
+     - mm, devm_memremap_pages: mark devm_memremap_pages() EXPORT_SYMBOL_GPL
+     - mm, devm_memremap_pages: kill mapping "System RAM" support
+     - sunrpc: fix cache_head leak due to queued request
+     - sunrpc: use SVC_NET() in svcauth_gss_* functions
+     - [mips*] math-emu: Write-protect delay slot emulation pages
+     - [amd64] crypto: x86/chacha20 - avoid sleeping with preemption disabled
+     - vhost/vsock: fix uninitialized vhost_vsock->guest_cid
+     - [amd64] IB/hfi1: Incorrect sizing of sge for PIO will OOPs
+     - ALSA: cs46xx: Potential NULL dereference in probe
+     - ALSA: usb-audio: Avoid access before bLength check in
+       build_audio_procunit()
+     - ALSA: usb-audio: Fix an out-of-bound read in create_composite_quirks
+     - dlm: fixed memory leaks after failed ls_remove_names allocation
+     - dlm: possible memory leak on error path in create_lkb()
+     - dlm: lost put_lkb on error path in receive_convert() and
+       receive_unlock()
+     - dlm: memory leaks on error path in dlm_user_request()
+     - gfs2: Get rid of potential double-freeing in gfs2_create_inode
+     - gfs2: Fix loop in gfs2_rbm_find
+     - b43: Fix error in cordic routine
+     - [powerpc*] tm: Set MSR[TS] just prior to recheckpoint
+     - 9p/net: put a lower bound on msize
+     - rxe: fix error completion wr_id and qp_num
+     - [amd64] iommu/vt-d: Handle domain agaw being less than iommu agaw
+     - ceph: don't update importing cap's mseq when handing cap export
+     - [ppc64el] genwqe: Fix size check
+     - [x86] intel_th: msu: Fix an off-by-one in attribute store
+     - [i386] power: supply: olpc_battery: correct the temperature units
+     - [arm64,armhf] drm/vc4: Set ->is_yuv to false when num_planes == 1
+     - bnx2x: Fix NULL pointer dereference in bnx2x_del_all_vlans() on some hw
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.151
+     - ALSA: hda/realtek - Disable headset Mic VREF for headset mode of ALC225
+     - CIFS: Do not hide EINTR after sending network packets
+     - cifs: Fix potential OOB access of lock element array
+     - usb: cdc-acm: send ZLP for Telit 3G Intel based modems
+     - USB: storage: don't insert sane sense for SPC3+ when bad sense specified
+     - USB: storage: add quirk for SMI SM3350
+     - USB: Add USB_QUIRK_DELAY_CTRL_MSG quirk for Corsair K70 RGB
+     - slab: alien caches must not be initialized if the allocation of the
+       alien cache failed
+     - mm: page_mapped: don't assume compound page is huge or THP
+     - ACPI: power: Skip duplicate power resource references in _PRx
+     - i2c: dev: prevent adapter retries and timeout being set as minus value
+     - rbd: don't return 0 on unmap if RBD_DEV_FLAG_REMOVING is set
+     - ext4: make sure enough credits are reserved for dioread_nolock writes
+     - ext4: fix a potential fiemap/page fault deadlock w/ inline_data
+     - ext4: avoid kernel warning when writing the superblock to a dead device
+     - sunrpc: use-after-free in svc_process_common() (CVE-2018-16884)
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.152
+     - tty/ldsem: Wake up readers after timed out down_write()
+     - tty: Hold tty_ldisc_lock() during tty_reopen()
+     - tty: Simplify tty->count math in tty_reopen()
+     - tty: Don't hold ldisc lock in tty_reopen() if ldisc present
+     - can: gw: ensure DLC boundaries after CAN frame modification
+       (CVE-2019-3701)
+     - Revert "f2fs: do not recover from previous remained wrong dnodes"
+     - media: em28xx: Fix misplaced reset of dev->v4l::field_count
+     - proc: Remove empty line in /proc/self/status
+     - [arm64] kvm: consistently handle host HCR_EL2 flags
+     - [arm64] Don't trap host pointer auth use to EL2
+     - ipv6: fix kernel-infoleak in ipv6_local_error()
+     - net: bridge: fix a bug on using a neighbour cache entry without checking
+       its state
+     - packet: Do not leak dev refcounts on error exit
+     - bonding: update nest level on unlink
+     - ip: on queued skb use skb_header_pointer instead of pskb_may_pull
+     - crypto: authencesn - Avoid twice completion call in decrypt path
+     - crypto: authenc - fix parsing key with misaligned rta_len
+     - btrfs: wait on ordered extents on abort cleanup
+     - Yama: Check for pid death before checking ancestry
+     - scsi: core: Synchronize request queue PM status only on successful
+       resume
+     - scsi: sd: Fix cache_type_store()
+     - [arm64] kaslr: ensure randomized quantities are clean to the PoC
+     - [mips*] Disable MSI also when pcie-octeon.pcie_disable on
+     - media: vivid: fix error handling of kthread_run
+     - media: vivid: set min width/height to a value > 0
+     - LSM: Check for NULL cred-security on free
+     - media: vb2: vb2_mmap: move lock up
+     - sunrpc: handle ENOMEM in rpcb_getport_async
+     - netfilter: ebtables: account ebt_table_info to kmemcg
+     - selinux: fix GPF on invalid policy
+     - blockdev: Fix livelocks on loop device
+     - sctp: allocate sctp_sockaddr_entry with kzalloc
+     - tipc: fix uninit-value in tipc_nl_compat_link_reset_stats
+     - tipc: fix uninit-value in tipc_nl_compat_bearer_enable
+     - tipc: fix uninit-value in tipc_nl_compat_link_set
+     - tipc: fix uninit-value in tipc_nl_compat_name_table_dump
+     - tipc: fix uninit-value in tipc_nl_compat_doit
+     - block/loop: Use global lock for ioctl() operation.
+     - loop: Fold __loop_release into loop_release
+     - loop: Get rid of loop_index_mutex
+     - loop: Fix double mutex_unlock(&loop_ctl_mutex) in loop_control_ioctl()
+     - drm/fb-helper: Ignore the value of fb_var_screeninfo.pixclock
+     - mm, memcg: fix reclaim deadlock with writeback
+     - media: vb2: be sure to unlock mutex on errors
+     - nbd: set the logical and physical blocksize properly
+     - nbd: Use set_blocksize() to set device blocksize
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.153
+     - r8169: Add support for new Realtek Ethernet
+     - ipv6: Consider sk_bound_dev_if when binding a socket to a v4 mapped
+       address
+     - ipv6: Take rcu_read_lock in __inet6_bind for mapped addresses
+     - [x86] platform: asus-wmi: Tell the EC the OS will handle the display off
+       hotkey
+     - e1000e: allow non-monotonic SYSTIM readings
+     - writeback: don't decrement wb->refcnt if !wb->bdi
+     - [arm64,armhf] serial: set suppress_bind_attrs flag only if builtin
+     - ALSA: oxfw: add support for APOGEE duet FireWire
+     - [arm64] perf: set suppress_bind_attrs flag to true
+     - selinux: always allow mounting submounts
+     - rxe: IB_WR_REG_MR does not capture MR's iova field
+     - jffs2: Fix use of uninitialized delayed_work, lockdep breakage
+     - pstore/ram: Do not treat empty buffers as valid
+     - [ppc64el] powerpc/xmon: Fix invocation inside lock region
+     - [powerpc*] powerpc/pseries/cpuidle: Fix preempt warning
+     - media: firewire: Fix app_info parameter type in avc_ca{,_app}_info
+     - net: call sk_dst_reset when set SO_DONTROUTE
+     - scsi: target: use consistent left-aligned ASCII INQUIRY data
+     - [armhf] clk: imx6q: reset exclusive gates on init
+     - tty/serial: do not free trasnmit buffer page under port lock
+     - [x86] perf intel-pt: Fix error with config term "pt=0"
+     - perf svghelper: Fix unchecked usage of strncpy()
+     - perf parse-events: Fix unchecked usage of strncpy()
+     - dm kcopyd: Fix bug causing workqueue stalls
+     - dm snapshot: Fix excessive memory usage and workqueue stalls
+     - ALSA: bebob: fix model-id of unit for Apogee Ensemble
+     - sysfs: Disable lockdep for driver bind/unbind files
+     - scsi: smartpqi: correct lun reset issues
+     - scsi: megaraid: fix out-of-bound array accesses
+     - ocfs2: fix panic due to unrecovered local alloc
+     - mm/page-writeback.c: don't break integrity writeback on ->writepage()
+       error
+     - mm, proc: be more verbose about unstable VMA flags in /proc/<pid>/smaps
+     - [arm64] ipmi:ssif: Fix handling of multi-part return messages
+     - locking/qspinlock: Pull in asm/byteorder.h to ensure correct endianness
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.154
+     - net: bridge: Fix ethernet header pointer before check skb forwardable
+     - net: Fix usage of pskb_trim_rcsum
+     - openvswitch: Avoid OOB read when parsing flow nlattrs
+     - vhost: log dirty page correctly
+     - net: ipv4: Fix memory leak in network namespace dismantle
+     - net_sched: refetch skb protocol for each filter
+     - ipfrag: really prevent allocation on netns exit
+     - USB: serial: simple: add Motorola Tetra TPG2200 device id
+     - USB: serial: pl2303: add new PID to support PL2303TB
+     - [x86] ASoC: atom: fix a missing check of snd_pcm_lib_malloc_pages
+     - [s390x] early: improve machine detection
+     - [s390x] smp: fix CPU hotplug deadlock with CPU rescan
+     - [x86] char/mwave: fix potential Spectre v1 vulnerability
+     - staging: rtl8188eu: Add device code for D-Link DWA-121 rev B1
+     - tty: Handle problem if line discipline does not have receive_buf
+     - uart: Fix crash in uart_write and uart_put_char
+     - [x86] tty/n_hdlc: fix __might_sleep warning
+     - CIFS: Fix possible hang during async MTU reads and writes
+     - Input: xpad - add support for SteelSeries Stratus Duo
+     - compiler.h: enable builtin overflow checkers and add fallback code
+     - Input: uinput - fix undefined behavior in uinput_validate_absinfo()
+     - [x86] acpi/nfit: Block function zero DSMs
+     - [x86] acpi/nfit: Fix command-supported detection
+     - dm thin: fix passdown_double_checking_shared_status()
+     - [x86] KVM: Fix single-step debugging
+     - [x86] kaslr: Fix incorrect i8254 outb() parameters
+     - can: dev: __can_get_echo_skb(): fix bogous check for non-existing skb by
+       removing it
+     - can: bcm: check timer values before ktime conversion
+     - vt: invoke notifier on screen size change
+     - perf unwind: Unwind with libdw doesn't take symfs into account
+     - perf unwind: Take pgoff into account when reporting elf to libdwfl
+     - [arm64] irqchip/gic-v3-its: Align PCI Multi-MSI allocation on their size
+     - [s390x] smp: Fix calling smp_call_ipl_cpu() from ipl CPU
+     - nvmet-rdma: Add unlikely for response allocated check
+     - nvmet-rdma: fix null dereference under heavy load
+     - f2fs: read page index before freeing
+     - btrfs: fix error handling in btrfs_dev_replace_start
+     - btrfs: dev-replace: go back to suspended state if target device is
+       missing
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.155
+     - Fix "net: ipv4: do not handle duplicate fragments as overlapping"
+     - fs: add the fsnotify call to vfs_iter_write
+     - ipv6: Consider sk_bound_dev_if when binding a socket to an address
+       (Closes: #918103)
+     - l2tp: copy 4 more bytes to linear part if necessary
+     - net/mlx4_core: Add masking for a few queries on HCA caps
+     - netrom: switch to sock timer API
+     - net/rose: fix NULL ax25_cb kernel panic
+     - net/mlx5e: Allow MAC invalidation while spoofchk is ON
+     - l2tp: remove l2specific_len dependency in l2tp_core
+     - l2tp: fix reading optional fields of L2TPv3
+     - ipvlan, l3mdev: fix broken l3s mode wrt local routes
+     - CIFS: Do not count -ENODATA as failure for query directory
+     - fs/dcache: Fix incorrect nr_dentry_unused accounting in
+       shrink_dcache_sb()
+     - [arm64] kaslr: ensure randomized quantities are clean also when kaslr is
+       off
+     - [arm64] hyp-stub: Forbid kprobing of the hyp-stub
+     - [arm64] hibernate: Clean the __hyp_text to PoC after resume
+     - gfs2: Revert "Fix loop in gfs2_rbm_find"
+     - [x86] platform/x86: asus-nb-wmi: Map 0x35 to KEY_SCREENLOCK
+     - [x86] platform/x86: asus-nb-wmi: Drop mapping of 0x33 and 0x34 scan
+       codes
+     - [arm64,armhf] mmc: sdhci-iproc: handle mmc_of_parse() errors during
+       probe
+     - kernel/exit.c: release ptraced tasks before zap_pid_ns_processes
+     - mm, oom: fix use-after-free in oom_kill_process
+     - mm: hwpoison: use do_send_sig_info() instead of force_sig()
+     - mm: migrate: don't rely on __PageMovable() of newpage after unlocking it
+     - cifs: Always resolve hostname before reconnecting
+     - drivers: core: Remove glue dirs from sysfs earlier
+     - fs: don't scan the inode cache before SB_BORN is set
+     - fanotify: fix handling of events on child sub-directory
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.156
+     - drm/bufs: Fix Spectre v1 vulnerability
+     - [x86] ASoC: Intel: mrfld: fix uninitialized variable access
+     - [armhf] gpu: ipu-v3: image-convert: Prevent race between run and
+       unprepare
+     - scsi: lpfc: Correct LCB RJT handling
+     - [armhf] 8808/1: kexec:offline panic_smp_self_stop CPU
+     - dlm: Don't swamp the CPU with callbacks queued during recovery
+     - [x86] PCI: Fix Broadcom CNB20LE unintended sign extension (redux)
+     - [ppc64el] powerpc/pseries: add of_node_put() in dlpar_detach_node()
+     - [arm64,armhf] drm/vc4: ->x_scaling[1] should never be set to
+       VC4_SCALING_NONE
+     - ptp: check gettime64 return code in PTP_SYS_OFFSET ioctl
+     - [arm64,armhf] soc/tegra: Don't leak device tree node reference
+     - [x86] iio: accel: kxcjk1013: Add KIOX010A ACPI Hardware-ID
+     - media: adv*/tc358743/ths8200: fill in min width/height/pixelclock
+     - f2fs: move dir data flush to write checkpoint process
+     - f2fs: fix wrong return value of f2fs_acl_create
+     - nfsd4: fix crash on writing v4_end_grace before nfsd startup
+     - Thermal: do not clear passive state during system sleep
+     - firmware/efi: Add NULL pointer checks in efivars API functions
+     - [arm64] ftrace: don't adjust the LR value
+     - [x86] fpu: Add might_fault() to user_insn()
+     - smack: fix access permissions for keyring
+     - usb: hub: delay hub autosuspend if USB3 port is still link training
+     - timekeeping: Use proper seqcount initializer
+     - [armhf] clk: sunxi-ng: a33: Set CLK_SET_RATE_PARENT for all audio module
+       clocks
+     - [amd64] iommu/amd: Fix amd_iommu=force_isolation
+     - [armhf] dts: Fix OMAP4430 SDP Ethernet startup
+     - [mips*] bpf: fix encoding bug for mm_srlv32_op
+     - [arm64,armhf] iommu/arm-smmu: Add support for qcom,smmu-v2 variant
+     - [arm64] iommu/arm-smmu-v3: Use explicit mb() when moving cons pointer
+     - udf: Fix BUG on corrupted inode
+     - memstick: Prevent memstick host from getting runtime suspended during
+       card detection
+     - [armhf] tty: serial: samsung: Properly set flags in autoCTS mode
+     - perf header: Fix unchecked usage of strncpy()
+     - perf probe: Fix unchecked usage of strncpy()
+     - [arm64] KVM: Skip MMIO insn after emulation
+     - mac80211: fix radiotap vendor presence bitmap handling
+     - xfrm6_tunnel: Fix spi check in __xfrm6_tunnel_alloc_spi
+     - Bluetooth: Fix unnecessary error message for HCI request completion
+     - scsi: smartpqi: correct host serial num for ssa
+     - scsi: smartpqi: correct volume status
+     - drbd: narrow rcu_read_lock in drbd_sync_handshake
+     - drbd: disconnect, if the wrong UUIDs are attached on a connected peer
+     - drbd: skip spurious timeout (ping-timeo) when failing promote
+     - fbdev: fbmem: behave better with small rotated displays and many CPUs
+     - i40e: define proper net_device::neigh_priv_len
+     - igb: Fix an issue that PME is not enabled during runtime suspend
+     - fbdev: fbcon: Fix unregister crash when more than one framebuffer
+     - [arm64] pinctrl: meson: meson8: fix the GPIO function for the GPIOAO
+       pins
+     - [arm64] pinctrl: meson: meson8b: fix the GPIO function for the GPIOAO
+       pins
+     - [x86] KVM: svm: report MSR_IA32_MCG_EXT_CTL as unsupported
+     - NFS: nfs_compare_mount_options always compare auth flavors.
+     - hwmon: (lm80) fix a missing check of the status of SMBus read
+     - hwmon: (lm80) fix a missing check of bus read in lm80 probe
+     - seq_buf: Make seq_buf_puts() null-terminate the buffer
+     - cifs: check ntwrk_buf_start for NULL before dereferencing it
+     - um: Avoid marking pages with "changed protection"
+     - niu: fix missing checks of niu_pci_eeprom_read
+     - f2fs: fix sbi->extent_list corruption issue
+     - ocfs2: don't clear bh uptodate for block read
+     - HID: lenovo: Add checks to fix of_led_classdev_register
+     - kernel/hung_task.c: break RCU locks based on jiffies
+     - proc/sysctl: fix return error for proc_doulongvec_minmax()
+     - fs/epoll: drop ovflist branch prediction
+     - exec: load_script: don't blindly truncate shebang string
+     - dccp: fool proof ccid_hc_[rt]x_parse_options()
+     - rxrpc: bad unlock balance in rxrpc_recvmsg
+     - skge: potential memory corruption in skge_get_regs()
+     - rds: fix refcount bug in rds_sock_addref
+     - net/mlx5e: Force CHECKSUM_UNNECESSARY for short ethernet frames
+     - [armhf] net: dsa: slave: Don't propagate flag changes on down slave
+       interfaces
+     - enic: fix checksum validation for IPv6
+     - ALSA: compress: Fix stop handling on compressed capture streams
+     - ALSA: hda - Serialize codec registrations
+     - fuse: call pipe_buf_release() under pipe lock
+     - fuse: decrement NR_WRITEBACK_TEMP on the right page
+     - fuse: handle zero sized retrieve correctly
+     - [arm64,armhf] dmaengine: bcm2835: Fix interrupt race on RT
+     - [arm64,armhf] dmaengine: bcm2835: Fix abort of transactions
+     - [armhf] dmaengine: imx-dma: fix wrong callback invoke
+     - [armhf] usb: phy: am335x: fix race condition in _probe
+     - [armhf] usb: gadget: musb: fix short isoc packets with inventra dma
+     - scsi: aic94xx: fix module loading
+     - [x86] KVM: work around leak of uninitialized stack contents
+       (CVE-2019-7222)
+     - kvm: fix kvm_ioctl_create_device() reference counting (CVE-2019-6974)
+     - [x86] KVM: nVMX: unconditionally cancel preemption timer in free_nested
+       (CVE-2019-7221)
+     - [x86] perf/x86/intel/uncore: Add Node ID mask
+     - [x86] MCE: Initialize mce.bank in the case of a fatal error in
+       mce_no_way_out()
+     - perf/core: Don't WARN() for impossible ring-buffer sizes
+     - perf tests evsel-tp-sched: Fix bitwise operator
+     - serial: fix race between flush_to_ldisc and tty_open
+     - oom, oom_reaper: do not enqueue same task twice
+     - [amd64] PCI: vmd: Free up IRQs on suspend path
+     - [amd64] IB/hfi1: Add limit test for RC/UC send via loopback
+     - [x86] perf/x86/intel: Delay memory deallocation until x86_pmu_dead_cpu()
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.157
+     - [armhf] mtd: rawnand: gpmi: fix MX28 bus master lockup problem
+     - signal: Always notice exiting tasks
+     - signal: Better detection of synchronous signals
+     - [arm64,armhf] misc: vexpress: Off by one in vexpress_syscfg_exec()
+     - debugfs: fix debugfs_rename parameter checking
+     - [mips*] cm: reprime error cause
+     - [mips*] OCTEON: don't set octeon_dma_bar_type if PCI is disabled
+     - mac80211: ensure that mgmt tx skbs have tailroom for encryption
+     - drm/modes: Prevent division by zero htotal
+     - [x86] drm/vmwgfx: Fix setting of dma masks
+     - [x86] drm/vmwgfx: Return error code from vmw_execbuf_copy_fence_user
+     - nfsd4: fix cached replies to solo SEQUENCE compounds
+     - nfsd4: catch some false session retries
+     - HID: debug: fix the ring buffer implementation (CVE-2019-3819)
+     - Revert "cifs: In Kconfig CONFIG_CIFS_POSIX needs depends on legacy
+       (insecure cifs)"
+     - libceph: avoid KEEPALIVE_PENDING races in ceph_con_keepalive()
+     - xfrm: refine validation of template and selector families
+     - batman-adv: Avoid WARN on net_device without parent in netns
+     - batman-adv: Force mac header to start of data on xmit
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.158
+     - Revert "exec: load_script: don't blindly truncate shebang string"
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.159
+     - dt-bindings: eeprom: at24: add "atmel,24c2048" compatible string
+     - eeprom: at24: add support for 24c2048
+     - uapi/if_ether.h: prevent redefinition of struct ethhdr
+     - [armel,armhf] 8789/1: signal: copy registers using __copy_to_user()
+     - [armel,armhf] 8791/1: vfp: use __copy_to_user() when saving VFP state
+     - [armel,armhf] 8793/1: signal: replace __put_user_error with __put_user
+     - [armel,armhf] 8794/1: uaccess: Prevent speculative use of the current
+       addr_limit
+     - [armel,armhf] 8795/1: spectre-v1.1: use put_user() for __put_user()
+     - [armel,armhf] 8796/1: spectre-v1,v1.1: provide helpers for address
+       sanitization
+     - [armel,armhf] 8797/1: spectre-v1.1: harden __copy_to_user
+     - [armel,armhf] 8810/1: vfp: Fix wrong assignement to ufp_exc
+     - [armel,armhf] make lookup_processor_type() non-__init
+     - [armel,armhf] split out processor lookup
+     - [armel,armhf] clean up per-processor check_bugs method call
+     - [armel,armhf] add PROC_VTABLE and PROC_TABLE macros
+     - [armel,armhf] spectre-v2: per-CPU vtables to work around big.Little
+       systems
+     - [armel,armhf] ensure that processor vtables is not lost after boot
+     - [armel,armhf] fix the cockup in the previous patch
+     - net: create skb_gso_validate_mac_len() (CVE-2018-1000026)
+     - bnx2x: disable GSO where gso_size is too big for hardware
+       (CVE-2018-1000026)
+     - [i386] ACPI: NUMA: Use correct type for printing addresses on i386-PAE
+     - cpufreq: check if policy is inactive early in __cpufreq_get()
+     - [armel] dts: kirkwood: Fix polarity of GPIO fan lines
+     - cifs: Limit memory used by lock request calls to a page
+     - perf report: Include partial stacks unwound with libdw
+     - Revert "Input: elan_i2c - add ACPI ID for touchpad in ASUS Aspire
+       F5-573G"
+     - Input: elan_i2c - add ACPI ID for touchpad in Lenovo V330-15ISK
+     - perf/core: Fix impossible ring-buffer sizes warning
+     - [x86] perf: Add check_period PMU callback
+     - ALSA: hda - Add quirk for HP EliteBook 840 G5
+     - ALSA: usb-audio: Fix implicit fb endpoint setup by quirk
+     - [x86] kvm: vmx: Fix entry number check for add_atomic_switch_msr()
+     - Input: elantech - enable 3rd button support on Fujitsu CELSIUS H780
+     - [alpha] fix page fault handling for r16-r18 targets
+     - [alpha] Fix Eiger NR_IRQS to 128
+     - tracing/uprobes: Fix output for multiple string arguments
+     - signal: Restore the stop PTRACE_EVENT_EXIT
+     - [amd64] x86/a.out: Clear the dump structure initially
+     - dm thin: fix bug where bio that overwrites thin block ignores FUA
+     - [x86] drm/i915: Prevent a race during I915_GEM_MMAP ioctl with WC set
+     - smsc95xx: Use skb_cow_head to deal with cloned skbs
+     - ch9200: use skb_cow_head() to deal with cloned skbs
+     - kaweth: use skb_cow_head() to deal with cloned skbs
+     - [arm64,armhf] usb: dwc2: Remove unnecessary kfree
+     - netfilter: nf_tables: fix mismatch in big-endian system
+     - [arm64] pinctrl: msm: fix gpio-hog related boot issues
+     - mm: stop leaking PageTables
+     - uapi/if_ether.h: move __UAPI_DEF_ETHHDR libc define
+     - Revert "scsi: aic94xx: fix module loading"
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.160
+     - net: fix IPv6 prefix route residue
+     - [x86] vsock: cope with memory allocation failure at socket creation time
+     - hwmon: (lm80) Fix missing unlock on error in set_fan_div()
+     - net: Fix for_each_netdev_feature on Big endian
+     - [arm64,armhf] net: stmmac: handle endianness in dwmac4_get_timestamp
+     - sky2: Increase D3 delay again
+     - vhost: correctly check the return value of translate_desc() in
+       log_used()
+     - net: Add header for usage of fls64()
+     - tcp: tcp_v4_err() should be more careful
+     - net: Do not allocate page fragments that are not skb aligned
+     - tcp: clear icsk_backoff in tcp_write_queue_purge()
+     - vxlan: test dev->flags & IFF_UP before calling netif_rx()
+     - [arm64,armhf] net: stmmac: Fix a race in EEE enable callback
+     - net: ipv4: use a dedicated counter for icmp_v4 redirect packets
+     - btrfs: Remove false alert when fiemap range is smaller than on-disk
+       extent
+     - mISDN: fix a race in dev_expire_timer()
+     - ax25: fix possible use-after-free
+     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.161
+     - mac80211: Free mpath object when rhashtable insertion fails
+     - libceph: handle an empty authorize reply
+     - ceph: avoid repeatedly adding inode to mdsc->snap_flush_list
+     - numa: change get_mempolicy() to use nr_node_ids instead of MAX_NUMNODES
+     - proc, oom: do not report alien mms when setting oom_score_adj
+     - KEYS: allow reaching the keys quotas exactly
+     - [armhf] mfd: ti_am335x_tscadc: Use PLATFORM_DEVID_AUTO while registering
+       mfd cells
+     - [armhf] mfd: twl-core: Fix section annotations on {,un}protect_pm_master
+     - [arm64] mfd: qcom_rpm: write fw_version to CTRL_REG
+     - [armhf] mfd: mc13xxx: Fix a missing check of a register-read failure
+     - qed: Fix qed_ll2_post_rx_buffer_notify_fw() by adding a write memory
+       barrier
+     - [arm64] net: hns: Fix use after free identified by SLUB debug
+     - scsi: qla4xxx: check return code of qla4xxx_copy_from_fwddb_param
+     - [x86] scsi: isci: initialize shost fully before calling scsi_add_host()
+     - atm: he: fix sign-extension overflow on large shift
+     - [armhf] leds: lp5523: fix a missing check of return value of lp55xx_read
+     - net/mlx5e: Fix wrong (zero) TX drop counter indication for representor
+     - RDMA/srp: Rework SCSI device reset handling
+     - KEYS: user: Align the payload buffer
+     - KEYS: always initialize keyring_index_key::desc_len
+     - batman-adv: fix uninit-value in batadv_interface_tx()
+     - net/packet: fix 4gb buffer limit due to overflow check
+     - team: avoid complex list operations in team_nl_cmd_options_set()
+     - sit: check if IPv6 enabled before calling ip6_err_gen_icmpv6_unreach()
+     - sctp: call gso_reset_checksum when computing checksum in
+       sctp_gso_segment
+     - net/mlx4_en: Force CHECKSUM_NONE for short ethernet frames
+     - [hppa/parisc] Fix ptrace syscall number modification
+     - [x86] hpet: Make cmd parameter of hpet_ioctl_common() unsigned
+     - clocksource: Use GENMASK_ULL in definition of CLOCKSOURCE_MASK
+     - netpoll: Fix device name check in netpoll_setup()
+     - tracing: Use cpumask_available() to check if cpumask variable may be
+       used
+     - [x86] boot: Disable the address-of-packed-member compiler warning
+     - [x86] drm/i915: Consistently use enum pipe for PCH transcoders
+     - [x86] drm/i915: Fix enum pipe vs. enum transcoder for the PCH transcoder
+     - [arm64] irqchip/gic-v3: Convert arm64 GIC accessors to
+       {read,write}_sysreg_s
+     - mm/zsmalloc.c: change stat type parameter to int
+     - mm/zsmalloc.c: fix -Wunneeded-internal-declaration warning
+     - Revert "bridge: do not add port to router list when receives query with
+       source 0.0.0.0"
+     - netfilter: nf_tables: fix flush after rule deletion in the same batch
+     - [arm64] pinctrl: max77620: Use define directive for
+       max77620_pinconf_param values
+     - [arm64,armhf] phy: tegra: remove redundant self assignment of 'map'
+     - sched/sysctl: Fix attributes of some extern declarations
+ .
+   [ Salvatore Bonaccorso ]
+   * Refresh kbuild-use-nostdinc-in-compile-tests.patch for context changes in
+     4.9.145
+   * [rt] Update to 4.9.146-rt125
+     - seqlock: provide the same ordering semantics as mainline
+     - squashfs: make use of local lock in multi_cpu decompressor
+     - locallock: provide {get,put}_locked_ptr() variants
+     - posix-timers: move the rcu head out of the union
+     - alarmtimer: Prevent live lock in alarm_cancel()
+     - block: blk-mq: move blk_queue_usage_counter_release() into process
+       context
+     - Revert "block: blk-mq: Use swait"
+     - Revert "rt,ntp: Move call to schedule_delayed_work() to helper thread"
+     - net: use task_struct instead of CPU number as the queue owner on -RT
+     - locking: add types.h
+     - mm/slub: close possible memory-leak in kmem_cache_alloc_bulk()
+     - crypto: limit more FPU-enabled sections
+     - sched, tracing: Fix trace_sched_pi_setprio() for deboosting
+     - rcu: Suppress lockdep false-positive ->boost_mtx complaints
+     - rcu: Do not include rtmutex_common.h unconditionally
+     - rtmutex: Make rt_mutex_futex_unlock() safe for irq-off callsites
+     - futex: Fix OWNER_DEAD fixup
+     - futex: Avoid violating the 10th rule of futex
+     - futex: Fix more put_pi_state() vs. exit_pi_state_list() races
+     - futex: Fix pi_state->owner serialization
+   * [rt] Refresh 0366-posix-timers-move-the-rcu-head-out-of-the-union.patch.
+     Refresh for context changes caused by a Debian specific patch to avoid
+     ABI change in 4.9.136: "posix-timers: Avoid ABI change in 4.9.136"
+   * [rt] Refresh 0280-random-Make-it-work-on-rt.patch
+   * [rt] Refresh 0198-fs-aio-simple-simple-work.patch for context changes in
+     4.9.147
+   * Btrfs: fix corruption reading shared and compressed extents after hole
+     punching (Closes: #922306)
+ .
+   [ Ben Hutchings ]
+   * Bump ABI to 9 and apply deferred changes:
+     - netfilter: ipv6: nf_defrag: reduce struct net memory waste
+     - proc/sysctl: prune stale dentries during unregistering
+     - proc/sysctl: Don't grab i_lock under sysctl_lock.
+     - proc: Fix proc_sys_prune_dcache to hold a sb reference
+     - [mips*] Correct the 64-bit DSP accumulator register size
+     - inet: frags: fix ip6frag_low_thresh boundary
+     - inet: frags: reorganize struct netns_frags
+     - rhashtable: reorganize struct rhashtable layout
+     - inet: frags: break the 2GB limit for frags storage
+     - elevator: fix truncation of icq_cache_name
+Checksums-Sha1:
+ 2159f52e577288782c17b2eaab82fa9aff3b7b62 122317 linux_4.9.161-1.dsc
+ 6318b7cfd88679a2757fa97cec262e34129cb0c9 94764896 linux_4.9.161.orig.tar.xz
+ a7ecf3b8390750e99f194dc55f382bd234381a61 1222860 linux_4.9.161-1.debian.tar.xz
+ f038292aa30a37e74c42b4aecaa94791d87bbcda 10304 acpi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 07eb1d037c8cdad0593a0a115a728bcdb40c6b38 99414 ata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ a120c3c90b6a6ccafac4f4aa13bd85e5fd331247 434422 btrfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 2c8e49da1ee0c7b95c50577c3b8542bca6ee9a8f 30840 cdrom-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 43aecfbbc1037b5699d179132db2fe629c9e48aa 5260 crc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ fa186af511960c9e0c8c63fd953c86f27c145583 12714 crypto-dm-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e476f9a708e59e9c4e4c75bd647e7a4d4c614252 40052 crypto-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 68ce89a8145375950124aa0aabdc30cc4ec780e0 10422 efi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3b4b6af275448ebc2486d93fad1b486bccd150a6 9096 event-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ eeb95e155ae2596ff5f237c71fed586681451cf6 268722 ext4-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b70a75603691e04c34dc32516df821c3d52ae2cf 39750 fat-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 304e9b4a9d1ad6f844f886fd3138215dd18b052d 12686 fb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e7fe15b030a8388e2cb2a21736ae9868422ab945 56084 firewire-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 2e8472b4f90cc7ca7b491beb6bfaf64982c9b12c 48266 fuse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e4a253ed71582126695b0aab808cbde142d2f4d6 41354 hyperv-daemons-dbgsym_4.9.161-1_amd64.deb
+ 13b82fa2c641aaade2955fee9f4d3646840dcf90 635828 hyperv-daemons_4.9.161-1_amd64.deb
+ 8e6ecf620441aec42122c75e0a81437989141c23 58258 hyperv-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3d0cb543d431d7d0f1f06199ff7006fdcd151172 13344 i2c-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1f021d8f2d28fd51d43254dcc2710b2ece317ae2 215604 input-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e9d5a88afb90f4a9ea48f24feb61bed2285a93a9 17666 isofs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 228ce023319d40c9cb7b56543eefd039733896c1 88578 jfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 322ee29402a0520e7deaa6d13b4fe82b0d2c582d 4531352 kernel-image-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 5f5ec851a996588f37c3d1aa8f4fd3cde9808dce 620858 libcpupower-dev_4.9.161-1_amd64.deb
+ 046f87140ae2c9ae11c82405029b346d84a29960 20096 libcpupower1-dbgsym_4.9.161-1_amd64.deb
+ 2f7f209778f0b61f45323281c2282c8b72d89d3a 626150 libcpupower1_4.9.161-1_amd64.deb
+ f1a0f89ee892b13cc0c7a1e7d44c9a4ed26f3d60 640132 libusbip-dev_2.0+4.9.161-1_amd64.deb
+ e0b11342feb426c25875152bc2130b1fcd43954c 618992 linux-compiler-gcc-6-x86_4.9.161-1_amd64.deb
+ 50485b925a035ea5a510cce2d989321a89b4af3f 54550 linux-cpupower-dbgsym_4.9.161-1_amd64.deb
+ 1d70b1e1b8069bfb5a4ba804678b71724a605220 691616 linux-cpupower_4.9.161-1_amd64.deb
+ f0e4f5eee459c6eabe50fb4ec25bfe7fde0a4583 12474614 linux-doc-4.9_4.9.161-1_all.deb
+ 50cad1aa6d1a5299521d5f9e33a70c925ee6949f 619020 linux-headers-4.9.0-9-all-amd64_4.9.161-1_amd64.deb
+ 34c7ea2f41807e088fd19e291281b1931051a61c 619006 linux-headers-4.9.0-9-all_4.9.161-1_amd64.deb
+ c22808ed50235f9b5e77e8fffacb90ed23c5cd04 449444 linux-headers-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 2d722f37388ee490860d24743c28606f121d6f6f 5728596 linux-headers-4.9.0-9-common-rt_4.9.161-1_all.deb
+ 8ec96e08628528aac47eda9309bef7876ca7a9e7 7661992 linux-headers-4.9.0-9-common_4.9.161-1_all.deb
+ 9cb3f018900890d415ba659edb42ce17dcd99533 448198 linux-headers-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ fd11152baf713505e1f85c5a9e2ff9f02cc9b85f 573468732 linux-image-4.9.0-9-amd64-dbg_4.9.161-1_amd64.deb
+ bf51c27ec4dd53e8d63c205085896b9e404601a1 39143948 linux-image-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 9277c11024b8edfb83ba15716ea97b888d9df8d2 572285620 linux-image-4.9.0-9-rt-amd64-dbg_4.9.161-1_amd64.deb
+ 496b52eaa73e0a7ee5270f0c0f4b233242b18127 39132836 linux-image-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ 40a637dc1d447b0d54ed9efbe696fd778ce944b2 488164 linux-kbuild-4.9-dbgsym_4.9.161-1_amd64.deb
+ 1fd9b79e94ebb2deb2293055839a2f18d7ca3ae2 826264 linux-kbuild-4.9_4.9.161-1_amd64.deb
+ cef58714148ef74ee693955a472da55048d5997b 1410994 linux-libc-dev_4.9.161-1_amd64.deb
+ 7bdffb7623e69bf63a890a414e46aa8963376701 3188096 linux-manual-4.9_4.9.161-1_all.deb
+ c346733448291b2d30e4b84fd57957561528e80b 4484002 linux-perf-4.9-dbgsym_4.9.161-1_amd64.deb
+ cd36b701e297c17bbfdc33ec9ac8d87ae5dd2698 1558344 linux-perf-4.9_4.9.161-1_amd64.deb
+ ecc06b10c6005d121999ccf903527bcf8f5b9f52 96804320 linux-source-4.9_4.9.161-1_all.deb
+ 969ba075e28590a9fe95ffb7a21d69274e62678d 667220 linux-support-4.9.0-9_4.9.161-1_all.deb
+ 3dbda969e5f9c7d6442a729b92798b389d16b063 64773 linux_4.9.161-1_amd64.buildinfo
+ 58651cc256c3775433829da6723537f8ae5d6638 13622 loop-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f86cceb0f6b7a402d3c896498b912d217b59eb2f 424586 md-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f3a482f0a5af6b8b246bc3e26e79f0f450d8e262 56132 mmc-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 57b906405d9344fb859466e7ae7f76eddd13812b 132738 mmc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 4635b11b2827f1be297adc45f70c3bcaad6d154b 52390 mouse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 23805788d4ea763160717955d9cbbf89c435b4cd 15642 multipath-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6519cceb02dc7cd45310d0b4464d93512ac81bd8 8882 nbd-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ cdea5168c5ad837038112c0d6416840355a24755 3117816 nic-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3f3219761b9275df559ea9018241632b9c1e9768 183890 nic-pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 754448fd108d4020bb71c4ff71ad402f5c40247f 38568 nic-shared-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e66c679f39405c3abd67f1d4169d10022ff220ef 186466 nic-usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f4bd9944e04ab488b395248ee500b0f7cbcfa164 3399472 nic-wireless-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f444224e5a4e6032291e8d24b879517a94aee441 45824 ntfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ a327353dcca16505ebf0cba789e31382dde5983b 53368 pata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 11f1b42b433872642a15a678166043cebacb507b 61954 pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f7941ae1557f48f6060555c90c7d5bb8cf17a039 7534 pcmcia-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b5637eb91fec665cbfbe27a8898236aa7c7b227d 36736 ppp-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 5bfdfd013f1080258c6567da3db01ccd7f6b940f 145926 sata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ c09b0344e0f1d84bfc491ea6a17704ef9ccc940e 139828 scsi-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 0ebb42d528b781331d92209218997b79ddae5d00 2405060 scsi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 494426ba251f42360beedc972a1326c9c96e8cd2 34758 serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ afd71674b8690360b99a7bda3dc4c13ad744b575 1822320 sound-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 4eea8a3dc6e8599699338f227dad0baf6d5f9e9c 47916 speakup-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1092c655e2027ef6c2a62527de1198b9405410b2 20598 squashfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ e5a12c96390b198906dc7e1d29487eed903832b9 45774 udf-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ c6a0c91b8bd5c3c4237a31c765656b9de2f675e4 7276 uinput-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 57b0c9334cf40070d87c484f94100f5f0b0e169d 255282 usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 7870bd1ac4a628b72226eaa219e13f2d100ab971 191488 usb-serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 87ddc1e622836a2905550c3a8241a1eea950f2f8 75118 usb-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 86f344c0f3acd89b66dee623d3eea650671ccf30 92978 usbip-dbgsym_2.0+4.9.161-1_amd64.deb
+ 5e4dcff68b9191364584b91816c77443f5ec7d9d 658410 usbip_2.0+4.9.161-1_amd64.deb
+ d999c625cf230bd16c3f49fc10802a0d4a5ac7ca 62430 virtio-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ a82b2c98c7e56485b495fa517ee8c9881e750e14 390812 xfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+Checksums-Sha256:
+ 774205fe7e64fc3edbde20a2471d264fad0d33a104dde3bf9634f7dee481252b 122317 linux_4.9.161-1.dsc
+ 4f39a9fcec9ac1cfb1fa9f5026c0064991e2df6b0cc239aefe1a6ffb4d7e438f 94764896 linux_4.9.161.orig.tar.xz
+ 180554d978d286515a215f5d99e1eba2c81ebe011682c892d7fcbabb153d470a 1222860 linux_4.9.161-1.debian.tar.xz
+ dde5d28bef6350f91a9e01b6b096d1cf379ee42ccc8b1603b201607abef2165a 10304 acpi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 22d69d2b68b06bcde88c0f61bfc4918c983b1c08dcc79577cf53d46f751253c5 99414 ata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1bc56352909b5a8fb1c3f677d9fa27685e6d67b59448195203dde95b965389f9 434422 btrfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ edb5c0928991992d70a13b8328f463438ecfd40c7825d41f1597c97225e28067 30840 cdrom-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 12a3bec0f2d00cdb3e86571fe02d2e16699766d1f0fb437877fdf4c5ac47aa5f 5260 crc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d14bfa0fbaf2302916a1d9a89806277acc26942b183da46a517c5e8a813d30be 12714 crypto-dm-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 890b9a74d17e3a2177398481c7c571088c5a2e506ddb92add3a0c276166ddbc6 40052 crypto-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 27050a8239e6575083098f4ced7110929bfd8371b1f7caf8592b59f1eab7f36e 10422 efi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 169be9843f76cdc3bdcd401e50ea4130df03facbd8ba42343e284446bed35ff4 9096 event-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 0c5c3864d905b34a08a2d977935bbe7333227fcb64defc576e40a6176a59afa1 268722 ext4-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 79d1ff8cdcbf24e363c74f97ac7079486b5bd3b08857b2f294a7172c7182860a 39750 fat-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 32589d3327b6487acf646098e5463316af5c5f9cf7100bc21da5d563798a947e 12686 fb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 89a2f5606e0c885df3d4d78ae46b524b8709f61e2de0817cad98457cf27d3585 56084 firewire-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d00c7ca252015991f9b8fb7179f2c1f6578c670b108ea0a9c0cdd821d8005f4b 48266 fuse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3b38e2c467becebf03e9312adb143f7511d73377ef2ffbb52841ccf1d97005f1 41354 hyperv-daemons-dbgsym_4.9.161-1_amd64.deb
+ cbf6ab3115940f39cefafbdf2a38dbeddd8e4b95c5f7620c5fe6d9650a95a323 635828 hyperv-daemons_4.9.161-1_amd64.deb
+ d23b4be9a49a34b32f5ce14718b39c274d397308c3387e17411dbadb53aa40bf 58258 hyperv-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ fa03db1ae091888586c23eceb6aac439a9d5834ba177338a71c5373f005bfa34 13344 i2c-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 74fa05f9914f34e99e2eb1540ba32174de9d358a029d16faf9167141bb7f5fe5 215604 input-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 70944f778d07ce7285835578d0404945d423ae2da837dce85bbf42da060f49eb 17666 isofs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 9485bfd3b728560edd527fed1490a7126979e0f2217c47e600c027bb11de87de 88578 jfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ff1523b47ba9a085ec742b53dff5918b1a165cc19a41316fd7b23043fb86328e 4531352 kernel-image-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 62567248f859a37723f19a505c5275e98ac91005c927b264420e7d1c3ad3ecf8 620858 libcpupower-dev_4.9.161-1_amd64.deb
+ 5b5ab4c0912e4ad9764af585aacb292c4add2d3efef926823f456068d89decb3 20096 libcpupower1-dbgsym_4.9.161-1_amd64.deb
+ dcdd721a97613744822e6e96b9a5d976b65cd59d7b87798f8f473156af18231f 626150 libcpupower1_4.9.161-1_amd64.deb
+ e418680d66688f815cf1bc2330f970e2d6ec82a8b9c1fe80e0924f06de9ab1bb 640132 libusbip-dev_2.0+4.9.161-1_amd64.deb
+ 2a6c436c105dfccfa22b714fd198fab26a0b44b395e538d35b4ad290b5c6b56e 618992 linux-compiler-gcc-6-x86_4.9.161-1_amd64.deb
+ d448dc9c2dba36b8956f8be80e14ace04660c7e7dc4cc56625f3f81fd24ec4f8 54550 linux-cpupower-dbgsym_4.9.161-1_amd64.deb
+ 1dad32f6a2ea81e69861883f55589719d93fb608176fc43c48f0ec71d9e3c6fa 691616 linux-cpupower_4.9.161-1_amd64.deb
+ 61860f803c6ec08b114c9664cd034122a037d8ae11421e9baea743bfe2750f04 12474614 linux-doc-4.9_4.9.161-1_all.deb
+ 91e2387ca6aa55d1976778d77ac74f08a0490762436855e9bbccd0ecee5da033 619020 linux-headers-4.9.0-9-all-amd64_4.9.161-1_amd64.deb
+ 07f8eefb82fc5b14d21f0e9808ed126ce0f42829b56bd38f2d3ce4f8ab5d8769 619006 linux-headers-4.9.0-9-all_4.9.161-1_amd64.deb
+ 5380c9fd6110ed03c62ced348927ff07ec385fdeba6dc4d3dfdaf22e2a1127ce 449444 linux-headers-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 5b7bab304818e746d7cffd46dd73472206b8a5fcc90387ae03fb246cfae082f5 5728596 linux-headers-4.9.0-9-common-rt_4.9.161-1_all.deb
+ a072a28a1ed21ca3388f5da268468873e2a67c63ce507ffa46686997fcb8b13f 7661992 linux-headers-4.9.0-9-common_4.9.161-1_all.deb
+ 248c065dc94171e1a924410199f8c208bf04b9a6b6977d7919a387bb04c6cb2c 448198 linux-headers-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ 079efccb96a5186869c62663771111bd47f0ce0b12330a43cb0126c251b7ec06 573468732 linux-image-4.9.0-9-amd64-dbg_4.9.161-1_amd64.deb
+ 4b7ef40fc70bee4aa579a3e1d63a93a3d7e6b158843a4ed68d4dab346bbad09b 39143948 linux-image-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 65d25ceffbc17fade55342a4f517b77f1694300cbf2c6544d3f5ea4de00d4001 572285620 linux-image-4.9.0-9-rt-amd64-dbg_4.9.161-1_amd64.deb
+ 1ace3cd666b8ab3be3ecfe30d3a1ee9ad6685ca65210ab07a920cd8e94722589 39132836 linux-image-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ d57cd26640844e091d11311a2034686f8ff860d9dcfbeb8999b6f2e0b4374ea1 488164 linux-kbuild-4.9-dbgsym_4.9.161-1_amd64.deb
+ 9e0e8a1a1395bc39918e15134b7dd52c4985891ecbb489ebca7259c0b00c9837 826264 linux-kbuild-4.9_4.9.161-1_amd64.deb
+ 310cee15760bbfa31cf61471280e7ff9ad6bd568dc6b2f3fe9a0052dba2399d2 1410994 linux-libc-dev_4.9.161-1_amd64.deb
+ d38b399a02609877783a0be1437a321294feab0cd578da0ed5be0a2e615248d5 3188096 linux-manual-4.9_4.9.161-1_all.deb
+ ba4f44c814d710d1c9741d535b229f82b97147fa0359e46e1c7bd4d5543554a5 4484002 linux-perf-4.9-dbgsym_4.9.161-1_amd64.deb
+ efcb039fc809646032142f894361ab8459577aa64830e0aa5cf0fb709f7f2fad 1558344 linux-perf-4.9_4.9.161-1_amd64.deb
+ 3255f8ad6979969b3d0ca58398ecb703ccb934733210d60490e2c82276d595a6 96804320 linux-source-4.9_4.9.161-1_all.deb
+ 0b3e8ad112613ca7fb9553ea85e6cba50939a77506fa7f60cbbca01c22f74920 667220 linux-support-4.9.0-9_4.9.161-1_all.deb
+ fdd181976a5b4c4f2021cc899bcf250f8df9658cd8f4bcec5846bc034889d379 64773 linux_4.9.161-1_amd64.buildinfo
+ 24312a130c4540aaab1580d37679b3d8f8884cc8ce9a7d718b4f4bdbbaf8a32a 13622 loop-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ad0ab94fd28c7c88800b27621aa87ecfe0b91ffec9d1b25e6e41b7b326ad551f 424586 md-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3791590cc62baf306a6a688c742d9953cda0de6b192960f382fba5bca52f1fc7 56132 mmc-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b72e9276e50a2bc7dc976c44ec8ce4cc82a07f0d5b14368413a65458575ac02e 132738 mmc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1de60d7242e4362873a2d4b37347dfaa5db45d67176a46cb8a16ff17099b16a9 52390 mouse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 96aa7c5b831fbd3b18a4127ca761a3593d37457f4530c8ae0566d0f3842ce3b7 15642 multipath-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 2668c185d324050b018da3d2f82e37506c676d5c95eca11d6b67bbd7daa6be4c 8882 nbd-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d0d081ddaee986b12baba94f2b74351bfa966e41132780e03261876c1c3d70ae 3117816 nic-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b290e45bb16aa621e8aa2449f667eb66774486b5fdf9fc8ec524ac02f0aacbf2 183890 nic-pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ fc7a98ead389e10a86fc96741aba9d682d14e9c2d01920976975f23914c9b804 38568 nic-shared-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 9d00bdc5e0d05cb003daec59913285a5e14f4c96d9ed12be65dd0b9256bbf831 186466 nic-usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ca8437271c706e8996cee964bb8daf52d2576e0a7cec246a781fe0795daa77fa 3399472 nic-wireless-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b472a7a38a772911d5245d9dbd51febdee07795e8d1beb2479a42c52cbe54257 45824 ntfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1a95d6626f48b4dd874ec8aeaac74d07fdd80393e70e59a17c242a41826a11a8 53368 pata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 77737b80cb525877c86d679e74d8ff04271cb5ee7653f213b50a0d3c64b69c4b 61954 pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d43bcd0626e07a7c6ce6fbb91ac06ff0a2124da894424c3b0958893869315e8a 7534 pcmcia-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 773d48cdc32d8a86eb7c10b3eb4655a9a267db9f14372ef322820ca43b242477 36736 ppp-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6398b7c8df8db54d43ccdea3a7bc0e3e654a5d8138d649863dab5c36ab8660b4 145926 sata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1bde2b0989cda3125c0d2c599bc177f5cf18da1a2a423f3ec07408252d53711b 139828 scsi-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 4c6395dda8a05e7daffd7d3f6622e3371febc54ef87009e68470111205419bcf 2405060 scsi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6fb6cc3481f9ed7419e7f58cd3c9bf612ae006517ab9114430019c0a239877af 34758 serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6ede64ef7302a86636f5df618f95e4668dcb893c0775d6a0c9d1ff8d2b2286fe 1822320 sound-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ caa21037ef18559b20401d028c70bad5e71bec6b509e283e80fd2797f55e5aa0 47916 speakup-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ feb058e248b849bfe56287706aa03aed7d3a1e0c80437a07758490687a767948 20598 squashfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 71431dcbe2c3aa0b82d1bb4e971f155e3298a338c914b09ba194c32c13f8168c 45774 udf-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b7578205a696f61d0896c6f8a8ef8871180966fa92c845e7d05ed5162c1aaffb 7276 uinput-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d399e6be182fc3974e30456b41788dbf72c0ee109ffa287ccad96538aa738795 255282 usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 7c8f6470020d61f1c30802982c39cf1f7acf5067c6a422ad71e549f8a84a6e94 191488 usb-serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ cfddfd91bef897e279c09bc837803102f2e1e49da7fe8f9974885296212d35fc 75118 usb-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 7047845bfbd4fbd30d7acb88319296eb38a55fd380059d13cf159eca44a60430 92978 usbip-dbgsym_2.0+4.9.161-1_amd64.deb
+ 5972d1a7df1a954f19831f34832f59a742e4141a09ff97412fb42e72533cf981 658410 usbip_2.0+4.9.161-1_amd64.deb
+ 9bb537df45f30ba39408e39e9965b7298bcfe210bcb224793df5622de910bf3c 62430 virtio-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 8a8b22b3a250cc1b996969c0270024f682730cf2130f073dd36d188cba63b171 390812 xfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+Files:
+ 0c7a72fc5a714427fa68ccd2dd4482ee 122317 kernel optional linux_4.9.161-1.dsc
+ 93b594e8fdc0a8703e4d4b873759380d 94764896 kernel optional linux_4.9.161.orig.tar.xz
+ 940d74f7da2c0e798616d8b7b715a673 1222860 kernel optional linux_4.9.161-1.debian.tar.xz
+ b4ae0b22174cb1c7bf009bfcf0deaee8 10304 debian-installer extra acpi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ef0f4d551eafac3122880f2b611540b2 99414 debian-installer extra ata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 965d8b291e2b7e38cba1cf15e3086a39 434422 debian-installer extra btrfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 152cd388652e8c4b3463528f2f45d5c3 30840 debian-installer standard cdrom-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 75fd55934fe0a12f80c780dffebb0e1b 5260 debian-installer extra crc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3819d41ce9f1a02cd8a36a71e6515df5 12714 debian-installer extra crypto-dm-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d970d5cbdf614c48adf4cd3f5b0b6740 40052 debian-installer extra crypto-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 63989558af590e331a98b0ebd3c70083 10422 debian-installer extra efi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 0ae878a8ff24b451c8ee374b4f8a79fb 9096 debian-installer extra event-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ac6a13fffcf553b84a3042ddf0f01b6f 268722 debian-installer standard ext4-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ eda55a3159a324022967b37145f14bea 39750 debian-installer standard fat-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 0c989f4c7842d03eee5000f62bb65c2b 12686 debian-installer extra fb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ea34452732c791a011306beea9f070ff 56084 debian-installer standard firewire-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 2d42e93fe753adb136ebc8bb0c6d0f62 48266 debian-installer extra fuse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 599992a99bb89b091d9f88008b9b78bb 41354 debug extra hyperv-daemons-dbgsym_4.9.161-1_amd64.deb
+ ecd706e005c02afdbd2523dffebf2ee5 635828 admin optional hyperv-daemons_4.9.161-1_amd64.deb
+ 7eb762b48b0a3bc64230d37ec527a997 58258 debian-installer extra hyperv-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ ac402d2db3f7b78c38869d1f9d90651f 13344 debian-installer extra i2c-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 68934052cfce62583e5103996521e0c9 215604 debian-installer extra input-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 933d5ab6f8a5bbaebf9323d6edb10a5f 17666 debian-installer standard isofs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3c8aa32a09b6281c4e0db058ab0c1af3 88578 debian-installer standard jfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ c2f388324142b97fd6038c1592e2888c 4531352 debian-installer standard kernel-image-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d605ea4e6a96c40b1071504b12870f40 620858 libdevel optional libcpupower-dev_4.9.161-1_amd64.deb
+ dcf307126f4a0eebe135f8f20aea9d94 20096 debug extra libcpupower1-dbgsym_4.9.161-1_amd64.deb
+ 1f6954e1b3b65eae3cc88cf953a74c8b 626150 libs optional libcpupower1_4.9.161-1_amd64.deb
+ aca034c5c658ae4acd4a7043c2404218 640132 libdevel optional libusbip-dev_2.0+4.9.161-1_amd64.deb
+ 45fb67c8b238eee7c4f9ea27e7024972 618992 kernel optional linux-compiler-gcc-6-x86_4.9.161-1_amd64.deb
+ 28344bc7bcfa99bb67112ad8eab7d7b5 54550 debug extra linux-cpupower-dbgsym_4.9.161-1_amd64.deb
+ 09edd5b4eefe46bb13b34acbf8dbb9df 691616 admin optional linux-cpupower_4.9.161-1_amd64.deb
+ eec8ba030b5964c9c74124cf9183d0a1 12474614 doc optional linux-doc-4.9_4.9.161-1_all.deb
+ df29579871536b54dc78f75e647eb343 619020 kernel optional linux-headers-4.9.0-9-all-amd64_4.9.161-1_amd64.deb
+ 45fd70d2aa4953b52fa4f14856964f69 619006 kernel optional linux-headers-4.9.0-9-all_4.9.161-1_amd64.deb
+ 60452ad1c0f17cf1b9f2c822e7ecb7e1 449444 kernel optional linux-headers-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 86a625a57db9b4f9a02f0da851b4b250 5728596 kernel optional linux-headers-4.9.0-9-common-rt_4.9.161-1_all.deb
+ d09ba4cbadac4bec916b0dfe0b55a94a 7661992 kernel optional linux-headers-4.9.0-9-common_4.9.161-1_all.deb
+ 02d8d51a9fd014665633a2a2d126a395 448198 kernel optional linux-headers-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ da90d2452aa270f5b972eced1fe7def0 573468732 debug extra linux-image-4.9.0-9-amd64-dbg_4.9.161-1_amd64.deb
+ 15105b2bd94303dfb102d5b25bcedcf8 39143948 kernel optional linux-image-4.9.0-9-amd64_4.9.161-1_amd64.deb
+ 9a7887530da8c56dfd659c757d28431d 572285620 debug extra linux-image-4.9.0-9-rt-amd64-dbg_4.9.161-1_amd64.deb
+ 93b81602952bda419e8a7190d1879852 39132836 kernel optional linux-image-4.9.0-9-rt-amd64_4.9.161-1_amd64.deb
+ ad6e009533db6131f7861b5eb881254e 488164 debug extra linux-kbuild-4.9-dbgsym_4.9.161-1_amd64.deb
+ 88999d7b79d2b7a31a836834a46a6a3a 826264 kernel optional linux-kbuild-4.9_4.9.161-1_amd64.deb
+ ebd3cfb17dff3c866eb583632af6ca15 1410994 devel optional linux-libc-dev_4.9.161-1_amd64.deb
+ f2b70d7600a63bbe303f8b507a6055c1 3188096 doc optional linux-manual-4.9_4.9.161-1_all.deb
+ 93c6711fb982bad7df8a62ab1292ea87 4484002 debug extra linux-perf-4.9-dbgsym_4.9.161-1_amd64.deb
+ 83e6f4cc61fcf2e0de2c2b8091206451 1558344 devel optional linux-perf-4.9_4.9.161-1_amd64.deb
+ 61796b532c32134e7a83f4de50f868b0 96804320 kernel optional linux-source-4.9_4.9.161-1_all.deb
+ 36e82b67e48d2217376bd6276448b327 667220 devel optional linux-support-4.9.0-9_4.9.161-1_all.deb
+ 74a8dfa8e6117a79e5239f70d6281def 64773 kernel optional linux_4.9.161-1_amd64.buildinfo
+ bda9fca8bb6458cf1392a6af1ca8c985 13622 debian-installer standard loop-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ db02d7664ce66d49048f764e78d4d06e 424586 debian-installer extra md-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 7d7d70f354e93ce298be591851e0c2e3 56132 debian-installer extra mmc-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ adbc791756319dfecc44d52324b25280 132738 debian-installer extra mmc-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 60b3522f260dbda410ca8dd8e6dcc551 52390 debian-installer extra mouse-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 325f3f7d918cad43dc30f3788313cfa2 15642 debian-installer extra multipath-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 22eb020068b1bbc4aef9015756de8a29 8882 debian-installer extra nbd-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 47e71ea102492adb49f129291e87aa65 3117816 debian-installer standard nic-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d262620965206685de3e049052800e3a 183890 debian-installer standard nic-pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 3e8889457d177cd0ab93301fd3535933 38568 debian-installer standard nic-shared-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f095cb07887024168ff5e652fa34a9bc 186466 debian-installer standard nic-usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6a5952ef152d204a82bccde710c94553 3399472 debian-installer standard nic-wireless-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ c972fbe086c7e26a4006213550265979 45824 debian-installer extra ntfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 484da2a628fff2c2b7567ca55da0593c 53368 debian-installer standard pata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 231cf8131e8aa64a8274b6635822eda1 61954 debian-installer standard pcmcia-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ a8349ffaba112ee6171c3700859b28ea 7534 debian-installer standard pcmcia-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 8f094836b6da3d681186bd1424ac5da5 36736 debian-installer optional ppp-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 6e3fd0848862c048a46848070286afc2 145926 debian-installer standard sata-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 669371a33b2c98e328fa6799a67daa2d 139828 debian-installer standard scsi-core-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ f221844bf1b829ea371acd67b2675bfe 2405060 debian-installer standard scsi-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 47412bd0bef366c3cc6220c450d930b6 34758 debian-installer optional serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 04177cede8105b80eee81b8190941906 1822320 debian-installer extra sound-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ b780404cf86fdb8240550bc5538009cb 47916 debian-installer extra speakup-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 44d7f357ec879226abc96476aa3bc94e 20598 debian-installer extra squashfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 5c75a4818f842c33cd55f7777a525f70 45774 debian-installer extra udf-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 290ea49d6b27173a02c65d531c54ee35 7276 debian-installer extra uinput-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 44623a81a3aca0b334004c2b207de7d1 255282 debian-installer extra usb-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ be7d7fd55217ad9b7a01359bd198863f 191488 debian-installer optional usb-serial-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d306513fcdb64363646fd8dd2ca068a6 75118 debian-installer standard usb-storage-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ 1b59f042a4a6780b0e76319950737bfe 92978 debug extra usbip-dbgsym_2.0+4.9.161-1_amd64.deb
+ a2f89b627cc05916b21ae74b54571bdf 658410 admin optional usbip_2.0+4.9.161-1_amd64.deb
+ 4306e7905210ebff911e6e47a004c1ef 62430 debian-installer extra virtio-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb
+ d186dcd31c9beeb86a804079ae9d6547 390812 debian-installer standard xfs-modules-4.9.0-9-amd64-di_4.9.161-1_amd64.udeb

@@ -46,6 +46,7 @@ my $source = 'xdg-desktop-portal_1.2.0-1_source.changes';
 my %controls;
 my @words;
 my @lines;
+my $orig;
 
 sub verbose_run {
     my $argv = shift;
@@ -491,6 +492,59 @@ ok(! verbose_run([
 ], '>', \$stdout, '2>', \$stderr));
 is($stdout, '');
 like($stderr, qr{Error: Changes files use unknown Format});
+
+diag('Multi-line Binary');
+$stdout = capture([
+    $mergechanges,
+    '--indep',
+    'mergechanges/linux_4.9.161-1_amd64.changes',
+    'mergechanges/linux_4.9.161-1_amd64.changes',
+]);
+unlike($stdout, qr/BEGIN PGP/);
+unlike($stdout, qr/END PGP/);
+$merged = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+open($fh, '<', \$stdout);
+$merged->parse($fh, 'stdout of mergechanges');
+close($fh);
+$orig = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+$orig->load('mergechanges/linux_4.9.161-1_amd64.changes');
+is($merged->{Format}, $orig->{Format});
+is($merged->{Date}, $orig->{Date});
+is($merged->{Source}, $orig->{Source});
+@words = sort split / /, $merged->{Binary};
+is_deeply(\@words, [sort qw(
+        linux-doc-4.9
+        linux-headers-4.9.0-9-common
+        linux-headers-4.9.0-9-common-rt
+        linux-manual-4.9
+        linux-source-4.9
+        linux-support-4.9.0-9
+)]);
+@words = sort split / /, $merged->{Architecture};
+is_deeply(\@words, [sort qw(all source)]);
+is($merged->{Version}, $orig->{Version});
+is($merged->{Distribution}, $orig->{Distribution});
+is($merged->{Urgency}, $orig->{Urgency});
+is($merged->{Maintainer}, $orig->{Maintainer});
+is($merged->{'Changed-By'}, $orig->{'Changed-By'});
+isnt($merged->{Description}, undef);
+@lines = sort split /\n/, $merged->{Description};
+is_deeply(\@lines, [sort(uniq(
+            grep({m/^$/ || m/^(linux-doc-4.9|linux-headers-4.9.0-9-common|linux-headers-4.9.0-9-common-rt|linux-manual-4.9|linux-source-4.9|linux-support-4.9.0-9) - /} (split /\n/, $orig->{Description})),
+))]);
+is($merged->{Changes}, $orig->{Changes});
+@lines = sort split /\n/, $merged->{Files};
+is_deeply(\@lines, [sort(uniq(
+            grep({! /_amd64\./} (split /\n/, $orig->{Files})),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha1'};
+is_deeply(\@lines, [sort(uniq(
+            grep({! /_amd64\./} (split /\n/, $orig->{'Checksums-Sha1'})),
+))]);
+@lines = sort split /\n/, $merged->{'Checksums-Sha256'};
+is_deeply(\@lines, [sort(uniq(
+            grep({! /_amd64\./} (split /\n/, $orig->{'Checksums-Sha256'})),
+))]);
 
 done_testing;
 
