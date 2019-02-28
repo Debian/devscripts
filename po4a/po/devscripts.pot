@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-17 23:17+0100\n"
+"POT-Creation-Date: 2019-02-28 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10556,8 +10556,8 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:39
 msgid ""
-"Searches for all packages that build-depend on a given package.  "
-"[dctrl-tools, dose-extra, libdpkg-perl]"
+"Searches for all packages that build-depend on a given "
+"package. [dctrl-tools, dose-extra, libdpkg-perl]"
 msgstr ""
 
 #. type: IP
@@ -10592,7 +10592,7 @@ msgstr ""
 #: ../doc/devscripts.1:45
 msgid ""
 "upload a Debian source package to a cowbuilder host and build it, optionally "
-"also signing and uploading the result to an incoming queue.  [ssh-client]"
+"also signing and uploading the result to an incoming queue. [ssh-client]"
 msgstr ""
 
 #. type: IP
@@ -10604,8 +10604,8 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:47
 msgid ""
-"wrappers around debi and debc respectively (see below)  which allow them to "
-"be called from the CVS working directory.  [cvs-buildpackage]"
+"wrappers around debi and debc respectively (see below) which allow them to "
+"be called from the CVS working directory. [cvs-buildpackage]"
 msgstr ""
 
 #. type: IP
@@ -10695,7 +10695,7 @@ msgstr ""
 msgid ""
 "Modifies debian/changelog and manages version numbers for you.  It will "
 "either increment the version number or add an entry for the current version, "
-"depending upon the options given to it.  [libdistro-info-perl, "
+"depending upon the options given to it. [libdistro-info-perl, "
 "libsoap-lite-perl]*"
 msgstr ""
 
@@ -10723,7 +10723,7 @@ msgid ""
 "below the current directory, and if requested, also remove all files that "
 "were generated from these source trees (that is .deb, .dsc and .changes "
 "files).  It will keep the .diffs and original files, though, so that the "
-"binaries and other files can be rebuilt if necessary.  [fakeroot]*"
+"binaries and other files can be rebuilt if necessary. [fakeroot]*"
 msgstr ""
 
 #. type: IP
@@ -10753,8 +10753,8 @@ msgid ""
 "A program which examines two .deb files or two .changes files and reports on "
 "any difference found in their file lists.  Useful for ensuring that no files "
 "were inadvertently lost between versions.  Can also examine two .dsc files "
-"and report on the changes between source versions.  For a deeper comparison "
-"one can use the diffoscope package.  [wdiff, patchutils]*"
+"and report on the changes between source versions. For a deeper comparison "
+"one can use the diffoscope package. [wdiff, patchutils]*"
 msgstr ""
 
 #. type: IP
@@ -10770,8 +10770,8 @@ msgid ""
 "by debdiff, to a target Debian source package. Any changes to "
 "debian/changelog are dealt with specially, to avoid the conflicts that "
 "changelog diffs typically produce when applied naively. May be used to check "
-"that old patches still apply to newer versions of those packages.  "
-"[python3-debian, python3-unidiff, quilt]"
+"that old patches still apply to newer versions of those "
+"packages. [python3-debian, python3-unidiff, quilt]"
 msgstr ""
 
 #. type: IP
@@ -10839,7 +10839,7 @@ msgid ""
 "second build, and compare the binary packages produced. If diffoscope is "
 "installed, it is used to compare non-matching binaries. If disorderfs is "
 "installed, it is used during the build to inject non-determinism in "
-"filesystem listing operations.  [faketime, diffoscope, disorderfs]"
+"filesystem listing operations. [faketime, diffoscope, disorderfs]"
 msgstr ""
 
 #. type: IP
@@ -10852,7 +10852,7 @@ msgstr ""
 #: ../doc/devscripts.1:81
 msgid ""
 "This transfers a .changes/.dsc pair to a remote machine for signing, and "
-"runs debsign on the remote machine over an SSH connection.  [gnupg | gnupg2, "
+"runs debsign on the remote machine over an SSH connection. [gnupg | gnupg2, "
 "debian-keyring, ssh-client]"
 msgstr ""
 
@@ -10865,7 +10865,7 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:83
 msgid ""
-"Use GNU Privacy Guard to sign the changes (and possibly dsc)  files created "
+"Use GNU Privacy Guard to sign the changes (and possibly dsc) files created "
 "by running dpkg-buildpackage with no-sign options.  Useful if you are "
 "building a package on a remote machine and wish to sign it on a local one.  "
 "This script is capable of automatically downloading the .changes and .dsc "
@@ -10893,12 +10893,12 @@ msgstr ""
 #: ../doc/devscripts.1:87
 msgid ""
 "A wrapper for building a package (i.e., dpkg-buildpackage) to avoid problems "
-"with insufficient permissions and wrong paths etc.  Debuild will set up the "
-"proper environment for building a package.  Debuild will use the fakeroot "
+"with insufficient permissions and wrong paths etc. Debuild will set up the "
+"proper environment for building a package. Debuild will use the fakeroot "
 "program to build the package by default, but can be instructed to use any "
 "other gain-root command, or can even be installed setuid root.  Debuild can "
 "also be used to run various of the debian/rules operations with the same "
-"root-gaining procedure.  Debuild will also run lintian to check that the "
+"root-gaining procedure. Debuild will also run lintian to check that the "
 "package does not have any major policy violations. [fakeroot, lintian, gnupg "
 "| gnupg2]*"
 msgstr ""
@@ -10979,7 +10979,7 @@ msgid ""
 "Runs a specified command (such as debian/rules build) or dpkg-buildpackage, "
 "respectively, to determine the packages used during the build process.  This "
 "information can be helpful when trying to determine the packages needed in "
-"the Build-Depends etc.  lines in the debian/control file. [build-essential, "
+"the Build-Depends etc. lines in the debian/control file. [build-essential, "
 "strace]"
 msgstr ""
 
@@ -11016,7 +11016,7 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:105
 msgid ""
-"add/edit a patch for a source package and commit the changes.  [quilt | "
+"add/edit a patch for a source package and commit the changes. [quilt | "
 "dpatch | cdbs]"
 msgstr ""
 
@@ -11040,7 +11040,7 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:109
 msgid ""
-"try to produce Debian orig.tar using git-archive(1).  [libdpkg-perl, "
+"try to produce Debian orig.tar using git-archive(1). [libdpkg-perl, "
 "libgit-wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, "
 "libtry-tiny-perl]"
 msgstr ""
@@ -11152,7 +11152,7 @@ msgstr ""
 #: ../doc/devscripts.1:127
 msgid ""
 "Rename upstream tarball, optionally changing the compression and removing "
-"unwanted files.  [libfile-which-perl, unzip, xz-utils, file]"
+"unwanted files. [libfile-which-perl, unzip, xz-utils, file]"
 msgstr ""
 
 #. type: IP
@@ -11227,7 +11227,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/devscripts.1:139
-msgid "list installed packages which have release-critical bugs.  [wget | curl]"
+msgid "list installed packages which have release-critical bugs. [wget | curl]"
 msgstr ""
 
 #. type: IP
@@ -11239,7 +11239,7 @@ msgstr ""
 #. type: Plain text
 #: ../doc/devscripts.1:141
 msgid ""
-"remotely query the Debian archive database about packages.  [liburi-perl, "
+"remotely query the Debian archive database about packages. [liburi-perl, "
 "wget | curl]"
 msgstr ""
 
@@ -11313,7 +11313,7 @@ msgstr ""
 #: ../doc/devscripts.1:153
 msgid ""
 "Check a list of source packages for involvement in transitions for which "
-"uploads to unstable are currently blocked.  [libwww-perl, libyaml-syck-perl]"
+"uploads to unstable are currently blocked. [libwww-perl, libyaml-syck-perl]"
 msgstr ""
 
 #. type: IP
@@ -11356,9 +11356,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/devscripts.1:159
-msgid ""
-"determine what patch system, if any, a source package is using.  "
-"[patchutils]"
+msgid "determine what patch system, if any, a source package is using. [patchutils]"
 msgstr ""
 
 #. type: IP
@@ -11406,9 +11404,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/devscripts.1:167
-msgid ""
-"list installed packages which are orphaned or up for adoption.  [wget | "
-"curl]"
+msgid "list installed packages which are orphaned or up for adoption. [wget | curl]"
 msgstr ""
 
 #. type: IP
@@ -11432,7 +11428,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/devscripts.1:170
-msgid "wrap long lines and sort items in packaging files.  [python3-debian]"
+msgid "wrap long lines and sort items in packaging files. [python3-debian]"
 msgstr ""
 
 #. type: textblock
