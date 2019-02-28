@@ -171,7 +171,7 @@ use constant keys => [
         undef,
         sub {
             $_[0]->safe(1);
-            $_[0]->{verbose} ||= 1;
+            $verbose ||= 1;
         }
     ],
     ['copy',   undef, sub { $_[0]->symlink('copy') }],
@@ -197,7 +197,7 @@ use constant keys => [
     ['no-verbose', undef, sub { $verbose = 0; return 1; }],
     [
         'verbose|v!', 'USCAN_VERBOSE',
-        sub { $verbose = ($_[1] =~ /^(?:1|yes)$/i ? 1 : 0) }
+        sub { $verbose = ($_[1] =~ /^(?:1|yes)$/i ? 1 : 0); return 1; }
     ],
     # Display version
     [
