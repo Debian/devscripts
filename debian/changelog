@@ -18,6 +18,7 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
   * salsa:
+    + Allow `checkout --all`, to checkout all repos in a group.  MR: !109
     + Return 1 when lists are empty.  MR: !110
   * uscan:
     + Fix bad check for "verbose" in Config.pm.  Closes: #923441; MR: !111

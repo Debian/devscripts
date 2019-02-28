@@ -8,12 +8,20 @@ use Devscripts::Utils;
 use Dpkg::IPC;
 use Moo::Role;
 
+with "Devscripts::Salsa::Repo";
+
 sub checkout {
     my ($self, @repos) = @_;
-    unless (@repos) {
+    unless (@repos or $self->config->all) {
         ds_warn "Usage $0 checkout <names>";
         return 1;
     }
+    if (@repos and $self->config->all) {
+        ds_warn "--all with a reponame makes no sense";
+        return 1;
+    }
+    # If --all is asked, launch all projects
+    @repos = map { $_->[1] } $self->get_repo(0, @repos) unless (@repos);
     my $cdir = `pwd`;
     chomp $cdir;
     foreach (@repos) {

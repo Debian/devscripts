@@ -151,6 +151,14 @@ exists, update local repo.
   salsa --group js-team co node-mongodb
   salsa co js-team/node-mongodb
 
+You can clone more than one repository or all repositories of a group or a
+user:
+
+  salsa --user yadd co devscripts autodep8
+  salsa co yadd/devscripts js-team/npm
+  salsa --group js-team co --all           # All js-team repos
+  salsa co --all                           # All your repos
+
 =item B<create_repo>
 
 Create public empty project. If C<--group>/C<--group-id> is set, project is
