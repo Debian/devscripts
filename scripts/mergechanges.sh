@@ -107,10 +107,30 @@ for f in "$@"; do
     fi
 done
 
+# Get a (possibly multi-line) field.
+get_field () {
+    perl -e '
+    use warnings;
+    use strict;
+    use autodie;
+
+    use Dpkg::Control;
+
+    my $field = shift;
+    foreach my $file (@ARGV) {
+        my $changes = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+        $changes->load($file);
+        next unless defined $changes->{$field};
+        print $changes->{$field};
+        print "\n";
+    }
+    ' "$@"
+}
+
 # Extract the Architecture: field from all .changes files,
 # and merge them, sorting out duplicates. Skip architectures
 # other than all and source if desired.
-ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u)
+ARCHS=$(get_field Architecture "$@" | tr ' ' '\n' | sort -u)
 if test ${REMOVE_ARCHDEP} = 1; then
     ARCHS=$(echo "$ARCHS" | grep -E '^(all|source)$')
 fi
@@ -125,6 +145,10 @@ checksum_uniq() {
     if test ${REMOVE_ARCHDEP} = 1 -o ${REMOVE_INDEP} = 1; then
 	while read line; do
 	    case "$line" in
+		("")
+		    # empty first line
+		    echo "$line"
+		    ;;
 		(*.dsc|*.diff.gz|*.tar.*|*_source.buildinfo)
 		    # source
 		    echo "$line"
@@ -155,20 +179,20 @@ checksum_uniq() {
 
 # Extract & merge the Version: field from all files..
 # Don't catch Version: GnuPG lines, though!
-VERSION=$(grep -h "^Version: [0-9]" "$@" | sed -e "s,^Version: ,," | sort -u)
+VERSION=$(get_field Version "$@" | sort -u)
 SVERSION=$(echo "$VERSION" | perl -pe 's/^\d+://')
 # Extract & merge the sources from all files
-SOURCE=$(grep -h "^Source: " "$@" | sed -e "s,^Source: ,," | sort -u)
+SOURCE=$(get_field Source "$@" | sort -u)
 # Extract & merge the files from all files
-FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | checksum_uniq)
+FILES=$(get_field Files "$@" | checksum_uniq)
 # Extract & merge the sha1 checksums from all files
-SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | checksum_uniq)
+SHA1S=$(get_field Checksums-Sha1 "$@" | checksum_uniq)
 # Extract & merge the sha256 checksums from all files
-SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | checksum_uniq)
+SHA256S=$(get_field Checksums-Sha256 "$@" | checksum_uniq)
 # Extract & merge the description from all files
-DESCRIPTIONS=$(sed '/^Description:/,/^[^ ]/{/^ /p;d};d' "$@" | sort -u)
+DESCRIPTIONS=$(get_field Description "$@" | sort -u)
 # Extract & merge the Formats from all files
-FORMATS=$(grep -h "^Format: " "$@" | sed -e "s,^Format: ,," | sort -u)
+FORMATS=$(get_field Format "$@" | sort -u)
 # Extract & merge the Checksums-* field names from all files
 CHECKSUMS=$(grep -h "^Checksums-.*:" "$@" | sort -u)
 UNSUPCHECKSUMS="$(echo "${CHECKSUMS}" | grep -v "^Checksums-Sha\(1\|256\):" || true)"
@@ -248,15 +272,19 @@ fi
 # Combine the Binary: and Description: fields. This is straightforward,
 # unless we want to exclude some binary packages, in which case we need
 # more thought.
-BINARY=$(grep -h "^Binary: " "$@" | sed -e "s,^Binary: ,," | tr ' ' '\n' | sort -u)
+BINARY=$(get_field Binary "$@" | tr ' ' '\n' | sort -u)
 if test ${REMOVE_ARCHDEP} = 1 && test ${REMOVE_INDEP} = 1; then
     BINARY=
     DESCRIPTIONS=
 elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
     keep_binaries=$(
-        grep -E -h "^ [0-9a-f]{32} [0-9]+" "$@" | while read -r line; do
+        get_field Files "$@" | while read -r line; do
             file="${line##* }"
             case "$line" in
+                ("")
+                    # empty first line
+                    echo "$line"
+                    ;;
                 (*.dsc|*.diff.gz|*.tar.*|*.buildinfo)
                     # source or buildinfo
                     ;;
@@ -265,9 +293,8 @@ elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
                     package="${file%%_*}"
 
                     if ! echo "$BINARY" | grep -q -x -F "$package"; then
-                        echo "Error: $package not found in Binary field" >&2
+                        echo "Warning: $package not found in Binary field" >&2
                         echo "$line" >&2
-                        exit 1
                     fi
 
                     if test ${REMOVE_INDEP} != 1; then
@@ -279,9 +306,8 @@ elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
                     package="${file%%_*}"
 
                     if ! echo "$BINARY" | grep -q -x -F "$package"; then
-                        echo "Error: $package not found in Binary field" >&2
+                        echo "Warning: $package not found in Binary field" >&2
                         echo "$line" >&2
-                        exit 1
                     fi
 
                     if test ${REMOVE_ARCHDEP} != 1; then
@@ -308,10 +334,9 @@ elif test ${REMOVE_ARCHDEP} = 1 || test ${REMOVE_INDEP} = 1; then
     DESCRIPTIONS=$(
         echo "$DESCRIPTIONS" |
         while read -r line; do
-            line="$(echo "$line" | sed -e 's/^ *//')"
             package="${line%% *}"
             if echo " $keep_binaries" | grep -q -F " $package "; then
-                echo " $line";
+                echo "$line";
             fi
         done
     )
@@ -319,8 +344,8 @@ fi
 BINARY=$(echo "$BINARY" | tr '\n' ' ' | sed 's/ $//')
 
 if test -n "${DESCRIPTIONS}"; then
-    echo "Description: " > "${DESCFILE}"
-    echo "${DESCRIPTIONS}" >> "${DESCFILE}"
+    printf "Description:" > "${DESCFILE}"
+    echo "${DESCRIPTIONS}" | sed -e 's/^/ /' >> "${DESCFILE}"
 fi
 
 if [ -n "$BINARY" ]; then
@@ -332,7 +357,7 @@ fi
 # * Nuke the value of Checksums-*: and Files:
 # * Insert the Description: field before the Changes: field
 #
-# We print Binary directly after Source instead of directly replacing
+# We print Binary directly before Source instead of directly replacing
 # Binary, because with dpkg 1.19.3, if the first .changes file is
 # source-only, it won't have a Binary field at all.
 eval "awk -- '/^[^ ]/{ deleting=0 }
@@ -342,9 +367,9 @@ eval "awk -- '/^[^ ]/{ deleting=0 }
         }
         next
     }
-    /^Architecture: /{printf \"%s ${ARCHS}\\n\", \$1; next}
-    /^Source: /{print; printf \"${BINARY}\"; next}
-    /^Binary: /{next}
+    /^Architecture: /{printf \"%s ${ARCHS}\\n\", \$1; deleting=1; next}
+    /^Source: /{printf \"${BINARY}\"; print; next}
+    /^Binary: /{deleting=1; next}
     /^Changes:/{
         field=\$0
         while ((getline < \"${DESCFILE}\") > 0) {
@@ -353,22 +378,22 @@ eval "awk -- '/^[^ ]/{ deleting=0 }
         printf \"%s\\n\", field
         next
     }
-    /^Format: /{ printf \"%s ${FORMATS}\\n\", \$1; next}
+    /^Format: /{ printf \"%s ${FORMATS}\\n\", \$1; deleting=1; next}
     /^(Checksums-.*|Files|Description):/{ deleting=1; next }
     { print }' \
     ${OUTPUT} ${REDIR1}"
 
 # Voodoo magic to get the merged file and checksum lists into the output
 if test -n "${SHA1S}"; then
-    eval "echo 'Checksums-Sha1: ' ${REDIR2}"
-    eval "echo '${SHA1S}' ${REDIR2}"
+    eval "printf 'Checksums-Sha1:' ${REDIR2}"
+    eval "echo '${SHA1S}' | sed -e 's/^/ /' ${REDIR2}"
 fi
 if test -n "${SHA256S}"; then
-    eval "echo 'Checksums-Sha256: ' ${REDIR2}"
-    eval "echo '${SHA256S}' ${REDIR2}"
+    eval "printf 'Checksums-Sha256:' ${REDIR2}"
+    eval "echo '${SHA256S}' | sed -e 's/^/ /' ${REDIR2}"
 fi
-eval "echo 'Files: ' ${REDIR2}"
-eval "echo '${FILES}' ${REDIR2}"
+eval "printf 'Files:' ${REDIR2}"
+eval "echo '${FILES}' | sed -e 's/^/ /' ${REDIR2}"
 
 if test ${DELETE} = 1; then
     rm "$@"
