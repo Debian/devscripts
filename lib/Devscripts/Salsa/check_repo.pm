@@ -65,15 +65,32 @@ sub _check_repo {
         # KGB
         if ($self->config->kgb and not $hooks->{kgb}) {
             push @err, "kgb missing";
-        } elsif ($self->config->kgb
-            and $hooks->{kgb}->{url} ne $self->config->kgb_server_url
-            . $self->config->irc_channel->[0]) {
+        } elsif ($self->config->disable_kgb and $hooks->{kgb}) {
+            push @err, "kgb enabled";
+        } elsif ($self->config->kgb) {
             push @err,
               "bad irc channel: "
               . substr($hooks->{kgb}->{url},
-                length($self->config->kgb_server_url));
-        } elsif ($self->config->disable_kgb and $hooks->{kgb}) {
-            push @err, "kgb enabled";
+                length($self->config->kgb_server_url))
+              if $hooks->{kgb}->{url} ne $self->config->kgb_server_url
+              . $self->config->irc_channel->[0];
+            my @wopts = @{ $self->config->kgb_options };
+            my @gopts = sort @{ $hooks->{kgb}->{options} };
+            my $i     = 0;
+            while (@gopts and @wopts) {
+                my $a;
+                $a = ($wopts[0] cmp $gopts[0]);
+                if ($a == -1) {
+                    push @err, "Missing KGB option " . shift(@wopts);
+                } elsif ($a == 1) {
+                    push @err, 'Unwanted KGB option ' . shift(@gopts);
+                } else {
+                    shift @wopts;
+                    shift @gopts;
+                }
+            }
+            push @err, map { "Missing KGB option $_" } @wopts;
+            push @err, map { "Unwanted KGB option $_" } @gopts;
         }
         # Email-on-push
         if ($self->config->email

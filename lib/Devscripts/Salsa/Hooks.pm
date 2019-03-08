@@ -39,17 +39,7 @@ sub add_hooks {
                     {
                         url => $self->config->kgb_server_url
                           . $self->config->irc_channel->[0],
-                        push_events                => 1,
-                        issues_events              => 1,
-                        confidential_issues_events => 0,
-                        confidential_comments_events =>
-                          0, # not exposed by Gitlab::API::v4 or Gitlab API yet
-                        merge_requests_events => 1,
-                        tag_push_events       => 1,
-                        note_events           => 1,
-                        job_events            => 1,
-                        pipeline_events       => 1,
-                        wiki_page_events      => 1,
+                        map { ($_ => 1) } @{ $self->config->kgb_options },
                     });
                 ds_verbose "KGB hook added to project $repo_id (channel: "
                   . $self->config->irc_channel->[0] . ')';
@@ -153,17 +143,18 @@ sub enabled_hooks {
             ds_warn "Unable to check hooks for project $repo_id";
             return undef;
         }
-        foreach (@{$hooks}) {
+        foreach my $h (@{$hooks}) {
             $res->{kgb} = {
-                id  => $_->{id},
-                url => $_->{url},
+                id      => $h->{id},
+                url     => $h->{url},
+                options => [grep { $h->{$_} and $h->{$_} eq 1 } keys %$h],
               }
-              if $_->{url} =~ /\Q$self->{config}->{kgb_server_url}\E/;
+              if $h->{url} =~ /\Q$self->{config}->{kgb_server_url}\E/;
             $res->{tagpending} = {
-                id  => $_->{id},
-                url => $_->{url},
+                id  => $h->{id},
+                url => $h->{url},
               }
-              if $_->{url} =~ /\Q$self->{config}->{tagpending_server_url}\E/;
+              if $h->{url} =~ /\Q$self->{config}->{tagpending_server_url}\E/;
         }
     }
     if (    ($self->config->email or $self->config->disable_email)

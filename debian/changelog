@@ -20,6 +20,7 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   * salsa:
     + Allow `checkout --all`, to checkout all repos in a group.  MR: !109
     + Return 1 when lists are empty.  MR: !110
+    + Add KGB options configuration.  Closes: #921641; MR: !115
   * uscan:
     + Fix bad check for "verbose" in Config.pm.  Closes: #923441; MR: !111
   * Update French translation

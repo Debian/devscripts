@@ -634,6 +634,22 @@ Enable, ignore or disable KGB webhook.
 
 C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)
 
+=item B<--kgb-options>
+
+List of KGB enabled options (comma separated). Default: issues_events,
+merge_requests_events, note_events, pipeline_events, push_events,
+tag_push_events, wiki_page_events
+
+  $ salsa update_safe debian/devscripts --kgb --irc-channel devscripts \
+    --kgb-options 'merge_requests_events,issues_events,enable_ssl_verification'
+
+List of available options: confidential_comments_events,
+confidential_issues_events, confidential_note_events, enable_ssl_verification,
+issues_events, job_events, merge_requests_events, note_events, pipeline_events,
+tag_push_events, wiki_page_events
+
+C<.devscripts> value: B<SALSA_KGB_OPTIONS>
+
 =item B<--no-fail>
 
 Don't stop on error when using B<update_repo> with B<--all>.
