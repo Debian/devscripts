@@ -110,43 +110,92 @@ use constant keys => [
     ['ci-config-path=s', 'SALSA_CI_CONFIG_PATH', qr/\./],
     ['desc!',            'SALSA_DESC',           'bool'],
     ['desc-pattern=s', 'SALSA_DESC_PATTERN', qr/\w/, 'Debian package %p'],
-    ['enable-issues!'],
-    ['disable-issues!'],
+    [
+        'enable-issues!',
+        undef,
+        sub {
+            !$_[1] or $_[0]->enable('yes', 'enable_issues', 'disable_issues');
+        }
+    ],
+    [
+        'disable-issues!',
+        undef,
+        sub {
+            !$_[1] or $_[0]->enable('no', 'enable_issues', 'disable_issues');
+        }
+    ],
     [
         undef, 'SALSA_ENABLE_ISSUES',
         sub { $_[0]->enable($_[1], 'enable_issues', 'disable_issues'); }
     ],
-    ['email!'],
-    ['disable-email!'],
+    [
+        'email!', undef,
+        sub { !$_[1] or $_[0]->enable('yes', 'email', 'disable_email'); }
+    ],
+    [
+        'disable-email!', undef,
+        sub { !$_[1] or $_[0]->enable('no', 'email', 'disable_email'); }
+    ],
     [
         undef, 'SALSA_EMAIL',
         sub { $_[0]->enable($_[1], 'email', 'disable_email'); }
     ],
     ['email-recipient=s', 'SALSA_EMAIL_RECIPIENTS', undef, sub { [] },],
-    ['enable-mr!'],
-    ['disable-mr!'],
+    [
+        'enable-mr!', undef,
+        sub { !$_[1] or $_[0]->enable('yes', 'enable_mr', 'disable_mr'); }
+    ],
+    [
+        'disable-mr!', undef,
+        sub { !$_[1] or $_[0]->enable('no', 'enable_mr', 'disable_mr'); }
+    ],
     [
         undef, 'SALSA_ENABLE_MR',
         sub { $_[0]->enable($_[1], 'enable_mr', 'disable_mr'); }
     ],
     ['irc-channel|irc=s', 'SALSA_IRC_CHANNEL', undef, sub { [] }],
-    ['irker!'],
-    ['disable-irker!'],
+    [
+        'irker!', undef,
+        sub { !$_[1] or $_[0]->enable('yes', 'irker', 'disable_irker'); }
+    ],
+    [
+        'disable-irker!', undef,
+        sub { !$_[1] or $_[0]->enable('no', 'irker', 'disable_irker'); }
+    ],
     [
         undef, 'SALSA_IRKER',
         sub { $_[0]->enable($_[1], 'irker', 'disable_irker'); }
     ],
     ['irker-host=s', 'SALSA_IRKER_HOST', undef, 'ruprecht.snow-crash.org'],
     ['irker-port=s', 'SALSA_IRKER_PORT', qr/^\d*$/],
-    ['kgb!'],
-    ['disable-kgb!'],
+    [
+        'kgb!', undef,
+        sub { !$_[1] or $_[0]->enable('yes', 'kgb', 'disable_kgb'); }
+    ],
+    [
+        'disable-kgb!', undef,
+        sub { !$_[1] or $_[0]->enable('no', 'kgb', 'disable_kgb'); }
+    ],
     [undef, 'SALSA_KGB', sub { $_[0]->enable($_[1], 'kgb', 'disable_kgb'); }],
     ['no-fail',      'SALSA_NO_FAIL',     'bool'],
     ['rename-head!', 'SALSA_RENAME_HEAD', 'bool'],
     ['source-branch=s', 'SALSA_SOURCE_BRANCH', undef, 'master'],
     ['dest-branch=s',   'SALSA_DEST_BRANCH',   undef, 'debian/master'],
-    ['tagpending!'],
-    ['disable-tagpending!'],
+    [
+        'tagpending!',
+        undef,
+        sub {
+            !$_[1]
+              or $_[0]->enable('yes', 'tagpending', 'disable_tagpending');
+        }
+    ],
+    [
+        'disable-tagpending!',
+        undef,
+        sub {
+            !$_[1] or $_[0]->enable('no', 'tagpending', 'disable_tagpending');
+        }
+    ],
     [
         undef, 'SALSA_TAGPENDING',
         sub { $_[0]->enable($_[1], 'tagpending', 'disable_tagpending'); }
