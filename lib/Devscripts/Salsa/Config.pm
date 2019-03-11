@@ -12,17 +12,22 @@ foreach (qw(
     all api_url cache_file command desc desc_pattern dest_branch rename_head
     disable_irker disable_issues disable_kgb disable_mr disable_tagpending
     enable_issues enable_mr irc_channel git_server_url irker irker_server_url
-    irker_host irker_port kgb kgb_server_url mr_allow_squash mr_desc mr_dst_branch
-    mr_dst_project mr_remove_source_branch mr_src_branch mr_src_project
-    mr_title no_fail path private_token skip source_branch group group_id user
-    user_id tagpending tagpending_server_url email email_recipient
-    disable_email ci_config_path
+    irker_host irker_port kgb kgb_server_url kgb_options mr_allow_squash
+    mr_desc mr_dst_branch mr_dst_project mr_remove_source_branch mr_src_branch
+    mr_src_project mr_title no_fail path private_token skip source_branch
+    group group_id user user_id tagpending tagpending_server_url email
+    email_recipient disable_email ci_config_path
     )
 ) {
     has $_ => (is => 'rw');
 }
 
 my $cacheDir;
+
+our @kgbOpt = qw(push_events issues_events confidential_issues_events
+  confidential_comments_events merge_requests_events tag_push_events
+  note_events job_events pipeline_events wiki_page_events
+  confidential_note_events enable_ssl_verification);
 
 BEGIN {
     $cacheDir = $ENV{XDG_CACHE_HOME} || $ENV{HOME} . '/.cache';
@@ -177,6 +182,14 @@ use constant keys => [
         sub { !$_[1] or $_[0]->enable('no', 'kgb', 'disable_kgb'); }
     ],
     [undef, 'SALSA_KGB', sub { $_[0]->enable($_[1], 'kgb', 'disable_kgb'); }],
+    [
+        'kgb-options=s',
+        'SALSA_KGB_OPTIONS',
+        qr/\w/,
+        'push_events,issues_events,merge_requests_events,tag_push_events,'
+          . 'note_events,pipeline_events,wiki_page_events'
+    ],
+
     ['no-fail',      'SALSA_NO_FAIL',     'bool'],
     ['rename-head!', 'SALSA_RENAME_HEAD', 'bool'],
     ['source-branch=s', 'SALSA_SOURCE_BRANCH', undef, 'master'],
@@ -295,6 +308,18 @@ use constant rules => [
                 return (0, "Only one IRC channel is accepted with --kgb");
             }
         }
+        return 1;
+    },
+    sub {
+        $_[0]->kgb_options([sort split ',\s*', $_[0]->kgb_options]);
+        my @err;
+        foreach my $o (@{ $_[0]->kgb_options }) {
+            unless (grep { $_ eq $o } @kgbOpt) {
+                push @err, $o;
+            }
+        }
+        return (0, 'Unknown KGB options: ' . join(', ', @err))
+          if @err;
         return 1;
     },
 ];
