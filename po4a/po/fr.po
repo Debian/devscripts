@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2019-02-28 18:01+0100\n"
+"POT-Creation-Date: 2019-03-19 13:56+0100\n"
 "PO-Revision-Date: 2019-02-28 18:11+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -370,7 +370,7 @@ msgstr ""
 #: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:115
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
-#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:775
+#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:791
 #: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:1944
 #: ../scripts/uupdate.1:189 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:167 ../scripts/wnpp-alert.1:29
@@ -424,7 +424,7 @@ msgstr ""
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
 #: ../scripts/nmudiff.1:119 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
-#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:779
+#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:795
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
 #: ../scripts/uscan.pl:1948 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
@@ -16843,7 +16843,7 @@ msgid "Kees Cook <kees@debian.org>"
 msgstr "Kees Cook <kees@debian.org>"
 
 #. type: =head1
-#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:783
+#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:799
 msgid "COPYRIGHT AND LICENSE"
 msgstr "COPYRIGHT ET LICENCE"
 
@@ -21867,28 +21867,68 @@ msgstr "Valeur C<.devscripts> : B<SALSA_KGB> (yes/ignore/no, défaut : ignore)"
 
 #. type: =item
 #: ../scripts/salsa.pl:637
+#, fuzzy
+#| msgid "B<--bpo>"
+msgid "B<--kgb-options>"
+msgstr "B<--bpo>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:639
+msgid ""
+"List of KGB enabled options (comma separated). Default: issues_events, "
+"merge_requests_events, note_events, pipeline_events, push_events, "
+"tag_push_events, wiki_page_events"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:643
+#, no-wrap
+msgid ""
+"  $ salsa update_safe debian/devscripts --kgb --irc-channel devscripts \\\n"
+"    --kgb-options 'merge_requests_events,issues_events,enable_ssl_verification'\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:646
+msgid ""
+"List of available options: confidential_comments_events, "
+"confidential_issues_events, confidential_note_events, "
+"enable_ssl_verification, issues_events, job_events, merge_requests_events, "
+"note_events, pipeline_events, tag_push_events, wiki_page_events"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:651
+#, fuzzy
+#| msgid "C<.devscripts> value: B<SALSA_GROUP>"
+msgid "C<.devscripts> value: B<SALSA_KGB_OPTIONS>"
+msgstr "Valeur C<.devscripts> : B<SALSA_GROUP>"
+
+#. type: =item
+#: ../scripts/salsa.pl:653
 msgid "B<--no-fail>"
 msgstr "B<--no-fail>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:639
+#: ../scripts/salsa.pl:655
 msgid "Don't stop on error when using B<update_repo> with B<--all>."
 msgstr ""
 "Ne pas s'arrêter à la première erreur lorsque B<update_repo> est utilisé "
 "avec B<--all>."
 
 #. type: textblock
-#: ../scripts/salsa.pl:641
+#: ../scripts/salsa.pl:657
 msgid "C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)"
 msgstr "Valeur C<.devscripts> : B<SALSA_NO_FAIL> (yes/no)"
 
 #. type: =item
-#: ../scripts/salsa.pl:643
+#: ../scripts/salsa.pl:659
 msgid "B<--rename-head>, B<--no-rename-head>"
 msgstr "B<--rename-head>, B<--no-rename-head>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:645
+#: ../scripts/salsa.pl:661
 msgid ""
 "Rename HEAD branch given by B<--source-branch> into B<--dest-branch> and "
 "change \"default branch\" of project. Works only with B<update_repo>."
@@ -21897,99 +21937,99 @@ msgstr ""
 "et changer la branche par défaut. Ne fonctionne qu'avec B<update_repo>."
 
 #. type: textblock
-#: ../scripts/salsa.pl:648
+#: ../scripts/salsa.pl:664
 msgid "C<.devscripts> value: B<SALSA_RENAME_HEAD> (yes/no)"
 msgstr "Valeur C<.devscripts> : B<SALSA_RENAME_HEAD> (yes/no)"
 
 #. type: =item
-#: ../scripts/salsa.pl:652
+#: ../scripts/salsa.pl:668
 msgid "B<--source-branch>: default \"master\""
 msgstr "B<--source-branch> : défaut \"master\""
 
 #. type: textblock
-#: ../scripts/salsa.pl:654
+#: ../scripts/salsa.pl:670
 msgid "C<.devscripts> value: B<SALSA_SOURCE_BRANCH>"
 msgstr "Valeur C<.devscripts> : B<SALSA_SOURCE_BRANCH>"
 
 #. type: =item
-#: ../scripts/salsa.pl:656
+#: ../scripts/salsa.pl:672
 msgid "B<--dest-branch>: default \"debian/master\""
 msgstr "B<--dest-branch> : défaut \"debian/master\""
 
 #. type: textblock
-#: ../scripts/salsa.pl:658
+#: ../scripts/salsa.pl:674
 msgid "C<.devscripts> value: B<SALSA_DEST_BRANCH>"
 msgstr "Valeur C<.devscripts> : B<SALSA_DEST_BRANCH>"
 
 #. type: =item
-#: ../scripts/salsa.pl:662
+#: ../scripts/salsa.pl:678
 msgid "B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>"
 msgstr "B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:664
+#: ../scripts/salsa.pl:680
 msgid "Enable, ignore or disable \"tagpending\" webhook."
 msgstr "Active, ignore ou désactive le webhook \"tagpending\"."
 
 #. type: textblock
-#: ../scripts/salsa.pl:666
+#: ../scripts/salsa.pl:682
 msgid ""
 "C<.devscripts> value: B<SALSA_TAGPENDING> (yes/ignore/no, default: ignore)"
 msgstr ""
 "Valeur C<.devscripts> : B<SALSA_TAGPENDING> (yes/ignore/no, défaut : ignore)"
 
 #. type: =head2
-#: ../scripts/salsa.pl:670
+#: ../scripts/salsa.pl:686
 msgid "Merge requests options"
 msgstr "Options pour les \"merge requests\""
 
 #. type: =item
-#: ../scripts/salsa.pl:674
+#: ../scripts/salsa.pl:690
 msgid "B<--mr-title>"
 msgstr "B<--mr-title>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:676
+#: ../scripts/salsa.pl:692
 msgid "Title for merge request. Default: last commit title."
 msgstr "Titre à utiliser. Défaut : titre du dernier commit."
 
 #. type: =item
-#: ../scripts/salsa.pl:678
+#: ../scripts/salsa.pl:694
 msgid "B<--mr-desc>"
 msgstr "B<--mr-desc>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:680
+#: ../scripts/salsa.pl:696
 msgid "Description of new MR. Default:"
 msgstr "Description à utiliser. Défaut :"
 
 #. type: =item
-#: ../scripts/salsa.pl:684
+#: ../scripts/salsa.pl:700
 msgid "empty if B<--mr-title> is set"
 msgstr "vide is B<--mr-title> est indiqué"
 
 #. type: =item
-#: ../scripts/salsa.pl:686
+#: ../scripts/salsa.pl:702
 msgid "last commit description if any"
 msgstr "description du dernier commit si elle existe"
 
 #. type: =item
-#: ../scripts/salsa.pl:690
+#: ../scripts/salsa.pl:706
 msgid "B<--mr-dst-branch> (or second command line argument)"
 msgstr "B<--mr-dst-branch>(ou second argument de la ligne de commande)"
 
 #. type: textblock
-#: ../scripts/salsa.pl:692
+#: ../scripts/salsa.pl:708
 msgid "Destination branch. Default to \"master\"."
 msgstr "Branche de destination. Défaut : \"master\"."
 
 #. type: =item
-#: ../scripts/salsa.pl:694
+#: ../scripts/salsa.pl:710
 msgid "B<--mr-dst-project> (or first command line argument)"
 msgstr "B<--mr-dst-projet>(ou premier argument de la ligne de commande)"
 
 #. type: textblock
-#: ../scripts/salsa.pl:696
+#: ../scripts/salsa.pl:712
 msgid ""
 "Destination project. Default: project from which the current project was "
 "forked; or, if not found, \"upstream\" value found using B<git remote --"
@@ -22000,7 +22040,7 @@ msgstr ""
 "à défaut le projet courant."
 
 #. type: textblock
-#: ../scripts/salsa.pl:700
+#: ../scripts/salsa.pl:716
 msgid ""
 "If B<--mr-dst-project> is set to B<same>, salsa will use source project as "
 "destination."
@@ -22009,22 +22049,22 @@ msgstr ""
 "comme destination."
 
 #. type: =item
-#: ../scripts/salsa.pl:703
+#: ../scripts/salsa.pl:719
 msgid "B<--mr-src-branch>"
 msgstr "B<--mr-src-branch>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:705
+#: ../scripts/salsa.pl:721
 msgid "Source branch. Default: current branch."
 msgstr "Branche source. Défaut : branche courante."
 
 #. type: =item
-#: ../scripts/salsa.pl:707
+#: ../scripts/salsa.pl:723
 msgid "B<--mr-src-project>"
 msgstr "B<--mr-src-project>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:709
+#: ../scripts/salsa.pl:725
 msgid ""
 "Source project. Default: current project found using B<git remote --verbose "
 "show>."
@@ -22033,124 +22073,124 @@ msgstr ""
 "verbose show>."
 
 #. type: =item
-#: ../scripts/salsa.pl:712
+#: ../scripts/salsa.pl:728
 msgid "B<--mr-allow-squash>, B<--no-mr-allow-squash>"
 msgstr "B<--mr-allow-squash>, B<--no-mr-allow-squash>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:714
+#: ../scripts/salsa.pl:730
 msgid "Allow upstream project to squash your commits, this is the default."
 msgstr ""
 "Autorise le projet amont à regrouper les commits (squash), c'est la valeur "
 "par défaut."
 
 #. type: textblock
-#: ../scripts/salsa.pl:716
+#: ../scripts/salsa.pl:732
 msgid "C<.devscripts> value: B<SALSA_MR_ALLOW_SQUASH> (yes/no)"
 msgstr "Valeur C<.devscripts> : B<SALSA_MR_ALLOW_SQUASH> (yes/no)"
 
 #. type: =item
-#: ../scripts/salsa.pl:718
+#: ../scripts/salsa.pl:734
 msgid "B<--mr-remove-source-branch>, B<--no-mr-remove-source-branch>"
 msgstr "B<--mr-remove-source-branch>, B<--no-mr-remove-source-branch>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:720
+#: ../scripts/salsa.pl:736
 msgid "Remove source branch if merge request is accepted. Default: no."
 msgstr "Effacer la branche source si la requête est acceptée. Défaut : no."
 
 #. type: textblock
-#: ../scripts/salsa.pl:722
+#: ../scripts/salsa.pl:738
 msgid "C<.devscripts> value: B<SALSA_MR_REMOVE_SOURCE_BRANCH> (yes/no)"
 msgstr "Valeur C<.devscripts> : B<SALSA_MR_REMOVE_SOURCE_BRANCH> (yes/no)"
 
 #. type: =head2
-#: ../scripts/salsa.pl:726
+#: ../scripts/salsa.pl:742
 msgid "Options to manage other Gitlab instances"
 msgstr "Options pour gérer d'autres instance GitLab"
 
 #. type: =item
-#: ../scripts/salsa.pl:730
+#: ../scripts/salsa.pl:746
 msgid "B<--api-url>"
 msgstr "B<--api-url>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:732
+#: ../scripts/salsa.pl:748
 msgid "GitLab API. Default: L<https://salsa.debian.org/api/v4>."
 msgstr "API GitLab. Défaut : L<https://salsa.debian.org/api/v4>."
 
 #. type: textblock
-#: ../scripts/salsa.pl:734
+#: ../scripts/salsa.pl:750
 msgid "C<.devscripts> value: B<SALSA_API_URL>"
 msgstr "Valeur C<.devscripts> : B<SALSA_API_URL>"
 
 #. type: =item
-#: ../scripts/salsa.pl:736
+#: ../scripts/salsa.pl:752
 msgid "B<--git-server-url>"
 msgstr "B<--git-server-url>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:738
+#: ../scripts/salsa.pl:754
 msgid "Default to \"git@salsa.debian.org:\""
 msgstr "Défaut : \"git@salsa.debian.org:\""
 
 #. type: textblock
-#: ../scripts/salsa.pl:740
+#: ../scripts/salsa.pl:756
 msgid "C<.devscripts> value: B<SALSA_GIT_SERVER_URL>"
 msgstr "Valeur C<.devscripts> : B<SALSA_GIT_SERVER_URL>"
 
 #. type: =item
-#: ../scripts/salsa.pl:742
+#: ../scripts/salsa.pl:758
 msgid "B<--irker-server-url>"
 msgstr "B<--irker-server-url>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:744
+#: ../scripts/salsa.pl:760
 msgid "Default to \"ircs://irc.oftc.net:6697/\""
 msgstr "Défaut : \"ircs://irc.oftc.net:6697/\""
 
 #. type: textblock
-#: ../scripts/salsa.pl:746
+#: ../scripts/salsa.pl:762
 msgid "C<.devscripts> value: B<SALSA_IRKER_SERVER_URL>"
 msgstr "Valeur C<.devscripts> : B<SALSA_IRKER_SERVER_URL>"
 
 #. type: =item
-#: ../scripts/salsa.pl:748
+#: ../scripts/salsa.pl:764
 msgid "B<--kgb-server-url>"
 msgstr "B<--kgb-server-url>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:750
+#: ../scripts/salsa.pl:766
 msgid "Default to L<http://kgb.debian.net:9418/webhook/?channel=>"
 msgstr "Défault : L<http://kgb.debian.net:9418/webhook/?channel=>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:752
+#: ../scripts/salsa.pl:768
 msgid "C<.devscripts> value: B<SALSA_KGB_SERVER_URL>"
 msgstr "Valeur C<.devscripts> : B<SALSA_KGB_SERVER_URL>"
 
 #. type: =item
-#: ../scripts/salsa.pl:754
+#: ../scripts/salsa.pl:770
 msgid "B<--tagpending-server-url>"
 msgstr "B<--tagpending-server-url>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:756
+#: ../scripts/salsa.pl:772
 msgid "Default to L<https://webhook.salsa.debian.org/tagpending/>"
 msgstr "Défaut : L<https://webhook.salsa.debian.org/tagpending/>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:758
+#: ../scripts/salsa.pl:774
 msgid "C<.devscripts> value: B<SALSA_TAGPENDING_SERVER_URL>"
 msgstr "Valeur C<.devscripts> : B<SALSA_TAGPENDING_SERVER_URL>"
 
 #. type: =head3
-#: ../scripts/salsa.pl:762
+#: ../scripts/salsa.pl:778
 msgid "Configuration file example"
 msgstr "Exemple de fichier de configuration"
 
 #. type: textblock
-#: ../scripts/salsa.pl:764
+#: ../scripts/salsa.pl:780
 msgid ""
 "Example to use salsa with L<https://gitlab.ow2.org> (group \"lemonldap-ng\"):"
 msgstr ""
@@ -22158,7 +22198,7 @@ msgstr ""
 "\"lemonldap-ng\"):"
 
 #. type: verbatim
-#: ../scripts/salsa.pl:766
+#: ../scripts/salsa.pl:782
 #, no-wrap
 msgid ""
 "  SALSA_TOKEN=`cat ~/.ow2-gitlab-token`\n"
@@ -22174,14 +22214,14 @@ msgstr ""
 "\n"
 
 #. type: textblock
-#: ../scripts/salsa.pl:771
+#: ../scripts/salsa.pl:787
 msgid "Then to use it, add something like this in your C<.bashrc> file:"
 msgstr ""
 "Ensuite pour l'utiliser, ajouter quelque chose comme suit dans votre fichier "
 "C<.bashrc> :"
 
 #. type: verbatim
-#: ../scripts/salsa.pl:773
+#: ../scripts/salsa.pl:789
 #, no-wrap
 msgid ""
 "  alias llng_admin='salsa --conffile ~/.salsa-ow2.conf'\n"
@@ -22191,22 +22231,22 @@ msgstr ""
 "\n"
 
 #. type: textblock
-#: ../scripts/salsa.pl:777
+#: ../scripts/salsa.pl:793
 msgid "B<dpt-salsa>"
 msgstr "B<dpt-salsa>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:781
+#: ../scripts/salsa.pl:797
 msgid "Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 msgstr "Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:785
+#: ../scripts/salsa.pl:801
 msgid "Copyright (C) 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 msgstr "Droits d'auteur (C) 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>"
 
 #. type: textblock
-#: ../scripts/salsa.pl:787
+#: ../scripts/salsa.pl:803
 msgid ""
 "It contains code formely found in L<dpt-salsa> I<(pkg-perl-tools)> copyright "
 "2018, gregor herrmann E<lt>gregoa@debian.orgE<gt>."
@@ -22215,7 +22255,7 @@ msgstr ""
 "d'auteur (C) 2018, gregor herrmann E<lt>gregoa@debian.orgE<gt>."
 
 #. type: textblock
-#: ../scripts/salsa.pl:790
+#: ../scripts/salsa.pl:806
 msgid ""
 "This library is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -22227,7 +22267,7 @@ msgstr ""
 "publiée par la Free Software Foundation, version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/salsa.pl:795
+#: ../scripts/salsa.pl:811
 msgid ""
 "This program is distributed in the hope that it will be useful, but WITHOUT "
 "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
@@ -22240,7 +22280,7 @@ msgstr ""
 "pour plus de détails."
 
 #. type: textblock
-#: ../scripts/salsa.pl:800
+#: ../scripts/salsa.pl:816
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "this program.  If not, see L<http://www.gnu.org/licenses/>."
