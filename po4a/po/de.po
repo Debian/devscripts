@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2018-11-08 23:05+0100\n"
+"POT-Creation-Date: 2019-03-19 09:52+0100\n"
 "PO-Revision-Date: 2019-01-27 10:18+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -92,7 +92,7 @@ msgstr "DEBIAN"
 #: ../scripts/nmudiff.1:2 ../scripts/origtargz.pl:20
 #: ../scripts/plotchangelog.1:2 ../scripts/pts-subscribe.1:2
 #: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:251 ../scripts/sadt.pod:17
-#: ../doc/suspicious-source.1:17 ../scripts/svnpath.pl:3
+#: ../scripts/salsa.pl:3 ../doc/suspicious-source.1:17 ../scripts/svnpath.pl:3
 #: ../scripts/tagpending.pl:80 ../scripts/transition-check.pl:23
 #: ../scripts/uscan.pl:34 ../scripts/uupdate.1:2 ../doc/what-patch.1:2
 #: ../scripts/whodepends.1:2 ../scripts/who-uploads.1:2
@@ -132,7 +132,7 @@ msgstr "annotate-output - versieht Programmausgaben mit Zeit und Datenstrom"
 #: ../scripts/mk-origtargz.pl:29 ../scripts/nmudiff.1:4
 #: ../scripts/origtargz.pl:24 ../scripts/plotchangelog.1:4
 #: ../scripts/pts-subscribe.1:4 ../scripts/rc-alert.1:4
-#: ../scripts/rmadison.pl:255 ../scripts/sadt.pod:21
+#: ../scripts/rmadison.pl:255 ../scripts/sadt.pod:21 ../scripts/salsa.pl:7
 #: ../doc/suspicious-source.1:21 ../scripts/svnpath.pl:7
 #: ../scripts/tagpending.pl:84 ../scripts/transition-check.pl:27
 #: ../scripts/uscan.pl:38 ../scripts/uupdate.1:4 ../doc/what-patch.1:5
@@ -173,7 +173,7 @@ msgstr "B<annotate-output> [I<Optionen>] I<Programm> [I<Argumente> …]"
 #: ../scripts/mk-origtargz.pl:39 ../scripts/nmudiff.1:6
 #: ../scripts/origtargz.pl:34 ../scripts/plotchangelog.1:7
 #: ../scripts/pts-subscribe.1:8 ../scripts/rc-alert.1:8
-#: ../scripts/rmadison.pl:263 ../scripts/sadt.pod:25
+#: ../scripts/rmadison.pl:263 ../scripts/sadt.pod:25 ../scripts/salsa.pl:28
 #: ../doc/suspicious-source.1:24 ../scripts/svnpath.pl:17
 #: ../scripts/tagpending.pl:88 ../scripts/transition-check.pl:33
 #: ../scripts/uscan.pl:42 ../scripts/uupdate.1:10 ../doc/what-patch.1:8
@@ -216,12 +216,12 @@ msgstr ""
 #: ../scripts/list-unreleased.1:12 ../scripts/ltnu.pod:27
 #: ../scripts/manpage-alert.1:12 ../scripts/mass-bug.pl:59
 #: ../scripts/mk-build-deps.pl:44 ../scripts/mk-origtargz.pl:62
-#: ../scripts/nmudiff.1:21 ../scripts/origtargz.pl:96
+#: ../scripts/nmudiff.1:24 ../scripts/origtargz.pl:96
 #: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
 #: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:272 ../scripts/sadt.pod:42
-#: ../doc/suspicious-source.1:34 ../scripts/tagpending.pl:94
-#: ../scripts/transition-check.pl:42 ../scripts/uupdate.1:54
-#: ../doc/what-patch.1:15 ../scripts/whodepends.1:10
+#: ../scripts/salsa.pl:375 ../doc/suspicious-source.1:34
+#: ../scripts/tagpending.pl:94 ../scripts/transition-check.pl:42
+#: ../scripts/uupdate.1:54 ../doc/what-patch.1:15 ../scripts/whodepends.1:10
 #: ../scripts/who-uploads.1:15 ../scripts/who-permits-upload.pl:62
 #: ../scripts/wnpp-alert.1:17 ../scripts/wnpp-check.1:16
 #: ../doc/wrap-and-sort.1:35
@@ -259,7 +259,7 @@ msgstr "B<-h>, B<--help>"
 #: ../scripts/annotate-output.1:19 ../scripts/debchange.1:401
 #: ../scripts/debclean.1:90 ../scripts/debrelease.1:102
 #: ../scripts/debsign.1:102 ../scripts/dep3changelog.1:19
-#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:80
+#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:83
 #: ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
@@ -356,11 +356,11 @@ msgstr ""
 #: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:72
 #: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:582
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
-#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:112
+#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:115
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
-#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69
-#: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:1924
+#: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:791
+#: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:1944
 #: ../scripts/uupdate.1:189 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:167 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:26 ../doc/devscripts.conf.5:54
@@ -411,11 +411,11 @@ msgstr ""
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
-#: ../scripts/nmudiff.1:116 ../scripts/origtargz.pl:162
+#: ../scripts/nmudiff.1:119 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
-#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397
+#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:795
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
-#: ../scripts/uscan.pl:1928 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
+#: ../scripts/uscan.pl:1948 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36
 #: ../doc/devscripts.conf.5:58
@@ -561,8 +561,9 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:41
-msgid "bts - developers' command line interface to the BTS"
-msgstr "bts - Befehlszeilenschnittstelle der Entwickler zum BTS"
+msgid ""
+"bts - developers' command line interface to the Debian Bug Tracking System"
+msgstr "bts - Befehlszeilenschnittstelle der Entwickler zum Debian Bug Tracking System"
 
 #. type: textblock
 #: ../scripts/bts.pl:218
@@ -915,7 +916,7 @@ msgstr ""
 "zum Beispiel: B<--sendmail=\"/usr/sbin/mymailer -t\">."
 
 #. type: TP
-#: ../scripts/bts.pl:351 ../scripts/nmudiff.1:31
+#: ../scripts/bts.pl:351 ../scripts/nmudiff.1:34
 #, no-wrap
 msgid "B<--mutt>"
 msgstr "B<--mutt>"
@@ -939,7 +940,7 @@ msgstr ""
 "müssen, um B<mutt> zum Senden von E-Mails zu verwenden."
 
 #. type: TP
-#: ../scripts/bts.pl:359 ../scripts/nmudiff.1:36
+#: ../scripts/bts.pl:359 ../scripts/nmudiff.1:39
 #, no-wrap
 msgid "B<--no-mutt>"
 msgstr "B<--no-mutt>"
@@ -1263,8 +1264,8 @@ msgstr ""
 #: ../scripts/debrelease.1:95 ../scripts/debsign.1:95 ../scripts/debuild.1:258
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
 #: ../scripts/grep-excuses.1:15 ../scripts/mass-bug.pl:112
-#: ../scripts/nmudiff.1:69 ../scripts/rmadison.pl:335 ../scripts/uscan.pl:1425
-#: ../scripts/uupdate.1:56 ../scripts/who-uploads.1:40
+#: ../scripts/nmudiff.1:72 ../scripts/rmadison.pl:335 ../scripts/salsa.pl:420
+#: ../scripts/uscan.pl:1445 ../scripts/uupdate.1:56 ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -1275,7 +1276,7 @@ msgstr "B<--no-conf>, B<--noconf>"
 #: ../scripts/debi.1:106 ../scripts/debrelease.1:99 ../scripts/debsign.1:99
 #: ../scripts/debuild.1:262 ../scripts/dpkg-depcheck.1:96
 #: ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:19
-#: ../scripts/mass-bug.pl:114 ../scripts/nmudiff.1:73 ../scripts/uupdate.1:60
+#: ../scripts/mass-bug.pl:114 ../scripts/nmudiff.1:76 ../scripts/uupdate.1:60
 #: ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -1285,7 +1286,7 @@ msgstr ""
 "Befehlszeile angegebene Option benutzt werden."
 
 #. type: =head1
-#: ../scripts/bts.pl:839 ../scripts/chdist.pl:55
+#: ../scripts/bts.pl:839 ../scripts/chdist.pl:55 ../scripts/salsa.pl:57
 msgid "COMMANDS"
 msgstr "BEFEHLE"
 
@@ -2208,9 +2209,9 @@ msgid ""
 "The list of valid tags and their significance is available at L<https://www."
 "debian.org/Bugs/Developer#tags>. The current valid tags are:"
 msgstr ""
-"Die Liste gültiger Markierungen und ihre Bedeutung ist unter "
-"L<https://www.debian.org/Bugs/Developer#tags> verfügbar. Derzeit sind "
-"folgende Markierungen gültig:"
+"Die Liste gültiger Markierungen und ihre Bedeutung ist unter L<https://www."
+"debian.org/Bugs/Developer#tags> verfügbar. Derzeit sind folgende "
+"Markierungen gültig:"
 
 #. type: textblock
 #: ../scripts/bts.pl:1608
@@ -2506,8 +2507,8 @@ msgid ""
 "only applies the subsequent control commands to bugs of package foo with "
 "either B<wishlist> or B<minor> severity."
 msgstr ""
-"wird nur auf nachfolgende Steuerbefehle für Fehler des Pakets Foo angewendet, "
-"die entweder den Schweregrad B<wishlist> oder B<minor> aufweisen."
+"wird nur auf nachfolgende Steuerbefehle für Fehler des Pakets Foo "
+"angewendet, die entweder den Schweregrad B<wishlist> oder B<minor> aufweisen."
 
 #. type: =item
 #: ../scripts/bts.pl:2059
@@ -2900,7 +2901,7 @@ msgstr ""
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:327
 #: ../scripts/dget.pl:687 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:43 ../scripts/grep-excuses.1:43
-#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:83
+#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:86
 #: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
 #: ../scripts/rmadison.pl:344 ../scripts/uupdate.1:107
 #: ../scripts/who-uploads.1:50
@@ -3015,7 +3016,7 @@ msgstr ""
 "B<mutt> benutzt wird. Entspricht der Befehlszeilenoption B<--mailreader>."
 
 #. type: TP
-#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:108
+#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:111
 #, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "B<BTS_SENDMAIL_COMMAND>"
@@ -3184,9 +3185,9 @@ msgstr ""
 "Mails gesteuert wird und L<https://www.debian.org/Bugs/>, um weitere "
 "Informationen über die Fehlerdatenbank zu erhalten."
 
+# FIXME wrong order
 #. type: textblock
 #: ../scripts/bts.pl:4356
-# FIXME wrong order
 msgid "querybts(1), reportbug(1), pts-subscribe(1), devscripts.conf(5)"
 msgstr "pts-subscribe(1), querybts(1), reportbug(1), devscripts.conf(5)"
 
@@ -3364,7 +3365,7 @@ msgstr ""
 "extra >= 4.0 installiert ist."
 
 #. type: TP
-#: ../scripts/build-rdeps.pl:84 ../scripts/nmudiff.1:26
+#: ../scripts/build-rdeps.pl:84 ../scripts/nmudiff.1:29
 #, no-wrap
 msgid "B<--old>"
 msgstr "B<--old>"
@@ -3436,8 +3437,8 @@ msgstr "führt den Fehlersuchmodus aus."
 #: ../scripts/build-rdeps.pl:109 ../scripts/cowpoke.1:131
 #: ../scripts/debclean.1:87 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:23 ../scripts/mass-bug.pl:117
-#: ../scripts/nmudiff.1:77 ../scripts/plotchangelog.1:92
-#: ../scripts/uscan.pl:1604
+#: ../scripts/nmudiff.1:80 ../scripts/plotchangelog.1:92
+#: ../scripts/uscan.pl:1624
 #, no-wrap
 msgid "B<--help>"
 msgstr "B<--help>"
@@ -3453,9 +3454,9 @@ msgstr "zeigt die Aufrufinformationen."
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/debsnap.1:77
 #: ../scripts/dep3changelog.1:19 ../scripts/diff2patches.1:25
 #: ../scripts/dscverify.1:40 ../scripts/grep-excuses.1:26
-#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:80
+#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:83
 #: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
-#: ../scripts/rmadison.pl:331 ../scripts/uscan.pl:1608 ../scripts/uupdate.1:104
+#: ../scripts/rmadison.pl:331 ../scripts/uscan.pl:1628 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
@@ -3582,7 +3583,7 @@ msgstr "wählt die Architektur aus (Vorgabe: »B<dpkg --print-architecture>«)."
 
 #. type: textblock
 #: ../scripts/chdist.pl:51 ../scripts/deb-reversion.dbk:239
-#: ../scripts/mass-bug.pl:123 ../scripts/uscan.pl:1610
+#: ../scripts/mass-bug.pl:123 ../scripts/uscan.pl:1630
 msgid "Display version information."
 msgstr "zeigt Versionsinformationen."
 
@@ -6290,9 +6291,9 @@ msgid ""
 "else any files matching I</var/lib/apt/lists/*_source_Sources> will be used."
 msgstr ""
 "Falls keine I<Quelldatei>en angegeben wurden, wird Dd-list einen geeigneten "
-"Satz Quellen von Apt-get abfragen (falls die Version von APT größer als 1.1.8 "
-"ist), ansonsten werden alle Dateien verwendet, auf die "
-"I</var/lib/apt/lists/*_source_Sources> passen."
+"Satz Quellen von Apt-get abfragen (falls die Version von APT größer als "
+"1.1.8 ist), ansonsten werden alle Dateien verwendet, auf die I</var/lib/apt/"
+"lists/*_source_Sources> passen."
 
 #. type: TP
 #: ../scripts/dd-list.1:90
@@ -6420,7 +6421,7 @@ msgstr ""
 #. type: =head2
 #: ../scripts/debc.1:28 ../scripts/debchange.1:109 ../scripts/debclean.1:27
 #: ../scripts/debi.1:29 ../scripts/debrelease.1:20 ../scripts/debuild.1:51
-#: ../scripts/uscan.pl:1810
+#: ../scripts/uscan.pl:1830
 #, no-wrap
 msgid "Directory name checking"
 msgstr "Prüfung von Verzeichnisnamen"
@@ -6452,14 +6453,14 @@ msgstr ""
 #. type: textblock
 #: ../scripts/debc.1:41 ../scripts/debchange.1:122 ../scripts/debclean.1:40
 #: ../scripts/debi.1:42 ../scripts/debrelease.1:33 ../scripts/debuild.1:65
-#: ../scripts/uscan.pl:1825
+#: ../scripts/uscan.pl:1845
 msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> can take the following values:"
 msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> kann die folgenden Werte annehmen:"
 
 #. type: =item
 #: ../scripts/debc.1:41 ../scripts/debchange.1:122 ../scripts/debclean.1:40
 #: ../scripts/debi.1:42 ../scripts/debrelease.1:33 ../scripts/debuild.1:65
-#: ../scripts/uscan.pl:1752 ../scripts/uscan.pl:1829
+#: ../scripts/uscan.pl:1772 ../scripts/uscan.pl:1849
 #, no-wrap
 msgid "B<0>"
 msgstr "B<0>"
@@ -6467,14 +6468,14 @@ msgstr "B<0>"
 #. type: textblock
 #: ../scripts/debc.1:44 ../scripts/debchange.1:125 ../scripts/debclean.1:43
 #: ../scripts/debi.1:45 ../scripts/debrelease.1:36 ../scripts/debuild.1:68
-#: ../scripts/uscan.pl:1831
+#: ../scripts/uscan.pl:1851
 msgid "Never check the directory name."
 msgstr "prüft den Verzeichnisnamen nie."
 
 #. type: =item
 #: ../scripts/debc.1:44 ../scripts/debchange.1:125 ../scripts/debclean.1:43
 #: ../scripts/debi.1:45 ../scripts/debrelease.1:36 ../scripts/debuild.1:68
-#: ../scripts/uscan.pl:1757 ../scripts/uscan.pl:1833
+#: ../scripts/uscan.pl:1777 ../scripts/uscan.pl:1853
 #, no-wrap
 msgid "B<1>"
 msgstr "B<1>"
@@ -6492,7 +6493,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/debc.1:48 ../scripts/debchange.1:129 ../scripts/debclean.1:47
 #: ../scripts/debi.1:49 ../scripts/debrelease.1:40 ../scripts/debuild.1:72
-#: ../scripts/uscan.pl:1840
+#: ../scripts/uscan.pl:1860
 #, no-wrap
 msgid "B<2>"
 msgstr "B<2>"
@@ -6500,7 +6501,7 @@ msgstr "B<2>"
 #. type: textblock
 #: ../scripts/debc.1:51 ../scripts/debchange.1:132 ../scripts/debclean.1:50
 #: ../scripts/debi.1:52 ../scripts/debrelease.1:43 ../scripts/debuild.1:75
-#: ../scripts/uscan.pl:1842
+#: ../scripts/uscan.pl:1862
 msgid "Always check the directory name."
 msgstr "prüft den Verzeichnisnamen immer."
 
@@ -6556,7 +6557,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/debc.1:77 ../scripts/debchange.1:381 ../scripts/debclean.1:72
 #: ../scripts/debi.1:87 ../scripts/debrelease.1:87 ../scripts/debuild.1:313
-#: ../scripts/uscan.pl:1515
+#: ../scripts/uscan.pl:1535
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr "B<--check-dirname-level> I<N>"
@@ -6576,7 +6577,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/debc.1:81 ../scripts/debchange.1:385 ../scripts/debclean.1:76
 #: ../scripts/debi.1:91 ../scripts/debrelease.1:91 ../scripts/debuild.1:317
-#: ../scripts/uscan.pl:1519
+#: ../scripts/uscan.pl:1539
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr "B<--check-dirname-regex> I<regulärer_Ausdruck>"
@@ -6598,9 +6599,9 @@ msgid ""
 msgstr ""
 "führt den Dateinamen der .changes-Datei auf und zeigt sonst nichts an. Diese "
 "Option ist nur sinnvoll, falls eine .changes-Datei NICHT explizit auf der "
-"Befehlszeile übergeben wird. Dies kann zum Beispiel in einem Skript verwendet "
-"werden, das sich auf die .changes-Datei bezieht, ohne die Heuristik zum "
-"Finden kopieren zu müssen, die Debc bereits umsetzt."
+"Befehlszeile übergeben wird. Dies kann zum Beispiel in einem Skript "
+"verwendet werden, das sich auf die .changes-Datei bezieht, ohne die "
+"Heuristik zum Finden kopieren zu müssen, die Debc bereits umsetzt."
 
 #. type: TP
 #: ../scripts/debc.1:92
@@ -6618,7 +6619,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/debc.1:108 ../scripts/debchange.1:410 ../scripts/debclean.1:99
 #: ../scripts/debi.1:115 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
-#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:89
+#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:92
 #: ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:113
 #: ../scripts/who-uploads.1:56
 msgid ""
@@ -6751,29 +6752,30 @@ msgid ""
 msgstr ""
 "B<debchange> oder dessen Alias B<dch> wird eine neue Kommentarzeile zum "
 "Debian-Changelog im aktuellen Quellbaum hinzufügen. Dieser Befehl muss "
-"innerhalb dieses Baums ausgeführt werden. Falls der Text der Änderung auf der "
-"Befehlszeile angegeben wurde, wird B<debchange> im Stapelverarbeitungsmodus "
-"laufen und einfach den Text hinzufügen sowie, falls nötig, Zeilenumbrüche an "
-"der geeigneten Stelle in I<debian/changelog> (oder dem durch Optionen "
-"angegeben Changelog, wie unten beschrieben) hinzufügen. Falls der auf der "
-"Befehlszeile angegebene Text eine Nullzeichenkette ist, wird B<debchange> im "
-"Stapelverarbeitungsmodus ausgeführt ohne einen Text hinzuzufügen. Falls der "
-"auf der Befehlszeile angegebene Text eine Leerzeichenzeichenkette ist, wird "
-"B<debchange> im Stapelverarbeitungsmodus ausgeführt und fügt einen leeren "
-"Changelog-Eintrag hinzu. Falls kein Text angegeben wurde, wird B<debchange> "
-"den durch B<sensible-editor> festgelegten Editor für Sie öffnen, um die Datei "
-"zu bearbeiten. (Die Umgebungsvariablen B<VISUAL> und B<EDITOR> werden in "
-"dieser Reihenfolge verwendet, um festzustellen, welcher Editor benutzt werden "
-"soll). Editoren, die die Option I<+n> zum Starten der Bearbeitung an einer "
-"bestimmten Zeile verstehen, werden dies benutzen, um zum Bearbeiten an die "
-"korrekte Zeile der Datei zu positionieren. Falls der Editor beendet wird, "
-"ohne die temporäre Datei zu verändern, wird B<debchange> beendet, ohne das "
-"existierende Changelog anzurühren. B<Beachten Sie, dass davon ausgegangen "
-"wird, dass das Changelog in UTF-8 kodiert ist - falls nicht, könnten Probleme "
-"auftreten.> Bitte lesen Sie die Handbuchseite B<iconv>(1), um herauszufinden, "
-"wie Changelogs mit älteren Kodierungen konvertiert werden können. Eine "
-"B<changelog>-Datei oder eine I<NEWS>-Datei kann unter Benutzung der weiter "
-"unten beschriebenen Option B<--create> von Grunde auf erzeugt werden."
+"innerhalb dieses Baums ausgeführt werden. Falls der Text der Änderung auf "
+"der Befehlszeile angegeben wurde, wird B<debchange> im "
+"Stapelverarbeitungsmodus laufen und einfach den Text hinzufügen sowie, falls "
+"nötig, Zeilenumbrüche an der geeigneten Stelle in I<debian/changelog> (oder "
+"dem durch Optionen angegeben Changelog, wie unten beschrieben) hinzufügen. "
+"Falls der auf der Befehlszeile angegebene Text eine Nullzeichenkette ist, "
+"wird B<debchange> im Stapelverarbeitungsmodus ausgeführt ohne einen Text "
+"hinzuzufügen. Falls der auf der Befehlszeile angegebene Text eine "
+"Leerzeichenzeichenkette ist, wird B<debchange> im Stapelverarbeitungsmodus "
+"ausgeführt und fügt einen leeren Changelog-Eintrag hinzu. Falls kein Text "
+"angegeben wurde, wird B<debchange> den durch B<sensible-editor> festgelegten "
+"Editor für Sie öffnen, um die Datei zu bearbeiten. (Die Umgebungsvariablen "
+"B<VISUAL> und B<EDITOR> werden in dieser Reihenfolge verwendet, um "
+"festzustellen, welcher Editor benutzt werden soll). Editoren, die die Option "
+"I<+n> zum Starten der Bearbeitung an einer bestimmten Zeile verstehen, "
+"werden dies benutzen, um zum Bearbeiten an die korrekte Zeile der Datei zu "
+"positionieren. Falls der Editor beendet wird, ohne die temporäre Datei zu "
+"verändern, wird B<debchange> beendet, ohne das existierende Changelog "
+"anzurühren. B<Beachten Sie, dass davon ausgegangen wird, dass das Changelog "
+"in UTF-8 kodiert ist - falls nicht, könnten Probleme auftreten.> Bitte lesen "
+"Sie die Handbuchseite B<iconv>(1), um herauszufinden, wie Changelogs mit "
+"älteren Kodierungen konvertiert werden können. Eine B<changelog>-Datei oder "
+"eine I<NEWS>-Datei kann unter Benutzung der weiter unten beschriebenen "
+"Option B<--create> von Grunde auf erzeugt werden."
 
 #. type: Plain text
 #: ../scripts/debchange.1:46
@@ -7201,7 +7203,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debchange.1:217 ../scripts/mk-origtargz.pl:70
-#: ../scripts/uscan.pl:1546
+#: ../scripts/uscan.pl:1566
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr "B<--package> I<Paket>"
@@ -7321,8 +7323,8 @@ msgid ""
 "Increment the Debian release number for a LTS Security Team non-maintainer "
 "upload, and add a B<LTS Security Team upload> changelog comment."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen durch das "
-"LTS-Sicherheits-Team als NMU und fügt einen Changelog-Kommentar B<LTS Team "
+"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen durch das LTS-"
+"Sicherheits-Team als NMU und fügt einen Changelog-Kommentar B<LTS Team "
 "upload> hinzu."
 
 #. type: TP
@@ -7791,7 +7793,7 @@ msgstr ""
 #: ../scripts/debchange.1:404 ../scripts/debclean.1:93
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:105
 #: ../scripts/dep3changelog.1:22 ../scripts/dscverify.1:43
-#: ../scripts/nmudiff.1:83 ../scripts/pts-subscribe.1:34
+#: ../scripts/nmudiff.1:86 ../scripts/pts-subscribe.1:34
 #: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr "zeigt Versions- und Copyright-Informationen an und endet erfolgreich."
@@ -8178,11 +8180,10 @@ msgid ""
 msgstr ""
 "arbeitet im authentifizierten Modus; dies bedeutet, dass für bekannte URLs "
 "(hauptsächlich die auf S<I<https://salsa.debian.org>> bereitgestellten) vor "
-"dem Auschecken versucht wird, die URL umzuschreiben, um sicherzustellen, dass "
-"in das Depot geschrieben werden kann. Für Git-Depots, die auf Salsa "
-"bereitgestellt sind, bedeutet das beispielsweise, dass "
-"S<I<git@salsa.debian.org:…git>> anstelle von "
-"S<I<https://salsa.debian.org/…git>> benutzt wird."
+"dem Auschecken versucht wird, die URL umzuschreiben, um sicherzustellen, "
+"dass in das Depot geschrieben werden kann. Für Git-Depots, die auf Salsa "
+"bereitgestellt sind, bedeutet das beispielsweise, dass S<I<git@salsa.debian."
+"org:…git>> anstelle von S<I<https://salsa.debian.org/…git>> benutzt wird."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:83
@@ -9360,8 +9361,8 @@ msgid ""
 msgstr ""
 "Dies ist identisch mit B<--move>, außer dass I<VON> als ein regulärer "
 "Ausdruck angesehen wird und der B<perl>-Ersetzungsbefehl I<s/^VON/BIS/> auf "
-"die Dateien angewendet wird. Insbesondere kann BIS Gebrauch von Rückverweisen "
-"wie $1 machen."
+"die Dateien angewendet wird. Insbesondere kann BIS Gebrauch von "
+"Rückverweisen wie $1 machen."
 
 #. type: TP
 #: ../scripts/debdiff.1:79
@@ -9820,9 +9821,9 @@ msgstr ""
 "werden und 1, falls doch. Falls es irgendeinen schwerwiegenden Fehler gibt, "
 "wird der Rückgabewert 255 sein."
 
+# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debdiff.1:242
-# FIXME wrong order
 msgid ""
 "B<debdiff-apply>(1), B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), "
 "B<wdiff>(1), B<devscripts.conf>(5), B<diffoscope>(1)"
@@ -9884,10 +9885,10 @@ msgid ""
 "I<patchfile> is expected to be a unified diff between two Debian source "
 "trees, as what B<debdiff>(1)  normally generates."
 msgstr ""
-"I<Orig> kann entweder dasselbe wie I<alt> sein oder sich davon unterscheiden. "
-"Von der I<Patch-Datei> wird erwartet, dass sie ein vereinheitlichtes Diff "
-"zwischen zwei Debian-Quellverzeichnissen ist, was B<debdiff>(1) normalerweise "
-"erzeugt."
+"I<Orig> kann entweder dasselbe wie I<alt> sein oder sich davon "
+"unterscheiden. Von der I<Patch-Datei> wird erwartet, dass sie ein "
+"vereinheitlichtes Diff zwischen zwei Debian-Quellverzeichnissen ist, was "
+"B<debdiff>(1) normalerweise erzeugt."
 
 #. type: Plain text
 #: ../scripts/debdiff-apply.1:42
@@ -9909,9 +9910,9 @@ msgid ""
 "with a non-zero error code."
 msgstr ""
 "Falls die I<Patch-Datei> nicht auf I<Orig> anwendbar ist, sogar nach der "
-"Sonderbehandlung von I<debian/changelog>, werden keine Änderungen vorgenommen "
-"und B<debdiff-apply>(1) wird mit einem von Null verschiedenen Fehlercode "
-"beendet."
+"Sonderbehandlung von I<debian/changelog>, werden keine Änderungen "
+"vorgenommen und B<debdiff-apply>(1) wird mit einem von Null verschiedenen "
+"Fehlercode beendet."
 
 #. type: SH
 #: ../scripts/debdiff-apply.1:48
@@ -9934,8 +9935,8 @@ msgid ""
 msgstr ""
 "Ziel, auf das der Patch angewendet wird. Dies kann entweder ein entpackter "
 "Quellverzeichnisbaum oder eine \\[char46]dsc-Datei sein. Im ersteren Fall "
-"wird das vorhandene Verzeichnis geändert, in letzterem Fall wird ein zweites "
-".dsc erstellt. Voreinstellung: I<.>"
+"wird das vorhandene Verzeichnis geändert, in letzterem Fall wird ein "
+"zweites .dsc erstellt. Voreinstellung: I<.>"
 
 #. type: TP
 #: ../scripts/debdiff-apply.1:54
@@ -9949,8 +9950,8 @@ msgid ""
 "Patch file to apply, in the format output by B<debdiff>(1).  Default: I<\\,/"
 "dev/stdin\\/>"
 msgstr ""
-"Patch-Datei im durch B<debdiff>(1) ausgegebenen Format, die angewendet werden "
-"soll. Voreinstellung: I<\\,/dev/stdin\\/>"
+"Patch-Datei im durch B<debdiff>(1) ausgegebenen Format, die angewendet "
+"werden soll. Voreinstellung: I<\\,/dev/stdin\\/>"
 
 #. type: Plain text
 #: ../scripts/debdiff-apply.1:65
@@ -10020,9 +10021,9 @@ msgid ""
 "is supposed to be applied to, or nothing if the patch does not specify a "
 "source version."
 msgstr ""
-"wendet den Patch nicht an; stattdessen wird die Version des Pakets ausgegeben "
-"auf das er angewendet werden soll oder nichts, falls der Patch keine "
-"Quellversion angibt."
+"wendet den Patch nicht an; stattdessen wird die Version des Pakets "
+"ausgegeben auf das er angewendet werden soll oder nichts, falls der Patch "
+"keine Quellversion angibt."
 
 #. type: TP
 #: ../scripts/debdiff-apply.1:83
@@ -10483,8 +10484,8 @@ msgid ""
 "between the two builds."
 msgstr ""
 "Um herauszufinden, was genau sich zwischen den beiden Bauvorgängen geändert "
-"hat, ist B<diff(1)> zwischen I<$AUSGABEVERZ/first/build.sh> und "
-"I<$AUSGABEVERZ/second/build.sh> eine hervorragende Methode."
+"hat, ist B<diff(1)> zwischen I<$AUSGABEVERZ/first/build.sh> und I<"
+"$AUSGABEVERZ/second/build.sh> eine hervorragende Methode."
 
 #. type: =head1
 #: ../scripts/debrepro.pod:53
@@ -10553,8 +10554,8 @@ msgstr "I<$TZ> wird sich bei den beiden Bauvorgängen unterscheiden."
 
 #. type: =item
 #: ../scripts/debrepro.pod:79
-msgid "filesystem-ordering"
-msgstr "Dateisystemordnung"
+msgid "B<filesystem-ordering>"
+msgstr "B<Dateisystemordnung>"
 
 #. type: textblock
 #: ../scripts/debrepro.pod:81
@@ -10610,11 +10611,11 @@ msgid ""
 msgstr ""
 "führt den BEFEHL vor dem zweiten Bauen aus. Dies kann zum Beispiel verwendet "
 "werden, um für das zweite Bauen einen Patch auf den Quellverzeichnisbaum "
-"anzuwenden und zu prüfen ob (oder wie) die daraus resultierenden Binärdateien "
-"betroffen sind."
+"anzuwenden und zu prüfen ob (oder wie) die daraus resultierenden "
+"Binärdateien betroffen sind."
 
 #. type: textblock
-#: ../scripts/debrepro.pod:107
+#: ../scripts/debrepro.pod:107 ../scripts/salsa.pl:319
 msgid "Examples:"
 msgstr "Beispiele:"
 
@@ -10651,7 +10652,7 @@ msgstr "zeigt diese Hilfenachricht und beendet sich."
 #. type: SH
 #: ../scripts/debrepro.pod:119 ../scripts/debsnap.1:102
 #: ../scripts/dscextract.1:20 ../scripts/transition-check.pl:54
-#: ../scripts/uscan.pl:1744 ../scripts/wnpp-check.1:28
+#: ../scripts/uscan.pl:1764 ../scripts/wnpp-check.1:28
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "EXIT-STATUS"
@@ -11567,10 +11568,10 @@ msgid ""
 "careful to calculate the size and checksums of any newly signed child files "
 "and replace the original values in the parent file."
 msgstr ""
-"B<debsign> ahmt die Signierungsgesichtspunkte (und Fehler) von "
-"B<dpkg-buildpackage>(1) nach. Es nimmt eine I<.dsc>-, I<.buildinfo>- oder "
-"I<.changes>-Datei entgegen und signiert sie ebenso wie jede untergeordnete "
-"I<.dsc>-, I<.buildinfo>- oder I<.changes>-Datei, auf die direkt oder indirekt "
+"B<debsign> ahmt die Signierungsgesichtspunkte (und Fehler) von B<dpkg-"
+"buildpackage>(1) nach. Es nimmt eine I<.dsc>-, I<.buildinfo>- oder I<."
+"changes>-Datei entgegen und signiert sie ebenso wie jede untergeordnete I<."
+"dsc>-, I<.buildinfo>- oder I<.changes>-Datei, auf die direkt oder indirekt "
 "verwiesen wird, mittels des GNU Privacy Guards. Es ist gewissenhaft, die "
 "Größe der Prüfsummen aller neu signierten untergeordneten Dateien zu "
 "berechnen und die Originalwerte in der übergeordneten Datei zu ersetzen."
@@ -11616,17 +11617,17 @@ msgstr ""
 "Dieses Hilfswerkzeug ist nützlich, falls ein Entwickler ein Paket auf einem "
 "Rechner bauen muss, der nicht sicher genug ist, um es zu signieren; er muss "
 "dann nur die kleinen I<.dsc>-, I<.buildinfo>- und I<.changes>-Dateien an "
-"einen sicheren Rechner übertragen und dann das Programm B<debsign> verwenden, "
-"um sie vor der Rückübertragung zu signieren. Dieser Prozess kann auf zwei "
-"Arten automatisiert werden. Falls die Dateien zum Signieren auf dem B<fernen> "
-"Rechner liegen, kann die Option B<-r> benutzt werden, um sie auf den lokalen "
-"Rechner und nach dem Signieren zurück zu kopieren. Falls die Dateien auf dem "
-"B<lokalen> Rechner liegen, können sie auf den fernen Rechner übertragen "
-"werden, um sie mittels B<debrsign>(1) zu signieren. Beachten Sie jedoch, dass "
-"es wahrscheinlich sicherer ist, wenn Sie ihren vertrauenswürdigen "
-"Signierrechner benutzen, der sich mittels B<debsign> mit dem nicht "
-"vertrauenswürdigen Signierrechner verbindet, als B<debrsign> zu verwenden, um "
-"die Verbindung in umgekehrter Richtung herzustellen."
+"einen sicheren Rechner übertragen und dann das Programm B<debsign> "
+"verwenden, um sie vor der Rückübertragung zu signieren. Dieser Prozess kann "
+"auf zwei Arten automatisiert werden. Falls die Dateien zum Signieren auf dem "
+"B<fernen> Rechner liegen, kann die Option B<-r> benutzt werden, um sie auf "
+"den lokalen Rechner und nach dem Signieren zurück zu kopieren. Falls die "
+"Dateien auf dem B<lokalen> Rechner liegen, können sie auf den fernen Rechner "
+"übertragen werden, um sie mittels B<debrsign>(1) zu signieren. Beachten Sie "
+"jedoch, dass es wahrscheinlich sicherer ist, wenn Sie ihren "
+"vertrauenswürdigen Signierrechner benutzen, der sich mittels B<debsign> mit "
+"dem nicht vertrauenswürdigen Signierrechner verbindet, als B<debrsign> zu "
+"verwenden, um die Verbindung in umgekehrter Richtung herzustellen."
 
 #. type: Plain text
 #: ../scripts/debsign.1:39
@@ -11654,12 +11655,11 @@ msgid ""
 "are allowed."
 msgstr ""
 "Die Dateien, die signiert werden sollen, liegen auf dem angegebenen fernen "
-"Rechner. In diesem Fall muss explizit eine I<.dsc>-, I<.buildinfo>- oder "
-"I<.changes>-Datei mit einem absoluten Pfad oder relativ zum fernen "
-"Home-Verzeichnisbaum benannt werden. Zum Kopieren wird B<scp> verwendet. Als "
-"eine Alternative ist die Syntax "
-"[I<Benutzername>B<@>]I<ferner_Rechner>B<:>I<Dateiname> zulässig. Platzhalter "
-"(B<*> etc.) sind erlaubt."
+"Rechner. In diesem Fall muss explizit eine I<.dsc>-, I<.buildinfo>- oder I<."
+"changes>-Datei mit einem absoluten Pfad oder relativ zum fernen Home-"
+"Verzeichnisbaum benannt werden. Zum Kopieren wird B<scp> verwendet. Als eine "
+"Alternative ist die Syntax [I<Benutzername>B<@>]I<ferner_Rechner>B<:"
+">I<Dateiname> zulässig. Platzhalter (B<*> etc.) sind erlaubt."
 
 #. type: TP
 #: ../scripts/debsign.1:48
@@ -11826,13 +11826,13 @@ msgid ""
 "buildpackage> to build your packages.  Note that it also affects "
 "B<debrelease>(1) in the same way, hence the strange name of the option."
 msgstr ""
-"Dies gibt das Verzeichnis an, in dem nach den zu signierenden Dateien gesucht "
-"werden soll. Es ist entweder ein absoluter Pfad oder relativ zur obersten "
-"Ebene des Quellverzeichnisbaums. Dies entspricht der Befehlszeilenoption "
-"B<--debs-dir>. Diese Direktive kann zum Beispiel benutzt werden, falls Sie "
-"immer B<pbuilder> oder B<svn-buildpackage> verwenden, um Ihre Pakete zu "
-"bauen. Beachten Sie, dass es außerdem B<debrelease>(1) auf die gleiche Weise "
-"beeinflusst, daher der merkwürdige Name der Option."
+"Dies gibt das Verzeichnis an, in dem nach den zu signierenden Dateien "
+"gesucht werden soll. Es ist entweder ein absoluter Pfad oder relativ zur "
+"obersten Ebene des Quellverzeichnisbaums. Dies entspricht der "
+"Befehlszeilenoption B<--debs-dir>. Diese Direktive kann zum Beispiel benutzt "
+"werden, falls Sie immer B<pbuilder> oder B<svn-buildpackage> verwenden, um "
+"Ihre Pakete zu bauen. Beachten Sie, dass es außerdem B<debrelease>(1) auf "
+"die gleiche Weise beeinflusst, daher der merkwürdige Name der Option."
 
 #. type: Plain text
 #: ../scripts/debsign.1:144
@@ -12315,17 +12315,17 @@ msgstr ""
 "installiert ist) und signiert schließlich die zugehörigen Dateien (mittels "
 "B<debsign>(1) anstelle von B<dpkg-buildpackage>(1) selbst; alle passenden "
 "Schlüsselsignierungsoptionen werden übergeben). Das Signieren wird "
-"übersprungen, falls die Distribution I<UNRELEASED> ist, außer es wird "
-"die Option B<--force-sign> von B<dpkg-buildpackage> benutzt. An "
-"B<dpkg-buildpackage> und B<lintian> können Parameter übergeben werden, wobei "
+"übersprungen, falls die Distribution I<UNRELEASED> ist, außer es wird die "
+"Option B<--force-sign> von B<dpkg-buildpackage> benutzt. An B<dpkg-"
+"buildpackage> und B<lintian> können Parameter übergeben werden, wobei "
 "letztere mit der Option B<--lintian-opts> angegeben werden. Die in diesem "
 "Fall erlaubten Optionen sind B<--lintian> und B<--no-lintian>, um den "
 "Lintian-Schritt zu erzwingen beziehungsweise zu überspringen. Standardmäßig "
 "wird B<lintian> ausgeführt. Außerdem sind verschiedene Optionen für das "
 "Setzen und Erhalten von Umgebungsvariablen verfügbar, wie nachfolgend im "
 "Abschnitt »Umgebungsvariablen« beschrieben. Bei dieser Methode B<debuild> "
-"auszuführen wird außerdem das Bauprotokoll "
-"I<../E<lt>PaketE<gt>_E<lt>VersionE<gt>_E<lt>ArchitekturE<gt>.build> sichern."
+"auszuführen wird außerdem das Bauprotokoll I<../"
+"E<lt>PaketE<gt>_E<lt>VersionE<gt>_E<lt>ArchitekturE<gt>.build> sichern."
 
 #. type: Plain text
 #: ../scripts/debuild.1:48
@@ -12589,8 +12589,9 @@ msgid ""
 msgstr ""
 "B<debuild> unterstützt eine Reihe von Hooks, wenn B<dpkg-buildpackage> "
 "ausgeführt wird. Beachten Sie, dass die Hooks B<dpkg-buildpackage> bis "
-"(einschließlich) B<lintian> an B<dpkg-buildpackage> mittels ihrer zugehörigen "
-"Option B<--hook->I<name> weitergereicht werden. Folgende Hooks sind verfügbar:"
+"(einschließlich) B<lintian> an B<dpkg-buildpackage> mittels ihrer "
+"zugehörigen Option B<--hook->I<name> weitergereicht werden. Folgende Hooks "
+"sind verfügbar:"
 
 #. type: TP
 #: ../scripts/debuild.1:156
@@ -13633,20 +13634,20 @@ msgstr ""
 msgid "I<bts>(1)"
 msgstr "I<bts>(1)"
 
+# SOAP = Simple Object Access Protocol
 #. type: Plain text
 #: ../doc/devscripts.1:37
-# SOAP = Simple Object Access Protocol
 msgid ""
-"A command-line tool for accessing the BTS, both to send mails to control@bts."
-"debian.org and to access the web pages and SOAP interface of the BTS. [www-"
-"browser, libauthen-sasl-perl, libnet-smtps-perl, libsoap-lite-perl, liburi-"
-"perl, libwww-perl, bsd-mailx | mailx]"
+"A command-line tool for accessing the Debian Bug Tracking System, both to "
+"send mails to control@bts.debian.org and to access the web pages and SOAP "
+"interface of the BTS. [www-browser, libauthen-sasl-perl, libnet-smtps-perl, "
+"libsoap-lite-perl, liburi-perl, libwww-perl, bsd-mailx | mailx]"
 msgstr ""
 "ein Befehlszeilenwerkzeug zum Manipulieren der Fehlerdatenbank, sowohl zum "
 "Senden von E-Mails an control@bts.debian.org als auch für den Zugriff auf "
-"Web-Seiten und die SOAP-Schnittstelle des BTS [www-browser, "
-"libauthen-sasl-perl, libnet-smtps-perl, libsoap-lite-perl, liburi-perl, "
-"libwww-perl, bsd-mailx | mailx]"
+"Web-Seiten und die SOAP-Schnittstelle des BTS. [www-browser, libauthen-sasl-"
+"perl, libnet-smtps-perl, libsoap-lite-perl, liburi-perl, libwww-perl, bsd-"
+"mailx | mailx]"
 
 #. type: IP
 #: ../doc/devscripts.1:37
@@ -13824,8 +13825,8 @@ msgid ""
 msgstr ""
 "ändert debian/changelog und verwaltet die Versionsnummern für Sie. Es wird "
 "die Versionsnummer entweder erhöhen oder einen Eintrag für die aktuelle "
-"Version hinzufügen, je nachdem, welche Optionen Sie angeben. "
-"[libdistro-info-perl, libsoap-lite-perl]*"
+"Version hinzufügen, je nachdem, welche Optionen Sie angeben. [libdistro-info-"
+"perl, libsoap-lite-perl]*"
 
 #. type: IP
 #: ../doc/devscripts.1:61
@@ -13853,9 +13854,9 @@ msgid ""
 "files).  It will keep the .diffs and original files, though, so that the "
 "binaries and other files can be rebuilt if necessary.  [fakeroot]*"
 msgstr ""
-"bereinigt einen Debian-Quellverzeichnisbaum. Debclean wird alle "
-"Debian-Quellverzeichnisbäume unterhalb des aktuellen Verzeichnisses "
-"bereinigen und, falls gewünscht, auch alle Dateien entfernen, die aus diesen "
+"bereinigt einen Debian-Quellverzeichnisbaum. Debclean wird alle Debian-"
+"Quellverzeichnisbäume unterhalb des aktuellen Verzeichnisses bereinigen und, "
+"falls gewünscht, auch alle Dateien entfernen, die aus diesen "
 "Quellverzeichnisbäumen erzeugt wurden (dabei handelt es sich um .deb-, .dsc- "
 "und .changes-Dateien). Es wird allerdings die .diffs und Originaldateien "
 "behalten, so dass die Binärdateien und andere Dateien neu gebaut werden "
@@ -13877,8 +13878,8 @@ msgid ""
 msgstr ""
 "übergibt Änderungen an cvs, darcs, svn, svk, tla, bzr, git oder hg mittels "
 "neuen Einträgen in debian/changelog als Commit-Nachricht. Unterstützt auch "
-"das Markieren von Debian-Paketveröffentlichungen. [cvs | darcs | subversion | "
-"svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
+"das Markieren von Debian-Paketveröffentlichungen. [cvs | darcs | subversion "
+"| svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:67
@@ -13899,8 +13900,8 @@ msgstr ""
 "Unterschiede meldet, die es in ihren Dateilisten findet. Dies ist nützlich, "
 "um sicherzustellen, dass zwischen zwei Versionen keine Dateien versehentlich "
 "verloren gingen. Es kann auch zwei .dsc-Dateien prüfen und Änderungen "
-"zwischen den Quellversionen melden. Für einen tiefergehenden Vergleich können "
-"Sie das Paket Diffoscope benutzen. [wdiff, patchutils]*"
+"zwischen den Quellversionen melden. Für einen tiefergehenden Vergleich "
+"können Sie das Paket Diffoscope benutzen. [wdiff, patchutils]*"
 
 #. type: IP
 #: ../doc/devscripts.1:69
@@ -13923,8 +13924,8 @@ msgstr ""
 "Änderungen am Changelog werden gesondert behandelt, um Konflikte zu "
 "vermeiden, die Changelog-Diffs normalerweise produzieren, wenn sie "
 "naiverweise angewendet werden. Dies kann benutzt werden, um zu prüfen, ob "
-"alte Patche noch immer zu neueren Versionen dieser Pakete passen. "
-"[python3-debian, python3-unidiff, quilt]"
+"alte Patche noch immer zu neueren Versionen dieser Pakete passen. [python3-"
+"debian, python3-unidiff, quilt]"
 
 #. type: IP
 #: ../doc/devscripts.1:71
@@ -13942,9 +13943,9 @@ msgid ""
 "package with a very short command is very useful when troubleshooting "
 "packages."
 msgstr ""
-"installiert das aktuelle Paket mittels des unten beschriebenen "
-"Setuid-Root-Debpkg-Skripts. Es geht davon aus, dass das aktuelle Paket gerade "
-"gebaut wurde (zum Beispiel durch Debuild), dass das .deb im übergeordneten "
+"installiert das aktuelle Paket mittels des unten beschriebenen Setuid-Root-"
+"Debpkg-Skripts. Es geht davon aus, dass das aktuelle Paket gerade gebaut "
+"wurde (zum Beispiel durch Debuild), dass das .deb im übergeordneten "
 "Verzeichnis liegt und führt effektiv »dpkg -i« auf dem .deb aus. Die "
 "Fähigkeit, das Paket mit einem sehr kurzen Befehl zu erstellen, ist bei der "
 "Fehlerbehebung in Paketen sehr nützlich."
@@ -13974,11 +13975,11 @@ msgstr ""
 "Setuid-Root-Bit ist nicht standardmäßig gesetzt. (Beachten Sie, dass die "
 "Fähigkeit, es mit Setuid-Root-Rechten auszuführen, Debpkg effektiv dieselben "
 "Rechte gibt, als hätte es Root-Zugriff auf das System, daher sollte es mit "
-"Vorsicht benutzt werden.) Debpkg als Wrapper für Dpkg zu verwenden, kann eine "
-"gute Sache ™ sein, da es die Möglichkeiten vermindert, durch versehentlich "
-"falsche Verwendung von Befehlen im Superbenutzermodus Schaden zu verursachen "
-"(z.B. kann ein unbeabsichtigtes »rm -rf *« im falschen Verzeichnis desaströs "
-"sein, wie viele bestätigen können)."
+"Vorsicht benutzt werden.) Debpkg als Wrapper für Dpkg zu verwenden, kann "
+"eine gute Sache ™ sein, da es die Möglichkeiten vermindert, durch "
+"versehentlich falsche Verwendung von Befehlen im Superbenutzermodus Schaden "
+"zu verursachen (z.B. kann ein unbeabsichtigtes »rm -rf *« im falschen "
+"Verzeichnis desaströs sein, wie viele bestätigen können)."
 
 #. type: IP
 #: ../doc/devscripts.1:75
@@ -14036,8 +14037,8 @@ msgid ""
 "debian-keyring, ssh-client]"
 msgstr ""
 "Dies überträgt ein .changes-/.dsc-Paar zum Signieren auf eine ferne Maschine "
-"und führt dort über eine SSH-Verbindung Debsign aus. [gnupg | gnupg2, "
-"debian-keyring, ssh-client]"
+"und führt dort über eine SSH-Verbindung Debsign aus. [gnupg | gnupg2, debian-"
+"keyring, ssh-client]"
 
 #. type: IP
 #: ../doc/devscripts.1:81
@@ -14055,11 +14056,11 @@ msgid ""
 "files from a remote machine. [gnupg |gnupg2, debian-keyring, ssh-client]*"
 msgstr ""
 "verwendet GNU Privacy Guard, um die Changes- (und eventuell Dsc-)Dateien zu "
-"signieren, die durch das Ausführen von Dpkg-buildpackage mit No-sign-Optionen "
-"erzeugt wurden. Dies ist nützlich, falls Sie ein Paket auf einem fernen "
-"Rechner bauen und es auf einem lokalen Rechner signieren möchten. Das Skript "
-"ist in der Lage, die .changes- und .dsc-Dateien automatisch vom fernen "
-"Rechner herunterzuladen. [gnupg |gnupg2, debian-keyring, ssh-client]*"
+"signieren, die durch das Ausführen von Dpkg-buildpackage mit No-sign-"
+"Optionen erzeugt wurden. Dies ist nützlich, falls Sie ein Paket auf einem "
+"fernen Rechner bauen und es auf einem lokalen Rechner signieren möchten. Das "
+"Skript ist in der Lage, die .changes- und .dsc-Dateien automatisch vom "
+"fernen Rechner herunterzuladen. [gnupg |gnupg2, debian-keyring, ssh-client]*"
 
 #. type: IP
 #: ../doc/devscripts.1:83
@@ -14072,8 +14073,8 @@ msgstr "I<debsnap>(1)"
 msgid ""
 "grab packages from https://snapshot.debian.org [libwww-perl, libjson-perl]"
 msgstr ""
-"greift auf Pakete von https://snapshot.debian.org zu. [libwww-perl, "
-"libjson-perl]"
+"greift auf Pakete von https://snapshot.debian.org zu. [libwww-perl, libjson-"
+"perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:85
@@ -14098,12 +14099,12 @@ msgstr ""
 "unzureichenden Zugriffsrechten, falschen Pfaden usw. zu vermeiden. Debuild "
 "wird die ordnungsgemäße Umgebung zum Bau eines Pakets einrichten. Debuild "
 "wird standardmäßig das Programm Fakeroot zum Bau des Pakets verwenden, kann "
-"aber angewiesen werden, irgendein anderes Programm zu benutzen, das "
-"Root-Zugriff erlangt oder sogar mit Setuid-Root installiert werden. Debuild "
-"kann auch verwendet werden, um verschiedene der debian/rules-Aktionen mit "
+"aber angewiesen werden, irgendein anderes Programm zu benutzen, das Root-"
+"Zugriff erlangt oder sogar mit Setuid-Root installiert werden. Debuild kann "
+"auch verwendet werden, um verschiedene der debian/rules-Aktionen mit "
 "derselben Prozedur zum Erlangen von Root-Rechten auszuführen. Debuild wird "
-"außerdem Lintian ausführen, um zu prüfen, ob das Paket keine groben "
-"Verstöße gegen das Regelwerk enthält. [fakeroot, lintian, gnupg | gnupg2]*"
+"außerdem Lintian ausführen, um zu prüfen, ob das Paket keine groben Verstöße "
+"gegen das Regelwerk enthält. [fakeroot, lintian, gnupg | gnupg2]*"
 
 #. type: IP
 #: ../doc/devscripts.1:87
@@ -14194,9 +14195,9 @@ msgid ""
 "the Build-Depends etc.  lines in the debian/control file. [build-essential, "
 "strace]"
 msgstr ""
-"führt einen angegebenen Befehl aus (wie »debian/rules build«) beziehungsweise "
-"Dpkg-buildpackage, um die beim Bauprozess benutzten Pakete zu bestimmen. "
-"Diese Information kann beim Bestimmen der Pakete, die in den "
+"führt einen angegebenen Befehl aus (wie »debian/rules build«) "
+"beziehungsweise Dpkg-buildpackage, um die beim Bauprozess benutzten Pakete "
+"zu bestimmen. Diese Information kann beim Bestimmen der Pakete, die in den "
 "Build-Depends-Zeilen usw. in der debian/control-Datei benötigt werden, "
 "hilfreich sein. [build-essential, strace]"
 
@@ -14268,9 +14269,9 @@ msgid ""
 "wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, libtry-tiny-"
 "perl]"
 msgstr ""
-"versucht, mittels git-archive(1) Debians orig.tar zu erstellen. "
-"[libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl, "
-"libstring-shellquote-perl, libtry-tiny-perl]"
+"versucht, mittels git-archive(1) Debians orig.tar zu erstellen. [libdpkg-"
+"perl, libgit-wrapper-perl, liblist-compare-perl, libstring-shellquote-perl, "
+"libtry-tiny-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:109
@@ -14414,9 +14415,9 @@ msgstr "prüft, ob Projektnamen bereits vergeben sind."
 msgid "I<nmudiff>(1)"
 msgstr "I<nmudiff>(1)"
 
+# FIXME: missing ')'
 #. type: Plain text
 #: ../doc/devscripts.1:131
-# FIXME: missing ')'
 msgid ""
 "prepare a diff of this version (presumably an NMU against the previously "
 "released version (as per the changelog) and submit the diff to the BTS. "
@@ -14468,8 +14469,8 @@ msgid ""
 "subscribe to the PTS (Package Tracking System) for a limited period of time. "
 "[bsd-mailx | mailx, at]"
 msgstr ""
-"abonniert das PTS (Paketverfolgungssystem) für eine begrenzte Zeit. "
-"[bsd-mailx | mailx, at]"
+"abonniert das PTS (Paketverfolgungssystem) für eine begrenzte Zeit. [bsd-"
+"mailx | mailx, at]"
 
 #. type: IP
 #: ../doc/devscripts.1:137
@@ -14513,12 +14514,23 @@ msgstr "führt DEP-8-Tests durch. [python3-debian]"
 
 #. type: IP
 #: ../doc/devscripts.1:143
+msgid "I<salsa>(1)"
+msgstr "I<salsa>(1)"
+
+#. type: Plain text
+#: ../doc/devscripts.1:145
+msgid ""
+"manipulates salsa.debian.org repositories and users [libgitlab-api-v4-perl]"
+msgstr ""
+
+#. type: IP
+#: ../doc/devscripts.1:145
 #, no-wrap
 msgid "I<suspicious-source>(1)"
 msgstr "I<suspicious-source>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:145
+#: ../doc/devscripts.1:147
 msgid ""
 "output a list of files which are not common source files. [python3-magic]"
 msgstr ""
@@ -14526,14 +14538,14 @@ msgstr ""
 "[python3-magic]"
 
 #. type: IP
-#: ../doc/devscripts.1:145
+#: ../doc/devscripts.1:147
 #, no-wrap
 msgid "I<svnpath>(1)"
 msgstr "I<svnpath>(1)"
 
-#. type: Plain text
-#: ../doc/devscripts.1:147
 # https://www.duden.de/rechtschreibung/auschecken
+#. type: Plain text
+#: ../doc/devscripts.1:149
 msgid ""
 "Prints the path to the Subversion repository of a Subversion checkout. Also "
 "supports calculating the paths for branches and tags in a repository "
@@ -14545,13 +14557,13 @@ msgstr ""
 "von SVN-Markierungen benutzt. [subversion]"
 
 #. type: IP
-#: ../doc/devscripts.1:147
+#: ../doc/devscripts.1:149
 #, no-wrap
 msgid "I<tagpending>(1)"
 msgstr "I<tagpending>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:149
+#: ../doc/devscripts.1:151
 msgid ""
 "runs from a Debian source tree and tags bugs that are to be closed in the "
 "latest changelog as pending. [libsoap-lite-perl]"
@@ -14561,13 +14573,13 @@ msgstr ""
 "lite-perl]"
 
 #. type: IP
-#: ../doc/devscripts.1:149
+#: ../doc/devscripts.1:151
 #, no-wrap
 msgid "I<transition-check>(1)"
 msgstr "I<transition-check>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:151
+#: ../doc/devscripts.1:153
 msgid ""
 "Check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked.  [libwww-perl, libyaml-syck-perl]"
@@ -14577,13 +14589,13 @@ msgstr ""
 "syck-perl]"
 
 #. type: IP
-#: ../doc/devscripts.1:151
+#: ../doc/devscripts.1:153
 #, no-wrap
 msgid "I<uscan>(1)"
 msgstr "I<uscan>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:153
+#: ../doc/devscripts.1:155
 msgid ""
 "Automatically scan for and download upstream updates.  Uscan can also call a "
 "program such as uupdate to attempt to update the Debianised version based on "
@@ -14595,22 +14607,23 @@ msgid ""
 msgstr ""
 "sucht automatisch nach Aktualisierungen der Ursprungsautoren und lädt sie "
 "herunter. Uscan kann außerdem ein Programm wie Uupdate aufrufen, um zu "
-"versuchen,  basierend auf der neuen Aktualisierung, die debianisierte Version "
-"zu aktualisieren. Obwohl Uscan zum automatischen Veröffentlichen der "
-"aktualisierten Version verwendet werden könnte, ist es wahrscheinlich besser, "
-"dies nicht ohne vorheriges Testen zu tun. Uscan kann außerdem separate "
-"OpenPGP-Signaturen prüfen, falls der Signaturschlüssel der Ursprungsautoren "
-"bekannt ist. [file, gpgv | gpgv2, gnupg | gnupg2, libfile-which-perl, "
-"liblwp-protocol-https-perl, libmoo-perl, libwww-perl, unzip, xz-utils]*"
+"versuchen,  basierend auf der neuen Aktualisierung, die debianisierte "
+"Version zu aktualisieren. Obwohl Uscan zum automatischen Veröffentlichen der "
+"aktualisierten Version verwendet werden könnte, ist es wahrscheinlich "
+"besser, dies nicht ohne vorheriges Testen zu tun. Uscan kann außerdem "
+"separate OpenPGP-Signaturen prüfen, falls der Signaturschlüssel der "
+"Ursprungsautoren bekannt ist. [file, gpgv | gpgv2, gnupg | gnupg2, libfile-"
+"which-perl, liblwp-protocol-https-perl, libmoo-perl, libwww-perl, unzip, xz-"
+"utils]*"
 
 #. type: IP
-#: ../doc/devscripts.1:153
+#: ../doc/devscripts.1:155
 #, no-wrap
 msgid "I<uupdate>(1)"
 msgstr "I<uupdate>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:155
+#: ../doc/devscripts.1:157
 msgid ""
 "Update the package with an archive or patches from an upstream author.  This "
 "will be of help if you have to update your package.  It will try to apply "
@@ -14622,13 +14635,13 @@ msgstr ""
 "Ihnen mitteilen, wie erfolgreich dies verlief. [patch]"
 
 #. type: IP
-#: ../doc/devscripts.1:155
+#: ../doc/devscripts.1:157
 #, no-wrap
 msgid "I<what-patch>(1)"
 msgstr "I<what-patch>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:157
+#: ../doc/devscripts.1:159
 msgid ""
 "determine what patch system, if any, a source package is using.  [patchutils]"
 msgstr ""
@@ -14636,24 +14649,24 @@ msgstr ""
 "[patchutils]"
 
 #. type: IP
-#: ../doc/devscripts.1:157
+#: ../doc/devscripts.1:159
 #, no-wrap
 msgid "I<whodepends>(1)"
 msgstr "I<whodepends>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:159
+#: ../doc/devscripts.1:161
 msgid "check which maintainers' packages depend on a package."
 msgstr "prüft die Pakete welches Betreuers von einem Paket abhängen."
 
 #. type: IP
-#: ../doc/devscripts.1:159
+#: ../doc/devscripts.1:161
 #, no-wrap
 msgid "I<who-permits-upload>(1)"
 msgstr "I<who-permits-upload>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:161
+#: ../doc/devscripts.1:163
 msgid ""
 "Retrieve information about Debian Maintainer access control lists. [gnupg | "
 "gnupg2, libencode-locale-perl, libwww-perl, debian-keyring]"
@@ -14662,13 +14675,13 @@ msgstr ""
 "libencode-locale-perl, libwww-perl, debian-keyring]"
 
 #. type: IP
-#: ../doc/devscripts.1:161
+#: ../doc/devscripts.1:163
 #, no-wrap
 msgid "I<who-uploads>(1)"
 msgstr "I<who-uploads>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:163
+#: ../doc/devscripts.1:165
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive. "
 "[gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
@@ -14677,13 +14690,13 @@ msgstr ""
 "haben. [gnupg | gnupg2, debian-keyring, debian-maintainers, wget]"
 
 #. type: IP
-#: ../doc/devscripts.1:163
+#: ../doc/devscripts.1:165
 #, no-wrap
 msgid "I<wnpp-alert>(1)"
 msgstr "I<wnpp-alert>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:165
+#: ../doc/devscripts.1:167
 msgid ""
 "list installed packages which are orphaned or up for adoption.  [wget | curl]"
 msgstr ""
@@ -14691,13 +14704,13 @@ msgstr ""
 "sind. [wget | curl]"
 
 #. type: IP
-#: ../doc/devscripts.1:165
+#: ../doc/devscripts.1:167
 #, no-wrap
 msgid "I<wnpp-check>(1)"
 msgstr "I<wnpp-check>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:167
+#: ../doc/devscripts.1:169
 msgid ""
 "check whether there is an open request for packaging or intention to package "
 "bug for a package. [wget | curl]"
@@ -14706,13 +14719,13 @@ msgstr ""
 "über die Absicht zum Packen für ein Paket gibt. [wget | curl]"
 
 #. type: IP
-#: ../doc/devscripts.1:167
+#: ../doc/devscripts.1:169
 #, no-wrap
 msgid "I<wrap-and-sort>(1)"
 msgstr "I<wrap-and-sort>(1)"
 
 #. type: Plain text
-#: ../doc/devscripts.1:168
+#: ../doc/devscripts.1:170
 msgid "wrap long lines and sort items in packaging files.  [python3-debian]"
 msgstr ""
 "bricht lange Zeilen um und sortiert Elemente in Paketierungsdateien. "
@@ -14950,7 +14963,7 @@ msgid "Allow SSL connections to untrusted hosts."
 msgstr "erlaubt SSL-Verbindungen zu nicht vetrauenswürdigen Rechnern."
 
 #. type: =item
-#: ../scripts/dget.pl:673
+#: ../scripts/dget.pl:673 ../scripts/salsa.pl:394
 msgid "B<--no-cache>"
 msgstr "B<--no-cache>"
 
@@ -15109,10 +15122,10 @@ msgid ""
 "``___'', and an extension of ``.patch''."
 msgstr ""
 "extrahiert Patches aus .diff.gz, die auf Dateien außerhalb des Bereichs des "
-"»debian/«-Verzeichnisses angewendet werden. Ein Patch wird für jede geänderte "
-"Datei erstellt. Jeder Patch ist entsprechend des Pfads der geänderten Datei "
-"benannt, wobei »/« durch »___« ersetzt und eine ».patch«-Erweiterung "
-"angehängt wird."
+"»debian/«-Verzeichnisses angewendet werden. Ein Patch wird für jede "
+"geänderte Datei erstellt. Jeder Patch ist entsprechend des Pfads der "
+"geänderten Datei benannt, wobei »/« durch »___« ersetzt und eine ».patch«-"
+"Erweiterung angehängt wird."
 
 #. type: TP
 #: ../scripts/diff2patches.1:18
@@ -15745,8 +15758,8 @@ msgstr ""
 "Es kann außerdem benutzt werden, um neue Patches zu integrieren. Falls es "
 "auf einen Patch zeigt, der noch nicht vorhanden ist, wird es den Patch im "
 "für das benutzte Patch-System korrekten Format, nach I<debian/patches> "
-"kopieren. Als nächstes wird der Patch angewendet und es wird eine Unter-Shell "
-"geöffnet, um den Patch zu bearbeiten. Die Eingabe von B<exit> oder das "
+"kopieren. Als nächstes wird der Patch angewendet und es wird eine Unter-"
+"Shell geöffnet, um den Patch zu bearbeiten. Die Eingabe von B<exit> oder das "
 "Drücken von Strg-D wird die Unter-Shell schließen und einen Editor öffnen, "
 "um den I<debian/changelog>-Eintrag aufzuschreiben."
 
@@ -15917,8 +15930,8 @@ msgid ""
 "B<dscverify> [B<--keyring >I<keyring>] ... "
 "I<changes_or_buildinfo_or_dsc_filename> ..."
 msgstr ""
-"B<dscverify> [B<--keyring >I<Schlüsselbund>] … "
-"I<changes-_oder_buildinfo-_oder_dsc-Dateiname> …"
+"B<dscverify> [B<--keyring >I<Schlüsselbund>] … I<changes-_oder_buildinfo-"
+"_oder_dsc-Dateiname> …"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:17
@@ -15932,15 +15945,15 @@ msgid ""
 "SHA1 and SHA256 if the latter are present).  The exit status is 0 if there "
 "are no problems and non-zero otherwise."
 msgstr ""
-"B<dscverify> prüft, ob die GPG-Signaturen der angegebenen I<.changes>-, "
-"I<.buildinfo>- oder I<.dsc>-Dateien gute Signaturen sind, die durch Schlüssel "
+"B<dscverify> prüft, ob die GPG-Signaturen der angegebenen I<.changes>-, I<."
+"buildinfo>- oder I<.dsc>-Dateien gute Signaturen sind, die durch Schlüssel "
 "aus aktuellen Debian-Schlüsselbünden erstellt wurden, die aus dem Paket "
 "I<debian-keyring> stammen. (Zusätzliche Schlüsselbünde können beliebig oft "
 "mittels der Option B<--keyring> angegeben werden.) Dann prüft es, ob die "
-"anderen in den I<.changes>-, I<.buildinfo>- oder I<.dsc>-Dateien aufgeführten "
-"Dateien die korrekten Größen und Prüfsummen aufweisen (MD5 plus SHA1 und "
-"SHA256, falls letzteres vorhanden ist). Der Exit-Status ist 0, falls es keine "
-"Probleme gibt, andernfalls ungleich 0,"
+"anderen in den I<.changes>-, I<.buildinfo>- oder I<.dsc>-Dateien "
+"aufgeführten Dateien die korrekten Größen und Prüfsummen aufweisen (MD5 plus "
+"SHA1 und SHA256, falls letzteres vorhanden ist). Der Exit-Status ist 0, "
+"falls es keine Probleme gibt, andernfalls ungleich 0,"
 
 #. type: TP
 #: ../scripts/dscverify.1:18
@@ -15984,7 +15997,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dscverify.1:33 ../scripts/plotchangelog.1:78
-#: ../scripts/uupdate.1:98
+#: ../scripts/salsa.pl:504 ../scripts/uupdate.1:98
 #, no-wrap
 msgid "B<--verbose>"
 msgstr "B<--verbose>"
@@ -16249,8 +16262,8 @@ msgid ""
 msgstr ""
 "B<git-deborig> wird mehrere geläufige Markierungsnamen durchprobieren. Falls "
 "dies fehlschlägt oder mherere dieser Markierungen vorhanden sind, können Sie "
-"die Markierung oder den Kopf des Zweiges zum Archivieren auf der Befehlszeile "
-"(I<COMMITTISH> oben) angeben."
+"die Markierung oder den Kopf des Zweiges zum Archivieren auf der "
+"Befehlszeile (I<COMMITTISH> oben) angeben."
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:39
@@ -16259,10 +16272,10 @@ msgid ""
 "of the tarball generated by git-archive(1) not to be identical with the "
 "commitish archived: the B<export-subst> and B<export-ignore> attributes."
 msgstr ""
-"B<git-deborig> wird gitattributes(5) außer Kraft setzen. letzteres würde dazu "
-"führen, dass der Inhalt des durch git-archive(1) erstellten Tarballs nicht "
-"mit dem archivierten Commitish übereinstimmt: den Attributen B<export-subst> "
-"und B<export-ignore>."
+"B<git-deborig> wird gitattributes(5) außer Kraft setzen. letzteres würde "
+"dazu führen, dass der Inhalt des durch git-archive(1) erstellten Tarballs "
+"nicht mit dem archivierten Commitish übereinstimmt: den Attributen B<export-"
+"subst> und B<export-ignore>."
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:44
@@ -16425,6 +16438,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/grep-excuses.1:40 ../scripts/hardening-check.pl:549
+#: ../scripts/salsa.pl:425
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
@@ -16509,17 +16523,17 @@ msgid ""
 "are:"
 msgstr ""
 "Dieses Hilfswerkzeug prüft eine angegebene Liste von ELF-Binärdateien auf "
-"mehrere Sicherheitshärtungsfunktionalitäten, die in ein ausführbares Programm "
-"einkompiliert werden können. Diese Funktionalitäten sind:"
+"mehrere Sicherheitshärtungsfunktionalitäten, die in ein ausführbares "
+"Programm einkompiliert werden können. Diese Funktionalitäten sind:"
 
 #. type: =item
 #: ../scripts/hardening-check.pl:446
 msgid "B<Position Independent Executable>"
 msgstr "B<Positionsunabhängiges Programm>"
 
+# https://de.wikipedia.org/wiki/Position-independent_Code
 #. type: textblock
 #: ../scripts/hardening-check.pl:448
-# https://de.wikipedia.org/wiki/Position-independent_Code
 msgid ""
 "This indicates that the executable was built in such a way (PIE) that the "
 "\"text\" section of the program can be relocated in memory. To take full "
@@ -16528,8 +16542,8 @@ msgid ""
 msgstr ""
 "Dies zeigt an, dass das Programm so gebaut wurde (PIE), dass der Abschnitt "
 "»text« des Programms nicht im Speicher an andere Stelle geschoben werden "
-"kann. Um die Vorteile dieser Funktionalität vollständig zu erlangen, muss der "
-"ausführende Kernel Address Space Layout Randomization (ASLR, "
+"kann. Um die Vorteile dieser Funktionalität vollständig zu erlangen, muss "
+"der ausführende Kernel Address Space Layout Randomization (ASLR, "
 "Adressverwürfelung) unterstützen."
 
 #. type: =item
@@ -16545,9 +16559,9 @@ msgid ""
 "program will be resistant to having its stack overflowed."
 msgstr ""
 "Dies zeigt an, dass es Anzeichen gibt, dass das ELF mit der L<gcc(1)>-Option "
-"B<-fstack-protector> kompiliert wurde (benutzt z.B. B<__stack_chk_fail>). Das "
-"Programm wird widerstandsfähig gegen Stapelverarbeitungsspeicherüberläufe "
-"sein."
+"B<-fstack-protector> kompiliert wurde (benutzt z.B. B<__stack_chk_fail>). "
+"Das Programm wird widerstandsfähig gegen "
+"Stapelverarbeitungsspeicherüberläufe sein."
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:459
@@ -16556,8 +16570,8 @@ msgid ""
 "the stack, this check will lead to false alarms (since there is no use of "
 "B<__stack_chk_fail>), even though it was compiled with the correct options."
 msgstr ""
-"Wenn ein Programm gebaut wurde ohne dass irgendwelche Zeichenkettenfelder auf "
-"dem Stapelverarbeitungsspeicher reserviert wurden, wird diese Prüfung zu "
+"Wenn ein Programm gebaut wurde ohne dass irgendwelche Zeichenkettenfelder "
+"auf dem Stapelverarbeitungsspeicher reserviert wurden, wird diese Prüfung zu "
 "Fehlalarmen führen (da dort B<__stack_chk_fail> nicht benutzt wird), obwohl "
 "es mit korrekten Optionen kompiliert wurde."
 
@@ -16576,11 +16590,10 @@ msgid ""
 "B<__memcpy_chk> insteade of B<memcpy>)."
 msgstr ""
 "Dies zeigt an, dass das Programm mit B<-D_FORTIFY_SOURCE=2> und B<-O1> oder "
-"höher kompiliert wurde. Dies sorgt dafür, dass bestimmte unsichere "
-"Glibc-Funktionen durch ihre sicheren Gegenstücke (z.B. B<strncpy> statt "
-"B<strcpy>) oder Aufrufe, die zur Laufzeit überprüfbar sind, durch die "
-"zur Laufzeit prüfende Version (z.B. B<__memcpy_chk> statt B<memcpy>) ersetzt "
-"werden."
+"höher kompiliert wurde. Dies sorgt dafür, dass bestimmte unsichere Glibc-"
+"Funktionen durch ihre sicheren Gegenstücke (z.B. B<strncpy> statt B<strcpy>) "
+"oder Aufrufe, die zur Laufzeit überprüfbar sind, durch die zur Laufzeit "
+"prüfende Version (z.B. B<__memcpy_chk> statt B<memcpy>) ersetzt werden."
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:472
@@ -16593,15 +16606,15 @@ msgid ""
 "conditions also pass (e.g. no functions that could be fortified are found, "
 "or not linked against glibc)."
 msgstr ""
-"Wenn ein Programm so gebaut wird, dass die verstärkten Versionen der "
-"Glibc-Funktionen nicht nützlich sind (z.B. Benutzung wird zu "
-"Kompilierungszeit als sicher befunden oder die Benutzung kann nicht zur "
-"Laufzeit überprüft werden), wird diese Prüfung zu Fehlalarmen führen. Im "
-"Versuch, dies zu mildern, wird die Prüfung positiv abgeschlossen, falls eine "
-"verstärkte Funktion gefunden wird und fehlschlagen, falls nur unverstärkte "
-"Funktionen gefunden werden. Unprüfbare Bedingungen führen auch zu positiven "
-"Ergebnissen (z.B. es werden keine verstärkten Funktionen gefunden oder sie "
-"sind nicht gegen Glibc gelinkt)."
+"Wenn ein Programm so gebaut wird, dass die verstärkten Versionen der Glibc-"
+"Funktionen nicht nützlich sind (z.B. Benutzung wird zu Kompilierungszeit als "
+"sicher befunden oder die Benutzung kann nicht zur Laufzeit überprüft "
+"werden), wird diese Prüfung zu Fehlalarmen führen. Im Versuch, dies zu "
+"mildern, wird die Prüfung positiv abgeschlossen, falls eine verstärkte "
+"Funktion gefunden wird und fehlschlagen, falls nur unverstärkte Funktionen "
+"gefunden werden. Unprüfbare Bedingungen führen auch zu positiven Ergebnissen "
+"(z.B. es werden keine verstärkten Funktionen gefunden oder sie sind nicht "
+"gegen Glibc gelinkt)."
 
 #. type: =item
 #: ../scripts/hardening-check.pl:480
@@ -16617,12 +16630,13 @@ msgid ""
 "begins. This reduces the possible areas of memory in a program that can be "
 "used by an attacker that performs a successful memory corruption exploit."
 msgstr ""
-"Dies zeigt an, dass das Programm mit B<-Wl,-z,relro> gebaut wurde, um "
-"ELF-Kennzeichen (RELRO) zu haben, die vom Laufzeit-Linker verlangen, dass er "
+"Dies zeigt an, dass das Programm mit B<-Wl,-z,relro> gebaut wurde, um ELF-"
+"Kennzeichen (RELRO) zu haben, die vom Laufzeit-Linker verlangen, dass er "
 "einige Bereiche der Verlagerungstabelle als »nur lesbar« kennzeichnet, falls "
 "sie aufgelöst waren, bevor die Verarbeitung begann. Dies vermindert die "
-"möglichen Speicherbereiche in einem Programm, die von einem Angreifer benutzt "
-"werden können, der mit einem Exploit erfolgreich Speicherinhalt verfälscht."
+"möglichen Speicherbereiche in einem Programm, die von einem Angreifer "
+"benutzt werden können, der mit einem Exploit erfolgreich Speicherinhalt "
+"verfälscht."
 
 #. type: =item
 #: ../scripts/hardening-check.pl:489
@@ -16637,9 +16651,9 @@ msgid ""
 "before starting program execution. When combined with RELRO above, this "
 "further reduces the regions of memory available to memory corruption attacks."
 msgstr ""
-"Dies zeigt an, dass das Programm mit B<-Wl,-z,now> gebaut wurde, um "
-"ELF-Kennzeichen (BIND_NOW) zu haben, die vom Laufzeit-Linker verlangen, dass "
-"er alle Verlagerungen auflöst, bevor die Programmausführung beginnt. Wenn es "
+"Dies zeigt an, dass das Programm mit B<-Wl,-z,now> gebaut wurde, um ELF-"
+"Kennzeichen (BIND_NOW) zu haben, die vom Laufzeit-Linker verlangen, dass er "
+"alle Verlagerungen auflöst, bevor die Programmausführung beginnt. Wenn es "
 "mit obigem RELRO kombiniert wurde, vermindert dies weitere Bereiche des "
 "Speichers, die für Angriffe, die dessen Inhalt verfälschen, zur Verfügung "
 "stehen."
@@ -16652,7 +16666,8 @@ msgstr "B<--nopie>, B<-p>"
 #. type: textblock
 #: ../scripts/hardening-check.pl:505
 msgid "No not require that the checked binaries be built as PIE."
-msgstr "erfordert nicht, dass die geprüften Binärdateien als PIE gebaut wurden."
+msgstr ""
+"erfordert nicht, dass die geprüften Binärdateien als PIE gebaut wurden."
 
 #. type: =item
 #: ../scripts/hardening-check.pl:507
@@ -16707,7 +16722,7 @@ msgid "Only report failures."
 msgstr "meldet nur Fehlschläge."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:527 ../scripts/uscan.pl:1434
+#: ../scripts/hardening-check.pl:527 ../scripts/uscan.pl:1454
 msgid "B<--verbose>, B<-v>"
 msgstr "B<--verbose>, B<-v>"
 
@@ -16740,8 +16755,8 @@ msgid ""
 "libc."
 msgstr ""
 "statt des normalen Berichts wird die Libc für das erste ELF auf der "
-"Befehlszeile geortet und alle bekannten »verstärkten« Funktionen, die von der "
-"Libc exportiert werden, gemeldet."
+"Befehlszeile geortet und alle bekannten »verstärkten« Funktionen, die von "
+"der Libc exportiert werden, gemeldet."
 
 #. type: =item
 #: ../scripts/hardening-check.pl:541
@@ -16814,7 +16829,7 @@ msgid "Kees Cook <kees@debian.org>"
 msgstr "Kees Cook <kees@debian.org>"
 
 #. type: =head1
-#: ../scripts/hardening-check.pl:574
+#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:799
 msgid "COPYRIGHT AND LICENSE"
 msgstr "COPYRIGHT UND LIZENZ"
 
@@ -16937,11 +16952,10 @@ msgid ""
 "that package to Debian Unstable, oldest uploads first."
 msgstr ""
 "B<ltnu> (Long Time No Upload, Lange Zeit nichts hochgeladen) fragt die "
-"öffentlichen Spiegelserver der Ultimate Debian Database "
-"(udd-mirror.debian.net) nach jedem Hochladen von Paketen durch den "
-"angegebenen Hochladenden oder Paketbetreuer ab und zeigt sie sortiert nach "
-"dem letzten Hochladen dieses Pakets nach Debian Unstable an, das älteste "
-"Hochladen zuerst."
+"öffentlichen Spiegelserver der Ultimate Debian Database (udd-mirror.debian."
+"net) nach jedem Hochladen von Paketen durch den angegebenen Hochladenden "
+"oder Paketbetreuer ab und zeigt sie sortiert nach dem letzten Hochladen "
+"dieses Pakets nach Debian Unstable an, das älteste Hochladen zuerst."
 
 #. type: textblock
 #: ../scripts/ltnu.pod:21
@@ -16951,11 +16965,11 @@ msgid ""
 "It's less suitable for MIA team purposes as it doesn't make a difference "
 "with regards to who actually uploaded a package."
 msgstr ""
-"Sein vorrangiger Zweck besteht darin, zu prüfen, welches Ihrer eigenen Pakete "
-"oder der Ihres Teams schon seit längerem nicht mehr hochgeladen wurden und "
-"vermutlich erneuert werden muss. Es ist weniger für die Zwecke des "
-"Vermissten-Teams (MIA) geeignet, da es nicht unterschiedet, wer ein Paket "
-"tatsächlich hochlädt."
+"Sein vorrangiger Zweck besteht darin, zu prüfen, welches Ihrer eigenen "
+"Pakete oder der Ihres Teams schon seit längerem nicht mehr hochgeladen "
+"wurden und vermutlich erneuert werden muss. Es ist weniger für die Zwecke "
+"des Vermissten-Teams (MIA) geeignet, da es nicht unterschiedet, wer ein "
+"Paket tatsächlich hochlädt."
 
 #. type: =item
 #: ../scripts/ltnu.pod:31
@@ -16978,9 +16992,9 @@ msgid ""
 "The maintainer/uploader to query can be given either by setting C<$DEBEMAIL> "
 "as environment variable or as single commandline parameter."
 msgstr ""
-"Der abzufragende Paketbetreuer/Hochladende kann entweder über die Einstellung "
-"C<$DEBEMAIL> als Umgebungsvariable oder als einzelner Befehlszeilenparameter "
-"angegeben werden."
+"Der abzufragende Paketbetreuer/Hochladende kann entweder über die "
+"Einstellung C<$DEBEMAIL> als Umgebungsvariable oder als einzelner "
+"Befehlszeilenparameter angegeben werden."
 
 #. type: textblock
 #: ../scripts/ltnu.pod:42
@@ -17392,7 +17406,7 @@ msgstr ""
 "setzen."
 
 #. type: =item
-#: ../scripts/mass-bug.pl:90
+#: ../scripts/mass-bug.pl:90 ../scripts/salsa.pl:491
 msgid "B<--user>"
 msgstr "B<--user>"
 
@@ -18037,7 +18051,7 @@ msgstr ""
 "B<--copy>, B<--rename> und B<--symlink> schließen sich gegenseitig aus."
 
 #. type: =item
-#: ../scripts/mk-origtargz.pl:138 ../scripts/uscan.pl:1618
+#: ../scripts/mk-origtargz.pl:138 ../scripts/uscan.pl:1638
 msgid "B<--symlink>"
 msgstr "B<--symlink>"
 
@@ -18062,7 +18076,7 @@ msgstr ""
 "Option wie B<--copy>."
 
 #. type: =item
-#: ../scripts/mk-origtargz.pl:146 ../scripts/uscan.pl:1623
+#: ../scripts/mk-origtargz.pl:146 ../scripts/uscan.pl:1643
 msgid "B<--copy>"
 msgstr "B<--copy>"
 
@@ -18076,7 +18090,7 @@ msgstr ""
 "nicht verändert werden muss)."
 
 #. type: =item
-#: ../scripts/mk-origtargz.pl:151 ../scripts/uscan.pl:1627
+#: ../scripts/mk-origtargz.pl:151 ../scripts/uscan.pl:1647
 msgid "B<--rename>"
 msgstr "B<--rename>"
 
@@ -18097,7 +18111,7 @@ msgstr ""
 "die Originaldatei hinterher gelöscht wird."
 
 #. type: =item
-#: ../scripts/mk-origtargz.pl:159 ../scripts/uscan.pl:1631
+#: ../scripts/mk-origtargz.pl:159 ../scripts/uscan.pl:1651
 msgid "B<--repack>"
 msgstr "B<--repack>"
 
@@ -18302,7 +18316,14 @@ msgid "B<nmudiff> [I<options>]"
 msgstr "B<nmudiff> [I<Optionen>]"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:16
+#: ../scripts/nmudiff.1:9
+msgid ""
+"B<nmudiff> is the tool to be used while preparing a Non-Maintainer Upload "
+"(NMU) to notify the maintainer about the work being done."
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:19
 msgid ""
 "B<nmudiff> should be run in the source tree of the package being NMUed, "
 "after the NMU is built. It assumes that the source packages (specifically, "
@@ -18326,7 +18347,7 @@ msgstr ""
 "wird das Diff per E-Mail an die Debian-Fehlerdatenbank gesandt."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:21
+#: ../scripts/nmudiff.1:24
 msgid ""
 "The default behaviour is that if exactly one bug is closed by this NMU, then "
 "that bug will be mailed, otherwise a new bug will be submitted.  This "
@@ -18339,13 +18360,13 @@ msgstr ""
 "Befehlszeilen- und Konfigurationsdateioptionen geändert werden."
 
 #. type: TP
-#: ../scripts/nmudiff.1:22
+#: ../scripts/nmudiff.1:25
 #, no-wrap
 msgid "B<--new>"
 msgstr "B<--new>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:26
+#: ../scripts/nmudiff.1:29
 msgid ""
 "Instead of mailing the bug reports which are to be closed by this NMU, a new "
 "bug report is submitted directly to the BTS."
@@ -18355,7 +18376,7 @@ msgstr ""
 "Fehlerdatenbank eingereicht."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:31
+#: ../scripts/nmudiff.1:34
 msgid ""
 "Send the bug report to all of the bugs which are being closed by this NMU, "
 "rather than opening a new bug report.  This option has no effect if no bugs "
@@ -18366,18 +18387,18 @@ msgstr ""
 "Auswirkungen, falls durch diesen NMU keine Fehlerberichte geschlossen werden."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:36
+#: ../scripts/nmudiff.1:39
 msgid ""
 "Use B<mutt>(1) (or B<neomutt>(1)) for editing and sending the message to the "
 "BTS (default behaviour).  This can be controlled using a configuration file "
 "option (see below)."
 msgstr ""
 "verwendet B<mutt>(1) (oder B<neomutt>(1)) zum Bearbeiten und Versenden der "
-"Nachricht an die Fehlerdatenbank (Standardverhalten). Dies kann mittels einer "
-"Konfigurationsdateioption geregelt werden (siehe unten)."
+"Nachricht an die Fehlerdatenbank (Standardverhalten). Dies kann mittels "
+"einer Konfigurationsdateioption geregelt werden (siehe unten)."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:41
+#: ../scripts/nmudiff.1:44
 msgid ""
 "Use B<sensible-editor>(1) to edit the message and then mail it directly "
 "using I</usr/bin/sendmail>.  This can be controlled using a configuration "
@@ -18388,13 +18409,13 @@ msgstr ""
 "Konfigurationsdateioption geregelt werden (siehe unten)."
 
 #. type: TP
-#: ../scripts/nmudiff.1:41
+#: ../scripts/nmudiff.1:44
 #, no-wrap
 msgid "B<--sendmail> I<SENDMAILCMD>"
 msgstr "B<--sendmail> I<SENDMAIL-BEFEHL>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:51
+#: ../scripts/nmudiff.1:54
 msgid ""
 "Specify the B<sendmail> command.  The command will be split on white space "
 "and will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  "
@@ -18413,13 +18434,13 @@ msgstr ""
 "mittels der Devscripts-Konfigurationsdateien gesetzt werden; siehe unten."
 
 #. type: TP
-#: ../scripts/nmudiff.1:51
+#: ../scripts/nmudiff.1:54
 #, no-wrap
 msgid "B<--from> I<EMAIL>"
 msgstr "B<--from> I<E-MAIL>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:59
+#: ../scripts/nmudiff.1:62
 msgid ""
 "If using the B<sendmail> (B<--no-mutt>) option, then the email to the BTS "
 "will be sent using the name and address in the environment variables "
@@ -18436,13 +18457,13 @@ msgstr ""
 "funktionieren, falls eine E-Mail-Adresse nicht bestimmt werden kann."
 
 #. type: TP
-#: ../scripts/nmudiff.1:59
+#: ../scripts/nmudiff.1:62
 #, no-wrap
 msgid "B<--delay> I<DELAY>"
 msgstr "B<--delay> I<VERZÖGERUNG>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:66
+#: ../scripts/nmudiff.1:69
 msgid ""
 "Indicate in the generated mail that the NMU has been uploaded to the DELAYED "
 "queue, with a delay of I<DELAY> days.  The default value is I<XX> which adds "
@@ -18458,40 +18479,40 @@ msgstr ""
 "werden; siehe unten."
 
 #. type: TP
-#: ../scripts/nmudiff.1:66
+#: ../scripts/nmudiff.1:69
 #, no-wrap
 msgid "B<--no-delay>, B<--nodelay>"
 msgstr "B<--no-delay>, B<--nodelay>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:69
+#: ../scripts/nmudiff.1:72
 msgid "Equivalent to B<--delay 0>."
 msgstr "entspricht B<--delay 0>."
 
 #. type: TP
-#: ../scripts/nmudiff.1:73
+#: ../scripts/nmudiff.1:76
 #, no-wrap
 msgid "B<--template> I<TEMPLATEFILE>"
 msgstr "B<--template> I<SCHABLONENDATEI>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:77
+#: ../scripts/nmudiff.1:80
 msgid ""
 "Use content of TEMPLATEFILE for message body instead of default template.  "
 "If TEMPLATEFILE does not exist, default template is applied."
 msgstr ""
-"verwendet den Inhalt der SCHABLONENDATEI für den Nachrichtentext anstelle der "
-"Standardschablone. Falls die SCHABLONENDATEI nicht existiert, wird die "
+"verwendet den Inhalt der SCHABLONENDATEI für den Nachrichtentext anstelle "
+"der Standardschablone. Falls die SCHABLONENDATEI nicht existiert, wird die "
 "Standardschablone genommen."
 
 #. type: TP
-#: ../scripts/nmudiff.1:89
+#: ../scripts/nmudiff.1:92
 #, no-wrap
 msgid "B<NMUDIFF_DELAY>"
 msgstr "B<NMUDIFF_DELAY>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:95
+#: ../scripts/nmudiff.1:98
 msgid ""
 "If this is set to a number, e-mails generated by B<nmudiff> will by default "
 "mention an upload to the DELAYED queue, delayed for the specified number of "
@@ -18503,13 +18524,13 @@ msgstr ""
 "gibt an, dass die DELAYED-Warteschlange nicht benutzt wurde."
 
 #. type: TP
-#: ../scripts/nmudiff.1:95
+#: ../scripts/nmudiff.1:98
 #, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:100
+#: ../scripts/nmudiff.1:103
 msgid ""
 "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> (or "
 "B<neomut>)to compose and send the message or not, as described above."
@@ -18519,13 +18540,13 @@ msgstr ""
 "wird oder nicht."
 
 #. type: TP
-#: ../scripts/nmudiff.1:100
+#: ../scripts/nmudiff.1:103
 #, no-wrap
 msgid "B<NMUDIFF_NEWREPORT>"
 msgstr "B<NMUDIFF_NEWREPORT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:108
+#: ../scripts/nmudiff.1:111
 msgid ""
 "This option controls whether a new bug report is made, or whether the diff "
 "is sent to the bugs closed by this NMU.  Can be I<maybe> (default), which "
@@ -18544,7 +18565,7 @@ msgstr ""
 "erstellt)."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:112
+#: ../scripts/nmudiff.1:115
 msgid ""
 "If this is set, specifies a B<sendmail> command to use instead of I</usr/"
 "sbin/sendmail>.  Same as the B<--sendmail> command line option."
@@ -18553,12 +18574,12 @@ msgstr ""
 "sbin/sendmail> zu benutzen. Entspricht der Befehlszeilenoption B<--sendmail>."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:116
+#: ../scripts/nmudiff.1:119
 msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 msgstr "B<debdiff>(1), B<sensible-editor>(1) und B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:120
+#: ../scripts/nmudiff.1:123
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
@@ -18650,9 +18671,9 @@ msgstr ""
 msgid "Finally, B<uscan --download --download-current-version> is tried."
 msgstr "Am Ende wird B<uscan --download --download-current-version> versucht."
 
+# FIXME s/preserved/are preserved/
 #. type: textblock
 #: ../scripts/origtargz.pl:69
-# FIXME s/preserved/are preserved/
 msgid ""
 "When asked to unpack the orig tarball, B<origtargz> will remove all files "
 "and directories from the current directory, except the debian directory, and "
@@ -18664,14 +18685,14 @@ msgid ""
 "hgignore>), if stored in VCS."
 msgstr ""
 "Wenn B<origtargz> den Original-Tarball entpacken soll, wird es alle Dateien "
-"und Verzeichnisse außer dem Debian-Verzeichnis und den "
-"VCS-Depotverzeichnissen aus dem aktuellen Verzeichnis entfernen. I<Beachten "
-"Sie, dass dadurch alle nicht übergebenen Änderungen> für das benutzte "
-"Patch-System (z.B. Quellformat »3.0 (quilt)«) I<verworfen werden>. Wenn kein "
-"Patch-System benutzt wird (das Originalquellformat »1.0«), werden sogar alle "
-"Patches des Pakets entfernt. Einige VCS-Steuerdateien außerhalb von "
-"F<debian/> werden aufbewahrt (F<.bzr-builddeb>, F<.bzr-ignore>, "
-"F<.gitignore>, F<.hgignore>), falls sie im VCS gespeichert sind."
+"und Verzeichnisse außer dem Debian-Verzeichnis und den VCS-"
+"Depotverzeichnissen aus dem aktuellen Verzeichnis entfernen. I<Beachten Sie, "
+"dass dadurch alle nicht übergebenen Änderungen> für das benutzte Patch-"
+"System (z.B. Quellformat »3.0 (quilt)«) I<verworfen werden>. Wenn kein Patch-"
+"System benutzt wird (das Originalquellformat »1.0«), werden sogar alle "
+"Patches des Pakets entfernt. Einige VCS-Steuerdateien außerhalb von F<debian/"
+"> werden aufbewahrt (F<.bzr-builddeb>, F<.bzr-ignore>, F<.gitignore>, F<."
+"hgignore>), falls sie im VCS gespeichert sind."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:78
@@ -19876,13 +19897,12 @@ msgstr "B<-u>, B<--url=>I<URL>[B<,>I<URL> …]"
 
 #. type: verbatim
 #: ../scripts/rmadison.pl:321
-#, no-wrap
 msgid ""
 "use I<URL> for the query. Supported shorthands are\n"
 " B<debian> https://api.ftp-master.debian.org/madison\n"
 " B<new> https://api.ftp-master.debian.org/madison?s=new\n"
 " B<qa> https://qa.debian.org/madison.php\n"
-" B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi\n"
+" B<ubuntu> https://people.canonical.com/~ubuntu-archive/madison.cgi\n"
 " B<udd> https://qa.debian.org/cgi-bin/madison.cgi\n"
 "\n"
 msgstr ""
@@ -19890,7 +19910,7 @@ msgstr ""
 " B<debian> https://api.ftp-master.debian.org/madison\n"
 " B<new> https://api.ftp-master.debian.org/madison?s=new\n"
 " B<qa> https://qa.debian.org/madison.php\n"
-" B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi\n"
+" B<ubuntu> https://people.canonical.com/~ubuntu-archive/madison.cgi\n"
 " B<udd> https://qa.debian.org/cgi-bin/madison.cgi\n"
 "\n"
 
@@ -20142,6 +20162,1798 @@ msgstr "README.package-tests, bei Autopkgtest 2.7.2 mitgeliefert"
 #: ../scripts/sadt.pod:71
 msgid "B<adt-run>(1)"
 msgstr "B<adt-run>(1)"
+
+#. type: textblock
+#: ../scripts/salsa.pl:5
+msgid "salsa - tool to manipulate salsa repositories and group members"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:9
+#, no-wrap
+msgid ""
+"  # salsa <command> <args>\n"
+"  salsa whoami\n"
+"  salsa search_project devscripts\n"
+"  salsa search_project qa/qa\n"
+"  salsa search_group js-team\n"
+"  salsa search_group perl-team/modules\n"
+"  salsa search_user yadd\n"
+"  salsa push_repo . --group js-team --kgb --irc devscripts --tagpending\n"
+"  salsa update_repo node-mongodb --group js-team --disable-kgb --desc \\\n"
+"        --desc-pattern \"Package %p\"\n"
+"  salsa update_repo js-team/node-mongodb --kgb --irc debian-js\n"
+"  salsa update_safe --all --desc --desc-pattern \"Debian package %p\" \\\n"
+"        --group js-team\n"
+"  salsa checkout node-mongodb --group js-team\n"
+"  salsa checkout js-team/node-mongodb\n"
+"  salsa add_user developer foobar --group-id 2665\n"
+"  salsa update_user maintainer foobar --group js-team\n"
+"  salsa del_user foobar --group js-team\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:30
+msgid ""
+"B<salsa> is a designed to create and configure repositories on L<https://"
+"salsa.debian.org> and manage users of groups."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:33
+msgid ""
+"A Salsa token is required, except for search* commands, and must be set in "
+"command line I<(see below)>, or in your configuration file I<(~/."
+"devscripts)>:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:36
+#, no-wrap
+msgid ""
+"  SALSA_TOKEN=abcdefghi\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:38 ../scripts/salsa.pl:42 ../scripts/salsa.pl:443
+#: ../scripts/salsa.pl:463
+msgid "or"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:40
+#, no-wrap
+msgid ""
+"  SALSA_TOKEN=`cat ~/.token`\n"
+"\n"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:44
+#, no-wrap
+msgid ""
+"  SALSA_TOKEN_FILE=~/.dpt.conf\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:46
+msgid ""
+"If you choose to link another file using SALSA_TOKEN_FILE, it must contain a "
+"line with one of (no differences):"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:49
+#, no-wrap
+msgid ""
+"  <anything>SALSA_PRIVATE_TOKEN=xxxx\n"
+"  <anything>SALSA_TOKEN=xxxx\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:52
+msgid ""
+"This allows for example to use dpt(1) configuration file (~/.dpt.conf) which "
+"contains:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:55
+#, no-wrap
+msgid ""
+"  DPT_SALSA_PRIVATE_TOKEN=abcdefghi\n"
+"\n"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:59
+msgid "Managing users and groups"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:63
+msgid "B<add_user>"
+msgstr "B<add_user>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:65
+msgid "Add a user to a group."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:67
+#, no-wrap
+msgid ""
+"  salsa --group js-group add_user guest foouser\n"
+"  salsa --group-id 1234 add_user guest foouser\n"
+"  salsa --group-id 1234 add_user maintainer 1245\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:71 ../scripts/salsa.pl:115
+msgid ""
+"First argument is the GitLab's access levels: guest, reporter, developer, "
+"maintainer, owner."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:74
+msgid "B<del_user>"
+msgstr "B<del_user>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:76
+msgid "Remove a user from a group"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:78
+#, no-wrap
+msgid ""
+"  salsa --group js-team del_user foouser\n"
+"  salsa --group-id=1234 del_user foouser\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:81
+msgid "B<list_groups>"
+msgstr "B<list_groups>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:83
+msgid ""
+"List sub groups of current one if group is set, groups of current user else."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:86
+msgid "B<group>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:88
+msgid "Show group members."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:90
+#, no-wrap
+msgid ""
+"  salsa --group js-team group\n"
+"  salsa --group-id 1234 group\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:93
+msgid "B<search_group>"
+msgstr "B<search_group>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:95
+msgid ""
+"Search for a group using given string. Shows group id and other information."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:98
+#, no-wrap
+msgid ""
+"  salsa search_group perl-team\n"
+"  salsa search_group perl-team/modules\n"
+"  salsa search_group 2666\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:102
+msgid "B<search_user>"
+msgstr "B<search_user>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:104
+msgid ""
+"Search for a user using given string. Shows user id and other information."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:106
+#, no-wrap
+msgid ""
+"  salsa search_user yadd\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:108
+msgid "B<update_user>"
+msgstr "B<update_user>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:110
+msgid "Update user role in a group."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:112
+#, no-wrap
+msgid ""
+"  salsa --group-id 1234 update_user guest foouser\n"
+"  salsa --group js-team update_user maintainer 1245\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:118
+msgid "B<whoami>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:120
+msgid "Gives information on the token owner"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:122
+#, no-wrap
+msgid ""
+"  salsa whoami\n"
+"\n"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:126
+msgid "Managing repositories"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:128
+msgid ""
+"One of C<--group>, C<--group-id>, C<--user> or C<--user-id> is required to "
+"manage repositories. If both are set, salsa warns and only C<--user>/C<--"
+"user-id> is used. If none is given, salsa uses current user id I<(token "
+"owner)>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:135
+msgid "B<check_repo>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:137
+msgid ""
+"Verify that repo(s) are well configured. It works exactly like "
+"B<update_repo> except that it does not modify anything but just lists "
+"projects not well configured with found errors."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:141
+#, no-wrap
+msgid ""
+"  salsa --user yadd --tagpending --kgb --irc=devscripts check_repo test\n"
+"  salsa --group js-team check_repo --all\n"
+"  salsa --group js-team --rename-head check_repo test1 test2 test3\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:145
+msgid "B<checkout> or B<co>"
+msgstr "B<checkout> oder B<co>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:147
+msgid ""
+"Clone repo in current dir. If directory already exists, update local repo."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:150
+#, no-wrap
+msgid ""
+"  salsa --user yadd co devscripts\n"
+"  salsa --group js-team co node-mongodb\n"
+"  salsa co js-team/node-mongodb\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:154
+msgid ""
+"You can clone more than one repository or all repositories of a group or a "
+"user:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:157
+#, no-wrap
+msgid ""
+"  salsa --user yadd co devscripts autodep8\n"
+"  salsa co yadd/devscripts js-team/npm\n"
+"  salsa --group js-team co --all           # All js-team repos\n"
+"  salsa co --all                           # All your repos\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:162
+msgid "B<create_repo>"
+msgstr "B<create_repo>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:164
+msgid ""
+"Create public empty project. If C<--group>/C<--group-id> is set, project is "
+"created in group directory, else in user directory."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:167
+#, no-wrap
+msgid ""
+"  salsa --user yadd create_repo test\n"
+"  salsa --group js-team --kgb --irc-channel=devscripts create_repo test\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:170
+msgid "B<del_repo>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:172
+msgid "Delete a repository."
+msgstr "Löscht ein Depot."
+
+#. type: =item
+#: ../scripts/salsa.pl:174
+msgid "B<fork>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:176
+msgid ""
+"Forks a project in group/user repository and set \"upstream\" to original "
+"project. Example:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:179
+#, no-wrap
+msgid ""
+"  $ salsa fork js-team/node-mongodb --verbose\n"
+"  ...\n"
+"  salsa.pl info: node-mongodb ready in node-mongodb/\n"
+"  $ cd node-mongodb\n"
+"  $ git remote --verbose show\n"
+"  origin          git@salsa.debian.org:me/node-mongodb (fetch)\n"
+"  origin          git@salsa.debian.org:me/node-mongodb (push)\n"
+"  upstream        git@salsa.debian.org:js-team/node-mongodb (fetch)\n"
+"  upstream        git@salsa.debian.org:js-team/node-mongodb (push)\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:189
+msgid "For a group:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:191
+#, no-wrap
+msgid ""
+"  salsa fork --group js-team user/node-foo\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:193
+msgid "B<forks>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:195
+msgid "List forks of project(s)."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:197
+#, no-wrap
+msgid ""
+"  salsa forks qa/qa debian/devscripts\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:199 ../scripts/salsa.pl:258
+msgid ""
+"Project can be set using full path or using B<--group>/B<--group-id> or B<--"
+"user>/B<--user-id>, else it is searched in current user namespace."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:202
+msgid "B<ls> or B<list_repos>"
+msgstr "B<ls> oder B<list_repos>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:204
+msgid ""
+"Shows projects owned by user or group. If second argument exists, search "
+"only matching projects"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:207
+#, no-wrap
+msgid ""
+"  salsa --group js-team list_repos\n"
+"  salsa --user yadd list_repos foo*\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:210
+msgid "B<merge_request>, B<mr>"
+msgstr "B<merge_request>, B<mr>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:212
+msgid "Creates a merge request."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:214
+msgid ""
+"Suppose you created a fork using B<salsa fork>, modify some things in a new "
+"branch using one commit and want to propose it to original project I<(branch "
+"\"master\")>. You just have to launch this in source directory:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:218
+#, no-wrap
+msgid ""
+"  salsa mr\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:220
+msgid "Other example:"
+msgstr "Weiteres Beispiel:"
+
+#. type: verbatim
+#: ../scripts/salsa.pl:222
+#, no-wrap
+msgid ""
+"  salsa mr --mr-dst-project debian/foo --mr-dst-branch debian/master\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:224
+msgid "or simply"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:226
+#, no-wrap
+msgid ""
+"  salsa mr debian/foo debian/master\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:228
+msgid ""
+"Note that unless destination project has been set using command line, "
+"B<salsa merge_request> will search it in the following order:"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:233
+msgid "using GitLab API: salsa will detect from where this project was forked"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:235
+msgid "using \"upstream\" origin"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:237
+msgid "else salsa will use source project as destination project"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:241
+msgid ""
+"To force salsa to use source project as destination project, you can use "
+"\"same\":"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:244
+#, no-wrap
+msgid ""
+"  salsa mr --mr-dst-project same\n"
+"  # or\n"
+"  salsa mr same\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:248
+msgid ""
+"New merge request will be created using last commit title and description."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:250
+msgid "See B<--mr-*> options for more."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:252
+msgid "B<merge_requests>, B<mrs>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:254
+msgid "List opened merge requests for project(s)"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:256
+#, no-wrap
+msgid ""
+"  salsa mrs qa/qa debian/devscripts\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:261
+msgid "B<protect_branch>"
+msgstr "B<protect_branch>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:263
+msgid "Protect/unprotect a branch."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:267
+msgid "Set protection"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:269
+#, no-wrap
+msgid ""
+"  #                                    project      branch merge push\n"
+"  salsa --group js-team protect_branch node-mongodb master m     d\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:272
+msgid "\"merge\" and \"push\" can be one of:"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:276
+msgid "B<o>, B<owner>: owner only"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:278
+msgid "B<m>, B<maintainer>: B<o> + maintainers allowed"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:280
+msgid "B<d>, B<developer>: B<m> + developers allowed"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:282
+msgid "B<r>, B<reporter>: B<d> + reporters allowed"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:284
+msgid "B<g>, B<guest>: B<r> + guest allowed"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:288
+msgid "Unprotect"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:290
+#, no-wrap
+msgid ""
+"  salsa --group js-team protect_branch node-mongodb master no\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:294
+msgid "B<protected_branches>"
+msgstr "B<protected_branches>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:296
+msgid "List protected branches"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:298
+#, no-wrap
+msgid ""
+"  salsa --group js-team protected_branches node-mongodb\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:300
+msgid "B<push_repo>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:302
+msgid ""
+"Create a new project from a local Debian source directory configured with "
+"git."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:305
+msgid "B<push_repo> executes the following steps:"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:309
+msgid "gets project name using debian/changelog file;"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:311
+msgid "launches B<git remote add upstream ...>;"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:313
+msgid "launches B<create_repo>;"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:315
+msgid "pushes local repo."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:321
+#, no-wrap
+msgid ""
+"  salsa --user yadd push_repo ./test\n"
+"  salsa --group js-team --kgb --irc-channel=devscripts push_repo .\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:324
+msgid "B<rename_branch>"
+msgstr "B<rename_branch>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:326
+msgid ""
+"Rename branch given in B<--source-branch> with name given in B<--dest-"
+"branch>.  You can use B<--no-fail> and B<--all> options here."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:329
+msgid "B<search>, B<search_project>, B<search_repo>"
+msgstr "B<search>, B<search_project>, B<search_repo>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:331
+msgid ""
+"Search for a project using given string. Shows name, owner id and other "
+"information."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:334
+#, no-wrap
+msgid ""
+"  salsa search devscripts\n"
+"  salsa search debian/devscripts\n"
+"  salsa search 18475\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:338
+msgid "B<update_repo>"
+msgstr "B<update_repo>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:340
+msgid ""
+"Configure repo(s) using parameters given to command line.  A repo name has "
+"to be given unless B<--all> is set. Prefer to use B<update_safe>."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:344
+#, no-wrap
+msgid ""
+"  salsa --user yadd --tagpending --kgb --irc=devscripts update_repo test\n"
+"  salsa --group js-team update_repo --all\n"
+"  salsa --group js-team --rename-head update_repo test1 test2 test3\n"
+"  salsa update_repo js-team/node-mongodb --kgb --irc debian-js\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:349
+msgid ""
+"By default when using B<--all>, salsa will fail on first error. If you want "
+"to continue, set B<--no-fail>. In this case, salsa will display a warning "
+"for each project that has fail but continue with next project. Then to see "
+"full errors, set B<--verbose>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:354
+msgid "B<update_safe>"
+msgstr "B<update_safe>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:356
+msgid ""
+"Launch B<check_repo> and ask before launching B<update_repo> (unless B<--"
+"yes>)."
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:358
+#, no-wrap
+msgid ""
+"  salsa --user yadd --tagpending --kgb --irc=devscripts update_safe test\n"
+"  salsa --group js-team update_safe --all\n"
+"  salsa --group js-team --rename-head update_safe test1 test2 test3\n"
+"  salsa update_safe js-team/node-mongodb --kgb --irc debian-js\n"
+"\n"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:365
+msgid "Other"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:369
+msgid "B<purge_cache>"
+msgstr "B<purge_cache>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:371
+msgid "Empty local cache."
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:377
+msgid "General options"
+msgstr "Allgemeine Optionen"
+
+#. type: =item
+#: ../scripts/salsa.pl:381
+msgid "B<-C>, B<--chdir>"
+msgstr "B<-C>, B<--chdir>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:383
+msgid "Change directory before launching command"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:385
+#, no-wrap
+msgid ""
+"  salsa -C ~/debian co debian/libapache2-mod-fcgid\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:387
+msgid "B<--cache-file>"
+msgstr "B<--cache-file>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:389
+msgid ""
+"File to store cached values. Default to B<~/.cache/salsa.json>. An empty "
+"value disables cache."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:392
+msgid "C<.devscripts> value: B<SALSA_CACHE_FILE>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:396
+msgid "Disable cache usage. Same as B<--cache-file ''>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:398 ../scripts/uscan.pl:1425
+msgid "B<--conffile>, B<--conf-file>"
+msgstr "B<--conffile>, B<--conf-file>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:400 ../scripts/uscan.pl:1427
+msgid ""
+"Add or replace default configuration files (C</etc/devscripts.conf> and C<~/."
+"devscripts>). This can only be used as the first option given on the command-"
+"line."
+msgstr ""
+"Standard-Konfigurationsdateien hinzufügen oder ersetzen (C</etc/devscripts.conf> und C<~/.devscripts>). Dies kann nur als erste auf der "
+"Befehlszeile angegebene Option benutzt werden."
+
+#. type: =item
+#: ../scripts/salsa.pl:406 ../scripts/uscan.pl:1433
+msgid "replace:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:408
+#, no-wrap
+msgid ""
+"  salsa --conf-file test.conf <command>...\n"
+"  salsa --conf-file test.conf --conf-file test2.conf  <command>...\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:411 ../scripts/uscan.pl:1437
+msgid "add:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:413
+#, no-wrap
+msgid ""
+"  salsa --conf-file +test.conf <command>...\n"
+"  salsa --conf-file +test.conf --conf-file +test2.conf  <command>...\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:416 ../scripts/uscan.pl:1441
+msgid ""
+"If one B<--conf-file> has no C<+>, default configuration files are ignored."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:422 ../scripts/uscan.pl:1447
+msgid ""
+"Don't read any configuration files. This can only be used as the first "
+"option given on the command-line."
+msgstr ""
+"liest keine Konfigurationsdateien. Dies kann nur als erste auf der "
+"Befehlszeile angegebene Option benutzt werden."
+
+#. type: textblock
+#: ../scripts/salsa.pl:427
+msgid "Enable debugging output"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:429
+msgid "B<--group>"
+msgstr "B<--group>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:431
+msgid "Team to use. Use C<salsa search_group name> to find it."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:433
+msgid "C<.devscripts> value: B<SALSA_GROUP>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:435
+msgid ""
+"Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every "
+"B<salsa> command will be executed in group space, for example if you want to "
+"propose a little change in a project using B<salsa fork> + B<salsa mr>, this "
+"\"fork\" will be done in group space unless you set a B<--user>/B<--user-"
+"id>.  Prefer to use an alias in your C<.bashrc> file. Example:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:441
+#, no-wrap
+msgid ""
+"  alias jsteam_admin=\"salsa --group js-team\"\n"
+"\n"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:445 ../scripts/salsa.pl:465
+#, no-wrap
+msgid ""
+"  alias jsteam_admin=\"salsa --conf-file ~/.js.conf\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:447
+msgid "then you can fix B<SALSA_GROUP> in C<~/.js.conf>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:449
+msgid "B<--group-id>"
+msgstr "B<--group-id>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:451
+msgid "Group id to use. Use C<salsa search_group name> to find it."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:453
+msgid "C<.devscripts> value: B<SALSA_GROUP_ID>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:455
+msgid ""
+"Be careful when you use B<SALSA_GROUP_ID> in your C<.devscripts> file. Every "
+"B<salsa> command will be executed in group space, for example if you want to "
+"propose a little change in a project using B<salsa fork> + B<salsa mr>, this "
+"\"fork\" will be done in group space unless you set a B<--user>/B<--user-"
+"id>.  Prefer to use an alias in your C<.bashrc> file. Example:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:461
+#, no-wrap
+msgid ""
+"  alias jsteam_admin=\"salsa --group-id 2666\"\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:467
+msgid "then you can fix B<SALSA_GROUP_ID> in C<~/.js.conf>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:469
+msgid "B<--help>: displays this manpage"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:471
+msgid "B<-i>, B<--info>"
+msgstr "B<-i>, B<--info>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:473
+msgid "Prompt before sensible changes."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:475
+msgid "C<.devscripts> value: B<SALSA_INFO> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:477
+msgid "B<--path>"
+msgstr "B<--path>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:479
+msgid "Repo path. Default to group or user path."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:481
+msgid "C<.devscripts> value: B<SALSA_REPO_PATH>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:483
+msgid "B<--token>"
+msgstr "B<--token>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:485
+msgid "Token value (see above)."
+msgstr "Token-Wert (siehe oben)."
+
+#. type: =item
+#: ../scripts/salsa.pl:487
+msgid "B<--token-file>"
+msgstr "B<--token-file>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:489
+msgid "File to find token (see above)."
+msgstr "Datei mit Token (siehe oben)."
+
+#. type: textblock
+#: ../scripts/salsa.pl:493
+msgid ""
+"Username to use. If neither B<--group>, B<--group-id>, B<--user> or B<--user-"
+"id> is set, salsa uses current user id (corresponding to salsa private "
+"token)."
+msgstr "Benutzername. Wenn weder B<--group>, B<--group-id>, B<--user> noch B<--user-id> gesetzt sind, benutzt salsa die aktuelle Benutzer-Id (die zu dem privaten Salsa-Token gehört)."
+
+#. type: =item
+#: ../scripts/salsa.pl:496
+msgid "B<--user-id>"
+msgstr "B<--user-id>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:498
+msgid ""
+"User id to use. Use C<salsa search_user name> to find one. If neither B<--"
+"group>, B<--group-id>, B<--user> or B<--user-id> is set, salsa uses current "
+"user id (corresponding to salsa private token)."
+msgstr "Benutzer-Id. Benutzen Sie C<salsa search_user name> um eine zu finden. Wenn weder B<--group>, B<--group-id>, B<--user> noch B<--user-id> gesetzt sind, benutzt salsa die aktuelle Benutzer-
+Id (die zu dem privaten Salsa-Token gehört)."
+
+#. type: textblock
+#: ../scripts/salsa.pl:502
+msgid "C<.devscripts> value: B<SALSA_USER_ID>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:506
+msgid "Enable verbose output."
+msgstr "Erzeugt eine detaillierte Ausgabe."
+
+#. type: =item
+#: ../scripts/salsa.pl:508
+msgid "B<--yes>"
+msgstr "B<--yes>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:510
+msgid "Never ask for consent."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:512
+msgid "C<.devscripts> value: B<SALSA_YES> (yes/no)"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:516
+msgid "Update/create repo options"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:520
+msgid "B<--all>"
+msgstr "B<--all>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:522
+msgid "When set, all project of group/user are affected by command."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:526
+msgid "B<--skip>: ignore project with B<--all>. Example:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:528
+#, no-wrap
+msgid ""
+"  salsa update_repo --tagpending --all --skip qa --skip devscripts\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:530
+msgid ""
+"C<.devscripts> value: B<SALSA_SKIP>. To set multiples values, use spaces.  "
+"Example"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:533
+#, no-wrap
+msgid ""
+"  SALSA_SKIP=qa devscripts\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:535
+msgid "B<--skip-file>: ignore projects in this file (1 project per line)"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:537
+#, no-wrap
+msgid ""
+"  salsa update_repo --tagpending --all --skip-file ~/.skip\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:539
+msgid "C<.devscripts> value: B<SALSA_SKIP_FILE>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:543
+msgid "B<--ci-config-path>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:545
+msgid ""
+"Configure configuration file path of GitLab CI. Default: empty. Example:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:547
+#, no-wrap
+msgid ""
+"  salsa update_safe --ci-config-path debian/.gitlab-ci.yml debian/devscripts\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:549
+msgid "C<.devscripts> value: B<SALSA_CI_CONFIG_PATH>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:551
+msgid "B<--desc> B<--no-desc>"
+msgstr "B<--desc> B<--no-desc>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:553
+msgid "Configure repo description using pattern given in B<desc-pattern>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:555
+msgid "C<.devscripts> value: B<SALSA_DESC> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:557
+msgid "B<--desc-pattern>"
+msgstr "B<--desc-pattern>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:559
+msgid ""
+"Repo description pattern. Default to \"Debian package %p\". \"%p\" is "
+"replaced by repo name, while \"%P\" is replaced by repo name given in "
+"command (may contains full path)."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:563
+msgid "C<.devscripts> value: B<SALSA_DESC_PATTERN>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:565
+msgid "B<--email>, B<--no-email>, B<--disable-email>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:567
+msgid "Enable, ignore or disable email-on-push."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:569
+msgid "C<.devscripts> value: B<SALSA_EMAIL> (yes/ignore/no, default: ignore)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:571
+msgid "B<--email-recipient>"
+msgstr "B<--email-recipient>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:573
+msgid "Email-on-push recipient. Can be multi valued:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:575
+#, no-wrap
+msgid ""
+"  $ salsa update_safe myrepo \\\n"
+"        --email-recipient foo@foobar.org \\\n"
+"        --email-recipient bar@foobar.org\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:579
+msgid "If recipient value contains \"%p\", it is replaced by project name."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:581
+msgid ""
+"C<.devscripts> value: B<SALSA_EMAIL_RECIPIENTS> (use spaces to separate "
+"multiples recipients)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:584
+msgid ""
+"B<--enable-issues>, B<--no-enable-issues>, B<--disable-issues>, B<--no-"
+"disable-issues>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:587
+msgid "Enable, ignore or disable issues."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:589
+msgid ""
+"C<.devscripts> values: B<SALSA_ENABLE_ISSUES> (yes/ignore/no, default: "
+"ignore)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:591
+msgid "B<--enable-mr>, B<--no-enable-mr>, B<--disable-mr>, B<--no-disable-mr>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:593
+msgid "Enable, ignore or disable merge requests."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:595
+msgid ""
+"C<.devscripts> values: B<SALSA_ENABLE_MR> (yes/ignore/no, default: ignore)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:597
+msgid "B<--irc-channel>"
+msgstr "B<--irc-channel>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:599
+msgid ""
+"IRC channel for KGB or Irker. Can be used more than one time only with B<--"
+"irker>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:602
+msgid ""
+"B<Important>: channel must not include the first \"#\". If salsa finds a "
+"channel starting with \"#\", it will consider that the channel starts with 2 "
+"\"#\"!"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:605
+msgid "C<.devscript> value: B<SALSA_IRC_CHANNEL>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:607
+msgid "Multiple values must be space separated."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:609
+msgid ""
+"Since configuration files are read using B<sh>, be careful when using \"#\": "
+"you must enclose the channel with quotes, else B<sh> will consider it as a "
+"comment and will ignore this value."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:613
+msgid "B<--irker>, B<--no-irker>, B<--disable-irker>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:615
+msgid "Enable, ignore or disable Irker service"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:617
+msgid "C<.devscripts> values: B<SALSA_IRKER> (yes/ignore/no, default: ignore)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:619
+msgid "B<--irker-host>"
+msgstr "B<--irker-host>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:621
+msgid "Irker host. Default: ruprecht.snow-crash.org"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:623
+msgid "C<.devscripts> value: B<SALSA_IRKER_HOST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:625
+msgid "B<--irker-port>"
+msgstr "B<--irker-port>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:627
+msgid "Irker port. Default: empty (default value)"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:629
+msgid "C<.devscripts> value: B<SALSA_IRKER_PORT>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:631
+msgid "B<--kgb>, B<--no-kgb>, B<--disable-kgb>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:633
+msgid "Enable, ignore or disable KGB webhook."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:635
+msgid "C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:637
+msgid "B<--kgb-options>"
+msgstr "B<--kgb-options>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:639
+msgid ""
+"List of KGB enabled options (comma separated). Default: issues_events, "
+"merge_requests_events, note_events, pipeline_events, push_events, "
+"tag_push_events, wiki_page_events"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:643
+#, no-wrap
+msgid ""
+"  $ salsa update_safe debian/devscripts --kgb --irc-channel devscripts \\\n"
+"    --kgb-options 'merge_requests_events,issues_events,enable_ssl_verification'\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:646
+msgid ""
+"List of available options: confidential_comments_events, "
+"confidential_issues_events, confidential_note_events, "
+"enable_ssl_verification, issues_events, job_events, merge_requests_events, "
+"note_events, pipeline_events, tag_push_events, wiki_page_events"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:651
+msgid "C<.devscripts> value: B<SALSA_KGB_OPTIONS>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:653
+msgid "B<--no-fail>"
+msgstr "B<--no-fail>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:655
+msgid "Don't stop on error when using B<update_repo> with B<--all>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:657
+msgid "C<.devscripts> value: B<SALSA_NO_FAIL> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:659
+msgid "B<--rename-head>, B<--no-rename-head>"
+msgstr "B<--rename-head>, B<--no-rename-head>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:661
+msgid ""
+"Rename HEAD branch given by B<--source-branch> into B<--dest-branch> and "
+"change \"default branch\" of project. Works only with B<update_repo>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:664
+msgid "C<.devscripts> value: B<SALSA_RENAME_HEAD> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:668
+msgid "B<--source-branch>: default \"master\""
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:670
+msgid "C<.devscripts> value: B<SALSA_SOURCE_BRANCH>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:672
+msgid "B<--dest-branch>: default \"debian/master\""
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:674
+msgid "C<.devscripts> value: B<SALSA_DEST_BRANCH>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:678
+msgid "B<--tagpending>, B<--no-tagpending>, B<--disable-tagpending>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:680
+msgid "Enable, ignore or disable \"tagpending\" webhook."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:682
+msgid ""
+"C<.devscripts> value: B<SALSA_TAGPENDING> (yes/ignore/no, default: ignore)"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:686
+msgid "Merge requests options"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:690
+msgid "B<--mr-title>"
+msgstr "B<--mr-title>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:692
+msgid "Title for merge request. Default: last commit title."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:694
+msgid "B<--mr-desc>"
+msgstr "B<--mr-desc>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:696
+msgid "Description of new MR. Default:"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:700
+msgid "empty if B<--mr-title> is set"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:702
+msgid "last commit description if any"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:706
+msgid "B<--mr-dst-branch> (or second command line argument)"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:708
+msgid "Destination branch. Default to \"master\"."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:710
+msgid "B<--mr-dst-project> (or first command line argument)"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:712
+msgid ""
+"Destination project. Default: project from which the current project was "
+"forked; or, if not found, \"upstream\" value found using B<git remote --"
+"verbose show>; or using source project."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:716
+msgid ""
+"If B<--mr-dst-project> is set to B<same>, salsa will use source project as "
+"destination."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:719
+msgid "B<--mr-src-branch>"
+msgstr "B<--mr-src-branch>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:721
+msgid "Source branch. Default: current branch."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:723
+msgid "B<--mr-src-project>"
+msgstr "B<--mr-src-project>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:725
+msgid ""
+"Source project. Default: current project found using B<git remote --verbose "
+"show>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:728
+msgid "B<--mr-allow-squash>, B<--no-mr-allow-squash>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:730
+msgid "Allow upstream project to squash your commits, this is the default."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:732
+msgid "C<.devscripts> value: B<SALSA_MR_ALLOW_SQUASH> (yes/no)"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:734
+msgid "B<--mr-remove-source-branch>, B<--no-mr-remove-source-branch>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:736
+msgid "Remove source branch if merge request is accepted. Default: no."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:738
+msgid "C<.devscripts> value: B<SALSA_MR_REMOVE_SOURCE_BRANCH> (yes/no)"
+msgstr ""
+
+#. type: =head2
+#: ../scripts/salsa.pl:742
+msgid "Options to manage other Gitlab instances"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:746
+msgid "B<--api-url>"
+msgstr "B<--api-url>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:748
+msgid "GitLab API. Default: L<https://salsa.debian.org/api/v4>."
+msgstr ""
+"GitLab-API. Standardwert: L<https://salsa.debian.org/api/v4>."
+
+#. type: textblock
+#: ../scripts/salsa.pl:750
+msgid "C<.devscripts> value: B<SALSA_API_URL>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:752
+msgid "B<--git-server-url>"
+msgstr "B<--git-server-url>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:754
+msgid "Default to \"git@salsa.debian.org:\""
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:756
+msgid "C<.devscripts> value: B<SALSA_GIT_SERVER_URL>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:758
+msgid "B<--irker-server-url>"
+msgstr "B<--irker-server-url>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:760
+msgid "Default to \"ircs://irc.oftc.net:6697/\""
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:762
+msgid "C<.devscripts> value: B<SALSA_IRKER_SERVER_URL>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:764
+msgid "B<--kgb-server-url>"
+msgstr "B<--kgb-server-url>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:766
+msgid "Default to L<http://kgb.debian.net:9418/webhook/?channel=>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:768
+msgid "C<.devscripts> value: B<SALSA_KGB_SERVER_URL>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/salsa.pl:770
+msgid "B<--tagpending-server-url>"
+msgstr "B<--tagpending-server-url>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:772
+msgid "Default to L<https://webhook.salsa.debian.org/tagpending/>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:774
+msgid "C<.devscripts> value: B<SALSA_TAGPENDING_SERVER_URL>"
+msgstr ""
+
+#. type: =head3
+#: ../scripts/salsa.pl:778
+msgid "Configuration file example"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:780
+msgid ""
+"Example to use salsa with L<https://gitlab.ow2.org> (group \"lemonldap-ng\"):"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:782
+#, no-wrap
+msgid ""
+"  SALSA_TOKEN=`cat ~/.ow2-gitlab-token`\n"
+"  SALSA_API_URL=https://gitlab.ow2.org/api/v4\n"
+"  SALSA_GIT_SERVER_URL=git@gitlab.ow2.org:\n"
+"  SALSA_GROUP_ID=34\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:787
+msgid "Then to use it, add something like this in your C<.bashrc> file:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/salsa.pl:789
+#, no-wrap
+msgid ""
+"  alias llng_admin='salsa --conffile ~/.salsa-ow2.conf'\n"
+"\n"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:793
+msgid "B<dpt-salsa>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:797
+msgid "Xavier Guimard E<lt>yadd@debian.orgE<gt>"
+msgstr "Xavier Guimard E<lt>yadd@debian.orgE<gt>"
+
+#. type: textblock
+#: ../scripts/salsa.pl:801
+msgid "Copyright (C) 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:803
+msgid ""
+"It contains code formely found in L<dpt-salsa> I<(pkg-perl-tools)> copyright "
+"2018, gregor herrmann E<lt>gregoa@debian.orgE<gt>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:806
+msgid ""
+"This library is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2, or (at your option)  any later "
+"version."
+msgstr ""
+"Dieses Programm ist freie Software; Sie können es unter den Bedingungen der "
+"GNU General Public License, Version 2 oder (nach Ihrer Wahl) neuer, wie sie von der Free "
+"Software Foundation veröffentlicht wurde, weitergeben und/oder ändern."
+
+#. type: textblock
+#: ../scripts/salsa.pl:811
+msgid ""
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/salsa.pl:816
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"this program.  If not, see L<http://www.gnu.org/licenses/>."
+msgstr ""
 
 #. type: TH
 #: ../doc/suspicious-source.1:15
@@ -21111,9 +22923,10 @@ msgid ""
 "version obtained from F<debian/changelog>. Package version is the "
 "concatenation of all \"group\" upstream version."
 msgstr ""
-"* B<group> erfordert, dass der herunterzuladende Tarball der Ursprungsautoren "
-"neuer als die aus F<debian/changelog> erhaltene Version ist. Die Paketversion "
-"ist aus allen »group«-Versionen der Ursprungsautoren zusammengesetzt."
+"* B<group> erfordert, dass der herunterzuladende Tarball der "
+"Ursprungsautoren neuer als die aus F<debian/changelog> erhaltene Version "
+"ist. Die Paketversion ist aus allen »group«-Versionen der Ursprungsautoren "
+"zusammengesetzt."
 
 #. type: =item
 #: ../scripts/uscan.pl:230
@@ -21276,8 +23089,8 @@ msgstr "B<@DEB_EXT@>"
 #: ../scripts/uscan.pl:289
 msgid "This is substituted by the typical Debian extension regexp (capturing)."
 msgstr ""
-"Dies wird durch den regulären Ausdruck der typischen "
-"Debian-Dateinamenerweiterung ersetzt. (einfangend)"
+"Dies wird durch den regulären Ausdruck der typischen Debian-"
+"Dateinamenerweiterung ersetzt. (einfangend)"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:291
@@ -21480,8 +23293,8 @@ msgid ""
 "either B<http> or B<ftp> by URL."
 msgstr ""
 "Dieser Modus ist die Voreinstellung, durch den der angegebene Tarball von "
-"der Archiv-URL im Web heruntergeladen wird. Der interne B<Modus> wird je nach "
-"URL automatisch auf B<http> oder B<ftp> aktualisiert."
+"der Archiv-URL im Web heruntergeladen wird. Der interne B<Modus> wird je "
+"nach URL automatisch auf B<http> oder B<ftp> aktualisiert."
 
 #. type: textblock
 #: ../scripts/uscan.pl:372
@@ -21492,8 +23305,8 @@ msgid ""
 msgstr ""
 "Dieser Modus greift mit dem Befehl B<git> direkt auf das Git-Archiv der "
 "Ursprungsautoren zu und packt den Quelltextverzeichnisbaum mit der "
-"angegebenen Markierung über I<Vergleichsmuster> in "
-"I<Quellpaketversion>B<.tar.xz>."
+"angegebenen Markierung über I<Vergleichsmuster> in I<Quellpaketversion>B<."
+"tar.xz>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:376
@@ -21501,8 +23314,8 @@ msgid ""
 "If the upstream publishes the released tarball via its web interface, please "
 "use it instead of using this mode. This mode is the last resort method."
 msgstr ""
-"Falls die Ursprungsautoren den veröffentlichten Tarball über ihre "
-"Web-Schnittstelle veröffentlichen, verwenden Sie bitte diese anstelle dieses "
+"Falls die Ursprungsautoren den veröffentlichten Tarball über ihre Web-"
+"Schnittstelle veröffentlichen, verwenden Sie bitte diese anstelle dieses "
 "Modus. Dieser Modus ist die letzte Rückfalloption."
 
 #. type: textblock
@@ -21518,8 +23331,8 @@ msgstr ""
 "Für den Git-Modus gibt I<Vergleichsmuster> das vollständige "
 "Zeichenkettenmuster für Markierungen anstelle von Hrefs an. Falls "
 "I<Vergleichsmuster> auf B<refs/tags/>I<Markierungsvergleichsmuster> gesetzt "
-"ist, lädt B<uscan> die Quelle von der B<refs/tags/I<passenden-Markierung> des "
-"Git-Depots herunter. Die Version der Ursprungsautoren wird aus dem "
+"ist, lädt B<uscan> die Quelle von der B<refs/tags/I<passenden-Markierung> "
+"des Git-Depots herunter. Die Version der Ursprungsautoren wird aus dem "
 "Zusammenhängen der passenden Teile in B<(> … B<)> mit B<.> extrahiert. Siehe "
 "L<»WATCH«-DATEIBEISPIELE>."
 
@@ -21565,19 +23378,19 @@ msgid ""
 "cloning separately.  The only local change is that uscan will run a \"fetch"
 "\" command to refresh the repository."
 msgstr ""
-"Falls das aktuelle Verzeichnis ein Git-Depot ist und das gesuchte Depot "
-"eine der registrierten »externen« aufgeführt ist, wird Uscan es benutzen, "
-"statt es separat zu klonen. Die einzige lokale Änderung besteht darin, dass "
-"Uscan einen »fetch«-Befehl zum Erneuern des Depots ausführt."
+"Falls das aktuelle Verzeichnis ein Git-Depot ist und das gesuchte Depot eine "
+"der registrierten »externen« aufgeführt ist, wird Uscan es benutzen, statt "
+"es separat zu klonen. Die einzige lokale Änderung besteht darin, dass Uscan "
+"einen »fetch«-Befehl zum Erneuern des Depots ausführt."
 
 #. type: =item
 #: ../scripts/uscan.pl:405
 msgid "B<pretty=>I<rule>"
 msgstr "B<pretty=>I<Regel>"
 
+# FIXME There's no manpage of get-log in Debian.
 #. type: textblock
 #: ../scripts/uscan.pl:407
-# FIXME There's no manpage of get-log in Debian.
 msgid ""
 "Set the upstream version string to an arbitrary format as an optional "
 "B<opts> argument when the I<matching-pattern> is B<HEAD> or B<heads/"
@@ -21585,12 +23398,12 @@ msgid ""
 "manpage under B<tformat>.  The default is B<pretty=0.0~git%cd.%h>.  No "
 "B<uversionmangle> rules is applicable for this case."
 msgstr ""
-"setzt die Versionszeichenkette der Ursprungsautoren auf ein beliebiges Format "
-"als optionales B<opts>-Argument, wenn das I<Vergleichsmuster> B<HEAD> oder "
-"B<heads/>I<Zweig> für den B<git>-Modus ist. Die genaue Syntax finden Sie in "
-"der Handbuchseite von B<get-log> unter B<tformat>. Die Voreinstellung ist "
-"B<pretty=0.0~git%cd.%h>. In diesem Fall können keine B<uversionmangle>-Regeln "
-"angewendet werden."
+"setzt die Versionszeichenkette der Ursprungsautoren auf ein beliebiges "
+"Format als optionales B<opts>-Argument, wenn das I<Vergleichsmuster> B<HEAD> "
+"oder B<heads/>I<Zweig> für den B<git>-Modus ist. Die genaue Syntax finden "
+"Sie in der Handbuchseite von B<get-log> unter B<tformat>. Die Voreinstellung "
+"ist B<pretty=0.0~git%cd.%h>. In diesem Fall können keine B<uversionmangle>-"
+"Regeln angewendet werden."
 
 #. type: textblock
 #: ../scripts/uscan.pl:413
@@ -21606,15 +23419,16 @@ msgid ""
 "tagging with random alphabetic tags."
 msgstr ""
 "Wenn B<pretty=describe> benutzt wird, ist die Versionszeichenkette der "
-"Ursprungsautoren stattdessen die Ausgabe des Befehls »B<git describe --tags | "
-"sed s/-/./g>«. Falls das Commit zum Beispiel das B<5>. nach der letzten "
+"Ursprungsautoren stattdessen die Ausgabe des Befehls »B<git describe --tags "
+"| sed s/-/./g>«. Falls das Commit zum Beispiel das B<5>. nach der letzten "
 "Markierung B<v2.17.12> und sein Kurz-Hash B<ged992511> ist, dann lautet die "
 "Zeichenkette B<v2.17.12.5.ged992511>. In diesem Fall ist es eine gute Idee, "
 "B<uversionmangle=s/^/0.0~/> oder B<uversionmangle=s/^v//> hinzuzufügen, um "
 "die Versionszeichenkette der Ursprungsautoren mit Debian kompatibel zu "
-"machen. B<uversionmangle=s/^v//> funktioniert möglicherweise ebenfalls. Bitte "
-"beachten Sie, dass, damit B<pretty=describe> gut klappt, die Ursprungsautoren "
-"das Markieren mit zufälligen alphabetischen Markierungen vermeiden müssen."
+"machen. B<uversionmangle=s/^v//> funktioniert möglicherweise ebenfalls. "
+"Bitte beachten Sie, dass, damit B<pretty=describe> gut klappt, die "
+"Ursprungsautoren das Markieren mit zufälligen alphabetischen Markierungen "
+"vermeiden müssen."
 
 #. type: textblock
 #: ../scripts/uscan.pl:422
@@ -21657,8 +23471,8 @@ msgid ""
 "full clone operation."
 msgstr ""
 "setzt den Git-Klonbetriebs-<Modus>. Voreinstellung ist B<gitmode=shallow>. "
-"Für einige dumme Git-Server müssen Sie möglicherweise manuell B<gitmode=full> "
-"setzen, um das vollständige Klonen zu erzwingen."
+"Für einige dumme Git-Server müssen Sie möglicherweise manuell "
+"B<gitmode=full> setzen, um das vollständige Klonen zu erzwingen."
 
 #. type: textblock
 #: ../scripts/uscan.pl:438
@@ -21824,9 +23638,9 @@ msgstr ""
 msgid "B<plain>: search pattern in the full page"
 msgstr "B<plain>: sucht Muster in der gesamten Seite"
 
+# FIXME s/is page/if page/
 #. type: textblock
 #: ../scripts/uscan.pl:503
-# FIXME s/is page/if page/
 msgid ""
 "This is useful is page content is not HTML but in JSON. Example with npmjs."
 "com:"
@@ -22590,11 +24404,10 @@ msgid ""
 msgstr ""
 "Falls die Signaturdatei heruntergeladen wird, wird der Tarball der "
 "Ursprungsautoren anhand dieser Signaturdatei auf seine Echtheit hin "
-"überprüft. Dies geschieht mittels des gehärteten Schlüsselbunds "
-"F<debian/upstream/signing-key.asc> (siehe L<BEISPIELE FÜR "
-"SCHLÜSSELBUNDDATEIEN>). Falls seine Signatur ungültig ist oder nicht durch "
-"einen der aufgeführten Schlüssel erstellt wurde, wird B<uscan> einen Fehler "
-"melden."
+"überprüft. Dies geschieht mittels des gehärteten Schlüsselbunds F<debian/"
+"upstream/signing-key.asc> (siehe L<BEISPIELE FÜR SCHLÜSSELBUNDDATEIEN>). "
+"Falls seine Signatur ungültig ist oder nicht durch einen der aufgeführten "
+"Schlüssel erstellt wurde, wird B<uscan> einen Fehler melden."
 
 #. type: textblock
 #: ../scripts/uscan.pl:817
@@ -22787,8 +24600,8 @@ msgid ""
 msgstr ""
 "In den BEISPIELEN unterhalb werden einige nicht dokumentierte kürzere "
 "Konfigurationszeichenketten benutzt, um Ihnen Tipparbeit zu ersparen. Dies "
-"ist gewollt. B<uscan> wurde so geschrieben, dass es einige häufige sinngemäße "
-"Abkürzungen akzeptiert, aber treiben Sie es nicht auf die Spitze."
+"ist gewollt. B<uscan> wurde so geschrieben, dass es einige häufige "
+"sinngemäße Abkürzungen akzeptiert, aber treiben Sie es nicht auf die Spitze."
 
 #. type: =head2
 #: ../scripts/uscan.pl:895
@@ -23213,9 +25026,9 @@ msgstr ""
 "      debian uupdate\n"
 "\n"
 
+# FIXME s/tailing/trailing/
 #. type: textblock
 #: ../scripts/uscan.pl:1037
-# FIXME s/tailing/trailing/
 msgid ""
 "Please note the subtle difference of a space before the tailing B<\\> "
 "between the first and the last examples."
@@ -23874,11 +25687,10 @@ msgstr ""
 #: ../scripts/uscan.pl:1268
 msgid ""
 "Package version is then the concatenation of upstream versions separated by "
-"\"+~\". If you use a repack suffix, you must set it in each line."
+"\"+~\"."
 msgstr ""
 "Die Paketversion ist dann zusammengesetzt aus den Versionen der "
-"Ursprungsautoren, getrennt durch »+~«. Falls Sie Neupack-Endung verwenden, "
-"müssen Sie sie in jeder Zeile setzen."
+"Ursprungsautoren, getrennt durch »+~«."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1271
@@ -23894,10 +25706,10 @@ msgid ""
 "release."
 msgstr ""
 "Falls die Ursprungsautoren ihren Code nur über das Git-Depot veröffentlichen "
-"und ihr Code keine Web-Schnittstelle hat, um den Veröffentlichungs-Tarball zu "
-"bekommen, können Sie B<uscan> mit den Markierungen des Git-Depots benutzen, "
-"um die neue Veröffentlichung der Originalautoren nachzuverfolgen und zu "
-"paketieren."
+"und ihr Code keine Web-Schnittstelle hat, um den Veröffentlichungs-Tarball "
+"zu bekommen, können Sie B<uscan> mit den Markierungen des Git-Depots "
+"benutzen, um die neue Veröffentlichung der Originalautoren nachzuverfolgen "
+"und zu paketieren."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1277
@@ -23985,11 +25797,11 @@ msgid ""
 "%m%d --pretty=0.0~git%cd.%h>\" on this local copy of repository as its "
 "default behavior."
 msgstr ""
-"Bitte beachten Sie, dass eine lokale oberflächlich mit »B<git clone --bare "
-"--depth=1> …« angelegte Kopie des Git-Depots normalerweise im Zielverzeichnis "
+"Bitte beachten Sie, dass eine lokale oberflächlich mit »B<git clone --bare --"
+"depth=1> …« angelegte Kopie des Git-Depots normalerweise im Zielverzeichnis "
 "erstellt wird. B<uscan> erzeugt standardmäßig die neue Version der "
-"Ursprungsautoren mit »B<git log --date=format:%Y%m%d --pretty=0.0~git%cd.%h>« "
-"auf dieser lokalen Kopie des Depots."
+"Ursprungsautoren mit »B<git log --date=format:%Y%m%d --pretty=0.0~git%cd."
+"%h>« auf dieser lokalen Kopie des Depots."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1308
@@ -23998,8 +25810,8 @@ msgid ""
 "by adding B<pretty> and B<date> options to the B<opts> arguments."
 msgstr ""
 "Das Erzeugen der Versionszeichenkette der Ursprungsautoren kann nach Ihrem "
-"Geschmack angepasst werden, indem Sie die den B<opts>-Argumenten die Optionen "
-"B<pretty> und B<date> hinzufügen."
+"Geschmack angepasst werden, indem Sie die den B<opts>-Argumenten die "
+"Optionen B<pretty> und B<date> hinzufügen."
 
 #. type: =head1
 #: ../scripts/uscan.pl:1311
@@ -24119,8 +25931,8 @@ msgid ""
 "be identified in 3 ways using the hexadecimal form."
 msgstr ""
 "Nehmen wir einmal an, dass »B<< Uscan-Testschlüssel (kein Geheimnis) "
-"<none@debian.org> >> der Ursprungsautoren Pakete mit einem geheimen "
-"OpenPGP-Schlüssel signiert und den zugehörigen öffentlichen OpenPGP-Schlüssel "
+"<none@debian.org> >> der Ursprungsautoren Pakete mit einem geheimen OpenPGP-"
+"Schlüssel signiert und den zugehörigen öffentlichen OpenPGP-Schlüssel "
 "veröffentlicht. Dieser öffentliche OpenPGP-Schlüssel kann mittels der "
 "hexadezimalen Form auf drei Arten identifiziert werden."
 
@@ -24130,9 +25942,9 @@ msgid ""
 "* The fingerprint as the 20 byte data calculated from the public OpenPGP "
 "key. E.  g., 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>'"
 msgstr ""
-"* Der Fingerabdruck als die 20 Byte Daten, die vom öffentlichen "
-"OpenPGP-Schlüssel berechnet wurden. Z.B.»B<CF21 8F0E 7EAB F584 B7E2 0402 C77E "
-"2D68 7254 3FAF>«"
+"* Der Fingerabdruck als die 20 Byte Daten, die vom öffentlichen OpenPGP-"
+"Schlüssel berechnet wurden. Z.B.»B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 "
+"7254 3FAF>«"
 
 #. type: =item
 #: ../scripts/uscan.pl:1366
@@ -24140,8 +25952,8 @@ msgid ""
 "* The long keyid as the last 8 byte data of the fingerprint. E. g., "
 "'B<C77E2D6872543FAF>'"
 msgstr ""
-"* Die lange Schlüsselkennung als die letzten acht Byte des Fingerabdrucks. "
-"Z.B. »B<C77E2D6872543FAF>«"
+"* Die lange Schlüsselkennung als die letzten acht Byte des Fingerabdrucks. Z."
+"B. »B<C77E2D6872543FAF>«"
 
 #. type: =item
 #: ../scripts/uscan.pl:1369
@@ -24149,8 +25961,8 @@ msgid ""
 "* The short keyid is the last 4 byte data of the fingerprint. E. g., "
 "'B<72543FAF>'"
 msgstr ""
-"* Die kurze Schlüsselkennung als die letzten vier Byte des Fingerabdrucks. "
-"Z.B. »B<72543FAF>«"
+"* Die kurze Schlüsselkennung als die letzten vier Byte des Fingerabdrucks. Z."
+"B. »B<72543FAF>«"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1374
@@ -24215,8 +26027,8 @@ msgid ""
 "upstream-signing-key.pgp>, are still supported but deprecated."
 msgstr ""
 "Die binären Schlüsselbunddateien F<debian/upstream/signing-key.pgp> und "
-"F<debian/upstream-signing-key.pgp> werden immer noch unterstützt, sind jedoch "
-"missbilligt."
+"F<debian/upstream-signing-key.pgp> werden immer noch unterstützt, sind "
+"jedoch missbilligt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1398
@@ -24283,37 +26095,44 @@ msgstr "BEFEHLZEILENOPTIONEN"
 msgid "For the basic usage, B<uscan> does not require to set these options."
 msgstr "Für die einfache Benutzung benötigt B<uscan> diese Optionen nicht."
 
-#. type: textblock
-#: ../scripts/uscan.pl:1427
+#. type: verbatim
+#: ../scripts/uscan.pl:1435
+#, no-wrap
 msgid ""
-"Don't read any configuration files. This can only be used as the first "
-"option given on the command-line."
+"  uscan --conf-file test.conf --verbose\n"
+"\n"
 msgstr ""
-"liest keine Konfigurationsdateien. Dies kann nur als erste auf der "
-"Befehlszeile angegebene Option benutzt werden."
+
+#. type: verbatim
+#: ../scripts/uscan.pl:1439
+#, no-wrap
+msgid ""
+"  uscan --conf-file +test.conf --verbose\n"
+"\n"
+msgstr ""
 
 #. type: =item
-#: ../scripts/uscan.pl:1430
+#: ../scripts/uscan.pl:1450
 msgid "B<--no-verbose>"
 msgstr "B<--no-verbose>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1432
+#: ../scripts/uscan.pl:1452
 msgid "Don't report verbose information. (default)"
 msgstr "gibt keine detaillierten Informationen aus. (Voreinstellung)"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1436
+#: ../scripts/uscan.pl:1456
 msgid "Report verbose information."
 msgstr "zeigt detaillierte Informationen an."
 
 #. type: =item
-#: ../scripts/uscan.pl:1438
+#: ../scripts/uscan.pl:1458
 msgid "B<--debug>, B<-vv>"
 msgstr "B<--debug>, B<-vv>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1440
+#: ../scripts/uscan.pl:1460
 msgid ""
 "Report verbose information including the downloaded web pages as processed "
 "to STDERR for debugging."
@@ -24322,12 +26141,12 @@ msgstr ""
 "Webseiten als verarbeitet zur Fehlersuche auf die Standardfehlerausgabe."
 
 #. type: =item
-#: ../scripts/uscan.pl:1443
+#: ../scripts/uscan.pl:1463
 msgid "B<--dehs>"
 msgstr "B<--dehs>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1445
+#: ../scripts/uscan.pl:1465
 msgid ""
 "Send DEHS style output (XML-type) to STDOUT, while send all other uscan "
 "output to STDERR."
@@ -24336,34 +26155,34 @@ msgstr ""
 "anderen Ausgaben von Uscan an die Standardfehlerausgabe gesandt werden."
 
 #. type: =item
-#: ../scripts/uscan.pl:1448
+#: ../scripts/uscan.pl:1468
 msgid "B<--no-dehs>"
 msgstr "B<--no-dehs>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1450
+#: ../scripts/uscan.pl:1470
 msgid "Use only traditional uscan output format. (default)"
 msgstr "verwendet nur das traditionelle Uscan-Ausgabeformat.(Voreinstellung)"
 
 #. type: =item
-#: ../scripts/uscan.pl:1452
+#: ../scripts/uscan.pl:1472
 msgid "B<--download>, B<-d>"
 msgstr "B<--download>, B<-d>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1454
+#: ../scripts/uscan.pl:1474
 msgid "Download the new upstream release. (default)"
 msgstr ""
 "lädt die neue Veröffentlichung der Ursprungsautoren herunter. "
 "(Voreinstellung)"
 
 #. type: =item
-#: ../scripts/uscan.pl:1456
+#: ../scripts/uscan.pl:1476
 msgid "B<--force-download>, B<-dd>"
 msgstr "B<--force-download>, B<-dd>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1458
+#: ../scripts/uscan.pl:1478
 msgid ""
 "Download the new upstream release even if up-to-date. (may not overwrite the "
 "local file)"
@@ -24372,12 +26191,12 @@ msgstr ""
 "wenn sie aktuell ist (wird jedoch nicht die lokale Datei überschreiben)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1460
+#: ../scripts/uscan.pl:1480
 msgid "B<--overwrite-download>, B<-ddd>"
 msgstr "B<--overwrite-download>, B<-ddd>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1462
+#: ../scripts/uscan.pl:1482
 msgid ""
 "Download the new upstream release even if up-to-date. (may overwrite the "
 "local file)"
@@ -24386,65 +26205,65 @@ msgstr ""
 "wenn sie aktuell ist (kann die lokale Datei überschreiben)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1464
+#: ../scripts/uscan.pl:1484
 msgid "B<--no-download>, B<--nodownload>"
 msgstr "B<--no-download>, B<--nodownload>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1466
+#: ../scripts/uscan.pl:1486
 msgid "Don't download and report information."
 msgstr "lädt die Informationen nicht herunter und meldet sie nicht."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1468
+#: ../scripts/uscan.pl:1488
 msgid "Previously downloaded tarballs may be used."
 msgstr "Vorher heruntergeladene Tarbälle können verwendet werden."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1470
+#: ../scripts/uscan.pl:1490
 msgid "Change default to B<--skip-signature>."
 msgstr "ändert die Voreinstellung in B<--skip-signature>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1472
+#: ../scripts/uscan.pl:1492
 msgid "B<--signature>"
 msgstr "B<--signature>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1474
+#: ../scripts/uscan.pl:1494
 msgid "Download signature. (default)"
 msgstr "lädt die Signatur herunter. (Voreinstellung)"
 
 #. type: =item
-#: ../scripts/uscan.pl:1476
+#: ../scripts/uscan.pl:1496
 msgid "B<--no-signature>"
 msgstr "B<--no-signature>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1478
+#: ../scripts/uscan.pl:1498
 msgid "Don't download signature but verify if already downloaded."
 msgstr ""
 "lädt die Signatur nicht herunter, prüft jedoch, ob sie bereits "
 "heruntergeladen wurde."
 
 #. type: =item
-#: ../scripts/uscan.pl:1480
+#: ../scripts/uscan.pl:1500
 msgid "B<--skip-signature>"
 msgstr "B<--skip-signature>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1482
+#: ../scripts/uscan.pl:1502
 msgid "Don't bother download signature nor verifying signature."
 msgstr ""
 "belästigt weder mit dem Herunterladen noch mit dem Prüfen der Signatur."
 
 #. type: =item
-#: ../scripts/uscan.pl:1484
+#: ../scripts/uscan.pl:1504
 msgid "B<--safe>, B<--report>"
 msgstr "B<--safe>, B<--report>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1486
+#: ../scripts/uscan.pl:1506
 msgid ""
 "Avoid running unsafe scripts by skipping both the repacking of the "
 "downloaded package and the updating of the new source tree."
@@ -24454,12 +26273,12 @@ msgstr ""
 "Quellcodeverzeichnisbaums übersprungen wird."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1489
+#: ../scripts/uscan.pl:1509
 msgid "Change default to B<--no-download> and B<--skip-signature>."
 msgstr "ändert die Voreinstellung in B<--no-download> und B<--skip-signature>."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1491
+#: ../scripts/uscan.pl:1511
 msgid ""
 "When the objective of running B<uscan> is to gather the upstream package "
 "status under the security conscious environment, please make sure to use "
@@ -24470,22 +26289,22 @@ msgstr ""
 "Sie sicher, dass Sie diese Option verwenden."
 
 #. type: =item
-#: ../scripts/uscan.pl:1494
+#: ../scripts/uscan.pl:1514
 msgid "B<--report-status>"
 msgstr "B<--report-status>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1496
+#: ../scripts/uscan.pl:1516
 msgid "This is equivalent of setting \"B<--verbose --safe>\"."
 msgstr "Dies entspricht dem Setzen der Option »B<--verbose --safe>«"
 
 #. type: =item
-#: ../scripts/uscan.pl:1498
+#: ../scripts/uscan.pl:1518
 msgid "B<--download-version> I<version>"
 msgstr "B<--download-version> I<Version>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1500
+#: ../scripts/uscan.pl:1520
 msgid ""
 "Specify the I<version> which the upstream release must match in order to be "
 "considered, rather than using the release with the highest version.  (a best "
@@ -24497,12 +26316,12 @@ msgstr ""
 "Funktionalität)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1504
+#: ../scripts/uscan.pl:1524
 msgid "B<--download-debversion> I<version>"
 msgstr "B<--download-debversion> I<version>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1506
+#: ../scripts/uscan.pl:1526
 msgid ""
 "Specify the Debian package version to download the corresponding upstream "
 "release version.  The B<dversionmangle> and B<uversionmangle> rules are "
@@ -24514,19 +26333,19 @@ msgstr ""
 "bestmöglich erfüllte Funktionalität)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1510
+#: ../scripts/uscan.pl:1530
 msgid "B<--download-current-version>"
 msgstr "B<--download-current-version>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1512
+#: ../scripts/uscan.pl:1532
 msgid "Download the currently packaged version.  (a best effort feature)"
 msgstr ""
 "lädt die aktuelle paketierte Version herunter (eine bestmöglich erfüllte "
 "Funktionalität)."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1517 ../scripts/uscan.pl:1521
+#: ../scripts/uscan.pl:1537 ../scripts/uscan.pl:1541
 msgid ""
 "See the below section L<Directory name checking> for an explanation of this "
 "option."
@@ -24535,7 +26354,7 @@ msgstr ""
 "von Verzeichnisnamen>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1523
+#: ../scripts/uscan.pl:1543
 msgid ""
 "B<--destdir> I<path> Normally, B<uscan> changes its internal current "
 "directory to the package's source directory where the F<debian/> is "
@@ -24550,7 +26369,7 @@ msgstr ""
 "Verzeichnisses gesetzt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1529
+#: ../scripts/uscan.pl:1549
 msgid ""
 "This default destination directory can be overridden by setting B<--destdir> "
 "option to a particular I<path>.  If this I<path> is a relative path, the "
@@ -24566,9 +26385,9 @@ msgstr ""
 "absolut ist, wird das Zielverzeichnis ungeachtet des internen aktuellen "
 "Verzeichnis, in dem B<uscan> ausgeführt wird, auf I<Pfad> gesetzt."
 
-#. type: textblock
-#: ../scripts/uscan.pl:1536
 # FIXME s/sinple/simple/
+#. type: textblock
+#: ../scripts/uscan.pl:1556
 msgid ""
 "The above is true not only for the sinple B<uscan> run in the single source "
 "tree but also for the advanced scanning B<uscan> run with subdirectories "
@@ -24580,7 +26399,7 @@ msgstr ""
 "liegen."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1540
+#: ../scripts/uscan.pl:1560
 msgid ""
 "One exception is when B<--watchfile> and B<--package> are used together.  "
 "For this case, the internal current directory of B<uscan> execution and the "
@@ -24596,7 +26415,7 @@ msgstr ""
 "außer Kraft gesetzt werden."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1548
+#: ../scripts/uscan.pl:1568
 msgid ""
 "Specify the name of the package to check for rather than examining F<debian/"
 "changelog>; this requires the B<--upstream-version> (unless a version is "
@@ -24615,12 +26434,12 @@ msgstr ""
 "nützlichsten."
 
 #. type: =item
-#: ../scripts/uscan.pl:1555
+#: ../scripts/uscan.pl:1575
 msgid "B<--upstream-version> I<upstream-version>"
 msgstr "B<--upstream-version> I<Version_der_Ursprungsautoren>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1557
+#: ../scripts/uscan.pl:1577
 msgid ""
 "Specify the current upstream version rather than examine F<debian/watch> or "
 "F<debian/changelog> to determine it. This is ignored if a directory scan is "
@@ -24632,12 +26451,12 @@ msgstr ""
 "eine F<debian/watch>-Datei gefunden wird."
 
 #. type: =item
-#: ../scripts/uscan.pl:1561
+#: ../scripts/uscan.pl:1581
 msgid "B<--watchfile> I<watchfile>"
 msgstr "B<--watchfile> I<watch-Datei>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1563
+#: ../scripts/uscan.pl:1583
 msgid ""
 "Specify the I<watchfile> rather than perform a directory scan to determine "
 "it.  If this option is used without B<--package>, then B<uscan> must be "
@@ -24650,9 +26469,9 @@ msgstr ""
 "aufgerufen werden (so dass F<debian/changelog> einfach beim Hochlaufen des "
 "Verzeichnisbaums gefunden werden kann)."
 
-#. type: textblock
-#: ../scripts/uscan.pl:1568
 # FIXME s/anywhare/anywhere/
+#. type: textblock
+#: ../scripts/uscan.pl:1588
 msgid ""
 "One exception is when B<--watchfile> and B<--package> are used together.  "
 "B<uscan> can be called from anywhare and the internal current directory of "
@@ -24665,17 +26484,17 @@ msgstr ""
 "auf das aktuelle Verzeichnis F<.> gesetzt, von wo B<uscan> gestartet wird."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1573
+#: ../scripts/uscan.pl:1593
 msgid "See more in the B<--destdir> explanation."
 msgstr "Weitere Einzelheiten erfahren Sie in der Erläuterung von B<--destdir>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1575
+#: ../scripts/uscan.pl:1595
 msgid "B<--bare>"
 msgstr "B<--bare>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1577
+#: ../scripts/uscan.pl:1597
 msgid ""
 "Disable all site specific special case codes to perform URL redirections and "
 "page content alterations."
@@ -24684,12 +26503,12 @@ msgstr ""
 "Weiterleitungen und Änderungen des Seiteninhalts durchführen."
 
 #. type: =item
-#: ../scripts/uscan.pl:1580
+#: ../scripts/uscan.pl:1600
 msgid "B<--no-exclusion>"
 msgstr "B<--no-exclusion>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1582
+#: ../scripts/uscan.pl:1602
 msgid ""
 "Don't automatically exclude files mentioned in F<debian/copyright> field "
 "B<Files-Excluded>."
@@ -24698,64 +26517,64 @@ msgstr ""
 "erwähnt wurden, nicht automatisch aus."
 
 #. type: =item
-#: ../scripts/uscan.pl:1584
+#: ../scripts/uscan.pl:1604
 msgid "B<--pasv>"
 msgstr "B<--pasv>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1586
+#: ../scripts/uscan.pl:1606
 msgid "Force PASV mode for FTP connections."
 msgstr "erzwingt bei FTP-Verbindungen den PASV-Modus."
 
 #. type: =item
-#: ../scripts/uscan.pl:1588
+#: ../scripts/uscan.pl:1608
 msgid "B<--no-pasv>"
 msgstr "B<--no-pasv>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1590
+#: ../scripts/uscan.pl:1610
 msgid "Don't use PASV mode for FTP connections."
 msgstr "verwendet bei FTP-Verbindungen nicht den PASV-Modus."
 
 #. type: TP
-#: ../scripts/uscan.pl:1592 ../scripts/uupdate.1:83
+#: ../scripts/uscan.pl:1612 ../scripts/uupdate.1:83
 #, no-wrap
 msgid "B<--no-symlink>"
 msgstr "B<--no-symlink>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1594
+#: ../scripts/uscan.pl:1614
 msgid "Don't rename nor repack upstream tarball."
 msgstr "benennt den Original-Tarball weder um, noch wird er neu gepackt."
 
 #. type: =item
-#: ../scripts/uscan.pl:1596
+#: ../scripts/uscan.pl:1616
 msgid "B<--timeout> I<N>"
 msgstr "B<--timeout> I<N>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1598
+#: ../scripts/uscan.pl:1618
 msgid "Set timeout to I<N> seconds (default 20 seconds)."
 msgstr ""
 "setzt die Zeitüberschreitung auf I<N> Sekunden (Voreinstellung 20 Sekunden)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1600
+#: ../scripts/uscan.pl:1620
 msgid "B<--user-agent>, B<--useragent>"
 msgstr "B<--user-agent>, B<--useragent>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1602
+#: ../scripts/uscan.pl:1622
 msgid "Override the default user agent header."
 msgstr "setzt die vorgegebene User-Agent-Kopfzeile außer Kraft. "
 
 #. type: textblock
-#: ../scripts/uscan.pl:1606
+#: ../scripts/uscan.pl:1626
 msgid "Give brief usage information."
 msgstr "gibt eine kurze Gebrauchsinformation."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1614
+#: ../scripts/uscan.pl:1634
 msgid ""
 "B<uscan> also accepts following options and passes them to B<mk-origtargz>:"
 msgstr ""
@@ -24763,7 +26582,7 @@ msgstr ""
 "origtargz> weiter:"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1620
+#: ../scripts/uscan.pl:1640
 msgid ""
 "Make B<orig.tar.gz> (with the appropriate extension) symlink to the "
 "downloaded files. (This is the default behavior.)"
@@ -24772,21 +26591,21 @@ msgstr ""
 "heruntergeladenen Dateien. (Dies ist das Standardverhalten.)"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1625
+#: ../scripts/uscan.pl:1645
 msgid "Instead of symlinking as described above, copy the downloaded files."
 msgstr ""
 "kopiert die heruntergeladenen Dateien, statt, wie oben beschrieben, "
 "symbolische Verweise darauf zu erstellen."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1629
+#: ../scripts/uscan.pl:1649
 msgid "Instead of symlinking as described above, rename the downloaded files."
 msgstr ""
 "benennt die heruntergeladenen Dateien um, statt, wie oben beschrieben, "
 "symbolische Verweise darauf zu erstellen."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1633
+#: ../scripts/uscan.pl:1653
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xpi "
 "archive, repack it to the specified compression (see B<--compression>)."
@@ -24796,7 +26615,7 @@ msgstr ""
 "speziellen Komprimierung neu gepackt (siehe B<--compression>)."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1636
+#: ../scripts/uscan.pl:1656
 msgid ""
 "The unzip package must be installed in order to repack zip and jar archives, "
 "the mozilla-devscripts package must be installed to repack xpi archives, and "
@@ -24808,12 +26627,12 @@ msgstr ""
 "LZMA- oder Xz-Tar-Archive neu zu packen."
 
 #. type: =item
-#: ../scripts/uscan.pl:1640
+#: ../scripts/uscan.pl:1660
 msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1642
+#: ../scripts/uscan.pl:1662
 msgid ""
 "In the case where the upstream sources are repacked (either because B<--"
 "repack> option is given or F<debian/copyright> contains the field B<Files-"
@@ -24828,12 +26647,12 @@ msgstr ""
 "B<xz> für Tarbälle, die direkt aus dem Git-Depot erstellt werden."
 
 #. type: =item
-#: ../scripts/uscan.pl:1648
+#: ../scripts/uscan.pl:1668
 msgid "B<--copyright-file> I<copyright-file>"
 msgstr "B<--copyright-file> I<Copyright-Datei>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1650
+#: ../scripts/uscan.pl:1670
 msgid ""
 "Exclude files mentioned in B<Files-Excluded> in the given I<copyright-"
 "file>.  This is useful when running B<uscan> not within a source package "
@@ -24844,12 +26663,12 @@ msgstr ""
 "innerhalb eines Quellpaketverzeichnisses ausgeführt wird."
 
 #. type: =head1
-#: ../scripts/uscan.pl:1655
+#: ../scripts/uscan.pl:1675
 msgid "DEVSCRIPT CONFIGURATION VARIABLES"
 msgstr "DEVSCRIPT-KONFIGURATIONSVARIABLEN"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1657
+#: ../scripts/uscan.pl:1677
 msgid ""
 "For the basic usage, B<uscan> does not require to set these configuration "
 "variables."
@@ -24858,7 +26677,7 @@ msgstr ""
 "Konfigurationsvariablen nicht."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1660
+#: ../scripts/uscan.pl:1680
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables. These may "
@@ -24875,17 +26694,17 @@ msgstr ""
 "werden diese Dateien nicht gelesen. Die derzeit bekannten Variablen sind:"
 
 #. type: =item
-#: ../scripts/uscan.pl:1669
+#: ../scripts/uscan.pl:1689
 msgid "B<USCAN_DOWNLOAD>"
 msgstr "B<USCAN_DOWNLOAD>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1671
+#: ../scripts/uscan.pl:1691
 msgid "Download or report only:"
 msgstr "nur Herunterladen oder melden:"
 
 #. type: =item
-#: ../scripts/uscan.pl:1675
+#: ../scripts/uscan.pl:1695
 msgid ""
 "B<no>: equivalent to B<--no-download>, newer upstream files will not be "
 "downloaded."
@@ -24894,7 +26713,7 @@ msgstr ""
 "werden nicht heruntergeladen."
 
 #. type: =item
-#: ../scripts/uscan.pl:1678
+#: ../scripts/uscan.pl:1698
 msgid ""
 "B<yes>: equivalent to B<--download>, newer upstream files will be "
 "downloaded. This is the default behavior."
@@ -24903,17 +26722,17 @@ msgstr ""
 "heruntergeladen. Dies ist das Standardverhalten."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1681
+#: ../scripts/uscan.pl:1701
 msgid "See also B<--force-download> and B<--overwrite-download>."
 msgstr "Siehe auch B<--force-download> und B<--overwrite-download>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1685
+#: ../scripts/uscan.pl:1705
 msgid "B<USCAN_SAFE>"
 msgstr "B<USCAN_SAFE>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1687
+#: ../scripts/uscan.pl:1707
 msgid ""
 "If this is set to B<yes>, then B<uscan> avoids running unsafe scripts by "
 "skipping both the repacking of the downloaded package and the updating of "
@@ -24927,12 +26746,12 @@ msgstr ""
 "auf B<--no-download> und B<--skip-signature>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1692
+#: ../scripts/uscan.pl:1712
 msgid "B<USCAN_PASV>"
 msgstr "B<USCAN_PASV>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1694
+#: ../scripts/uscan.pl:1714
 msgid ""
 "If this is set to yes or no, this will force FTP connections to use PASV "
 "mode or not to, respectively. If this is set to default, then B<Net::FTP(3)> "
@@ -24945,12 +26764,12 @@ msgstr ""
 "(basiert hauptsächlich auf der Umgebungsvariable B<FTP_PASSIVE>)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1698
+#: ../scripts/uscan.pl:1718
 msgid "B<USCAN_TIMEOUT>"
 msgstr "B<USCAN_TIMEOUT>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1700
+#: ../scripts/uscan.pl:1720
 msgid ""
 "If set to a number I<N>, then set the timeout to I<N> seconds. This is "
 "equivalent to the B<--timeout> option."
@@ -24959,12 +26778,12 @@ msgstr ""
 "I<N> Sekunden eingestellt. Dies entspricht der Option B<--timeout>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1703
+#: ../scripts/uscan.pl:1723
 msgid "B<USCAN_SYMLINK>"
 msgstr "B<USCAN_SYMLINK>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1705
+#: ../scripts/uscan.pl:1725
 msgid ""
 "If this is set to no, then a I<pkg>_I<version>B<.orig.tar.{gz|bz2|lzma|xz}> "
 "symlink will not be made (equivalent to the B<--no-symlink> option). If it "
@@ -24979,12 +26798,12 @@ msgstr ""
 "ist, werden die Dateien umbenannt (entspricht der Option B<--rename>)."
 
 #. type: =item
-#: ../scripts/uscan.pl:1710
+#: ../scripts/uscan.pl:1730
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr "B<USCAN_DEHS_OUTPUT>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1712
+#: ../scripts/uscan.pl:1732
 msgid ""
 "If this is set to B<yes>, then DEHS-style output will be used. This is "
 "equivalent to the B<--dehs> option."
@@ -24993,12 +26812,12 @@ msgstr ""
 "Dies entspricht der Option B<--dehs>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1715
+#: ../scripts/uscan.pl:1735
 msgid "B<USCAN_VERBOSE>"
 msgstr "B<USCAN_VERBOSE>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1717
+#: ../scripts/uscan.pl:1737
 msgid ""
 "If this is set to B<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
@@ -25007,12 +26826,12 @@ msgstr ""
 "Dies entspricht der Option B<--verbose>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1720
+#: ../scripts/uscan.pl:1740
 msgid "B<USCAN_USER_AGENT>"
 msgstr "B<USCAN_USER_AGENT>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1722
+#: ../scripts/uscan.pl:1742
 msgid ""
 "If set, the specified user agent string will be used in place of the "
 "default.  This is equivalent to the B<--user-agent> option."
@@ -25021,12 +26840,12 @@ msgstr ""
 "vorgegebenen benutzt. Dies entspricht der Option B<--user-agent>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1725
+#: ../scripts/uscan.pl:1745
 msgid "B<USCAN_DESTDIR>"
 msgstr "B<USCAN_DESTDIR>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1727
+#: ../scripts/uscan.pl:1747
 msgid ""
 "If set, the downloaded files will be placed in this directory.  This is "
 "equivalent to the B<--destdir> option."
@@ -25035,12 +26854,12 @@ msgstr ""
 "abgelegt. Dies entspricht der Option B<--destdir>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1730
+#: ../scripts/uscan.pl:1750
 msgid "B<USCAN_REPACK>"
 msgstr "B<USCAN_REPACK>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1732
+#: ../scripts/uscan.pl:1752
 msgid ""
 "If this is set to yes, then after having downloaded a bzip tar, lzma tar, xz "
 "tar, or zip archive, uscan will repack it to the specified compression (see "
@@ -25052,12 +26871,12 @@ msgstr ""
 "B<--repack>."
 
 #. type: =item
-#: ../scripts/uscan.pl:1736
+#: ../scripts/uscan.pl:1756
 msgid "B<USCAN_EXCLUSION>"
 msgstr "B<USCAN_EXCLUSION>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1738
+#: ../scripts/uscan.pl:1758
 msgid ""
 "If this is set to no, files mentioned in the field B<Files-Excluded> of "
 "F<debian/copyright> will be ignored and no exclusion of files will be "
@@ -25068,7 +26887,7 @@ msgstr ""
 "Dateien auszuschließen. Dies entspricht der Option B<--no-exclusion>."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1746
+#: ../scripts/uscan.pl:1766
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -25079,7 +26898,7 @@ msgstr ""
 "was geschehen ist und ob irgendwelche Warnungen zu beachten sind."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1754
+#: ../scripts/uscan.pl:1774
 msgid ""
 "Either B<--help> or B<--version> was used, or for some F<watch> file which "
 "was examined, a newer upstream version was located."
@@ -25088,7 +26907,7 @@ msgstr ""
 "untersuchte F<watch>-Datei eine neuere Version der Ursprungsautoren gefunden."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1759
+#: ../scripts/uscan.pl:1779
 msgid ""
 "No newer upstream versions were located for any of the F<watch> files "
 "examined."
@@ -25097,12 +26916,12 @@ msgstr ""
 "Ursprungsautoren gefunden."
 
 #. type: =head1
-#: ../scripts/uscan.pl:1763
+#: ../scripts/uscan.pl:1783
 msgid "ADVANCED FEATURES"
 msgstr "FORTGESCHRITTENE FUNKTIONALITÄTEN"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1765
+#: ../scripts/uscan.pl:1785
 msgid ""
 "B<uscan> has many other enhanced features which are skipped in the above "
 "section for the simplicity.  Let's check their highlights."
@@ -25112,7 +26931,7 @@ msgstr ""
 "Glanzlicher an."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1768
+#: ../scripts/uscan.pl:1788
 msgid ""
 "B<uscan> actually scans not just the current directory but all its "
 "subdirectories looking for F<debian/watch> to process them all.  See "
@@ -25123,7 +26942,7 @@ msgstr ""
 "verarbeiten. Siehe L<Prüfung von Verzeichnisnamen>."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1772
+#: ../scripts/uscan.pl:1792
 msgid ""
 "B<uscan> can be executed with I<path> as its argument to change the starting "
 "directory of search from the current directory to I<path> ."
@@ -25132,18 +26951,18 @@ msgstr ""
 "Startverzeichnis der Suche vom aktuellen Verzeichnis auf I<Pfad> zu ändern."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1775
+#: ../scripts/uscan.pl:1795
 msgid ""
 "If you are not sure what exactly is happening behind the scene, please "
 "enable the B<--verbose> option.  If this is not enough, enable the B<--"
 "debug> option too see all the internal activities."
 msgstr ""
 "Falls Sie nicht genau wissen, was im Hintergrund geschieht, aktivieren Sie "
-"bitte die Option B<--verbose>. Falls dies nicht ausreicht, aktivieren Sie die "
-"Option B<--debug>, um alle internen Aktivitäten zu sehen."
+"bitte die Option B<--verbose>. Falls dies nicht ausreicht, aktivieren Sie "
+"die Option B<--debug>, um alle internen Aktivitäten zu sehen."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1779
+#: ../scripts/uscan.pl:1799
 msgid ""
 "See L<COMMANDLINE OPTIONS> and L<DEVSCRIPT CONFIGURATION VARIABLES> for "
 "other variations."
@@ -25152,12 +26971,12 @@ msgstr ""
 "KONFIGURATIONSVARIABLEN>."
 
 #. type: =head2
-#: ../scripts/uscan.pl:1782
+#: ../scripts/uscan.pl:1802
 msgid "Custom script"
 msgstr "Benutzerdefiniertes Skript"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1784
+#: ../scripts/uscan.pl:1804
 msgid ""
 "The optional I<script> parameter in F<debian/watch> means to execute "
 "I<script> with options after processing this line if specified."
@@ -25167,7 +26986,7 @@ msgstr ""
 "falls angegeben."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1787
+#: ../scripts/uscan.pl:1807
 msgid ""
 "See L<HISTORY AND UPGRADING> for how B<uscan> invokes the custom I<script>."
 msgstr ""
@@ -25175,7 +26994,7 @@ msgstr ""
 "L<CHRONIK UND UPGRADES DURCHFÜHREN>."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1789
+#: ../scripts/uscan.pl:1809
 msgid ""
 "For compatibility with other tools such as B<git-buildpackage>, it may not "
 "be wise to create custom scripts with random behavior.  In general, "
@@ -25192,12 +27011,12 @@ msgstr ""
 "org/748474>."
 
 #. type: =head2
-#: ../scripts/uscan.pl:1795
+#: ../scripts/uscan.pl:1815
 msgid "URL diversion"
 msgstr "URL-Umleitung"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1797
+#: ../scripts/uscan.pl:1817
 msgid ""
 "Some popular web sites changed their web page structure causing maintenance "
 "problems to the watch file.  There are some redirection services created to "
@@ -25211,17 +27030,17 @@ msgstr ""
 "folgenden URLs weiter, um diese Situation zu bewältigen."
 
 #. type: =item
-#: ../scripts/uscan.pl:1804
+#: ../scripts/uscan.pl:1824
 msgid "* L<http://sf.net>"
 msgstr "* L<http://sf.net>"
 
 #. type: =item
-#: ../scripts/uscan.pl:1806
+#: ../scripts/uscan.pl:1826
 msgid "* L<http://pypi.python.org>"
 msgstr "* L<http://pypi.python.org>"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1812
+#: ../scripts/uscan.pl:1832
 msgid ""
 "Similarly to several other scripts in the B<devscripts> package, B<uscan> "
 "explores the requested directory trees looking for F<debian/changelog> and "
@@ -25251,7 +27070,7 @@ msgstr ""
 "geregelt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1835
+#: ../scripts/uscan.pl:1855
 msgid ""
 "Only check the directory name if we have had to change directory in our "
 "search for F<debian/changelog>, that is, the directory containing F<debian/"
@@ -25264,7 +27083,7 @@ msgstr ""
 "aufgerufen wurde. Dies ist das Standardverhalten."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1846
+#: ../scripts/uscan.pl:1866
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by pwd(1)) matches the regex given by the configuration file "
@@ -25293,12 +27112,12 @@ msgstr ""
 "daher entspricht er Verzeichnisnamen wie B<Paket> und I<Paket>-I<Version>."
 
 #. type: =head1
-#: ../scripts/uscan.pl:1857
+#: ../scripts/uscan.pl:1877
 msgid "HISTORY AND UPGRADING"
 msgstr "CHRONIK UND UPGRADES DURCHFÜHREN"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1859
+#: ../scripts/uscan.pl:1879
 msgid ""
 "This section briefly describes the backwards-incompatible F<watch> file "
 "features which have been added in each F<watch> file version, and the first "
@@ -25309,12 +27128,12 @@ msgstr ""
 "wurden, und die erste Version des B<devscripts>-Pakets, das sie verstand."
 
 #. type: =item
-#: ../scripts/uscan.pl:1865
+#: ../scripts/uscan.pl:1885
 msgid "Pre-version 2"
 msgstr "Vorversion 2"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1867
+#: ../scripts/uscan.pl:1887
 msgid ""
 "The F<watch> file syntax was significantly different in those days. Don't "
 "use it.  If you are upgrading from a pre-version 2 F<watch> file, you are "
@@ -25326,12 +27145,12 @@ msgstr ""
 "Grund auf neu zu beginnen."
 
 #. type: =item
-#: ../scripts/uscan.pl:1871
+#: ../scripts/uscan.pl:1891
 msgid "Version 2"
 msgstr "Version 2"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1873
+#: ../scripts/uscan.pl:1893
 msgid ""
 "B<devscripts> version 2.6.90: The first incarnation of the current style of "
 "F<watch> files."
@@ -25340,12 +27159,12 @@ msgstr ""
 "Dateistils"
 
 #. type: =item
-#: ../scripts/uscan.pl:1876
+#: ../scripts/uscan.pl:1896
 msgid "Version 3"
 msgstr "Version 3"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1878
+#: ../scripts/uscan.pl:1898
 msgid ""
 "B<devscripts> version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -25359,7 +27178,7 @@ msgstr ""
 "eingeführt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1883
+#: ../scripts/uscan.pl:1903
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -25375,7 +27194,7 @@ msgstr ""
 "einfachen B<(> I< … > B<)>-Gruppen sind."
 
 #. type: =item
-#: ../scripts/uscan.pl:1891
+#: ../scripts/uscan.pl:1911
 msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
@@ -25384,7 +27203,7 @@ msgstr ""
 "version> I<Version> B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar.gz>« auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:1894
+#: ../scripts/uscan.pl:1914
 msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--no-symlink --"
 "upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
@@ -25394,12 +27213,12 @@ msgstr ""
 "gz> auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:1899
+#: ../scripts/uscan.pl:1919
 msgid "Version 4"
 msgstr "Version 4"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1901
+#: ../scripts/uscan.pl:1921
 msgid ""
 "B<devscripts> version 2.15.10: The first incarnation of F<watch> files "
 "supporting multiple upstream tarballs."
@@ -25408,7 +27227,7 @@ msgstr ""
 "die mehrere Tarbälle der Ursprungsautoren unterstützt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1904
+#: ../scripts/uscan.pl:1924
 msgid ""
 "The syntax of the watch file is relaxed to allow more spaces for readability."
 msgstr ""
@@ -25416,7 +27235,7 @@ msgstr ""
 "mehr Leerräumen zu erlauben."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1906
+#: ../scripts/uscan.pl:1926
 msgid ""
 "If you have a custom script in place of B<uupdate>, you may also encounter "
 "problems updating from Version 3."
@@ -25426,7 +27245,7 @@ msgstr ""
 "Probleme."
 
 #. type: =item
-#: ../scripts/uscan.pl:1911
+#: ../scripts/uscan.pl:1931
 msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version>\"."
@@ -25435,7 +27254,7 @@ msgstr ""
 "version> I<Version>« auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:1914
+#: ../scripts/uscan.pl:1934
 msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--find> B<--"
 "upstream-version> I<version>\"."
@@ -25444,7 +27263,7 @@ msgstr ""
 "upstream-version> I<Version>« auf."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1919
+#: ../scripts/uscan.pl:1939
 msgid ""
 "Restriction for B<--dehs> is lifted by redirecting other output to STDERR "
 "when it is activated."
@@ -25453,12 +27272,12 @@ msgstr ""
 "die Standardfehlerausgabe umgeleitet werden, wenn sie aktiviert ist."
 
 #. type: textblock
-#: ../scripts/uscan.pl:1926
+#: ../scripts/uscan.pl:1946
 msgid "dpkg(1), mk-origtargz(1), perlre(1), uupdate(1), devscripts.conf(5)"
 msgstr "dpkg(1), mk-origtargz(1), perlre(1), uupdate(1), devscripts.conf(5)"
 
 #. type: textblock
-#: ../scripts/uscan.pl:1930
+#: ../scripts/uscan.pl:1950
 msgid ""
 "The original version of uscan was written by Christoph Lameter "
 "<clameter@debian.org>. Significant improvements, changes and bugfixes were "
