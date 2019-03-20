@@ -135,11 +135,11 @@ testGit() {
 
 testGitHead() {
     helperLaunch "pgpmode=none" HEAD
-    ORIG=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/^foo.*\.orig\.tar\.xz/')
-    UPSTREAM=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/^foo.*(?<!orig)\.tar\.xz/')
-    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/$UPSTREAM' ]"
-    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$ORIG' ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$ORIG' ]"
+    ORIG=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*\.orig\.tar\.xz$/')
+    UPSTREAM=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*(?<!orig)\.tar\.xz$/')
+    assertTrue 'downloaded tarfile not present' "[ -f '$UPSTREAM' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$ORIG' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$ORIG' ]"
     cleanup
 }
 
