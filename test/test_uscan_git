@@ -16,11 +16,17 @@
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
 set -u
+#set -x
 
 TESTTYPE=Git
 . ./lib_test_uscan
 
 COMMAND="chronic_sh uscan --no-conf --compression=xz --dehs"
+
+# prevent the local from messing with this test
+export GIT_CONFIG_NOGLOBAL=1
+export HOME=""
+export XDG_CONFIG_HOME=""
 
 # comment out for debug
 #COMMAND="$COMMAND --verbose"
