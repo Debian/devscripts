@@ -65,6 +65,10 @@ PKG=foo
 makeDebianDir() {
     WATCHARGS=$1
     TMPDIR=$(mktemp -d)
+    if [ -z "$TMPDIR" ]; then
+        echo "Failed to create temporary directory" >&2
+        exit 1
+    fi
     mkdir -p $TMPDIR/$PKG/debian/upstream
     mkdir -p $TMPDIR/$PKG/debian/source
     spawnGitRepo
