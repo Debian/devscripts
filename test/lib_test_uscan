@@ -75,14 +75,16 @@ chronic_sh (){
 }
 
 oneTimeSetUp () {
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+    chronic_sh $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
         --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+    chronic_sh $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
         --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
+    echo "Using test gpg key:"
     $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+        --secret-keyring $PRIVATE_KEYRING --default-key \
+        CF218F0E7EABF584B7E20402C77E2D6872543FAF \
         --list-keys --verbose
 
     export GNUPGHOME=$GPGHOME

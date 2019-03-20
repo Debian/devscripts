@@ -20,7 +20,7 @@ set -u
 TESTTYPE=Git
 . ./lib_test_uscan
 
-COMMAND="uscan --no-conf --compression=xz --dehs"
+COMMAND="chronic_sh uscan --no-conf --compression=xz --dehs"
 
 # comment out for debug
 #COMMAND="$COMMAND --verbose"
@@ -34,20 +34,20 @@ cleanup(){
 spawnGitRepo(){
     mkdir -p $TMPDIR/repo
     (cd $TMPDIR/repo
-    git init
+    chronic_sh git init
     git config user.name "Joe Developer"
     git config user.email "none@debian.org"
     touch changelog file.c
-    git add changelog file.c
-    git commit -a -m 'Init'
+    chronic_sh git add changelog file.c
+    chronic_sh git commit -a -m 'Init'
     for version in 1.0 2.0; do
         echo "# Version $version" >> file.c
         cat >> changelog <<END
 Version $version
 
 END
-        git commit -a -m "Releasing $version"
-        git tag -s -u 72543FAF -m "Version $version" "v$version"
+        chronic_sh git commit -a -m "Releasing $version"
+        chronic_sh git tag -s -u 72543FAF -m "Version $version" "v$version"
     done)
 }
 
