@@ -33,7 +33,7 @@ else
     export PERL5LIB
 fi
 
-GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
+GPGHOME=$(mktemp -d -t gpg.XXXXX)
 
 GPG=gpg
 if !command -v $GPG >/dev/null 2>&1; then
