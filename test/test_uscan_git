@@ -16,94 +16,103 @@
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
 set -u
+#set -x
 
 TESTTYPE=Git
 . ./lib_test_uscan
 
-COMMAND="uscan --no-conf --compression=xz --dehs"
+COMMAND="chronic_sh uscan --no-conf --compression=xz --dehs"
+
+# prevent the local from messing with this test
+export GIT_CONFIG_NOGLOBAL=1
+export HOME=""
+export XDG_CONFIG_HOME=""
 
 # comment out for debug
 #COMMAND="$COMMAND --verbose"
 #COMMAND="$COMMAND --debug"
 
 cleanup(){
-    rm -rf $TMPDIR
-    echo ""
+    rm -rf "$TEMP_PKG_DIR"
 }
 
 spawnGitRepo(){
-    mkdir -p $TMPDIR/repo
-    (cd $TMPDIR/repo
-    git init
+    mkdir -p "$TEMP_PKG_DIR/repo"
+    (cd "$TEMP_PKG_DIR/repo" || exit 1
+    chronic_sh git init
     git config user.name "Joe Developer"
     git config user.email "none@debian.org"
     touch changelog file.c
-    git add changelog file.c
-    git commit -a -m 'Init'
+    chronic_sh git add changelog file.c
+    chronic_sh git commit -a -m 'Init'
     for version in 1.0 2.0; do
         echo "# Version $version" >> file.c
         cat >> changelog <<END
 Version $version
 
 END
-        git commit -a -m "Releasing $version"
-        git tag -s -u 72543FAF -m "Version $version" "v$version"
+        chronic_sh git commit -a -m "Releasing $version"
+        chronic_sh git tag -s -u 72543FAF -m "Version $version" "v$version"
     done)
 }
 
-trap cleanup 1 2 3 13 15
+trap cleanup EXIT
 
 containsName(){
-  echo "$1" | fgrep -q "$2"
+  echo "$1" | grep -F -q "$2"
   echo $?
 }
 
+# shellcheck source=shunit2-helper-functions.sh
 . "${0%/*}/shunit2-helper-functions.sh"
 
 PKG=foo
 
 makeDebianDir() {
     WATCHARGS=$1
-    TMPDIR=$(mktemp -d)
-    mkdir -p $TMPDIR/$PKG/debian/upstream
-    mkdir -p $TMPDIR/$PKG/debian/source
+    TEMP_PKG_DIR=$(mktemp -d --tmpdir="$SHUNIT_TMPDIR" uscan_git.XXXXXX)
+    if [ -z "$TEMP_PKG_DIR" ]; then
+        echo "Failed to create temporary directory" >&2
+        exit 1
+    fi
+    mkdir -p "$TEMP_PKG_DIR"/$PKG/debian/upstream
+    mkdir -p "$TEMP_PKG_DIR"/$PKG/debian/source
     spawnGitRepo
-    REPO=$TMPDIR/REPO
 
-    cat <<END > $TMPDIR/$PKG/debian/watch
+    cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
 opts="mode=git,gitmode=shallow,$WATCHARGS" \
-file:///$TMPDIR/repo refs/tags/v([\d\.]+) debian
+file:///$TEMP_PKG_DIR/repo refs/tags/v([\\d\\.]+) debian
 END
 
-    cat <<END > $TMPDIR/$PKG/debian/changelog
+    cat <<END > "$TEMP_PKG_DIR/$PKG/debian/changelog"
 $PKG (0-1) unstable; urgency=low
 
   * Initial release
 
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
-    echo -n '3.0 (quilt)' > $TMPDIR/$PKG/debian/source/format
-    cp -f $test_dir/uscan/PUBLIC_KEY.asc $TMPDIR/$PKG/debian/upstream/signing-key.asc
+    echo '3.0 (quilt)' > "$TEMP_PKG_DIR/$PKG/debian/source/format"
+    cp -f "$test_dir/uscan/PUBLIC_KEY.asc" "$TEMP_PKG_DIR/$PKG/debian/upstream/signing-key.asc"
 }
 
 makeDebianDirWithUpstream() {
     WATCHARGS=$1
-    makeDebianDir $WATCHARGS
-    cd $TMPDIR/$PKG
-    git init
-    git remote add upstream file:///$TMPDIR/repo
-    git fetch upstream
-    cd -
+    makeDebianDir "$WATCHARGS"
+    cd "$TEMP_PKG_DIR/$PKG" || exit 1
+    chronic_sh git init
+    chronic_sh git remote add upstream "file:///$TEMP_PKG_DIR/repo"
+    chronic_sh git fetch upstream
+    cd - > /dev/null || exit 1
 }
 
 makeDebianDirHead() {
     WATCHARGS=$1
-    makeDebianDir $WATCHARGS
-    cat <<END > $TMPDIR/$PKG/debian/watch
+    makeDebianDir "$WATCHARGS"
+    cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
 opts="mode=git,pretty=0.0+git%cd.%h" \
-file:///$TMPDIR/repo HEAD
+file:///$TEMP_PKG_DIR/repo HEAD
 END
 }
 
@@ -111,60 +120,61 @@ helperLaunch() {
     WATCHARGS=$1
     ARG="${2:-}"
     if test "$ARG" = "upstream"; then
-        makeDebianDirWithUpstream $WATCHARGS
+        makeDebianDirWithUpstream "$WATCHARGS"
     elif test "$ARG" = "HEAD"; then
-        makeDebianDirHead $WATCHARGS
+        makeDebianDirHead "$WATCHARGS"
     else
-        makeDebianDir $WATCHARGS
+        makeDebianDir "$WATCHARGS"
     fi
-    OUTPUT=$( cd $TMPDIR/$PKG ; $COMMAND --watchfile=debian/watch)
+    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 }
 
 testGit() {
     helperLaunch "pgpmode=none"
     TARBALL=${PKG}_2.0.orig.tar.xz
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
     cleanup
 }
 
 testGitHead() {
     helperLaunch "pgpmode=none" HEAD
-    ORIG=$(ls $TMPDIR|perl -ne 'print if/^foo.*\.orig\.tar\.xz/')
-    UPSTREAM=$(ls $TMPDIR|perl -ne 'print if/^foo.*(?<!orig)\.tar\.xz/')
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/$UPSTREAM ]"
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$ORIG ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$ORIG ]"
+    ORIG=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*\.orig\.tar\.xz$/')
+    UPSTREAM=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*(?<!orig)\.tar\.xz$/')
+    assertTrue 'downloaded tarfile not present' "[ -f '$UPSTREAM' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$ORIG' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$ORIG' ]"
     cleanup
 }
 
 testGitSignedTag() {
     helperLaunch "pgpmode=gittag"
     TARBALL=${PKG}_2.0.orig.tar.xz
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
     cleanup
 }
 
 testGitUpstream() {
     helperLaunch "pgpmode=none" upstream
     TARBALL=${PKG}_2.0.orig.tar.xz
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
     cleanup
 }
 
 testGitUpstreamSignedTag() {
     helperLaunch "pgpmode=gittag" upstream
     TARBALL=${PKG}_2.0.orig.tar.xz
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
     cleanup
 }
 
+# shellcheck disable=SC1091
 . shunit2

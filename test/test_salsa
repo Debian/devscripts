@@ -31,6 +31,7 @@ sub run {
 sub mkDebianDir {
     my $tmpdir = tempdir(CLEANUP => 1);
     chdir $tmpdir;
+    $ENV{"GIT_CONFIG_NOGLOBAL"} = 1;
     system "git init";
     mkdir 'debian';
     open F, ">debian/changelog";

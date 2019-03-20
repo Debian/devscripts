@@ -15,6 +15,16 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * Apply patch from Jakub Wilk to fix a weird spacing in devscripts(1).
     Closes: #922975
+  * tests:
+    + Introduce a chronic_sh() bash function, reimplementing chronic(1).
+    + Rename the TMPDIR variable to avoid overloading it, and with it affect
+      the behaviour of mktemp(1) when it was already exported.  Closes: #924977
+      This affected only some uscan tests.
+    + Also tweak a few mktemp(1) calls to place their files in SHUNIT_TMPDIR,
+      and name them after the tests they are running.
+    + export GIT_CONFIG_NOGLOBAL=1, HOME=, XDG_CONFIG_HOME= in a few tests
+      (uscan_git and salsa) to prevent the local configuration from affecting
+      the tests.
 
   [ Xavier Guimard ]
   * salsa:

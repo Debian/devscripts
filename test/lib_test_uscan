@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2018, Xavier <yadd@debian.org>
 #
@@ -33,10 +33,10 @@ else
     export PERL5LIB
 fi
 
-GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
+GPGHOME=$(mktemp -d -t gpg.XXXXX)
 
 GPG=gpg
-if !command -v $GPG >/dev/null 2>&1; then
+if ! command -v $GPG >/dev/null 2>&1; then
     echo "$GPG missing"
     GPG=gpg2
     if ! command -v $GPG >/dev/null 2>&1; then
@@ -50,15 +50,41 @@ PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
 PRIVATE_KEYRING=$GPGHOME/secring.gpg
 PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
+# magic function that pipes stdout and stderr into a pipe, and prints it only
+# on command failure.
+# This uses a pipe, so it has limited capacity.  Do not use it with stuff
+# outputing too much data.
+chronic_sh (){
+    local pipe
+    pipe=$(mktemp -u)
+    mkfifo "$pipe"
+    # one can't open a reading fd and a writing fd without blocking, because
+    # they want to already have something on the other side of the pipe.
+    # the temporary fd 5 will be that something.
+    exec 5<>"$pipe" # hack
+    exec 3>"$pipe"  # writing fd
+    exec 4<"$pipe"  # reading fd
+    exec 5>&-       # end hack
+    rm "$pipe"
+
+    if ! "$@" >&3 2>&3 ; then
+        exec 3>&-
+        cat <&4-
+        return 1
+    fi
+}
+
 oneTimeSetUp () {
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+    chronic_sh $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+        --output "$PRIVATE_KEYRING" --dearmor "$PRIVATE_KEY"
 
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+    chronic_sh $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+        --output "$PUBLIC_KEYRING" --dearmor "$PUBLIC_KEY"
 
+    echo "Using test gpg key:"
     $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+        --secret-keyring "$PRIVATE_KEYRING" --default-key \
+        CF218F0E7EABF584B7E20402C77E2D6872543FAF \
         --list-keys --verbose
 
     export GNUPGHOME=$GPGHOME

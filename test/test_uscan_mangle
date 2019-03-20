@@ -46,8 +46,8 @@ if which dpkg-vendor >/dev/null 2>&1; then
 fi
 
 cleanup(){
-    kill -9 $(cat $TMPDIR/$REPOPATH/pid)
-    rm -rf $TMPDIR
+    kill -9 $(cat "$TEMP_PKG_DIR"/$REPOPATH/pid)
+    rm -rf "$TEMP_PKG_DIR"
     echo ""
 }
 
@@ -55,8 +55,8 @@ spawnHttpServer(){
     unset http_proxy
     (
         USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
-        mkdir -p $TMPDIR/$REPOPATH
-        cd $TMPDIR/$REPOPATH
+        mkdir -p "$TEMP_PKG_DIR"/$REPOPATH
+        cd "$TEMP_PKG_DIR"/$REPOPATH
         python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
         echo $! > pid
         while ! [ -s port ]; do
@@ -182,8 +182,8 @@ makeUpstreamTar() {
     COMPRESSION=${3:-gz} # archve compression type
     TYPE=${4:-non-native} # set this if native-type upstream
     OLDDIR=`pwd`
-    mkdir -p $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
-    cd $TMPDIR/$REPOPATH/$POOLPATH
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
+    cd "$TEMP_PKG_DIR"/$REPOPATH/$POOLPATH
     touch $UPNAME-$UPVER/FILE.$UPNAME.$UPVER
     touch $UPNAME-$UPVER/include-this
     touch $UPNAME-$UPVER/exclude-this
@@ -196,9 +196,9 @@ makeUpstreamTar() {
     mkdir -p $UPNAME-$UPVER/docs/html/js/
     touch $UPNAME-$UPVER/docs/html/js/jquery.js
     if [ "$TYPE" = "native" ]; then
-        cd $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
+        cd "$TEMP_PKG_DIR"/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
         makeDebianDir $UPNAME $UPVER
-        cd $TMPDIR/$REPOPATH/$POOLPATH
+        cd "$TEMP_PKG_DIR"/$REPOPATH/$POOLPATH
     fi
     case $COMPRESSION in
         gz|gzip)
@@ -247,7 +247,7 @@ helperWatch() {
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
     local PREFIX="${4:-}"
-    local TMPDIR=$(mktemp -d)
+    local TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
@@ -262,40 +262,40 @@ helperWatch() {
     FILEEXCLUDE=${FILEEXCLUDE:-0} # no exclude
     SIGMODE=${SIGMODE:-ASC} # ASC=ASCII or BIN=BINARY or SELF
     KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
-    cd $TMPDIR
-    # start HTTP server with its root at $TMPDIR/$REPOPATH
+    cd "$TEMP_PKG_DIR"
+    # start HTTP server with its root at "$TEMP_PKG_DIR"/$REPOPATH
     spawnHttpServer
-    PORT=$(cat $TMPDIR/$REPOPATH/port)
-    $DEBUGECHO " ***** http://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
+    PORT=$(cat "$TEMP_PKG_DIR"/$REPOPATH/port)
+    $DEBUGECHO " ***** http://localhost:$PORT started showing "$TEMP_PKG_DIR"/$REPOPATH *****"
     # make web site
     $SITESCRIPT
     # make local $VEROLD source tree
-    tar -xzf $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
+    tar -xzf "$TEMP_PKG_DIR"/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
     if [ -n "$PREFIX" ]; then
-        mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+        mv "$TEMP_PKG_DIR"/${PKG}-${VEROLD} "$TEMP_PKG_DIR"/${PKG}-${PREFIX}${VEROLD}
     fi
-    mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
-    cd $TMPDIR/${PKG}
+    mv "$TEMP_PKG_DIR"/${PKG}-${PREFIX}${VEROLD} "$TEMP_PKG_DIR"/${PKG}
+    cd "$TEMP_PKG_DIR"/${PKG}
     if [ ! -d debian ]; then
         makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
     fi
     local UUPDATE=""
-    if grep -q "uupdate" $TMPDIR/${PKG}/debian/watch ; then
+    if grep -q "uupdate" "$TEMP_PKG_DIR"/${PKG}/debian/watch ; then
         UUPDATE=uupdate
     fi
     local PGP=""
-    if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
+    if grep -q "pgpurlmangle" "$TEMP_PKG_DIR"/${PKG}/debian/watch ; then
         PGP=pgp
     fi
-    if grep -q "pgpmode *= *auto" $TMPDIR/${PKG}/debian/watch ; then
+    if grep -q "pgpmode *= *auto" "$TEMP_PKG_DIR"/${PKG}/debian/watch ; then
         PGP=pgp
     fi
-    if grep -q "pgpmode *= *previous" $TMPDIR/${PKG}/debian/watch ; then
+    if grep -q "pgpmode *= *previous" "$TEMP_PKG_DIR"/${PKG}/debian/watch ; then
         PGP=pgp
     fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
-    cd $TMPDIR
+    cd "$TEMP_PKG_DIR"
     $DEBUGLSLR
     UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
@@ -328,7 +328,7 @@ helperWatch() {
     done
     # check uupdate
     if [ "$UUPDATE" = "uupdate" ]; then
-        cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
+        cd "$TEMP_PKG_DIR"/${PKG}-${PREFIX}${VERNEW}
         assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
         DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
         assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
@@ -348,7 +348,7 @@ helperWatch() {
                 $(containsName "$CONTENTS" "; echo baz; #/")
         fi
         for c in $COMPONENTS ; do
-            cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}/$c
+            cd "$TEMP_PKG_DIR"/${PKG}-${PREFIX}${VERNEW}/$c
         assertTrue 'file that must be present is excluded in the tarball' '[ -f include-this ]'
         if [ "$FILEEXCLUDE" = "1" ] || [ "$FILEEXCLUDE" = "2" ]; then
         assertFalse "file that must be excluded is present in the orig-$c.tar" '[ -f exclude-this ]'
@@ -362,7 +362,7 @@ helperWatch() {
                 $(containsName "$CONTENTS" "; echo baz; #/")
         fi
         done
-        cd $TMPDIR
+        cd "$TEMP_PKG_DIR"
     fi
     $DEBUGBASH
     cd $ORIGDIR
@@ -383,7 +383,7 @@ helperWatch() {
 # setup a common watch file test environment to see user-agent
 helperWatchUA() {
     local SITESCRIPT=${1:-siteWebNonNative}
-    TMPDIR=$(mktemp -d)
+    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
@@ -393,16 +393,16 @@ helperWatchUA() {
     WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
-    cd $TMPDIR
-    # start HTTP server with its root at $TMPDIR/$REPOPATH
+    cd "$TEMP_PKG_DIR"
+    # start HTTP server with its root at "$TEMP_PKG_DIR"/$REPOPATH
     spawnHttpServer
-    PORT=$(cat $TMPDIR/$REPOPATH/port)
-    $DEBUGECHO " ***** http://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
+    PORT=$(cat "$TEMP_PKG_DIR"/$REPOPATH/port)
+    $DEBUGECHO " ***** http://localhost:$PORT started showing "$TEMP_PKG_DIR"/$REPOPATH *****"
     # make web site
     $SITESCRIPT
     # make local $VEROLD source tree
-    mkdir -p $TMPDIR/${PKG}
-    cd $TMPDIR/${PKG}
+    mkdir -p "$TEMP_PKG_DIR"/${PKG}
+    cd "$TEMP_PKG_DIR"/${PKG}
     if [ ! -d debian ]; then
         makeDebianDir $PKG 1.0-$SUFFIX
     fi
@@ -428,12 +428,12 @@ siteNative() {
     makeUpstreamTar $PKG 0.0 gz native
     makeUpstreamTar $PKG 1.0 gz native
     makeUpstreamTar $PKG 2.0 gz native
-    mkdir -p $TMPDIR/$REPOPATH/0.0/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/1.0/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/2.0/$PKG/ooo/
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
 }
 
 siteNonNative() {
@@ -442,41 +442,41 @@ siteNonNative() {
     makeUpstreamTar $PKG 0.0 gz non-native
     makeUpstreamTar $PKG 1.0 gz non-native
     makeUpstreamTar $PKG 2.0 gz non-native
-    mkdir -p $TMPDIR/$REPOPATH/0.0/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/1.0/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/2.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/
     if [ -n "$EXTRA" ]; then
     makeUpstreamTar $PKG 3.0 gz non-native
-    mkdir -p $TMPDIR/$REPOPATH/3.0/$PKG/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/
     fi
     if [ "${SIGMODE:-}" = "ASC" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.asc $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.asc $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.asc
     if [ -n "$EXTRA" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.asc $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.asc
     fi
     elif [ "${SIGMODE:-}" = "BIN" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.sig $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.sig $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.sig
     if [ -n "$EXTRA" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.sig $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.sig
     fi
     elif [ "${SIGMODE:-}" = "SELF" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.gpg
     if [ -n "$EXTRA" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.gpg $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.gpg
     fi
     fi
 }
@@ -484,7 +484,7 @@ siteNonNative() {
 # hide siteNative behind a web page
 siteWebNative() {
     siteNative
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -500,7 +500,7 @@ END
 
 siteWebNonNative() {
     siteNonNative
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -516,7 +516,7 @@ END
 
 siteWebNonNative() {
     siteNonNative
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -534,20 +534,20 @@ siteWebNonNativeR() {
     makeUpstreamTar foo 0.0 gz non-native
     makeUpstreamTar foo 1.0 gz non-native
     makeUpstreamTar foo 2.0 gz non-native
-    mkdir -p $TMPDIR/$REPOPATH/123/foo/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/124/foo/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/125/foo/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/325/foo/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/424/foo/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/523/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/123/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/124/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/125/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/325/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/424/foo/ooo/
+    mkdir -p "$TEMP_PKG_DIR"/$REPOPATH/523/foo/ooo/
     if [ "$SIGMODE" = "ASC" ]; then
-    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz $TMPDIR/$REPOPATH/125/foo/ooo/foo-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz $TMPDIR/$REPOPATH/124/foo/ooo/foo-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz $TMPDIR/$REPOPATH/123/foo/ooo/foo-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.asc $TMPDIR/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.asc $TMPDIR/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.asc $TMPDIR/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.asc
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/125/foo/ooo/foo-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/124/foo/ooo/foo-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/123/foo/ooo/foo-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.asc "$TEMP_PKG_DIR"/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.asc
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -563,13 +563,13 @@ siteWebNonNativeR() {
 <html>
 END
     elif [ "$SIGMODE" = "BIN" ]; then
-    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz $TMPDIR/$REPOPATH/125/foo/ooo/foo-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz $TMPDIR/$REPOPATH/124/foo/ooo/foo-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz $TMPDIR/$REPOPATH/123/foo/ooo/foo-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.sig $TMPDIR/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.sig $TMPDIR/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.sig $TMPDIR/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.sig
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/125/foo/ooo/foo-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/124/foo/ooo/foo-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/123/foo/ooo/foo-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.sig "$TEMP_PKG_DIR"/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.sig
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -585,10 +585,10 @@ END
 <html>
 END
     elif [ "$SIGMODE" = "SELF" ]; then
-    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.gpg
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.gpg "$TEMP_PKG_DIR"/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.gpg
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -608,7 +608,7 @@ END
 
 sitePrWebNonNative() {
     siteNonNative
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -629,10 +629,10 @@ siteWebNonNativeLarge() {
     mkdir -p $REPOPATH/0.0/foo/ooo/
     mkdir -p $REPOPATH/1.0/foo/ooo/
     mkdir -p $REPOPATH/2.0/foo/ooo/
-    ln -sf ../../../$POOLPATH/foo-19990101.tar.gz $TMPDIR/$REPOPATH/0.0/foo/ooo/foo-19990101.tar.gz
-    ln -sf ../../../$POOLPATH/foo-20000101.tar.gz $TMPDIR/$REPOPATH/1.0/foo/ooo/foo-20000101.tar.gz
-    ln -sf ../../../$POOLPATH/foo-20010101.tar.gz $TMPDIR/$REPOPATH/2.0/foo/ooo/foo-20010101.tar.gz
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    ln -sf ../../../$POOLPATH/foo-19990101.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/0.0/foo/ooo/foo-19990101.tar.gz
+    ln -sf ../../../$POOLPATH/foo-20000101.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/1.0/foo/ooo/foo-20000101.tar.gz
+    ln -sf ../../../$POOLPATH/foo-20010101.tar.gz "$TEMP_PKG_DIR"/$REPOPATH/2.0/foo/ooo/foo-20010101.tar.gz
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -648,7 +648,7 @@ END
 
 siteXmlNonNative() {
     siteNonNative
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -666,7 +666,7 @@ siteWebNonNativeMUT() {
     siteNonNative foo
     siteNonNative bar EXTRA
     siteNonNative baz EXTRA
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
@@ -693,7 +693,7 @@ END
 
 siteWebNonNativeGetOnlyHref() {
     siteNonNative foo
-    cat <<END > $TMPDIR/$REPOPATH/index.html
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">

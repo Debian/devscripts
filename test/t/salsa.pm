@@ -145,6 +145,7 @@ sub api {
         POST => qr{^projects$} => sub {
             my $content = JSON::from_json($_[0]->[2]->{content});
             mkdir "$gitdir/me/$content->{path}";
+            $ENV{"GIT_CONFIG_NOGLOBAL"} = 1;
             print
 `cd $gitdir/me/$content->{path};git init;git config receive.denyCurrentBranch ignore;cd -`;
             $content->{id}        = scalar @projects + 1;
