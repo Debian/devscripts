@@ -17,6 +17,8 @@ my ($api, $gitdir);
 sub mkDebianDir {
     my $tmpdir = tempdir(CLEANUP => 1);
     chdir $tmpdir;
+    $ENV{"GIT_CONFIG_NOGLOBAL"} = 1;
+    $ENV{"HOME"} = "";
     system "git init";
     system "git config user.name 'Joe Developer'";
     system 'git config user.email "jd@debian.org"';
@@ -36,7 +38,7 @@ EOF
 EOF
     system "git add *";
     system "git commit -a -m 'Salsa test'";
-    system "git checkout -b dev";
+    system "git checkout -q -b dev";
     chdir $pwd;
     return $tmpdir;
 }
