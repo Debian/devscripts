@@ -1,12 +1,12 @@
-devscripts (2.19.4) UNRELEASED; urgency=medium
+devscripts (2.19.4) unstable; urgency=medium
 
   [ Antonio Terceiro ]
   * debrepro:
-    + include --before-second-build option in output of --help
+    + Include --before-second-build option in output of --help.
 
   [ Adam D. Barratt ]
   * scripts/Makefile:
-    + fix building / testing of shell-based scripts.  Closes: #923271
+    + Fix building / testing of shell-based scripts.  Closes: #923271
 
   [ Paul Wise ]
   * chdist:
@@ -54,7 +54,7 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * Refresh German translation, mostly for salsa.
 
- -- Mattia Rizzolo <mattia@debian.org>  Tue, 19 Feb 2019 11:54:13 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 20 Mar 2019 16:57:59 +0100
 
 devscripts (2.19.3) unstable; urgency=medium
 
