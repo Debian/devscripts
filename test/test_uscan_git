@@ -38,7 +38,7 @@ cleanup(){
 
 spawnGitRepo(){
     mkdir -p "$TEMP_PKG_DIR/repo"
-    (cd "$TEMP_PKG_DIR/repo"
+    (cd "$TEMP_PKG_DIR/repo" || exit 1
     chronic_sh git init
     git config user.name "Joe Developer"
     git config user.email "none@debian.org"
@@ -56,13 +56,14 @@ END
     done)
 }
 
-trap cleanup 1 2 3 13 15
+trap cleanup EXIT
 
 containsName(){
-  echo "$1" | fgrep -q "$2"
+  echo "$1" | grep -F -q "$2"
   echo $?
 }
 
+# shellcheck source=shunit2-helper-functions.sh
 . "${0%/*}/shunit2-helper-functions.sh"
 
 PKG=foo
@@ -77,12 +78,11 @@ makeDebianDir() {
     mkdir -p "$TEMP_PKG_DIR"/$PKG/debian/upstream
     mkdir -p "$TEMP_PKG_DIR"/$PKG/debian/source
     spawnGitRepo
-    REPO="$TEMP_PKG_DIR/REPO"
 
     cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
 opts="mode=git,gitmode=shallow,$WATCHARGS" \
-file:///$TEMP_PKG_DIR/repo refs/tags/v([\d\.]+) debian
+file:///$TEMP_PKG_DIR/repo refs/tags/v([\\d\\.]+) debian
 END
 
     cat <<END > "$TEMP_PKG_DIR/$PKG/debian/changelog"
@@ -92,13 +92,13 @@ $PKG (0-1) unstable; urgency=low
 
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
-    echo -n '3.0 (quilt)' > "$TEMP_PKG_DIR/$PKG/debian/source/format"
-    cp -f $test_dir/uscan/PUBLIC_KEY.asc "$TEMP_PKG_DIR/$PKG/debian/upstream/signing-key.asc"
+    echo '3.0 (quilt)' > "$TEMP_PKG_DIR/$PKG/debian/source/format"
+    cp -f "$test_dir/uscan/PUBLIC_KEY.asc" "$TEMP_PKG_DIR/$PKG/debian/upstream/signing-key.asc"
 }
 
 makeDebianDirWithUpstream() {
     WATCHARGS=$1
-    makeDebianDir $WATCHARGS
+    makeDebianDir "$WATCHARGS"
     cd "$TEMP_PKG_DIR/$PKG" || exit 1
     chronic_sh git init
     chronic_sh git remote add upstream "file:///$TEMP_PKG_DIR/repo"
@@ -108,7 +108,7 @@ makeDebianDirWithUpstream() {
 
 makeDebianDirHead() {
     WATCHARGS=$1
-    makeDebianDir $WATCHARGS
+    makeDebianDir "$WATCHARGS"
     cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
 opts="mode=git,pretty=0.0+git%cd.%h" \
@@ -120,13 +120,13 @@ helperLaunch() {
     WATCHARGS=$1
     ARG="${2:-}"
     if test "$ARG" = "upstream"; then
-        makeDebianDirWithUpstream $WATCHARGS
+        makeDebianDirWithUpstream "$WATCHARGS"
     elif test "$ARG" = "HEAD"; then
-        makeDebianDirHead $WATCHARGS
+        makeDebianDirHead "$WATCHARGS"
     else
-        makeDebianDir $WATCHARGS
+        makeDebianDir "$WATCHARGS"
     fi
-    OUTPUT=$( cd "$TEMP_PKG_DIR/$PKG" ; $COMMAND --watchfile=debian/watch)
+    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 }
 
@@ -176,4 +176,5 @@ testGitUpstreamSignedTag() {
     cleanup
 }
 
+# shellcheck disable=SC1091
 . shunit2
