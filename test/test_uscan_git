@@ -28,7 +28,6 @@ COMMAND="chronic_sh uscan --no-conf --compression=xz --dehs"
 
 cleanup(){
     rm -rf "$TEMP_PKG_DIR"
-    echo ""
 }
 
 spawnGitRepo(){
@@ -94,11 +93,11 @@ END
 makeDebianDirWithUpstream() {
     WATCHARGS=$1
     makeDebianDir $WATCHARGS
-    cd "$TEMP_PKG_DIR/$PKG"
-    git init
-    git remote add upstream "file:///$TEMP_PKG_DIR/repo"
-    git fetch upstream
-    cd -
+    cd "$TEMP_PKG_DIR/$PKG" || exit 1
+    chronic_sh git init
+    chronic_sh git remote add upstream "file:///$TEMP_PKG_DIR/repo"
+    chronic_sh git fetch upstream
+    cd - > /dev/null || exit 1
 }
 
 makeDebianDirHead() {
