@@ -15,6 +15,9 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * Apply patch from Jakub Wilk to fix a weird spacing in devscripts(1).
     Closes: #922975
+  * sadt:
+    + Ignore a UserWarning from debian.deb822.PkgRelation.parse_relations after
+      #712513 changed its format.  Closes: #924026
   * tests:
     + Introduce a chronic_sh() bash function, reimplementing chronic(1).
     + Quiet down the uscan_git tests by using the new chronic_sh() thing, and
@@ -26,7 +29,7 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
       and name them after the tests they are running.
     + export GIT_CONFIG_NOGLOBAL=1, HOME=, XDG_CONFIG_HOME= in a few tests
       (uscan_git and salsa) to prevent the local configuration from affecting
-      the tests.
+      the tests.  Closes: #921334
 
   [ Xavier Guimard ]
   * salsa:

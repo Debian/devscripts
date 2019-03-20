@@ -30,7 +30,20 @@ import subprocess as ipc
 import sys
 import tempfile
 import threading
+import warnings
 from debian import deb822
+
+
+def parse_relations(field):
+    '''
+    wrap debian.deb822.PkgRelation.parse_relations() to suppress the
+    UserWarning about the inability to parse something.
+    See https://bugs.debian.org/712513
+    '''
+    warnings.simplefilter('ignore')
+    parsed = deb822.PkgRelation.parse_relations(field)
+    warnings.resetwarnings()
+    return parsed
 
 
 def chmod_x(path):
@@ -327,22 +340,11 @@ class TestGroup:
         if '@' not in self.depends:
             return
         or_clauses = []
-        # deb822 prints a warning on stderr: https://bugs.debian.org/712513
-        # We don't want the user to see the warning, because the unusual
-        # character in the relation is intentional.
-        orig_sys_stderr = sys.stderr
-        sys.stderr = open(os.devnull, 'wt', errors='ignore')
-        try:
-            parsed_depends = deb822.PkgRelation.parse_relations(self.depends)
-        finally:
-            try:
-                sys.stderr.close()
-            finally:
-                sys.stderr = orig_sys_stderr
+        parsed_depends = parse_relations(self.depends)
         for or_clause in parsed_depends:
             if len(or_clause) == 1 and or_clause[0]['name'] == '@builddeps@':
                 or_clauses += build_depends
-                or_clauses += deb822.PkgRelation.parse_relations('make')
+                or_clauses += parse_relations('make')
                 continue
             stripped_or_clause = [r for r in or_clause if r['name'] != '@']
             if len(stripped_or_clause) < len(or_clause):
@@ -486,8 +488,7 @@ def main():
                 # para['Source']
                 for field in 'Build-Depends', 'Build-Depends-Indep':
                     try:
-                        build_depends += deb822.PkgRelation.parse_relations(
-                            para[field])
+                        build_depends += parse_relations(para[field])
                     except KeyError:
                         continue
             else:
