@@ -96,6 +96,8 @@ class WrapAndSortControl(Control):
                 paragraph["Architecture"] = " ".join(archs)
 
         if self.args.sort_binary_packages:
+            if self.filename.endswith('tests/control'):
+                return
             first = self.paragraphs[:1 + int(self.args.keep_first)]
             sortable = self.paragraphs[1 + int(self.args.keep_first):]
             sort_key = operator.itemgetter("Package")

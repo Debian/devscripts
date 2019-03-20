@@ -18,6 +18,8 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
   * sadt:
     + Ignore a UserWarning from debian.deb822.PkgRelation.parse_relations after
       #712513 changed its format.  Closes: #924026
+  * wrap-and-sort:
+    + Do not try to sort the paragraphs in d/tests/control.  Closes: #923499
   * tests:
     + Introduce a chronic_sh() bash function, reimplementing chronic(1).
     + Quiet down the uscan_git tests by using the new chronic_sh() thing, and
