@@ -17,6 +17,8 @@ devscripts (2.19.4) UNRELEASED; urgency=medium
     Closes: #922975
   * tests:
     + Introduce a chronic_sh() bash function, reimplementing chronic(1).
+    + Quiet down the uscan_git tests by using the new chronic_sh() thing, and
+      tweaking a few command calls here and there.
     + Rename the TMPDIR variable to avoid overloading it, and with it affect
       the behaviour of mktemp(1) when it was already exported.  Closes: #924977
       This affected only some uscan tests.
