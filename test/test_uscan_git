@@ -64,7 +64,7 @@ PKG=foo
 
 makeDebianDir() {
     WATCHARGS=$1
-    TEMP_PKG_DIR=$(mktemp -d)
+    TEMP_PKG_DIR=$(mktemp -d --tmpdir="$SHUNIT_TMPDIR" uscan_git.XXXXXX)
     if [ -z "$TEMP_PKG_DIR" ]; then
         echo "Failed to create temporary directory" >&2
         exit 1
