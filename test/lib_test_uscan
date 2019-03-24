@@ -53,7 +53,7 @@ PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 # magic function that pipes stdout and stderr into a pipe, and prints it only
 # on command failure.
 # This uses a pipe, so it has limited capacity.  Do not use it with stuff
-# outputing too much data.
+# outputting too much data.
 chronic_sh (){
     local pipe
     pipe=$(mktemp -u)
