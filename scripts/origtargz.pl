@@ -349,9 +349,10 @@ sub unpack_tarball ($) {
     # figure out which subdirectory was created by unpacking
     my $directory;
     my @files = glob "$tmpdir/*";
-    if (@files == 1 and -d $files[0]) { # exactly one directory, move its contents over
+    if (@files == 1 and -d $files[0])
+    {    # exactly one directory, move its contents over
         $directory = $files[0];
-    } else { # several files were created, move these to the target directory
+    } else {   # several files were created, move these to the target directory
         $directory = $tmpdir;
     }
 
