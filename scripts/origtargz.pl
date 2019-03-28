@@ -2,7 +2,7 @@
 #
 # origtargz: fetch the orig tarball of a Debian package from various sources,
 # and unpack it
-# Copyright (C) 2012-2018  Christoph Berg <myon@debian.org>
+# Copyright (C) 2012-2019  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -346,14 +346,14 @@ sub unpack_tarball ($) {
         return 0;
     }
 
-    # figure out which directory was created
-    my @dirs = glob "$tmpdir/*/";
-    unless (@dirs) {
-        print STDERR "unpacking $origtar did not create any directory\n";
-        return 0;
+    # figure out which subdirectory was created by unpacking
+    my $directory;
+    my @files = glob "$tmpdir/*";
+    if (@files == 1 and -d $files[0]) { # exactly one directory, move its contents over
+        $directory = $files[0];
+    } else { # several files were created, move these to the target directory
+        $directory = $tmpdir;
     }
-    my $directory = $dirs[0];
-    chop $directory;
 
     # move all files over, except the debian directory
     opendir DIR, $directory or die "opendir $directory: $!";
