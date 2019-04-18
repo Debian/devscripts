@@ -83,7 +83,7 @@ use constant keys => [
             my $s = join '', <F>;
             close F;
             if ($s
-                =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(["'])?(\w+)\1?$/m
+                =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(["'])?([-\w]+)\1?$/m
             ) {
                 $self->private_token($2);
                 return 1;
