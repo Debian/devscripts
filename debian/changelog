@@ -3,6 +3,7 @@ devscripts (2.19.5) UNRELEASED; urgency=medium
   [ Xavier Guimard ]
   * salsa:
     + Fix token regexp to allow "-" in GitLab tokens
+    + Fix useless warnings when old description is null.  Closes: #927367
 
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 18 Apr 2019 17:22:35 +0200
 
