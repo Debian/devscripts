@@ -115,6 +115,12 @@ sub access_level {
     if ($self->group_id) {
         my $tmp = $self->api->group_member($self->group_id, $user_id);
         unless ($tmp) {
+            my $members
+              = $self->api->paginator('all_group_members', $self->group_id,
+                { query => $user_id });
+            while ($_ = $members->next) {
+                return $_->{access_level} if ($_->{id} eq $user_id);
+            }
             ds_warn "You're not member of this group";
             return 0;
         }

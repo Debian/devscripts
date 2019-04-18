@@ -3,8 +3,11 @@ devscripts (2.19.5) UNRELEASED; urgency=medium
   [ Xavier Guimard ]
   * salsa:
     + Fix token regexp to allow "-" in GitLab tokens
-    + Fix useless warnings when old description is null.  Closes: #927367
-    + Accept sub-groups in --group parameter.  Closes: #927350 
+    + Fix useless warnings when old description is null.
+      Closes: #927367; MR 117
+    + Accept sub-groups in --group parameter.  Closes: #927350; MR 117
+    + Fix bad warning if user is an inherited member of a subgroup.
+      Closes: #927373; MR 117
 
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 18 Apr 2019 17:22:35 +0200
 
