@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2019-03-19 13:56+0100\n"
+"POT-Creation-Date: 2019-04-20 22:58+0200\n"
 "PO-Revision-Date: 2019-02-28 18:11+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -16680,7 +16680,7 @@ msgstr "B<--nopie>, B<-p>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:505
-msgid "No not require that the checked binaries be built as PIE."
+msgid "Do not require that the checked binaries be built as PIE."
 msgstr "N'exige pas que les exécutables vérifiés soient construits comme PIE."
 
 #. type: =item
@@ -16691,7 +16691,7 @@ msgstr "B<--nostackprotector>, B<-s>"
 #. type: textblock
 #: ../scripts/hardening-check.pl:509
 msgid ""
-"No not require that the checked binaries be built with the stack protector."
+"Do not require that the checked binaries be built with the stack protector."
 msgstr ""
 "N'exige pas que les exécutables vérifiés soient construits avec le "
 "protecteur de pile."
@@ -16703,7 +16703,7 @@ msgstr "B<--nofortify>, B<-f>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:513
-msgid "No not require that the checked binaries be built with Fority Source."
+msgid "Do not require that the checked binaries be built with Fortify Source."
 msgstr ""
 "N'exige pas que les exécutables vérifiés soient construits avec Fortify "
 "Source."
@@ -16715,7 +16715,7 @@ msgstr "B<--norelro>, B<-r>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:517
-msgid "No not require that the checked binaries be built with RELRO."
+msgid "Do not require that the checked binaries be built with RELRO."
 msgstr "N'exige pas que les exécutables vérifiés soient construits avec RELRO."
 
 #. type: =item
@@ -16725,7 +16725,7 @@ msgstr "B<--nobindnow>, B<-b>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:521
-msgid "No not require that the checked binaries be built with BIND_NOW."
+msgid "Do not require that the checked binaries be built with BIND_NOW."
 msgstr ""
 "N'exige pas que les exécutables vérifiés soient construits avec BIND_NOW."
 
@@ -21867,10 +21867,8 @@ msgstr "Valeur C<.devscripts> : B<SALSA_KGB> (yes/ignore/no, défaut : ignore)"
 
 #. type: =item
 #: ../scripts/salsa.pl:637
-#, fuzzy
-#| msgid "B<--bpo>"
 msgid "B<--kgb-options>"
-msgstr "B<--bpo>"
+msgstr "B<--kgb-options>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:639
@@ -21900,10 +21898,8 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/salsa.pl:651
-#, fuzzy
-#| msgid "C<.devscripts> value: B<SALSA_GROUP>"
 msgid "C<.devscripts> value: B<SALSA_KGB_OPTIONS>"
-msgstr "Valeur C<.devscripts> : B<SALSA_GROUP>"
+msgstr "Valeur C<.devscripts> : B<SALSA_KGB_OPTIONS>"
 
 #. type: =item
 #: ../scripts/salsa.pl:653
