@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2019-03-19 11:33+0100\n"
+"POT-Creation-Date: 2019-04-20 22:58+0200\n"
 "PO-Revision-Date: 2019-01-27 10:18+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -16667,7 +16667,7 @@ msgstr "B<--nopie>, B<-p>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:505
-msgid "No not require that the checked binaries be built as PIE."
+msgid "Do not require that the checked binaries be built as PIE."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien als PIE gebaut wurden."
 
@@ -16679,7 +16679,7 @@ msgstr "B<--nostackprotector>, B<-s>"
 #. type: textblock
 #: ../scripts/hardening-check.pl:509
 msgid ""
-"No not require that the checked binaries be built with the stack protector."
+"Do not require that the checked binaries be built with the stack protector."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit "
 "Stapelverarbeitungsschutz gebaut werden."
@@ -16691,9 +16691,9 @@ msgstr "B<--nofortify>, B<-f>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:513
-msgid "No not require that the checked binaries be built with Fority Source."
+msgid "Do not require that the checked binaries be built with Fortify Source."
 msgstr ""
-"erfordert nicht, dass die geprüften Binärdateien mit Fority Source gebaut "
+"erfordert nicht, dass die geprüften Binärdateien mit Fortify Source gebaut "
 "werden."
 
 #. type: =item
@@ -16703,7 +16703,7 @@ msgstr "B<--norelro>, B<-r>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:517
-msgid "No not require that the checked binaries be built with RELRO."
+msgid "Do not require that the checked binaries be built with RELRO."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit RELRO gebaut werden."
 
@@ -16714,7 +16714,7 @@ msgstr "B<--nobindnow>, B<-b>"
 
 #. type: textblock
 #: ../scripts/hardening-check.pl:521
-msgid "No not require that the checked binaries be built with BIND_NOW."
+msgid "Do not require that the checked binaries be built with BIND_NOW."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit BIND_NOW gebaut werden."
 
