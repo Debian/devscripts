@@ -2010,7 +2010,8 @@ my $res = 0;
 
 my @wf = find_watch_files($config);
 foreach (@wf) {
-    $res ||= process_watchfile(@$_);
+    my $tmp = process_watchfile(@$_);
+    $res ||= $tmp;
 
     # Are there any warnings to give if we're using dehs?
     dehs_output if ($dehs);
