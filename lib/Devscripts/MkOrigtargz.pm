@@ -336,20 +336,22 @@ sub make_orig_targz {
         close($fh_sig);
 
         if (not $is_openpgp_ascii_armor) {
-            my $enarmor
+            my @enarmor
               = `gpg --no-options --output - --enarmor $self->{config}->{signature_file} 2>&1`;
             unless ($? == 0) {
                 ds_die
 "Failed to convert $self->{config}->{signature_file} to *.asc\n";
                 return $self->status(1);
             }
-            $enarmor =~ s/ARMORED FILE/SIGNATURE/;
-            $enarmor =~ /^Comment:/d;
             unless (open(DESTSIG, '>', $destsigfile)) {
                 ds_die "Failed to open $destsigfile for write $!\n";
                 return $self->status(1);
             }
-            print DESTSIG $enarmor;
+            foreach my $line (@enarmor) {
+                next if $line =~ m/^Comment:/;
+                $line =~ s/ARMORED FILE/SIGNATURE/;
+                print DESTSIG $line;
+            }
         } else {
             if (abs_path($self->config->signature_file) ne
                 abs_path($destsigfile)) {
