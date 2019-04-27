@@ -345,7 +345,7 @@ sub make_orig_targz {
             }
             $enarmor =~ s/ARMORED FILE/SIGNATURE/;
             $enarmor =~ /^Comment:/d;
-            unless (open(DESTSIG, ">> $destsigfile")) {
+            unless (open(DESTSIG, '>>', $destsigfile)) {
                 ds_die "Failed to open $destsigfile for append: $!\n";
                 return $self->status(1);
             }
