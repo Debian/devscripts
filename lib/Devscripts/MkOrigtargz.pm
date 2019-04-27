@@ -307,9 +307,6 @@ sub make_orig_targz {
 
     # Final step: symlink, copy or rename for signature file.
 
-    my $is_ascfile = $self->config->signature_file =~ /\.asc$/i;
-    my $is_gpgfile = $self->config->signature_file =~ /\.(gpg|pgp|sig|sign)$/i;
-
     my $destsigfile;
     if ($self->config->signature == 1) {
         $destsigfile = sprintf "%s.asc", $destfile;
@@ -324,7 +321,21 @@ sub make_orig_targz {
     }
 
     if ($self->config->signature == 1 or $self->config->signature == 2) {
-        if ($is_gpgfile) {
+        my $is_openpgp_ascii_armor = 0;
+        my $fh_sig;
+        unless (open($fh_sig, '<', $self->config->signature_file)) {
+            ds_die "Cannot open $self->{config}->{signature_file}\n";
+            return $self->status(1);
+        }
+        while (<$fh_sig>) {
+            if (m/^-----BEGIN PGP /) {
+                $is_openpgp_ascii_armor = 1;
+                last;
+            }
+        }
+        close($fh_sig);
+
+        if (not $is_openpgp_ascii_armor) {
             my $enarmor
               = `gpg --output - --enarmor $self->{config}->{signature_file} 2>&1`;
             unless ($? == 0) {
