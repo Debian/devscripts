@@ -340,14 +340,13 @@ sub make_orig_targz {
               = `gpg --no-options --output - --enarmor $self->{config}->{signature_file} 2>&1`;
             unless ($? == 0) {
                 ds_die
-"mk-origtargz: Failed to convert $self->{config}->{signature_file} to *.asc\n";
+"Failed to convert $self->{config}->{signature_file} to *.asc\n";
                 return $self->status(1);
             }
             $enarmor =~ s/ARMORED FILE/SIGNATURE/;
             $enarmor =~ /^Comment:/d;
             unless (open(DESTSIG, ">> $destsigfile")) {
-                ds_die
-                  "mk-origtargz: Failed to open $destsigfile for append: $!\n";
+                ds_die "Failed to open $destsigfile for append: $!\n";
                 return $self->status(1);
             }
             print DESTSIG $enarmor;
