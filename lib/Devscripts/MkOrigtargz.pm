@@ -337,7 +337,7 @@ sub make_orig_targz {
 
         if (not $is_openpgp_ascii_armor) {
             my $enarmor
-              = `gpg --output - --enarmor $self->{config}->{signature_file} 2>&1`;
+              = `gpg --no-options --output - --enarmor $self->{config}->{signature_file} 2>&1`;
             unless ($? == 0) {
                 ds_die
 "mk-origtargz: Failed to convert $self->{config}->{signature_file} to *.asc\n";
