@@ -353,6 +353,11 @@ sub make_orig_targz {
                 $line =~ s/ARMORED FILE/SIGNATURE/;
                 print DESTSIG $line;
             }
+            unless (close(DESTSIG)) {
+                ds_die
+"Cannot write signature file $self->{config}->{signature_file}\n";
+                return $self->status(1);
+            }
         } else {
             if (abs_path($self->config->signature_file) ne
                 abs_path($destsigfile)) {
