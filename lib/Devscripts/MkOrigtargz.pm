@@ -348,6 +348,7 @@ sub make_orig_targz {
                 return $self->status(1);
             }
             foreach my $line (@enarmor) {
+                next if $line =~ m/^Version:/;
                 next if $line =~ m/^Comment:/;
                 $line =~ s/ARMORED FILE/SIGNATURE/;
                 print DESTSIG $line;
