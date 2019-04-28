@@ -430,6 +430,10 @@ Enable debugging output
 
 Team to use. Use C<salsa search_group name> to find it.
 
+If you want to use a subgroup, you have to set its full path:
+
+  salsa --group perl-team/modules/packages check_repo lemonldap-ng
+
 C<.devscripts> value: B<SALSA_GROUP>
 
 Be careful when you use B<SALSA_GROUP> in your C<.devscripts> file. Every
