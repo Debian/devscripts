@@ -6,6 +6,9 @@ devscripts (2.19.5) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
   * Update French translation.
+  * uscan:
+    + Don't fail on first error when using multiple watch files.
+      Closes: #927864; MR: !119
 
   [ Edward Betts ]
   * Correct some spelling errors in documentation.  MR: !116
