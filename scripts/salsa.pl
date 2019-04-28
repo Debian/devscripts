@@ -800,7 +800,7 @@ Xavier Guimard E<lt>yadd@debian.orgE<gt>
 
 Copyright (C) 2018, Xavier Guimard E<lt>yadd@debian.orgE<gt>
 
-It contains code formely found in L<dpt-salsa> I<(pkg-perl-tools)>
+It contains code formerly found in L<dpt-salsa> I<(pkg-perl-tools)>
 copyright 2018, gregor herrmann E<lt>gregoa@debian.orgE<gt>.
 
 This library is free software; you can redistribute it and/or modify

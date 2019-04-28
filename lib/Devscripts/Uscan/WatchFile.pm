@@ -345,7 +345,7 @@ sub process_group {
     foreach my $line (@{ $self->watchlines }) {
         # Set same $download for all
         $line->shared->{download} = $download;
-        # Non "group" lines where not intialized
+        # Non "group" lines where not initialized
         unless ($line->type eq 'group') {
             if (   $line->parse
                 or $line->search
