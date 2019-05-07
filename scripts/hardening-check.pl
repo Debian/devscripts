@@ -16,6 +16,7 @@ my $skip_stackprotector = 0;
 my $skip_fortify        = 0;
 my $skip_relro          = 0;
 my $skip_bindnow        = 0;
+my $skip_stackclash     = 0;
 my $report_functions    = 0;
 my $find_libc_functions = 0;
 my $color               = 0;
@@ -32,6 +33,7 @@ GetOptions(
     "nofortify|f+"           => \$skip_fortify,
     "norelro|r+"             => \$skip_relro,
     "nobindnow|b+"           => \$skip_bindnow,
+    "nostackclash|S+"        => \$skip_stackclash,
     "report-functions|R!"    => \$report_functions,
     "find-libc-functions|F!" => \$find_libc_functions,
     "color|c!"               => \$color,
@@ -275,6 +277,9 @@ foreach my $file (@ARGV) {
     # Get ELF headers.
     my $DYN_REPORT = output("readelf", "-dW", $file);
 
+    # Get disassembly
+    my $DISASM = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
+
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
 
@@ -399,6 +404,67 @@ foreach my $file (@ARGV) {
         }
     }
 
+    # For stack clash we need to look for a specific sequence of
+    # instructions in the objdump disassembly
+    $name = " Stack clash protection";
+    my $index = 0;
+    my $cmp_addr = 0;
+    my @patterns = (
+        qr/^\s+([0-9a-f]+):\s+cmp\s+(rsp.*|.*0x1000)/,
+        qr/^\s+[0-9a-f]+:\s+j[eb]\s+([x0-9a-f]+)/,
+        qr/^\s+[0-9a-f]+:\s+sub\s+(.*,0x1000)/,
+        qr/^\s+[0-9a-f]+:\s+or\s+(.*,0x0)/,
+        qr/^\s+([0-9a-f]+):\s+(jmp\s+([x0-9a-f]+)|cmp\s+rsp,.*)/,
+        qr/^\s+([0-9a-f]+):\s+jne\s+([x0-9a-f]+)/
+        );
+    my $found = 0;
+    foreach my $line (split /\n/, $DISASM) {
+        # look for each regex from patterns in succession - they all
+        # should be consecutive in the binary so we always fall back to
+        # index 0 if we fail to find the next one
+        if (my @matches = ($line =~ $patterns[$index])) {
+            if ($index == 0) {
+                $cmp_addr = hex($matches[0]);
+            } elsif ($index == 4) {
+                # this could be either the jmp or cmp - if is jump then
+                # this is the last instruction in the sequence otherwise
+                # cmp has a jne following for index 5
+                if ($matches[1] =~ /^jmp.*/) {
+                    my $arg = hex($matches[2]);
+                    if ($arg == $cmp_addr) {
+                        good($name, "yes");
+                        $found = 1;
+                        last;
+                    } else {
+                        # since the expected instructions should be
+                        # contiguous, always fall back to zero on failure
+                        $index = 0;
+                        next;
+                    }
+                }
+                # nothing to do for the cmp case
+            } elsif ($index == 5) {
+                my $arg = hex($matches[1]);
+                if ($arg == $cmp_addr + 5) {
+                    good($name, "yes");
+                    $found = 1;
+                    last;
+                } else {
+                    # since the expected instructions should be
+                    # contiguous, always fall back to zero on failure
+                    $index = 0;
+                    next;
+                }
+            }
+            ++$index;
+        } else {
+            $index = 0;
+        }
+    }
+    if (!$found) {
+        bad("no-stack-clash-protection", $file, $name, "no, not found!", $skip_stackclash);
+    }
+
     if (!$lintian && (!$quiet || $rc != 0)) {
         print $report, "\n";
     }
@@ -519,6 +585,10 @@ Do not require that the checked binaries be built with RELRO.
 =item B<--nobindnow>, B<-b>
 
 Do not require that the checked binaries be built with BIND_NOW.
+
+=item B<--nostackclash>, B<-S>
+
+Do not require that the checked binaries be built with stack clash protection.
 
 =item B<--quiet>, B<-q>
 
