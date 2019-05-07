@@ -463,7 +463,8 @@ foreach my $file (@ARGV) {
         }
     }
     if (!$found) {
-        unknown($name, "unknown, -fstack-clash-protection instructions found",
+        unknown($name,
+            "unknown, no -fstack-clash-protection instructions found",
             $skip_stackclash);
     }
 
