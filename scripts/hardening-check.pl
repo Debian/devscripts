@@ -278,7 +278,8 @@ foreach my $file (@ARGV) {
     my $DYN_REPORT = output("readelf", "-dW", $file);
 
     # Get disassembly
-    my $DISASM = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
+    my $DISASM
+      = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
 
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
@@ -407,7 +408,7 @@ foreach my $file (@ARGV) {
     # For stack clash we need to look for a specific sequence of
     # instructions in the objdump disassembly
     $name = " Stack clash protection";
-    my $index = 0;
+    my $index    = 0;
     my $cmp_addr = 0;
     my @patterns = (
         qr/^\s+([0-9a-f]+):\s+cmp\s+(rsp.*|.*0x1000)/,
@@ -416,7 +417,7 @@ foreach my $file (@ARGV) {
         qr/^\s+[0-9a-f]+:\s+or\s+(.*,0x0)/,
         qr/^\s+([0-9a-f]+):\s+(jmp\s+([x0-9a-f]+)|cmp\s+rsp,.*)/,
         qr/^\s+([0-9a-f]+):\s+jne\s+([x0-9a-f]+)/
-        );
+    );
     my $found = 0;
     foreach my $line (split /\n/, $DISASM) {
         # look for each regex from patterns in succession - they all
@@ -462,7 +463,8 @@ foreach my $file (@ARGV) {
         }
     }
     if (!$found) {
-        bad("no-stack-clash-protection", $file, $name, "no, not found!", $skip_stackclash);
+        bad("no-stack-clash-protection", $file, $name, "no, not found!",
+            $skip_stackclash);
     }
 
     if (!$lintian && (!$quiet || $rc != 0)) {
