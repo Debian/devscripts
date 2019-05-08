@@ -140,7 +140,7 @@ sub download ($$$$$$$$) {
     } else {    # elsif ($$optref{'mode'} eq 'git')
         my $destdir = $self->destdir;
         my $curdir  = cwd();
-        $fname =~ m%(.*)/$pkg-([^_/]*)\.tar\.(gz|xz|bz2|lzma)%;
+        $fname =~ m%(.*)/$pkg-([^_/]*)\.tar\.(gz|xz|bz2|lzma|zstd?)%;
         my $dst     = $1;
         my $abs_dst = abs_path($dst);
         my $ver     = $2;
@@ -288,6 +288,8 @@ sub download ($$$$$$$$) {
             uscan_exec("bzip2", "$pkg-$ver.tar");
         } elsif ($suffix eq 'lzma') {
             uscan_exec("lzma", "$pkg-$ver.tar");
+            #} elsif ($suffix =~ /^zstd?$/) {
+            #    uscan_exec("zstd", "$pkg-$ver.tar");
         } else {
             $clean_and_die->("Unknown suffix file to repack: $suffix");
         }

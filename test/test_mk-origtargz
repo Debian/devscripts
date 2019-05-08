@@ -87,7 +87,11 @@ makeTarBall () {
 	comp="$1"
 	mkgpg="${2:-none}"
 	makeUpstreamFiles
-	tar --create --auto-compress --file "$TMPDIR/foo-0.1.tar.$comp" --directory "$TMPDIR" foo-0.1
+	COMP="--auto-compress"
+	if [ "$comp" = "zst" ]; then
+		COMP=--zstd
+	fi
+	tar --create $COMP --file "$TMPDIR/foo-0.1.tar.$comp" --directory "$TMPDIR" foo-0.1
 	local gpgopts=(
 		chronic_sh $GPG
 		--homedir "$GPGHOME"
@@ -413,6 +417,35 @@ testRepackXZ2GZ() {
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackZST2XZRepackOpt() {
+	makeTarBall zst
+	run_mk_origtargz "" ""\
+		"Successfully repacked foo-0.1.tar.zst as foo_0.1.orig.tar.xz." \
+		--package foo --version 0.1 --copy foo-0.1.tar.zst --repack
+	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.zst ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+}
+
+testRepackZST2XZNoRepackOpt() {
+	makeTarBall zst
+	run_mk_origtargz "" ""\
+		"Successfully repacked foo-0.1.tar.zst as foo_0.1.orig.tar.xz." \
+		--package foo --version 0.1 --copy foo-0.1.tar.zst
+	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.zst ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+}
+
+testRepackZST2ZSTFail() {
+	makeTarBall zst
+	run_mk_origtargz "" "mk-origtargz error: Bad value for compression: Unknown compression scheme zst"\
+		"" \
+		--package foo --version 0.1 --copy foo-0.1.tar.zst --compression zst
+	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.zst ]"
+	assertFalse "result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 }
 
 testRepackZip2GZ() {
