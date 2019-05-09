@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright 2014, Rafael Laboissiere <rafael@laboissiere.net>
 # Copyright 2015, James McCoy <jamessan@debian.org>
@@ -17,6 +17,10 @@
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
 set -u
+
+# Load GPG
+TESTTYPE=MkOrigTarGz
+. ./lib_test_uscan
 
 if test "${1:-}" = --installed; then
     MK_ORIGTARGZ="mk-origtargz"
@@ -72,9 +76,31 @@ makeUpstreamFiles () {
 
 }
 makeTarBall () {
-	comp="$1";
+	comp="$1"
+	mkgpg="${2:-none}"
 	makeUpstreamFiles
 	tar --create --auto-compress --file "$TMPDIR/foo-0.1.tar.$comp" --directory "$TMPDIR" foo-0.1
+	local gpgopts=(
+		chronic_sh $GPG
+		--homedir "$GPGHOME"
+		--no-options -q --batch --no-default-keyring
+		--secret-keyring "$PRIVATE_KEYRING"
+		--default-key 72544FAF
+		--detach-sign
+	)
+	case "$mkgpg" in
+		sig)
+			"${gpgopts[@]}" "$TMPDIR/foo-0.1.tar.$comp"
+			;;
+		asc)
+			"${gpgopts[@]}" --armor "$TMPDIR/foo-0.1.tar.$comp"
+			;;
+		none)
+			;;
+		*)
+			fail "unknown parameter in makeTarBall()"
+			;;
+	esac
 	rm -rf "$TMPDIR/foo-0.1"
 }
 makeSimpleTar () {
@@ -233,6 +259,39 @@ testSymlink() {
 	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertEquals "final symlink" foo-0.1.tar.gz "$(readlink $TMPDIR/foo_0.1.orig.tar.gz)"
+}
+
+testSymlinkWithConvertedSig() {
+	makeTarBall gz sig
+	makeDebianDir
+	run_mk_origtargz foo "" \
+		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
+		--signature 1 --signature-file=../foo-0.1.tar.gz.sig \
+		../foo-0.1.tar.gz
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertEquals "final symlink" foo-0.1.tar.gz "$(readlink $TMPDIR/foo_0.1.orig.tar.gz)"
+	assertTrue "signature isn't valid" "$GPG --homedir '$GPGHOME' --verify $TMPDIR/foo_0.1.orig.tar.gz.asc"
+}
+
+testSymlinkWithArmoredSig() {
+	# MR for https://lists.debian.org/debian-devel/2019/04/msg00459.html
+	makeTarBall gz asc
+	# an armored signature, but with the wrong extension.
+	mv $TMPDIR/foo-0.1.tar.gz.asc $TMPDIR/foo-0.1.tar.gz.sig
+	makeDebianDir
+	run_mk_origtargz foo "" \
+		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
+		--signature 1 --signature-file=../foo-0.1.tar.gz.sig \
+		../foo-0.1.tar.gz
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertEquals "final symlink" foo-0.1.tar.gz "$(readlink $TMPDIR/foo_0.1.orig.tar.gz)"
+	assertTrue "signature isn't valid" "$GPG --homedir '$GPGHOME' --verify $TMPDIR/foo_0.1.orig.tar.gz.asc"
 }
 
 testCopy() {
