@@ -9,15 +9,24 @@ devscripts (2.19.5) UNRELEASED; urgency=medium
   * uscan:
     + Don't fail on first error when using multiple watch files.
       Closes: #927864; MR: !119
-  * salsa:
-    + Fix token regexp to allow "-" in GitLab tokens.  MR: !117
-    + Fix useless warnings when old description is null. Closes: #927367; MR 117
-    + Accept sub-groups in --group parameter.  Closes: #927350; MR 117
+  * salsa:  MR: !117
+    + Fix token regexp to allow "-" in GitLab tokens.
+    + Fix useless warnings when old description is null.  Closes: #927367
+    + Accept sub-groups in --group parameter.  Closes: #927350
     + Fix bad warning if user is an inherited member of a subgroup.
-      Closes: #927373; MR 117
+      Closes: #927373
 
   [ Edward Betts ]
   * Correct some spelling errors in documentation.  MR: !116
+
+  [ Guillem Jover ]
+  * mk-origtargz:  MR: !120
+    + Do not enarmor already armored OpenPGP signatures.  This actively caused
+      broken .asc files to be uploaded to the archive.
+    + Pass --no-options to gpg.
+    + Prevent duplicating the signature in case mk-origtargz is called twice.
+    + Fix OpenPGP signature ASCII enarmor normalization.
+    + Minore code improvements.
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Apr 2019 16:08:02 +0200
 
