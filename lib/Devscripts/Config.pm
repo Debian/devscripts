@@ -110,6 +110,7 @@ use Dpkg::IPC;
 use File::HomeDir;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Moo;
+use String::ShellQuote;
 
 # Common options
 has common_opts => (
@@ -222,13 +223,15 @@ sub parse_conf_files {
         my @key_names = map { $_->[1] ? $_->[1] : () } @$keys;
         my %config_vars;
 
-        my $shell_cmd
-          = 'for file in ' . join(" ", @cfg_files) . '; do . $file; done;';
+        my $shell_cmd = q{for file in };
+        my @shell_cfg_files = map { shell_quote($_) } @cfg_files;
+        $shell_cmd .= join(' ', @shell_cfg_files);
+        $shell_cmd .= q{ ; do . "$file"; done;};
 
         # Read back values
-        foreach my $var (@key_names) {
-            $shell_cmd .= "echo \$$var;\n";
-        }
+        $shell_cmd .= q{ printf '%s\0' };
+        my @shell_key_names = map { qq{"\$$_"} } @key_names;
+        $shell_cmd .= join(' ', @shell_key_names);
         my $shell_out;
         spawn(
             exec       => ['/bin/bash', '-c', $shell_cmd],
@@ -236,7 +239,7 @@ sub parse_conf_files {
             to_string  => \$shell_out
         );
         @config_vars{@key_names} = map { s/^\s*(.*?)\s*/$1/ ? $_ : undef }
-          split(/\n/, $shell_out, -1);
+          split(/\0/, $shell_out, -1);
 
         # Check validity and set value
         foreach my $key (@$keys) {

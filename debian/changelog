@@ -1,6 +1,8 @@
 devscripts (2.19.6) UNRELEASED; urgency=medium
 
-  * 
+  [ Paul Wise ]
+  * Improve handling of the configuration files (MR: !124)
+    - Move String::ShellQuote from recommends to depends
 
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
 
