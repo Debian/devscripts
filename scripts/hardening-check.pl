@@ -16,7 +16,6 @@ my $skip_stackprotector = 0;
 my $skip_fortify        = 0;
 my $skip_relro          = 0;
 my $skip_bindnow        = 0;
-my $skip_stackclash     = 0;
 my $report_functions    = 0;
 my $find_libc_functions = 0;
 my $color               = 0;
@@ -33,7 +32,6 @@ GetOptions(
     "nofortify|f+"           => \$skip_fortify,
     "norelro|r+"             => \$skip_relro,
     "nobindnow|b+"           => \$skip_bindnow,
-    "nostackclash|S+"        => \$skip_stackclash,
     "report-functions|R!"    => \$report_functions,
     "find-libc-functions|F!" => \$find_libc_functions,
     "color|c!"               => \$color,
@@ -587,10 +585,6 @@ Do not require that the checked binaries be built with RELRO.
 =item B<--nobindnow>, B<-b>
 
 Do not require that the checked binaries be built with BIND_NOW.
-
-=item B<--nostackclash>, B<-S>
-
-Do not require that the checked binaries be built with stack clash protection.
 
 =item B<--quiet>, B<-q>
 
