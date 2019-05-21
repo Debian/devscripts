@@ -406,7 +406,7 @@ refresh the repository.
 
 Set the upstream version string to an arbitrary format as an optional B<opts>
 argument when the I<matching-pattern> is B<HEAD> or B<heads/>I<branch> for
-B<git> mode.  For the exact syntax, see the B<get-log> manpage under B<tformat>.
+B<git> mode.  For the exact syntax, see the B<git-log> manpage under B<tformat>.
 The default is B<pretty=0.0~git%cd.%h>.  No B<uversionmangle> rules is
 applicable for this case.
 
