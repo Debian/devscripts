@@ -1,4 +1,3 @@
-
 =pod
 
 =head1 NAME
@@ -930,7 +929,7 @@ sub search {
     uscan_verbose "Looking at \$base = $self->{parse_result}->{base} with\n"
       . "    \$filepattern = $self->{parse_result}->{filepattern} found\n"
       . "    \$newfile     = $newfile\n"
-      . "    \$newversion  = $newversion which is newer than\n"
+      . "    \$newversion  = $newversion\n"
       . "    \$lastversion = $self->{parse_result}->{lastversion}";
     $self->search_result({
         newversion => $newversion,
