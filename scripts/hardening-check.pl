@@ -275,6 +275,10 @@ foreach my $file (@ARGV) {
     # Get ELF headers.
     my $DYN_REPORT = output("readelf", "-dW", $file);
 
+    # Get disassembly
+    my $DISASM
+      = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
+
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
 
@@ -397,6 +401,68 @@ foreach my $file (@ARGV) {
         } else {
             good($name, "no", ", non-ELF (ignored)");
         }
+    }
+
+    # For stack clash we need to look for a specific sequence of
+    # instructions in the objdump disassembly
+    $name = " Stack clash protection";
+    my $index    = 0;
+    my $cmp_addr = 0;
+    my @patterns = (
+        qr/^\s+([0-9a-f]+):\s+cmp\s+(rsp.*|.*0x1000)/,
+        qr/^\s+[0-9a-f]+:\s+j[eb]\s+([x0-9a-f]+)/,
+        qr/^\s+[0-9a-f]+:\s+sub\s+(.*,0x1000)/,
+        qr/^\s+[0-9a-f]+:\s+or\s+(.*,0x0)/,
+        qr/^\s+([0-9a-f]+):\s+(jmp\s+([x0-9a-f]+)|cmp\s+rsp,.*)/,
+        qr/^\s+([0-9a-f]+):\s+jne\s+([x0-9a-f]+)/
+    );
+    my $found = 0;
+    foreach my $line (split /\n/, $DISASM) {
+        # look for each regex from patterns in succession - they all
+        # should be consecutive in the binary so we always fall back to
+        # index 0 if we fail to find the next one
+        if (my @matches = ($line =~ $patterns[$index])) {
+            if ($index == 0) {
+                $cmp_addr = hex($matches[0]);
+            } elsif ($index == 4) {
+                # this could be either the jmp or cmp - if is jump then
+                # this is the last instruction in the sequence otherwise
+                # cmp has a jne following for index 5
+                if ($matches[1] =~ /^jmp.*/) {
+                    my $arg = hex($matches[2]);
+                    if ($arg == $cmp_addr) {
+                        good($name, "yes");
+                        $found = 1;
+                        last;
+                    } else {
+                        # since the expected instructions should be
+                        # contiguous, always fall back to zero on failure
+                        $index = 0;
+                        next;
+                    }
+                }
+                # nothing to do for the cmp case
+            } elsif ($index == 5) {
+                my $arg = hex($matches[1]);
+                if ($arg == $cmp_addr + 5) {
+                    good($name, "yes");
+                    $found = 1;
+                    last;
+                } else {
+                    # since the expected instructions should be
+                    # contiguous, always fall back to zero on failure
+                    $index = 0;
+                    next;
+                }
+            }
+            ++$index;
+        } else {
+            $index = 0;
+        }
+    }
+    if (!$found) {
+        unknown($name,
+            "unknown, no -fstack-clash-protection instructions found");
     }
 
     if (!$lintian && (!$quiet || $rc != 0)) {

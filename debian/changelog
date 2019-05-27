@@ -4,6 +4,11 @@ devscripts (2.19.6+exp) UNRELEASED; urgency=medium
   * origtargz:
     + Support unpacking tarballs where the files are in /.
 
+  [ Alex Murray ]
+  * hardening-check:
+    + Add support for detecting binaries compiled with
+      -fstack-clash-protection.  LP: #1820798; MR: !121
+
  -- Christoph Berg <myon@debian.org>  Thu, 28 Mar 2019 14:36:21 +0100
 
 devscripts (2.19.6) UNRELEASED; urgency=medium
