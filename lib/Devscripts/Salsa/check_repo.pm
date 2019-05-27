@@ -41,6 +41,7 @@ sub _check_repo {
         # check description
         my %prms = $self->desc($name);
         if ($self->config->desc) {
+            $project->{description} //= '';
             push @err, "bad description: $project->{description}"
               if ($prms{description} ne $project->{description});
         }

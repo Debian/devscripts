@@ -502,23 +502,23 @@ corruption attacks.
 
 =item B<--nopie>, B<-p>
 
-No not require that the checked binaries be built as PIE.
+Do not require that the checked binaries be built as PIE.
 
 =item B<--nostackprotector>, B<-s>
 
-No not require that the checked binaries be built with the stack protector.
+Do not require that the checked binaries be built with the stack protector.
 
 =item B<--nofortify>, B<-f>
 
-No not require that the checked binaries be built with Fority Source.
+Do not require that the checked binaries be built with Fortify Source.
 
 =item B<--norelro>, B<-r>
 
-No not require that the checked binaries be built with RELRO.
+Do not require that the checked binaries be built with RELRO.
 
 =item B<--nobindnow>, B<-b>
 
-No not require that the checked binaries be built with BIND_NOW.
+Do not require that the checked binaries be built with BIND_NOW.
 
 =item B<--quiet>, B<-q>
 

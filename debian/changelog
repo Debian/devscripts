@@ -1,9 +1,51 @@
-devscripts (2.19.5) UNRELEASED; urgency=medium
+devscripts (2.19.6+exp) UNRELEASED; urgency=medium
 
   [ Christoph Berg ]
-  * origtargz: Support unpacking tarballs where the files are in /.
+  * origtargz:
+    + Support unpacking tarballs where the files are in /.
 
  -- Christoph Berg <myon@debian.org>  Thu, 28 Mar 2019 14:36:21 +0100
+
+devscripts (2.19.6) UNRELEASED; urgency=medium
+
+  [ laokz ]
+  * uscan:
+    + Fix typo in documentation.  MR: !125
+    + Remove redundant, misleading  string in a debug message.  MR: !126
+
+ -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
+
+devscripts (2.19.5) unstable; urgency=medium
+
+  [ Topi Miettinen ]
+  * hardening-check:
+    + Fix some typos in the documentation.  MR: !118
+
+  [ Xavier Guimard ]
+  * Update French translation.
+  * uscan:
+    + Don't fail on first error when using multiple watch files.
+      Closes: #927864; MR: !119
+  * salsa:  MR: !117
+    + Fix token regexp to allow "-" in GitLab tokens.
+    + Fix useless warnings when old description is null.  Closes: #927367
+    + Accept sub-groups in --group parameter.  Closes: #927350
+    + Fix bad warning if user is an inherited member of a subgroup.
+      Closes: #927373
+
+  [ Edward Betts ]
+  * Correct some spelling errors in documentation.  MR: !116
+
+  [ Guillem Jover ]
+  * mk-origtargz:  MR: !120
+    + Do not enarmor already armored OpenPGP signatures.  This actively caused
+      broken .asc files to be uploaded to the archive.
+    + Pass --no-options to gpg.
+    + Prevent duplicating the signature in case mk-origtargz is called twice.
+    + Fix OpenPGP signature ASCII enarmor normalization.
+    + Minore code improvements.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 17:01:29 +0200
 
 devscripts (2.19.4) unstable; urgency=medium
 
@@ -48,7 +90,7 @@ devscripts (2.19.4) unstable; urgency=medium
     + Add KGB options configuration.  Closes: #921641; MR: !115
   * uscan:
     + Fix bad check for "verbose" in Config.pm.  Closes: #923441; MR: !111
-  * Update French translation
+  * Update French translation.
 
   [ Reiner Herrmann ]
   * Update German translation.

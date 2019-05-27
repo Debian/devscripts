@@ -70,7 +70,7 @@ use constant keys => [
             return /^[\w\d\-]+$/ ? 1 : (0, "Bad path $_");
         }
     ],
-    ['group=s',    'SALSA_GROUP',    qr/^[\-\w]+$/],
+    ['group=s',    'SALSA_GROUP',    qr/^[\/\-\w]+$/],
     ['group-id=s', 'SALSA_GROUP_ID', qr/^\d+$/],
     ['token', 'SALSA_TOKEN', sub { $_[0]->private_token($_[1]) }],
     [
@@ -83,7 +83,7 @@ use constant keys => [
             my $s = join '', <F>;
             close F;
             if ($s
-                =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(["'])?(\w+)\1?$/m
+                =~ m/^[^#]*(?:SALSA_(?:PRIVATE_)?TOKEN)\s*=\s*(["'])?([-\w]+)\1?$/m
             ) {
                 $self->private_token($2);
                 return 1;
