@@ -1468,7 +1468,7 @@ if (($opt_r || $opt_a || $merge) && !$opt_create) {
     while (<S>) {
         $line++;
         # Start of existing changes by the current maintainer
-        if (/^  \[ $MAINTAINER \]$/ && $opt_multimaint_merge) {
+        if (/^  \[ \Q$MAINTAINER\E \]$/ && $opt_multimaint_merge) {
             # If there's more than one such block,
             # we only care about the first
             $maintline ||= $line;

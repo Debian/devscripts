@@ -224,4 +224,11 @@ testGuessedDistribution() {
     verifyGuessedDistribution unstable --stable stretch
 }
 
+testSpecialCharacterMaintainer() {
+    rm -f "$CHANGELOG"
+    export DEBFULLNAME='\k'
+    success "--create -D unstable --package test-package -v 1.0-1 \"First upload\""
+    success "-a \"Some change\""
+}
+
 . shunit2
