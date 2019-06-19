@@ -30,7 +30,7 @@ BEGIN {
 has agent =>
   (is => 'rw', default => sub { "Debian uscan $main::uscan_version" });
 has timeout => (is => 'rw');
-has pasv => (
+has pasv    => (
     is      => 'rw',
     default => 'default',
     trigger => sub {
@@ -90,7 +90,7 @@ sub download ($$$$$$$$) {
         my $headers = HTTP::Headers->new;
         $headers->header('Accept'  => '*/*');
         $headers->header('Referer' => $base);
-        $request = HTTP::Request->new('GET', $url, $headers);
+        $request  = HTTP::Request->new('GET', $url, $headers);
         $response = $self->user_agent->request($request, $fname);
         if (!$response->is_success) {
             uscan_warn((defined $pkg_dir ? "In directory $pkg_dir, d" : "D")
@@ -100,7 +100,7 @@ sub download ($$$$$$$$) {
         }
     } elsif ($mode eq 'ftp') {
         uscan_verbose "Requesting URL:\n   $url";
-        $request = HTTP::Request->new('GET', "$url");
+        $request  = HTTP::Request->new('GET', "$url");
         $response = $self->user_agent->request($request, $fname);
         if (!$response->is_success) {
             uscan_warn((defined $pkg_dir ? "In directory $pkg_dir, d" : "D")

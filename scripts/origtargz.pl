@@ -335,7 +335,7 @@ sub clean_checkout () {
 
 sub unpack_tarball ($) {
     my $origtar = shift;
-    my $tmpdir = File::Temp->newdir(DIR => ".", CLEANUP => 1);
+    my $tmpdir  = File::Temp->newdir(DIR => ".", CLEANUP => 1);
 
     print "Unpacking $origtar\n";
 

@@ -110,7 +110,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     # We don't have any predefined variables, but allow any of the form
     # RMADISON_URL_MAP_SHORTCODE=URL
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my @config_vars = ();
+    my @config_vars  = ();
 
     my $shell_cmd;
     # Set defaults

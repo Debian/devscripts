@@ -116,14 +116,9 @@ sub _check_repo {
         # Irker
         if ($self->config->irker and not $hooks->{irker}) {
             push @err, "irker missing";
-        } elsif (
-            $self->config->irker
-            and $hooks->{irker}->{recipients} ne join(
-                ' ',
-                map {
-                    "#$_"
-                } @{ $self->config->irc_channel })
-        ) {
+        } elsif ($self->config->irker
+            and $hooks->{irker}->{recipients} ne
+            join(' ', map { "#$_" } @{ $self->config->irc_channel })) {
             push @err, "bad irc channel: " . $hooks->{irker}->{recipients};
         } elsif ($self->config->disable_irker and $hooks->{irker}) {
             push @err, "irker enabled";

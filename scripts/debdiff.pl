@@ -137,7 +137,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DEBDIFF_DIRS'                 => 'no',
         'DEBDIFF_CONTROL'              => 'yes',
         'DEBDIFF_CONTROLFILES'         => 'control',
@@ -233,13 +233,13 @@ while (@ARGV) {
         my $from = shift;
         my $to   = shift;
         $from =~ s%^\./%/%;
-        $to =~ s%^\./%/%;
+        $to   =~ s%^\./%/%;
 
         if ($regex) {
             # quote ':' in the from and to patterns;
             # used later as a pattern delimiter
             $from =~ s/:/\\:/g;
-            $to =~ s/:/\\:/g;
+            $to   =~ s/:/\\:/g;
         }
         push @move, [$regex, $from, $to];
     } elsif ($ARGV[0] eq '--renamed') {
@@ -842,8 +842,8 @@ my (@deblosses, @debgains);
     grep $debs{$_}--, keys %debs1;
     grep $debs{$_}++, keys %debs2;
 
-    @deblosses = sort grep $debs{$_} < 0, keys %debs;
-    @debgains = sort grep $debs{$_} > 0, keys %debs;
+    @deblosses  = sort grep $debs{$_} < 0, keys %debs;
+    @debgains   = sort grep $debs{$_} > 0, keys %debs;
     @CommonDebs = sort grep $debs{$_} == 0, keys %debs;
 }
 
@@ -869,8 +869,8 @@ if ($show_moved and $type ne 'deb') {
     grep $files{$_}--, @D1;
     grep $files{$_}++, @D2;
 
-    my @old = sort grep $files{$_} < 0, keys %files;
-    my @new = sort grep $files{$_} > 0, keys %files;
+    my @old  = sort grep $files{$_} < 0, keys %files;
+    my @new  = sort grep $files{$_} > 0, keys %files;
     my @same = sort grep $files{$_} == 0, keys %files;
 
     # We store any changed files in a hash of hashes %changes, where
@@ -968,7 +968,7 @@ if ($show_moved and $type ne 'deb') {
     grep $files{$_}++, @D2;
 
     my @losses = sort grep $files{$_} < 0, keys %files;
-    my @gains = sort grep $files{$_} > 0, keys %files;
+    my @gains  = sort grep $files{$_} > 0, keys %files;
 
     if (@losses == 0 && @gains == 0) {
         print "File lists identical (after any substitutions)\n"
@@ -1103,7 +1103,7 @@ sub process_debI($) {
         last if /^Package:/;
         next unless /^\s+\d+\s+bytes,\s+\d+\s+lines\s+(\*)?\s+([\-\w]+)/;
         my $control = $2;
-        my $perms = ($1 ? "-rwxr-xr-x" : "-rw-r--r--");
+        my $perms   = ($1 ? "-rwxr-xr-x" : "-rw-r--r--");
         push @filelist, "$perms  root/root   DEBIAN/$control";
     }
 
@@ -1148,7 +1148,7 @@ sub wdiff_control_files($$$$$) {
             }
         }
         my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
-        my @opts = ('-n');
+        my @opts       = ('-n');
         push @opts, $wdiff_opt if $wdiff_opt;
         my ($wdiff, $wdiff_error) = ('', '');
         spawn(

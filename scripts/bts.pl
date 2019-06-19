@@ -514,7 +514,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'BTS_OFFLINE'            => 'no',
         'BTS_CACHE'              => 'yes',
         'BTS_CACHE_MODE'         => 'min',
@@ -1342,7 +1342,7 @@ Change the I<title> of the I<bug>.
 =cut
 
 sub bts_retitle {
-    my $bug = checkbug(shift) or die "bts retitle: retitle what bug?\n";
+    my $bug   = checkbug(shift) or die "bts retitle: retitle what bug?\n";
     my $title = join(" ", @_);
     if (!length $title) {
         die "bts retitle: set title of $bug to what?\n";
@@ -1429,7 +1429,7 @@ reopened.
 =cut
 
 sub bts_found {
-    my $bug = checkbug(shift) or die "bts found: found what bug?\n";
+    my $bug     = checkbug(shift) or die "bts found: found what bug?\n";
     my $version = shift;
     if (!defined $version) {
         warn
@@ -1448,7 +1448,7 @@ package to which it is assigned.
 =cut
 
 sub bts_notfound {
-    my $bug = checkbug(shift) or die "bts notfound: what bug?\n";
+    my $bug     = checkbug(shift) or die "bts notfound: what bug?\n";
     my $version = shift
       or die "bts notfound: remove record \#$bug from which version?\n";
     opts_done(@_);
@@ -1480,7 +1480,7 @@ This is equivalent to the sequence of commands "B<found> I<bug> I<version>",
 =cut
 
 sub bts_notfixed {
-    my $bug = checkbug(shift) or die "bts notfixed: what bug?\n";
+    my $bug     = checkbug(shift) or die "bts notfixed: what bug?\n";
     my $version = shift
       or die "bts notfixed: remove record \#$bug from which version?\n";
     opts_done(@_);
@@ -1494,7 +1494,7 @@ Note that a I<bug> is blocked from being fixed by a set of other bugs.
 =cut
 
 sub bts_block {
-    my $bug = checkbug(shift) or die "bts block: what bug is blocked?\n";
+    my $bug  = checkbug(shift) or die "bts block: what bug is blocked?\n";
     my $word = shift;
     if (defined $word && $word ne 'by' && $word ne 'with') {
         unshift @_, $word;
@@ -1516,7 +1516,7 @@ Note that a I<bug> is no longer blocked from being fixed by a set of other bugs.
 =cut
 
 sub bts_unblock {
-    my $bug = checkbug(shift) or die "bts unblock: what bug is blocked?\n";
+    my $bug  = checkbug(shift) or die "bts unblock: what bug is blocked?\n";
     my $word = shift;
     if (defined $word && $word ne 'by' && $word ne 'with') {
         unshift @_, $word;
@@ -2174,7 +2174,7 @@ sub bts_reportspam {
             print "bts reportspam: would report $bug as containing spam (URL: "
               . $url . ")\n";
         } else {
-            my $request = HTTP::Request->new('GET', $url);
+            my $request  = HTTP::Request->new('GET', $url);
             my $response = $ua->request($request);
             if (!$response->is_success) {
                 warn "$progname: failed to report $bug as containing spam: "
@@ -2588,7 +2588,7 @@ sub sanitizething {
 # Perform basic validation of an argument which should be an email address,
 # handling ! if allowed
 sub checkemail {
-    my $email = $_[0] or return;
+    my $email     = $_[0] or return;
     my $allowbang = $_[1];
 
     if ($email !~ /\@/ && (!$allowbang || $email ne '!')) {
@@ -3255,7 +3255,7 @@ sub download {
         # Add a <base> tag to the live page content, so that relative urls
         # in it work when it's passed to the web browser.
         my $base = $url;
-        $base =~ s%/[^/]*$%%;
+        $base     =~ s%/[^/]*$%%;
         $livepage =~ s%<head>%<head><base href="$base">%i;
 
         chdir $oldcwd or die "$progname: chdir $oldcwd failed: $!\n";
@@ -3338,7 +3338,7 @@ m%<a(?: class=\".*?\")? href="(?:/cgi(?:-bin)?/)?((bugreport\.cgi[^\"]+)"(?: .*?
 
         warn "bts debug: downloading $btscgiurl$ref\n" if $debug;
         init_agent() unless $ua;  # shouldn't be necessary, but do just in case
-        my $request = HTTP::Request->new('GET', $btscgiurl . $ref);
+        my $request  = HTTP::Request->new('GET', $btscgiurl . $ref);
         my $response = $ua->request($request);
         if ($response->is_success) {
             my $content_length
@@ -3526,7 +3526,7 @@ s%(<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?([^\"]+)(\"
 
 # Removes a specified thing from the cache
 sub deletecache {
-    my $thing = shift;
+    my $thing   = shift;
     my $thgopts = shift || '';
 
     if (!-d $cachedir) {
@@ -3546,16 +3546,16 @@ sub deletecache {
 
 # Given a thing, returns the filename for it in the cache.
 sub cachefile {
-    my $thing = shift;
+    my $thing   = shift;
     my $thgopts = shift || '';
     if ($thing eq '') { die "$progname: cachefile given empty argument\n"; }
     if ($thing =~ /bugs.css$/) { return $cachedir . "bugs.css" }
-    $thing =~ s/^src:/src_/;
-    $thing =~ s/^from:/from_/;
-    $thing =~ s/^tag:/tag_/;
-    $thing =~ s/^usertag:/usertag_/;
-    $thing =~ s%^release-critical/index\.html$%release-critical.html%;
-    $thing =~ s%/%_%g;
+    $thing   =~ s/^src:/src_/;
+    $thing   =~ s/^from:/from_/;
+    $thing   =~ s/^tag:/tag_/;
+    $thing   =~ s/^usertag:/usertag_/;
+    $thing   =~ s%^release-critical/index\.html$%release-critical.html%;
+    $thing   =~ s%/%_%g;
     $thgopts =~ s/;/_3B/g;
     $thgopts =~ s/=/_3D/g;
     return File::Spec->catfile($cachedir,
@@ -3582,7 +3582,7 @@ sub cachebugdir {
 # And the reverse: Given a filename in the cache, returns the corresponding
 # "thing".
 sub cachefile_to_thing {
-    my $thing = basename(shift, '.html');
+    my $thing   = basename(shift, '.html');
     my $thgopts = '';
     $thing =~ s/^src_/src:/;
     $thing =~ s/^from_/from:/;
@@ -3696,7 +3696,7 @@ sub href_to_filename {
         $msg = $uri->query_param_delete('msg');
 
         my $ref = $uri->query // '';
-        $ref =~ s/&(?:amp;)?/;/g;    # normalise all hrefs
+        $ref =~ s/&(?:amp;)?/;/g;          # normalise all hrefs
         $ref =~ s/;archive=(yes|no)\b//;
         $ref =~ s/%3D/=/g;
         $uri->query($ref);
@@ -3770,7 +3770,7 @@ sub href_to_filename {
 # ";opt1=val1;opt2=val2" with possible caching if there are no options
 sub browse {
     prunecache();
-    my $thing = shift;
+    my $thing   = shift;
     my $thgopts = shift || '';
 
     if ($thing eq '') {
@@ -4058,7 +4058,7 @@ sub set_timestamp {
 }
 
 sub delete_timestamp {
-    my $thing = shift;
+    my $thing   = shift;
     my $thgopts = shift || '';
 
     if (tied %timestamp) {
@@ -4130,7 +4130,7 @@ sub bts_mirror {
     init_agent() unless $ua;
     if ($url =~ m%/\d+$% and !$refreshmode and !$force) {
         # Single bug, worth doing timestamp checks
-        my $request = HTTP::Request->new('HEAD', $url);
+        my $request  = HTTP::Request->new('HEAD', $url);
         my $response = $ua->request($request);
 
         if ($response->is_success) {
@@ -4146,7 +4146,7 @@ sub bts_mirror {
     # So now we download the full thing regardless
     # We don't care if we scotch the contents of $file - it's only
     # a temporary file anyway
-    my $request = HTTP::Request->new('GET', $url);
+    my $request  = HTTP::Request->new('GET', $url);
     my $response = $ua->request($request);
 
     if ($response->is_success) {

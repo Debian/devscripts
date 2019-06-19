@@ -1043,7 +1043,7 @@ sub cmp_versions {
     $dehs_tags->{'debian-uversion'} //= $self->parse_result->{lastversion};
     $dehs_tags->{'debian-mangled-uversion'} //= $mangled_lastversion;
     $dehs_tags->{'upstream-version'} //= $self->search_result->{newversion};
-    $dehs_tags->{'upstream-url'} //= $self->upstream_url;
+    $dehs_tags->{'upstream-url'}     //= $self->upstream_url;
 
     my $mangled_ver
       = Dpkg::Version->new("1:${mangled_lastversion}-0", check => 0);
@@ -1620,7 +1620,7 @@ sub mkorigtargz {
     }
 
     dehs_verbose "$mk_origtargz_out\n" if $mk_origtargz_out;
-    $dehs_tags->{target} = $target;
+    $dehs_tags->{target}        = $target;
     $dehs_tags->{'target-path'} = $path;
 
 #######################################################################

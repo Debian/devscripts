@@ -276,7 +276,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DEBCHANGE_PRESERVE'             => 'no',
         'DEBCHANGE_QUERY_BTS'            => 'yes',
         'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
@@ -568,7 +568,7 @@ fatal
 fatal "--package can only be used with --create, --increment and --newversion"
   if $opt_package && !($opt_create || $opt_i || $opt_v);
 
-my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
+my $changelog_path      = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 my $real_changelog_path = $changelog_path;
 if ($opt_news) { $changelog_path = $opt_news; }
 if ($changelog_path ne 'debian/changelog' and not $opt_news) {
@@ -798,17 +798,17 @@ check_env_utf8('UBUMAIL');
 
 if (exists $env{'DEBEMAIL'} and $env{'DEBEMAIL'} =~ /^(.*)\s+<(.*)>$/) {
     $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
-    $env{'DEBEMAIL'} = $2;
+    $env{'DEBEMAIL'}    = $2;
 }
 if (!exists $env{'DEBEMAIL'} or !exists $env{'DEBFULLNAME'}) {
     if (exists $env{'EMAIL'} and $env{'EMAIL'} =~ /^(.*)\s+<(.*)>$/) {
         $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
-        $env{'EMAIL'} = $2;
+        $env{'EMAIL'}       = $2;
     }
 }
 if (exists $env{'UBUMAIL'} and $env{'UBUMAIL'} =~ /^(.*)\s+<(.*)>$/) {
     $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
-    $env{'UBUMAIL'} = $2;
+    $env{'UBUMAIL'}     = $2;
 }
 
 # Now use the gleaned values to determine our MAINTAINER and EMAIL values
@@ -916,7 +916,7 @@ if (
         my $uploader = decode_utf8($parser->{Uploaders}) || '';
         $uploader =~ s/^\s+//;
         my $maintainer = decode_utf8($parser->{Maintainer});
-        my @uploaders = split(/\s*,\s*/, $uploader);
+        my @uploaders  = split(/\s*,\s*/, $uploader);
 
         my $packager = "$MAINTAINER <$EMAIL>";
 
@@ -1764,7 +1764,7 @@ if (   (basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%)
       and $v->is_valid();
 
     my ($new_version, $new_uversion);
-    $new_version = $v->as_string(omit_epoch => 1);
+    $new_version  = $v->as_string(omit_epoch => 1);
     $new_uversion = $v->as_string(omit_epoch => 1, omit_revision => 1);
 
     if ($new_uversion ne $UVERSION) {

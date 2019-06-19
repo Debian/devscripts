@@ -175,9 +175,9 @@ sub desc {
     my @res = ();
     if ($self->config->desc) {
         my $str = $self->config->desc_pattern;
-        $str =~ s/%P/$repo/g;
+        $str  =~ s/%P/$repo/g;
         $repo =~ s#.*/##;
-        $str =~ s/%p/$repo/g;
+        $str  =~ s/%p/$repo/g;
         push @res, description => $str;
     }
     if ($self->config->disable_issues) {

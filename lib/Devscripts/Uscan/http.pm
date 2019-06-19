@@ -21,7 +21,7 @@ sub http_search {
 "you must have the liblwp-protocol-https-perl package installed\nto use https URLs";
     }
     uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
-    my $request = HTTP::Request->new('GET', $self->parse_result->{base});
+    my $request  = HTTP::Request->new('GET', $self->parse_result->{base});
     my $response = $self->downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn
@@ -211,7 +211,7 @@ sub http_newdir {
 "$progname: you must have the liblwp-protocol-https-perl package installed\n"
           . "to use https URLs";
     }
-    $request = HTTP::Request->new('GET', $base);
+    $request  = HTTP::Request->new('GET', $base);
     $response = $downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn

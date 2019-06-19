@@ -576,7 +576,7 @@ sub compare_src_bin {
         my $package_h = \%{ $packages{Sources}{$package} };
         if ($package_h->{'Binary'}) {
             my @binaries = split(", ", $package_h->{'Binary'});
-            my $version = $package_h->{'Version'};
+            my $version  = $package_h->{'Version'};
             foreach my $binary (@binaries) {
                 if (defined $packages{Sources_Bin}{$binary}) {
                     my $alt_ver = $packages{Sources_Bin}{$binary}{Version};

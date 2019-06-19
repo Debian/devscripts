@@ -386,7 +386,7 @@ sub newest_bugs {
 sub bug_log {
     die "Couldn't run bug_log: $soap_broken\n" unless have_soap();
 
-    my $bug = shift || '';
+    my $bug     = shift || '';
     my $message = shift;
 
     return if $bug !~ /^\d+$/;

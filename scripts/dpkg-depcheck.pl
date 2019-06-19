@@ -141,7 +141,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = ('DPKG_DEPCHECK_OPTIONS' => '',);
+    my %config_vars    = ('DPKG_DEPCHECK_OPTIONS' => '',);
     my %config_default = %config_vars;
 
     my $shell_cmd;
@@ -252,7 +252,7 @@ if ($opts{"pkgs"} ne 'all') {
       = $packagedeps->full_dependencies('build-essential', @essential);
     my @essential_files = PackagesToFiles(@essential_packages);
     @used_ess_files = SetInter(\@usedfiles, \@essential_files);
-    @usedfiles = SetMinus(\@usedfiles, \@used_ess_files);
+    @usedfiles      = SetMinus(\@usedfiles, \@used_ess_files);
 }
 
 # Now let's find out which packages are used...

@@ -150,7 +150,7 @@ my $root_cmd;
 my @packages;
 
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-my %config_vars = (
+my %config_vars  = (
     'MKBUILDDEPS_TOOL' =>
 '/usr/bin/apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends',
     'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no',

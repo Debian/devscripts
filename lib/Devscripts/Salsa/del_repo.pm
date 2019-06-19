@@ -12,7 +12,7 @@ sub del_repo {
         ds_warn "Repository name or path is missing";
         return 1;
     }
-    my $id = $self->project2id($reponame) or return 1;
+    my $id   = $self->project2id($reponame) or return 1;
     my $path = $self->project2path($reponame);
     return 1
       if ($ds_yes < 0

@@ -35,7 +35,7 @@ our $DM_URL = "https://ftp-master.debian.org/dm.txt";
 our $KEYRING
   = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
-our $GPG = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") }
+our $GPG  = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") }
 qw(gpg2 gpg);
 our ($HELP, @ARGUMENTS, @DM_DATA, %GPG_CACHE);
 

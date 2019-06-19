@@ -10,7 +10,7 @@ our $prompt = 1;
 
 sub rename_branch {
     my ($self, @reponames) = @_;
-    my $res = 0;
+    my $res   = 0;
     my @repos = $self->get_repo($prompt, @reponames);
     return @repos unless (ref $repos[0]);    # get_repo returns 1 when fails
     foreach (@repos) {

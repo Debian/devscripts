@@ -139,7 +139,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'GREP_EXCUSES_MAINTAINER'   => '',
         'GREP_EXCUSES_AUTOPKGTESTS' => 0,
     );

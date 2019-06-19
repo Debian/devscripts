@@ -29,7 +29,7 @@ has exclude_globs => (
     default => sub { $_[0]->config->exclude_file },
 );
 
-has status => (is => 'rw', default => sub { 0 });
+has status        => (is => 'rw', default => sub { 0 });
 has destfile_nice => (is => 'rw');
 
 sub do {

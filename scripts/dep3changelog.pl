@@ -81,12 +81,12 @@ check_env_utf8('EMAIL');
 
 if (exists $env{'DEBEMAIL'} and $env{'DEBEMAIL'} =~ /^(.*)\s+<(.*)>$/) {
     $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
-    $env{'DEBEMAIL'} = $2;
+    $env{'DEBEMAIL'}    = $2;
 }
 if (!exists $env{'DEBEMAIL'} or !exists $env{'DEBFULLNAME'}) {
     if (exists $env{'EMAIL'} and $env{'EMAIL'} =~ /^(.*)\s+<(.*)>$/) {
         $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
-        $env{'EMAIL'} = $2;
+        $env{'EMAIL'}       = $2;
     }
 }
 

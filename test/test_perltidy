@@ -18,7 +18,7 @@ if test "${1:-}" = --installed; then
 fi
 
 # Don't run this test with old Perltidy versions
-if test "$(perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION')" -lt 20180000; then
+if test "$(perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION')" -lt 20181100; then
     echo "SKIP: perltidy version too old, skipping this test."
     exit 0
 fi

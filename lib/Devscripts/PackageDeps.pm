@@ -62,7 +62,7 @@ sub new ($$) {
 # Syntax: Devscripts::PackageDeps->fromStatus()
 
 sub fromStatus ($) {
-    my $this = shift;
+    my $this  = shift;
     my $class = ref($this) || $this;
 
     my $self = {};

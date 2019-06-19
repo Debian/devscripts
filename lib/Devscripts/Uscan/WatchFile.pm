@@ -375,7 +375,7 @@ sub process_group {
     }
     my $new_version = join '+~', @new_versions;
     $dehs_tags->{'upstream-version'} = $new_version;
-    $dehs_tags->{'debian-uversion'} = join('+~', @last_versions)
+    $dehs_tags->{'debian-uversion'}  = join('+~', @last_versions)
       if (grep { $_ } @last_versions);
     $dehs_tags->{'debian-mangled-uversion'} = join '+~',
       @last_debian_mangled_uversions
@@ -393,7 +393,7 @@ sub process_group {
     }
     foreach my $line (@{ $self->watchlines }) {
         my $path = $line->destfile or next;
-        my $ver = $line->shared->{common_mangled_newversion};
+        my $ver  = $line->shared->{common_mangled_newversion};
         $path =~ s/\Q$ver\E/$new_version/;
         print STDERR "mv $line->{destfile} to $path\n";
         rename $line->{destfile}, $path;

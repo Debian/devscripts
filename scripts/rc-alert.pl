@@ -153,14 +153,14 @@ GetOptions(
 if ($opt_help)    { print $usage;   exit 0; }
 if ($opt_version) { print $version; exit 0; }
 
-$tagincoperation =~ /^(or|and)$/  or $tagincoperation  = 'or';
+$tagincoperation  =~ /^(or|and)$/ or $tagincoperation  = 'or';
 $distincoperation =~ /^(or|and)$/ or $distincoperation = 'or';
-$tagexcoperation =~ /^(or|and)$/  or $tagexcoperation  = 'or';
+$tagexcoperation  =~ /^(or|and)$/ or $tagexcoperation  = 'or';
 $distexcoperation =~ /^(or|and)$/ or $distexcoperation = 'or';
-$includetags =~ s/[^P+HMRSUI]//gi;
-$excludetags =~ s/[^P+HMRSUI]//gi;
-$includedists =~ s/[^OSTUE]//gi;
-$excludedists =~ s/[^OSTUE]//gi;
+$includetags      =~ s/[^P+HMRSUI]//gi;
+$excludetags      =~ s/[^P+HMRSUI]//gi;
+$includedists     =~ s/[^OSTUE]//gi;
+$excludedists     =~ s/[^OSTUE]//gi;
 $includetags  = remove_duplicate_values(uc($includetags));
 $excludetags  = remove_duplicate_values(uc($excludetags));
 $includedists = remove_duplicate_values(uc($includedists));
@@ -473,7 +473,7 @@ sub human_dists($) {
 # Reverse of master.debian.org:/srv/bugs.debian.org/cgi-bin/common.pl
 sub unhtmlsanit ($) {
     my %saniarray = ('lt', '<', 'gt', '>', 'amp', '&', 'quot', '"');
-    my $in = $_[0];
+    my $in        = $_[0];
     $in =~ s/&(lt|gt|amp|quot);/$saniarray{$1}/g;
     return $in;
 }
