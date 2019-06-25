@@ -755,7 +755,9 @@ EOF
     }
 
     # Set $download_version etc. if already known
-    if ($self->config->download_version) {
+    if ($self->versionmode eq 'ignore' and $self->config->download_version) {
+        uscan_verbose 'Ignore --download_version for component with "ignore"';
+    } elsif ($self->config->download_version) {
         $self->shared->{download_version} = $self->config->download_version;
         $self->shared->{download}         = 2
           if $self->shared->{download} == 1;    # Change default 1 -> 2
@@ -1060,7 +1062,8 @@ sub cmp_versions {
     }
 
     # Version dependent $download adjustment
-    if (defined $self->shared->{download_version}) {
+    if (defined $self->shared->{download_version}
+        and not $self->versionmode eq 'ignore') {
 
         # Pretend to find a newer upstream version to exit without error
         uscan_msg "Newest version of $self->{pkg} on remote site is "

@@ -86,7 +86,8 @@ sub http_search {
         uscan_verbose $msg;
     }
     my ($newversion, $newfile);
-    if (defined $self->shared->{download_version}) {
+    if (defined $self->shared->{download_version}
+        and not $self->versionmode eq 'ignore') {
 
         # extract ones which has $match in the above loop defined
         my @vhrefs = grep { $$_[3] } @hrefs;

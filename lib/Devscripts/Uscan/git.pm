@@ -163,7 +163,8 @@ sub git_search {
                 $msg .= "     $$ref[1] ($$ref[0])\n";
             }
             uscan_verbose "$msg";
-            if ($self->shared->{download_version}) {
+            if ($self->shared->{download_version}
+                and not $self->versionmode eq 'ignore') {
 
 # extract ones which has $version in the above loop matched with $download_version
                 my @vrefs
