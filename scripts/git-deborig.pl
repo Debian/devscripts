@@ -137,7 +137,7 @@ die "version number $version is not valid ..\n" unless $version->is_valid();
 my $source           = $changelog->{Source};
 my $upstream_version = $version->version();
 
-# Sanity check #3
+# Sanity check #4
 # Only complain if the user didn't supply a version, because the user
 # is not required to include a Debian revision when they pass
 # --version
