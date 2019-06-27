@@ -144,6 +144,17 @@ my $upstream_version = $version->version();
 die "this looks like a native package .."
   if (!$user_version && $version->is_native());
 
+# Convert the upstream version according to DEP-14 rules
+my $git_upstream_version = $upstream_version;
+$git_upstream_version =~ y/:~/%_/;
+$git_upstream_version =~ s/\.(?=\.|$|lock$)/.#/g;
+
+# This list could be expanded if new conventions come into use
+my @candidate_tags = (
+    "$git_upstream_version", "v$git_upstream_version",
+    "upstream/$git_upstream_version"
+);
+
 # Default to gzip
 my $compressor  = "gzip -cn";
 my $compression = "gz";
@@ -172,16 +183,7 @@ if ($user_ref) {    # User told us the tag/branch to archive
             # Get available git tags
     my @all_tags = $git->tag();
 
-    # convert according to DEP-14 rules
-    my $git_upstream_version = $upstream_version;
-    $git_upstream_version =~ y/:~/%_/;
-    $git_upstream_version =~ s/\.(?=\.|$|lock$)/.#/g;
-
     # See which candidate version tags are present in the repo
-    my @candidate_tags = (
-        "$git_upstream_version", "v$git_upstream_version",
-        "upstream/$git_upstream_version"
-    );
     my $lc           = List::Compare->new(\@all_tags, \@candidate_tags);
     my @version_tags = $lc->get_intersection();
 
