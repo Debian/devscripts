@@ -71,7 +71,7 @@ the Debian changelog, use I<VERSION>.
 
 =head1 SEE ALSO
 
-git-archive(1), dgit-maint-merge(7)
+git-archive(1), dgit-maint-merge(7), dgit-maint-debrebase(7)
 
 =head1 AUTHOR
 
