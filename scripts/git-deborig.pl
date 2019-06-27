@@ -2,7 +2,7 @@
 
 # git-deborig -- try to produce Debian orig.tar using git-archive(1)
 
-# Copyright (C) 2016-2018  Sean Whitton <spwhitton@spwhitton.name>
+# Copyright (C) 2016-2019  Sean Whitton <spwhitton@spwhitton.name>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<COMMITTISH>]
+B<git deborig> [B<--force>|B<-f>] [B<--just-print>|B<--just-print-tag-names>] [B<--version=>I<VERSION>] [I<COMMITTISH>]
 
 =head1 DESCRIPTION
 
@@ -61,6 +61,13 @@ Note that running the git-archive(1) invocation outputted with this
 option may not produce the same output.  This is because
 B<git-deborig> takes care to disables git attributes otherwise heeded
 by git-archive(1), as detailed above.
+
+=item B<--just-print-tag-names>
+
+Instead of actually invoking git-archive(1), or even checking which
+tags exist, print the tag names we would consider for the upstream
+version number in the first entry in the Debian changelog, or that
+supplied with B<--version>.
 
 =item B<--version=>I<VERSION>
 
@@ -107,17 +114,21 @@ die "pwd doesn't look like a Debian source package ..\n"
 # Process command line args
 my $orig_args = join(" ", map { shell_quote($_) } ("git", "deborig", @ARGV));
 my $overwrite = '';
-my $user_version = '';
-my $user_ref     = '';
-my $just_print   = '';
+my $user_version         = '';
+my $user_ref             = '';
+my $just_print           = '';
+my $just_print_tag_names = '';
 GetOptions(
-    'force|f'    => \$overwrite,
-    'just-print' => \$just_print,
-    'version=s'  => \$user_version
+    'force|f'              => \$overwrite,
+    'just-print'           => \$just_print,
+    'just-print-tag-names' => \$just_print_tag_names,
+    'version=s'            => \$user_version
 ) || usage();
+
 if (scalar @ARGV == 1) {
     $user_ref = shift @ARGV;
-} elsif (scalar @ARGV >= 2) {
+} elsif (scalar @ARGV >= 2
+    || ($just_print && $just_print_tag_names)) {
     usage();
 }
 
@@ -154,6 +165,14 @@ my @candidate_tags = (
     "$git_upstream_version", "v$git_upstream_version",
     "upstream/$git_upstream_version"
 );
+
+# Handle the --just-print-tag-names option
+if ($just_print_tag_names) {
+    for my $candidate_tag (@candidate_tags) {
+        print "$candidate_tag\n";
+    }
+    exit 0;
+}
 
 # Default to gzip
 my $compressor  = "gzip -cn";
@@ -261,5 +280,5 @@ sub archive_ref_or_just_print {
 
 sub usage {
     die
-"usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [COMMITTISH]\n";
+"usage: git deborig [--force|-f] [--just-print|--just-print-tag-names] [--version=VERSION] [COMMITTISH]\n";
 }
