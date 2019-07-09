@@ -223,7 +223,7 @@ sub parse_conf_files {
         my @key_names = map { $_->[1] ? $_->[1] : () } @$keys;
         my %config_vars;
 
-        my $shell_cmd = q{for file in };
+        my $shell_cmd       = q{for file in };
         my @shell_cfg_files = map { shell_quote($_) } @cfg_files;
         $shell_cmd .= join(' ', @shell_cfg_files);
         $shell_cmd .= q{ ; do . "$file"; done;};
