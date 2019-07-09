@@ -138,7 +138,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DEBRELEASE_DEBS_DIR'            => '..',
         'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
         'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
@@ -347,7 +347,7 @@ if ($opt_list_changes) {
 
 chdir dirname($changes)
   or die "$progname: can't chdir to $changes directory: $!\n";
-$changes = basename($changes);
+$changes  = basename($changes);
 $mchanges = basename($mchanges) if $opt_multi;
 
 if (!-r $changes or $opt_multi and $mchanges and !-r $mchanges) {

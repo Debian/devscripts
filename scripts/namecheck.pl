@@ -163,7 +163,7 @@ sub testSites {
         #
         #  Get the URL
         #
-        my $request = HTTP::Request->new('GET', $url, $headers);
+        my $request  = HTTP::Request->new('GET', $url, $headers);
         my $response = $ua->request($request);
 
         #

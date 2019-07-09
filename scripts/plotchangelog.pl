@@ -103,7 +103,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'PLOTCHANGELOG_OPTIONS' => '',
         'PLOTCHANGELOG_GNUPLOT' => '',
     );

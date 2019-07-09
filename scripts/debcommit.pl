@@ -269,7 +269,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DEBCOMMIT_STRIP_MESSAGE'         => 'yes',
         'DEBCOMMIT_SIGN_COMMITS'          => 'no',
         'DEBCOMMIT_SIGN_TAGS'             => 'no',
@@ -899,7 +899,7 @@ sub confirm {
 # to the user again needs to have a \n tacked on to the end.
 sub edit {
     my $message = shift;
-    my $fh = File::Temp->new(TEMPLATE => '.commit-tmp.XXXXXX')
+    my $fh      = File::Temp->new(TEMPLATE => '.commit-tmp.XXXXXX')
       || die "$progname: unable to create a temporary file.\n";
     # Ensure the message we present to the user has an EOL on the last line.
     chomp($message);

@@ -294,10 +294,10 @@ sub safe_replace($$) {
             return 0;
         }
 
-        $regexp =~ s/\\(.)/$1/g;
+        $regexp      =~ s/\\(.)/$1/g;
         $replacement =~ s/\\(.)/$1/g;
 
-        $regexp =~ s/([^-])/'\\x'  . unpack 'H*', $1/ge;
+        $regexp      =~ s/([^-])/'\\x'  . unpack 'H*', $1/ge;
         $replacement =~ s/([^-])/'\\x'  . unpack 'H*', $1/ge;
 
         eval "\$\$in =~ tr<$regexp><$replacement>$flags;";

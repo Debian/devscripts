@@ -96,8 +96,7 @@ my $git = Git::Wrapper->new(".");
 # Sanity check #1
 try {
     $git->rev_parse({ git_dir => 1 });
-}
-catch {
+} catch {
     die "pwd doesn't look like a git repository ..\n";
 };
 
@@ -183,7 +182,7 @@ if ($user_ref) {    # User told us the tag/branch to archive
         "$git_upstream_version", "v$git_upstream_version",
         "upstream/$git_upstream_version"
     );
-    my $lc = List::Compare->new(\@all_tags, \@candidate_tags);
+    my $lc           = List::Compare->new(\@all_tags, \@candidate_tags);
     my @version_tags = $lc->get_intersection();
 
     # If there is only one candidate version tag, we're good to go.

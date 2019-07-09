@@ -402,7 +402,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DGET_PATH'   => '',
         'DGET_UNPACK' => 'yes',
         'DGET_VERIFY' => 'yes',

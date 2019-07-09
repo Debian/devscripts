@@ -388,7 +388,7 @@ sub main {
         shift @ARGV;
     } else {
         my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-        my %config_vars = ('DSCVERIFY_KEYRINGS' => '',);
+        my %config_vars    = ('DSCVERIFY_KEYRINGS' => '',);
         my %config_default = %config_vars;
 
         my $shell_cmd;

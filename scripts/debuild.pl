@@ -252,7 +252,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
+    my %config_vars  = (
         'DEBUILD_PRESERVE_ENV'                => 'no',
         'DEBUILD_PRESERVE_ENVVARS'            => '',
         'DEBUILD_LINTIAN'                     => 'yes',
@@ -419,8 +419,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
         my $savearg = $arg;
         my $opt     = '';
 
-        $arg =~ /^(-h|--help)$/ and usage(),   exit 0;
-        $arg eq '--version'     and version(), exit 0;
+        $arg =~ /^(-h|--help)$/ and usage(), exit 0;
+        $arg eq '--version' and version(), exit 0;
 
         # Let's do the messy case first
         if ($arg eq '--preserve-envvar') {
@@ -514,7 +514,7 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
             $root_command = $opt;
             next;
         }
-        $arg eq '--tgz-check'       and $tgz_check = 1, next;
+        $arg eq '--tgz-check' and $tgz_check = 1, next;
         $arg =~ /^--no-?tgz-check$/ and $tgz_check = 0, next;
         $arg =~ /^-r(.*)/ and $root_command = $1, next;
         if ($arg =~ /^--check-dirname-level=(.*)$/) {
@@ -642,7 +642,7 @@ if ($save_vars{'PATH'}) {
     $ENV{'PATH'} = join(':', $prepend_path, $ENV{'PATH'}) if $prepend_path;
 }
 $save_vars{'PATH'} = 1;
-$ENV{'TERM'} = 'dumb' unless exists $ENV{'TERM'};
+$ENV{'TERM'}       = 'dumb' unless exists $ENV{'TERM'};
 
 # Store a few variables for safe keeping.
 my %store_vars;

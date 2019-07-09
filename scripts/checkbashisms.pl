@@ -219,7 +219,7 @@ foreach my $filename (@ARGV) {
         # Handle line continuation
         if (!$makefile && $cat_string eq '' && m/\\$/) {
             chop;
-            $buffered_line .= $_;
+            $buffered_line      .= $_;
             $buffered_orig_line .= $orig_line . "\n";
             next;
         }
@@ -244,7 +244,7 @@ foreach my $filename (@ARGV) {
             if (/^[\w%-]+:+\s.*?;?(.*)$/
                 and !($last_continued and !$found_rules)) {
                 $found_rules = 1;
-                $_ = $1 if $1;
+                $_           = $1 if $1;
             }
 
             last
@@ -309,7 +309,7 @@ foreach my $filename (@ARGV) {
                     if ($count % 2 == 0) {
                         # Quoted block ends on this line
                         # Ignore everything before the closing quote
-                        $line = $rest || '';
+                        $line         = $rest || '';
                         $quote_string = "";
                     } else {
                         next;
@@ -326,7 +326,7 @@ foreach my $filename (@ARGV) {
             if ($quote_string eq "") {
                 # Possible start of a quoted block
                 for my $quote ("\"", "\'") {
-                    my $templine = $line;
+                    my $templine   = $line;
                     my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
                     # Remove balanced quotes and their content
@@ -468,7 +468,7 @@ m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+(?:\/[^\s;]+)?)\s*(\&|\||\d?>|<
 
             # We've checked for all the things we still want to notice in
             # double-quoted strings, so now remove those strings as well.
-            $line =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+            $line     =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
             $cat_line =~ s/(^|[^<\\\'-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
             foreach my $re (@bashisms_keys) {
                 my $expl = $bashisms{$re};

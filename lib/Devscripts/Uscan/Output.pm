@@ -49,7 +49,7 @@ sub uscan_warn ($) {
 sub uscan_die ($) {
     my $msg = $_[0];
     if ($dehs) {
-        $dehs_tags = { 'errors' => "$msg" };
+        $dehs_tags       = { 'errors' => "$msg" };
         $dehs_end_output = 1;
         dehs_output();
     }

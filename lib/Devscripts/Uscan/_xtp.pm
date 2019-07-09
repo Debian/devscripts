@@ -53,7 +53,7 @@ sub _xtp_newfile_base {
 
             # Remove HTTP header trash
             $newfile_base =~ s/[\?#].*$//;    # PiPy
-                # just in case this leaves us with nothing
+                 # just in case this leaves us with nothing
             if ($newfile_base eq '') {
                 uscan_warn
 "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.";

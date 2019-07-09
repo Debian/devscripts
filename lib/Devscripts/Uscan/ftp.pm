@@ -15,7 +15,7 @@ sub ftp_search {
 
     # FTP site
     uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
-    my $request = HTTP::Request->new('GET', $self->parse_result->{base});
+    my $request  = HTTP::Request->new('GET', $self->parse_result->{base});
     my $response = $self->downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn
@@ -148,7 +148,7 @@ sub ftp_newdir {
         $download_version_short3)
       = partial_version($download_version);
     my $base = $site . $dir;
-    $request = HTTP::Request->new('GET', $base);
+    $request  = HTTP::Request->new('GET', $base);
     $response = $downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn

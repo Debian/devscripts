@@ -261,7 +261,7 @@ my $compression_re = compression_get_file_extension_regex();
 # <!-- TODO we really need to factor out in a Perl module the
 #      configuration file parsing code -->
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-my %config_vars = (
+my %config_vars  = (
     'DEBCHECKOUT_AUTH_URLS' => '',
     'DEBCHECKOUT_SOURCE'    => 'auto',
     'DEBCHECKOUT_USER'      => '',
@@ -310,7 +310,7 @@ sub init_agent {
 
 sub recurs_mkdir {
     my ($dir) = @_;
-    my @temp = split /\//, $dir;
+    my @temp      = split /\//, $dir;
     my $createdir = "";
     foreach my $piece (@temp) {
         if (!length $createdir and !length $piece) {
@@ -330,7 +330,7 @@ sub recurs_mkdir {
 # fields.  Returns (version, type, url, origtgz_name) tuple.
 sub find_repo($$) {
     my ($pkg, $desired_ver) = @_;
-    my @repo = ("", 0, "", "");
+    my @repo  = ("", 0, "", "");
     my $found = 0;
     my ($nonepoch_version, $version) = ("", "");
     my $origtgz_name = "";
@@ -765,7 +765,7 @@ sub checkout_files($$$$) {
                       ? "$repo_url/$escaped_file"
                       : "$repo_url/raw-file/tip/$file";
                     init_agent() unless $ua;
-                    my $request = HTTP::Request->new('GET', "$file_url");
+                    my $request  = HTTP::Request->new('GET', "$file_url");
                     my $response = $ua->request($request);
                     if ($response->is_success) {
                         if (!open OUTPUT, ">", $dir . "/" . basename($file)) {
@@ -845,7 +845,7 @@ sub checkout_files($$$$) {
                             $browse_url .= ".git";
                             $file_url = "$browse_url;a=blob_plain";
                             $file_url .= ";f=$escaped_file;hb=HEAD";
-                            $request = HTTP::Request->new('GET', $file_url);
+                            $request  = HTTP::Request->new('GET', $file_url);
                             $response = $ua->request($request);
                             if (!$response->is_success) {
                                 print "Error retrieving file: "
@@ -1055,7 +1055,7 @@ sub tg_info($) {
     $info{'top-bases'} = '';
     my @bases = git_ls_remote($url, 'refs/top-bases');
     if (@bases) {
-        $info{'topgit'} = 'yes';
+        $info{'topgit'}    = 'yes';
         $info{'top-bases'} = join ' ', @bases;
     }
     return (\%info);
@@ -1206,7 +1206,7 @@ EOF
     $repo_url = munge_url($repo_type, $repo_url);
     if ($auth and not @files) {
         $anon_repo_url = $repo_url;
-        $repo_url = set_auth($repo_type, $repo_url, $user, $dont_act);
+        $repo_url      = set_auth($repo_type, $repo_url, $user, $dont_act);
     }
     print_repo($repo_type, $repo_url) if $print_mode;    # ... then quit
     print_details($repo_type, $repo_url) if $details_mode;    # ... then quit
@@ -1257,7 +1257,7 @@ EOF
             }
             # Filter out any branches already populated via TopGit
             my @tgheads = split ' ', $$tg_info{'top-bases'};
-            my $master = 'master';
+            my $master  = 'master';
             if (
                 open(HEAD,
                     "env GIT_DIR=\"$wcdir/.git\" git symbolic-ref HEAD |"

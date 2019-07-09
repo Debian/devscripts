@@ -42,7 +42,7 @@ sub push_repo {
         return 1;
     }
     my $path = $self->project2path('') or return 1;
-    my $url = $self->config->git_server_url . "$path$reponame";
+    my $url  = $self->config->git_server_url . "$path$reponame";
     spawn(
         exec       => ['git', 'remote', 'add', 'origin', $url],
         wait_child => 1,

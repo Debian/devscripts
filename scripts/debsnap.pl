@@ -48,7 +48,7 @@ if ($@) {
 my $modified_conf_msg = '';
 my %config_vars       = ();
 
-my %opt = (architecture => []);
+my %opt     = (architecture => []);
 my $package = '';
 my $pkgversion;
 my $firstversion;

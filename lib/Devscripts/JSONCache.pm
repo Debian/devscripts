@@ -78,9 +78,7 @@ sub NEXTKEY {
         $i++ if ($_ eq $last);
         return ()
       }
-      sort {
-        $a cmp $b
-      } keys %{ $_[0]->data };
+      sort { $a cmp $b } keys %{ $_[0]->data };
     return @keys ? $keys[0] : ();
 }
 

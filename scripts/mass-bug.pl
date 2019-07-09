@@ -229,7 +229,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = ('BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',);
+    my %config_vars    = ('BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',);
     my %config_default = %config_vars;
 
     my $shell_cmd;
