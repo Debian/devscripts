@@ -1,4 +1,4 @@
-devscripts (2.19.6+exp) UNRELEASED; urgency=medium
+devscripts (2.19.6) UNRELEASED; urgency=medium
 
   [ Christoph Berg ]
   * origtargz:
@@ -8,10 +8,6 @@ devscripts (2.19.6+exp) UNRELEASED; urgency=medium
   * hardening-check:
     + Add support for detecting binaries compiled with
       -fstack-clash-protection.  LP: #1820798; MR: !121
-
- -- Christoph Berg <myon@debian.org>  Thu, 28 Mar 2019 14:36:21 +0100
-
-devscripts (2.19.6) UNRELEASED; urgency=medium
 
   [ laokz ]
   * uscan:
