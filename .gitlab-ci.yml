@@ -1,5 +1,6 @@
 before_script:
   - apt-get -q update
+  - apt-get -q -y dist-upgrade
   - env DEBIAN_FRONTEND=noninteractive apt-get -q -y install --no-install-recommends aspcud apt-cudf
   - env DEBIAN_FRONTEND=noninteractive apt-get -q -y --solver aspcud -o APT::Solver::Strict-Pinning=0 -o Debug::pkgProblemResolver=yes build-dep .
   - make
