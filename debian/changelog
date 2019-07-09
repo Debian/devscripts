@@ -8,6 +8,7 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   * hardening-check:
     + Add support for detecting binaries compiled with
       -fstack-clash-protection.  LP: #1820798; MR: !121
+    + Add detection for -fcf-protection.  MR: !127
 
   [ laokz ]
   * uscan:

@@ -465,6 +465,15 @@ foreach my $file (@ARGV) {
             "unknown, no -fstack-clash-protection instructions found");
     }
 
+    # For cf-protection look for endbr32/64 in objdump disassembly which
+    # mark possible indirect branch targets
+    $name = " Control flow integrity";
+    if ($DISASM =~ /^\s+[0-9a-f]+:\s+endbr(32|64)/m) {
+        good($name, "yes");
+    } else {
+        unknown($name, "unknown, no -fcf-protection instructions found!");
+    }
+
     if (!$lintian && (!$quiet || $rc != 0)) {
         print $report, "\n";
     }
