@@ -21,6 +21,12 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   [ Xavier Guimard ]
   * Reformat code following the changes in the new perltify 20181102.  MR: !129
 
+  [ Paul Wise ]
+  * Devscripts::Config:
+    + Improve handling (prevent code execution and errors with spaces and
+      newlines) of the configuration files.  MR: !124
+      - Move String::ShellQuote from Recommends to Depends.
+
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
