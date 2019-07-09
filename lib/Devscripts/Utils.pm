@@ -10,16 +10,16 @@ our @EXPORT = qw(ds_exec ds_exec_no_fail);
 sub ds_exec_no_fail {
     {
         local $, = ' ';
-        ds_verbose "Execute: @_...";
+        ds_debug "Execute: @_...";
     }
-    run \@_;
+    run \@_, '>', '/dev/null';
     return $?;
 }
 
 sub ds_exec {
     {
         local $, = ' ';
-        ds_verbose "Execute: @_...";
+        ds_debug "Execute: @_...";
     }
     run \@_;
     if ($?) {

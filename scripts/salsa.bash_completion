@@ -23,7 +23,7 @@ _salsa_completion () {
     opts+=" --no-tagpending --no-fail --rename-head --token --token-file"
     opts+=" --user --user-id --verbose"
     local commands=" add_user check_repo checkout co create_repo del_repo"
-    commands+=" del_user group list_groups list_repos ls"
+    commands+=" del_user group list_groups list_repos ls join push"
     commands+=" fork forks merge_request merge_requests mr mrs"
     commands+=" protect_branch protected_branches purge_cache push_repo"
     commands+=" search_group search_project search_user"

@@ -28,6 +28,12 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
       newlines) of the configuration files.  MR: !124
       - Move String::ShellQuote from Recommends to Depends.
 
+  [ Xavier Guimard ]
+  * salsa:
+    + Add "join" command.  Closes: #921314;  MR: !108
+    + Add "push" command.  MR: !108
+    + Update doc: completion for aliases.  MR: !108
+
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
