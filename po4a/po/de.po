@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2019-05-22 19:53+0200\n"
+"POT-Creation-Date: 2019-07-09 11:20+0200\n"
 "PO-Revision-Date: 2019-01-27 10:18+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -84,7 +84,7 @@ msgstr "DEBIAN"
 #: ../scripts/dpkg-depcheck.1:2 ../scripts/dpkg-genbuilddeps.1:2
 #: ../doc/edit-patch.1:2 ../scripts/dscextract.1:2 ../scripts/dscverify.1:2
 #: ../scripts/getbuildlog.1:2 ../scripts/git-deborig.pl:20
-#: ../scripts/grep-excuses.1:2 ../scripts/hardening-check.pl:427
+#: ../scripts/grep-excuses.1:2 ../scripts/hardening-check.pl:493
 #: ../scripts/list-unreleased.1:2 ../scripts/ltnu.pod:1
 #: ../scripts/manpage-alert.1:2 ../scripts/mass-bug.pl:21
 #: ../scripts/mergechanges.1:2 ../scripts/mk-build-deps.pl:24
@@ -125,7 +125,7 @@ msgstr "annotate-output - versieht Programmausgaben mit Zeit und Datenstrom"
 #: ../scripts/dpkg-genbuilddeps.1:4 ../doc/edit-patch.1:6
 #: ../scripts/dscextract.1:4 ../scripts/dscverify.1:4
 #: ../scripts/getbuildlog.1:4 ../scripts/git-deborig.pl:24
-#: ../scripts/grep-excuses.1:4 ../scripts/hardening-check.pl:431
+#: ../scripts/grep-excuses.1:4 ../scripts/hardening-check.pl:497
 #: ../scripts/list-unreleased.1:4 ../scripts/ltnu.pod:5
 #: ../scripts/manpage-alert.1:4 ../scripts/mass-bug.pl:25
 #: ../scripts/mergechanges.1:4 ../scripts/mk-build-deps.pl:28
@@ -166,7 +166,7 @@ msgstr "B<annotate-output> [I<Optionen>] I<Programm> [I<Argumente> …]"
 #: ../scripts/dpkg-depcheck.1:6 ../scripts/dpkg-genbuilddeps.1:6
 #: ../doc/edit-patch.1:11 ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
 #: ../scripts/getbuildlog.1:8 ../scripts/git-deborig.pl:28
-#: ../scripts/grep-excuses.1:6 ../scripts/hardening-check.pl:438
+#: ../scripts/grep-excuses.1:6 ../scripts/hardening-check.pl:504
 #: ../scripts/list-unreleased.1:6 ../scripts/ltnu.pod:13
 #: ../scripts/manpage-alert.1:6 ../scripts/mass-bug.pl:29
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
@@ -212,7 +212,7 @@ msgstr ""
 #: ../scripts/diff2patches.1:16 ../scripts/dpkg-depcheck.1:15
 #: ../scripts/dscextract.1:14 ../scripts/dscverify.1:17
 #: ../scripts/getbuildlog.1:24 ../scripts/git-deborig.pl:47
-#: ../scripts/grep-excuses.1:14 ../scripts/hardening-check.pl:499
+#: ../scripts/grep-excuses.1:14 ../scripts/hardening-check.pl:565
 #: ../scripts/list-unreleased.1:12 ../scripts/ltnu.pod:27
 #: ../scripts/manpage-alert.1:12 ../scripts/mass-bug.pl:59
 #: ../scripts/mk-build-deps.pl:44 ../scripts/mk-origtargz.pl:62
@@ -354,7 +354,7 @@ msgstr ""
 #: ../scripts/dget.pl:739 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
 #: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:72
-#: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:582
+#: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:648
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
 #: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:115
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
@@ -407,7 +407,7 @@ msgstr ""
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
 #: ../scripts/dscverify.1:81 ../scripts/getbuildlog.1:41
 #: ../scripts/git-deborig.pl:76 ../scripts/grep-excuses.1:60
-#: ../scripts/hardening-check.pl:570 ../scripts/list-unreleased.1:21
+#: ../scripts/hardening-check.pl:636 ../scripts/list-unreleased.1:21
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
@@ -7368,10 +7368,10 @@ msgstr "B<--bpo>"
 #. type: Plain text
 #: ../scripts/debchange.1:264
 msgid ""
-"Increment the Debian release number for an upload to stretch-backports, and "
+"Increment the Debian release number for an upload to buster-backports, and "
 "add a backport upload changelog comment."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach stretch-"
+"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach buster-"
 "backports und fügt einen Changelog-Kommentar »backport upload« hinzu."
 
 #. type: TP
@@ -9623,7 +9623,7 @@ msgstr ""
 "oder relativ zur Wurzel des Quellverzeichnisses sein."
 
 #. type: =item
-#: ../scripts/debdiff.1:170 ../scripts/hardening-check.pl:523
+#: ../scripts/debdiff.1:170 ../scripts/hardening-check.pl:589
 #, no-wrap
 msgid "B<--quiet>, B<-q>"
 msgstr "B<--quiet>, B<-q>"
@@ -16439,7 +16439,7 @@ msgstr ""
 "Autoremovals."
 
 #. type: =item
-#: ../scripts/grep-excuses.1:40 ../scripts/hardening-check.pl:549
+#: ../scripts/grep-excuses.1:40 ../scripts/hardening-check.pl:615
 #: ../scripts/salsa.pl:425
 #, no-wrap
 msgid "B<--debug>"
@@ -16497,18 +16497,18 @@ msgstr ""
 "E<lt>jdg@debian.orgE<gt>."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:429
+#: ../scripts/hardening-check.pl:495
 msgid "hardening-check - check binaries for security hardening features"
 msgstr ""
 "hardening-check - prüft Binärdateien auf Sicherheitshärtungsfunktionalitäten"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:433
+#: ../scripts/hardening-check.pl:499
 msgid "hardening-check [options] [ELF ...]"
 msgstr "hardening-check [Optionen] [ELF …]"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:435
+#: ../scripts/hardening-check.pl:501
 msgid ""
 "Examine a given set of ELF binaries and check for several security hardening "
 "features, failing if they are not all found."
@@ -16518,7 +16518,7 @@ msgstr ""
 "nicht alle gefunden werden."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:440
+#: ../scripts/hardening-check.pl:506
 msgid ""
 "This utility checks a given list of ELF binaries for several security "
 "hardening features that can be compiled into an executable. These features "
@@ -16529,13 +16529,13 @@ msgstr ""
 "Programm einkompiliert werden können. Diese Funktionalitäten sind:"
 
 #. type: =item
-#: ../scripts/hardening-check.pl:446
+#: ../scripts/hardening-check.pl:512
 msgid "B<Position Independent Executable>"
 msgstr "B<Positionsunabhängiges Programm>"
 
 # https://de.wikipedia.org/wiki/Position-independent_Code
 #. type: textblock
-#: ../scripts/hardening-check.pl:448
+#: ../scripts/hardening-check.pl:514
 msgid ""
 "This indicates that the executable was built in such a way (PIE) that the "
 "\"text\" section of the program can be relocated in memory. To take full "
@@ -16549,12 +16549,12 @@ msgstr ""
 "Adressverwürfelung) unterstützen."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:453
+#: ../scripts/hardening-check.pl:519
 msgid "B<Stack Protected>"
 msgstr "B<Geschützter Stapelverarbeitungsspeicher>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:455
+#: ../scripts/hardening-check.pl:521
 msgid ""
 "This indicates that there is evidence that the ELF was compiled with the "
 "L<gcc(1)> option B<-fstack-protector> (e.g. uses B<__stack_chk_fail>). The "
@@ -16566,7 +16566,7 @@ msgstr ""
 "Stapelverarbeitungsspeicherüberläufe sein."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:459
+#: ../scripts/hardening-check.pl:525
 msgid ""
 "When an executable was built without any character arrays being allocated on "
 "the stack, this check will lead to false alarms (since there is no use of "
@@ -16578,12 +16578,12 @@ msgstr ""
 "es mit korrekten Optionen kompiliert wurde."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:464
+#: ../scripts/hardening-check.pl:530
 msgid "B<Fortify Source functions>"
 msgstr "B<Quellfunktionen verstärken>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:466
+#: ../scripts/hardening-check.pl:532
 msgid ""
 "This indicates that the executable was compiled with B<-D_FORTIFY_SOURCE=2> "
 "and B<-O1> or higher. This causes certain unsafe glibc functions with their "
@@ -16598,7 +16598,7 @@ msgstr ""
 "prüfende Version (z.B. B<__memcpy_chk> statt B<memcpy>) ersetzt werden."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:472
+#: ../scripts/hardening-check.pl:538
 msgid ""
 "When an executable was built such that the fortified versions of the glibc "
 "functions are not useful (e.g. use is verified as safe at compile time, or "
@@ -16619,12 +16619,12 @@ msgstr ""
 "gegen Glibc gelinkt)."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:480
+#: ../scripts/hardening-check.pl:546
 msgid "B<Read-only relocations>"
 msgstr "B<Nur lesende Verlagerungen>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:482
+#: ../scripts/hardening-check.pl:548
 msgid ""
 "This indicates that the executable was build with B<-Wl,-z,relro> to have "
 "ELF markings (RELRO) that ask the runtime linker to mark any regions of the "
@@ -16641,12 +16641,12 @@ msgstr ""
 "verfälscht."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:489
+#: ../scripts/hardening-check.pl:555
 msgid "B<Immediate binding>"
 msgstr "B<Sofortanbindung>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:491
+#: ../scripts/hardening-check.pl:557
 msgid ""
 "This indicates that the executable was built with B<-Wl,-z,now> to have ELF "
 "markings (BIND_NOW) that ask the runtime linker to resolve all relocations "
@@ -16661,23 +16661,23 @@ msgstr ""
 "stehen."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:503
+#: ../scripts/hardening-check.pl:569
 msgid "B<--nopie>, B<-p>"
 msgstr "B<--nopie>, B<-p>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:505
+#: ../scripts/hardening-check.pl:571
 msgid "Do not require that the checked binaries be built as PIE."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien als PIE gebaut wurden."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:507
+#: ../scripts/hardening-check.pl:573
 msgid "B<--nostackprotector>, B<-s>"
 msgstr "B<--nostackprotector>, B<-s>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:509
+#: ../scripts/hardening-check.pl:575
 msgid ""
 "Do not require that the checked binaries be built with the stack protector."
 msgstr ""
@@ -16685,72 +16685,72 @@ msgstr ""
 "Stapelverarbeitungsschutz gebaut werden."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:511
+#: ../scripts/hardening-check.pl:577
 msgid "B<--nofortify>, B<-f>"
 msgstr "B<--nofortify>, B<-f>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:513
+#: ../scripts/hardening-check.pl:579
 msgid "Do not require that the checked binaries be built with Fortify Source."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit Fortify Source gebaut "
 "werden."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:515
+#: ../scripts/hardening-check.pl:581
 msgid "B<--norelro>, B<-r>"
 msgstr "B<--norelro>, B<-r>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:517
+#: ../scripts/hardening-check.pl:583
 msgid "Do not require that the checked binaries be built with RELRO."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit RELRO gebaut werden."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:519
+#: ../scripts/hardening-check.pl:585
 msgid "B<--nobindnow>, B<-b>"
 msgstr "B<--nobindnow>, B<-b>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:521
+#: ../scripts/hardening-check.pl:587
 msgid "Do not require that the checked binaries be built with BIND_NOW."
 msgstr ""
 "erfordert nicht, dass die geprüften Binärdateien mit BIND_NOW gebaut werden."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:525
+#: ../scripts/hardening-check.pl:591
 msgid "Only report failures."
 msgstr "meldet nur Fehlschläge."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:527 ../scripts/uscan.pl:1454
+#: ../scripts/hardening-check.pl:593 ../scripts/uscan.pl:1454
 msgid "B<--verbose>, B<-v>"
 msgstr "B<--verbose>, B<-v>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:529
+#: ../scripts/hardening-check.pl:595
 msgid "Report verbosely on failures."
 msgstr "meldet Fehlschläge detailliert."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:531
+#: ../scripts/hardening-check.pl:597
 msgid "B<--report-functions>, B<-R>"
 msgstr "B<--report-functions>, B<-R>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:533
+#: ../scripts/hardening-check.pl:599
 msgid "After the report, display all external functions needed by the ELF."
 msgstr ""
 "zeigt nach dem Bericht alle externen Funktionen, die vom ELF benötigt werden."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:535
+#: ../scripts/hardening-check.pl:601
 msgid "B<--find-libc-functions>, B<-F>"
 msgstr "B<--find-libc-functions>, B<-F>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:537
+#: ../scripts/hardening-check.pl:603
 msgid ""
 "Instead of the regular report, locate the libc for the first ELF on the "
 "command line and report all the known \"fortified\" functions exported by "
@@ -16761,59 +16761,59 @@ msgstr ""
 "der Libc exportiert werden, gemeldet."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:541
+#: ../scripts/hardening-check.pl:607
 msgid "B<--color>, B<-c>"
 msgstr "B<--color>, B<-c>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:543
+#: ../scripts/hardening-check.pl:609
 msgid "Enable colorized status output."
 msgstr "aktiviert eingefärbte Statusausgabe."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:545
+#: ../scripts/hardening-check.pl:611
 msgid "B<--lintian>, B<-l>"
 msgstr "B<--lintian>, B<-l>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:547
+#: ../scripts/hardening-check.pl:613
 msgid "Switch reporting to lintian-check-parsable output."
 msgstr ""
 "schaltet das Berichten auf »lintian-check-parsable«-Ausgabe (durch Lintian "
 "auswertbare Ausgabe)."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:551
+#: ../scripts/hardening-check.pl:617
 msgid "Report some debugging during processing."
 msgstr "meldet während des Ausführung einige Fehlersuchausgaben."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:553
+#: ../scripts/hardening-check.pl:619
 msgid "B<--help>, B<-h>, B<-?>"
 msgstr "B<--help>, B<-h>, B<-?>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:555
+#: ../scripts/hardening-check.pl:621
 msgid "Print a brief help message and exit."
 msgstr "gibt eine kurze Hilfenachricht aus und wird beendet."
 
 #. type: =item
-#: ../scripts/hardening-check.pl:557
+#: ../scripts/hardening-check.pl:623
 msgid "B<--man>, B<-H>"
 msgstr "B<--man>, B<-H>"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:559
+#: ../scripts/hardening-check.pl:625
 msgid "Print the manual page and exit."
 msgstr "gibt die Handbuchseite aus und beendet sich."
 
 #. type: =head1
-#: ../scripts/hardening-check.pl:563
+#: ../scripts/hardening-check.pl:629
 msgid "RETURN VALUE"
 msgstr "RÜCKGABEWERT"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:565
+#: ../scripts/hardening-check.pl:631
 msgid ""
 "When all checked binaries have all checkable hardening features detected, "
 "this program will finish with an exit code of 0. If any check fails, the "
@@ -16826,22 +16826,22 @@ msgstr ""
 "Prüfungen können über Befehlszeilenoptionen deaktiviert werden."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:572
+#: ../scripts/hardening-check.pl:638
 msgid "Kees Cook <kees@debian.org>"
 msgstr "Kees Cook <kees@debian.org>"
 
 #. type: =head1
-#: ../scripts/hardening-check.pl:574 ../scripts/salsa.pl:803
+#: ../scripts/hardening-check.pl:640 ../scripts/salsa.pl:803
 msgid "COPYRIGHT AND LICENSE"
 msgstr "COPYRIGHT UND LIZENZ"
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:576
+#: ../scripts/hardening-check.pl:642
 msgid "Copyright 2009-2013 Kees Cook <kees@debian.org>."
 msgstr "Copyright 2009-2013 Kees Cook <kees@debian.org>."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:578
+#: ../scripts/hardening-check.pl:644
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -16852,7 +16852,7 @@ msgstr ""
 "Software Foundation veröffentlicht wurde, weitergeben und/oder ändern."
 
 #. type: textblock
-#: ../scripts/hardening-check.pl:584
+#: ../scripts/hardening-check.pl:650
 msgid "L<gcc(1)>, L<hardening-wrapper(1)>"
 msgstr "L<gcc(1)>, L<hardening-wrapper(1)>"
 
