@@ -101,7 +101,8 @@ sub find_watch_files {
     # correctly, which makes this code a little messier than it would be
     # otherwise.
     my @dirs;
-    open FIND, '-|', 'find', @ARGV, qw(-follow -type d -name debian -print)
+    open FIND, '-|', 'find', @ARGV,
+      qw{-follow -type d ( -name .git -prune -o -name debian -print ) }
       or uscan_die "Couldn't exec find: $!";
 
     while (<FIND>) {

@@ -34,6 +34,13 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Add "push" command.  MR: !108
     + Update doc: completion for aliases.  MR: !108
 
+  [ Simon McVittie ]
+  * uscan:
+    + Don't recurse into directories named .git when searching for
+      Debian packages. When running uscan in a git checkout where dgit
+      has been used, we don't want to try to update using
+      .git/dgit/unpack/work/debian/watch, only ./debian/watch.  MR: !132
+
  -- Mattia Rizzolo <mattia@debian.org>  Thu, 09 May 2019 21:34:23 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
