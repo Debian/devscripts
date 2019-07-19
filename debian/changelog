@@ -19,12 +19,6 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   * debchange:
     + Target buster-backports with --bpo.  Closes: #931614
 
-  [ Xavier Guimard ]
-  * Reformat code following the changes in the new perltify 20181102.  MR: !129
-  * debi:
-    + Replace dpkg + apt-get by "apt-get install" on .change file.
-      Closes: #810294; MR: !45
-
   [ Paul Wise ]
   * Devscripts::Config:
     + Improve handling (prevent code execution and errors with spaces and
@@ -32,6 +26,10 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
       - Move String::ShellQuote from Recommends to Depends.
 
   [ Xavier Guimard ]
+  * Reformat code following the changes in the new perltify 20181102.  MR: !129
+  * debi:
+    + Replace dpkg + apt-get by "apt-get install" on .change file.
+      Closes: #810294; MR: !45
   * salsa:
     + Add "join" command.  Closes: #921314;  MR: !108
     + Add "push" command.  MR: !108
