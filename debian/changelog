@@ -41,6 +41,11 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   * debchange:
     + Make sure to escape special characters in the maintainer name.  MR: !128
 
+  [ Simon McVittie ]
+  * uscan:
+    + Don't recurse into directories named .git when searching for
+      Debian packages.  MR: !132
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Jul 2019 14:48:19 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
