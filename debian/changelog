@@ -35,7 +35,8 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Update doc: completion for aliases.  MR: !108
 
   [ Mattia Rizzolo ]
-  * d/control: Bump Standards-Version to 4.4.0, no changes needed.
+  * d/control:
+    + Bump Standards-Version to 4.4.0, no changes needed.
 
   [ Nick Gerow ]
   * debchange:
@@ -45,6 +46,11 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   * uscan:
     + Don't recurse into directories named .git when searching for
       Debian packages.  MR: !132
+
+  [ Unit 193 ]
+  * dcmd:
+    + Consider .asc files as part of the upstream orig files.
+    + Also add .zst as an allowed extension for upstream orig files.
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Jul 2019 14:48:19 +0200
 

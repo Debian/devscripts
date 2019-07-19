@@ -188,10 +188,12 @@ $THISARG\";"
 		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_DIFF=1;"
-	    elif endswith "$THISARG" .tar.gz || \
-		 endswith "$THISARG" .tar.xz || \
-		 endswith "$THISARG" .tar.lzma || \
-		 endswith "$THISARG" .tar.bz2; then
+	    elif endswith "$THISARG" .tar.bz2	|| \
+		 endswith "$THISARG" .tar.gz	|| \
+		 endswith "$THISARG" .tar.lzma	|| \
+		 endswith "$THISARG" .tar.xz	|| \
+		 endswith "$THISARG" .tar.zst	|| \
+		 endswith "$THISARG" .tar.*.asc; then
 		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_TARBALL=1;"
