@@ -33,6 +33,8 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Add "join" command.  Closes: #921314;  MR: !108
     + Add "push" command.  MR: !108
     + Update doc: completion for aliases.  MR: !108
+  * uscan:
+    + Ignore --download-version when component is marked as "ignore".  MR: !130
 
   [ Mattia Rizzolo ]
   * d/control:

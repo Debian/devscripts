@@ -55,7 +55,8 @@ sub ftp_search {
                 return undef;
             }
             my $match = '';
-            if (defined $self->shared->{download_version}) {
+            if (defined $self->shared->{download_version}
+                and not $self->versionmode eq 'ignore') {
                 if ($mangled_version eq $self->shared->{download_version}) {
                     $match = "matched with the download version";
                 }
