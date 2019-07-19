@@ -21,6 +21,9 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
   * Reformat code following the changes in the new perltify 20181102.  MR: !129
+  * debi:
+    + Replace dpkg + apt-get by "apt-get install" on .change file.
+      Closes: #810294; MR: !45
 
   [ Paul Wise ]
   * Devscripts::Config:
