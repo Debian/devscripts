@@ -52,6 +52,10 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Consider .asc files as part of the upstream orig files.
     + Also add .zst as an allowed extension for upstream orig files.
 
+  [ Sean Whitton ]
+  * git-deborig:
+    + New --just-print-tag-names option.  Closes: #931180; MR: !131
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Jul 2019 14:48:19 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
