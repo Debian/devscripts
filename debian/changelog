@@ -37,6 +37,10 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * d/control: Bump Standards-Version to 4.4.0, no changes needed.
 
+  [ Nick Gerow ]
+  * debchange:
+    + Make sure to escape special characters in the maintainer name.  MR: !128
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Jul 2019 14:48:19 +0200
 
 devscripts (2.19.5) unstable; urgency=medium
