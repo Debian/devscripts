@@ -36,6 +36,7 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
     + Update doc: completion for aliases.  MR: !108
   * uscan:
     + Ignore --download-version when component is marked as "ignore".  MR: !130
+    + Fix download when <base> tag is relative.  Closes: #932399; MR: !133
 
   [ Mattia Rizzolo ]
   * d/control:

@@ -343,6 +343,19 @@ sub html_search {
         # Ensure it ends with /
         $self->parse_result->{urlbase} = "$2/";
         $self->parse_result->{urlbase} =~ s%//$%/%;
+        if ($self->parse_result->{urlbase} !~ /^https?:/) {
+            if ($self->parse_result->{urlbase} !~ m#^/#) {
+                uscan_warn "Malfored <base> tag, ignoring it";
+                ($self->parse_result->{urlbase} = $self->parse_result->{base})
+                  =~ s%/[^/]*$%/%;
+            } else {
+                uscan_verbose
+                  "base is not absolute ($self->parse_result->{urlbase})";
+                $self->parse_result->{base} =~ m#^(https?://[^/]+)#;
+                my $base = $1;
+                $self->parse_result->{urlbase} =~ s#^/+#$base/#;
+            }
+        }
     } else {
         # May have to strip a base filename
         ($self->parse_result->{urlbase} = $self->parse_result->{base})
