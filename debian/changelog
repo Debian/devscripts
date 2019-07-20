@@ -58,6 +58,7 @@ devscripts (2.19.6) UNRELEASED; urgency=medium
   [ Sean Whitton ]
   * git-deborig:
     + New --just-print-tag-names option.  Closes: #931180; MR: !131
+    + Print to stderr, not stdout, when appropriate.  Closes: #931509; MR: !134
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Jul 2019 14:48:19 +0200
 
