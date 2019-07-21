@@ -414,7 +414,8 @@ if ($progname eq 'debi') {
     if ($opt_with_depends) {
         if ($install_tool =~ /^apt(?:-get)?$/) {
             spawn(
-                exec       => [$install_tool, 'install', "./$changes"],
+                exec =>
+                  [$install_tool, 'install', '--reinstall', "./$changes"],
                 wait_child => 1
             );
         } else {
@@ -427,8 +428,11 @@ if ($progname eq 'debi') {
     } else {
         if ($install_tool =~ /^apt(?:-get)?$/) {
             spawn(
-                exec =>
-                  [$install_tool, 'install', '--only-upgrade', "./$changes"],
+                exec => [
+                    $install_tool,    'install',
+                    '--only-upgrade', '--reinstall',
+                    "./$changes"
+                ],
                 wait_child => 1
             );
         } else {

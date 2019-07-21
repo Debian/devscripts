@@ -4,6 +4,9 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
   * debi:
     + Wait for apt/dpkg child processes, fixing a regression in MR !45.
       Closes: #932896; MR: !135
+    + Invoke apt or apt-get with --reinstall.
+      Otherwise repeated test-builds of a package with the intended next
+      version number will not replace each other since MR !45.  MR: !136
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 22 Jul 2019 08:15:08 +0200
 
