@@ -413,17 +413,26 @@ if ($progname eq 'debi') {
     my @upgrade = $opt_upgrade ? ('-O') : ();
     if ($opt_with_depends) {
         if ($install_tool =~ /^apt(?:-get)?$/) {
-            spawn(exec => [$install_tool, 'install', "./$changes"]);
+            spawn(
+                exec       => [$install_tool, 'install', "./$changes"],
+                wait_child => 1
+            );
         } else {
-            spawn(exec => ['debpkg', @upgrade, '--unpack', @debs]);
-            spawn(exec => [$install_tool, '-f', 'install']);
+            spawn(
+                exec       => ['debpkg', @upgrade, '--unpack', @debs],
+                wait_child => 1
+            );
+            spawn(exec => [$install_tool, '-f', 'install'], wait_child => 1);
         }
     } else {
         if ($install_tool =~ /^apt(?:-get)?$/) {
-            spawn(exec =>
-                  [$install_tool, 'install', '--only-upgrade', "./$changes"]);
+            spawn(
+                exec =>
+                  [$install_tool, 'install', '--only-upgrade', "./$changes"],
+                wait_child => 1
+            );
         } else {
-            spawn(exec => ['debpkg', @upgrade, '-i', @debs]);
+            spawn(exec => ['debpkg', @upgrade, '-i', @debs], wait_child => 1);
         }
     }
 } else {
