@@ -280,13 +280,21 @@ while ($control = shift) {
         }
         my $args = '';
         my $arch = 'all';
-        my ($build_deps,      $build_dep,     $build_indep);
-        my ($build_conflicts, $conflict_arch, $conflict_indep);
+        my ($build_deps,      $build_dep,      $build_dep_arch, $build_indep);
+        my ($build_conflicts, $build_conflict, $conflict_arch,  $conflict_indep);
 
         if (exists $ctrl->{'Build-Depends'}) {
             $build_dep = $ctrl->{'Build-Depends'};
             $build_dep =~ s/\n/ /g;
             $build_deps = $build_dep;
+        }
+        if (exists $ctrl->{'Build-Depends-Arch'}) {
+            $build_dep_arch = $ctrl->{'Build-Depends-Arch'};
+            $build_dep_arch =~ s/\n/ /g;
+	    $build_dep  .= ', ' if $build_dep_arch;
+	    $build_dep  .= $build_dep_arch;
+            $build_deps .= ', ' if $build_dep_arch;
+            $build_deps .= $build_dep_arch;
         }
         if (exists $ctrl->{'Build-Depends-Indep'}) {
             $build_indep = $ctrl->{'Build-Depends-Indep'};
@@ -295,9 +303,17 @@ while ($control = shift) {
             $build_deps .= $build_indep;
         }
         if (exists $ctrl->{'Build-Conflicts'}) {
-            $conflict_arch = $ctrl->{'Build-Conflicts'};
+            $build_conflict = $ctrl->{'Build-Conflicts'};
+            $build_conflict =~ s/\n/ /g;
+            $build_conflicts = $build_conflict;
+        }
+        if (exists $ctrl->{'Build-Conflicts-Arch'}) {
+            $conflict_arch = $ctrl->{'Build-Conflicts-Arch'};
             $conflict_arch =~ s/\n/ /g;
-            $build_conflicts = $conflict_arch;
+            $build_conflict  .= ', ' if $conflict_arch;
+            $build_conflict  .= $conflict_arch;
+            $build_conflicts .= ', ' if $conflict_arch;
+            $build_conflicts .= $conflict_arch;
         }
         if (exists $ctrl->{'Build-Conflicts-Indep'}) {
             $conflict_indep = $ctrl->{'Build-Conflicts-Indep'};
@@ -342,7 +358,7 @@ while ($control = shift) {
                 @pkgInfo,
                 {
                     depends   => $build_dep,
-                    conflicts => $conflict_arch,
+                    conflicts => $build_conflict,
                     name      => $ctrl->{$name},
                     type      => 'build-deps-depends',
                     version   => $ctrl->{Version} });
