@@ -280,8 +280,9 @@ while ($control = shift) {
         }
         my $args = '';
         my $arch = 'all';
-        my ($build_deps,      $build_dep,      $build_dep_arch, $build_indep);
-        my ($build_conflicts, $build_conflict, $conflict_arch,  $conflict_indep);
+        my ($build_deps, $build_dep, $build_dep_arch, $build_indep);
+        my ($build_conflicts, $build_conflict, $conflict_arch,
+            $conflict_indep);
 
         if (exists $ctrl->{'Build-Depends'}) {
             $build_dep = $ctrl->{'Build-Depends'};
@@ -291,8 +292,8 @@ while ($control = shift) {
         if (exists $ctrl->{'Build-Depends-Arch'}) {
             $build_dep_arch = $ctrl->{'Build-Depends-Arch'};
             $build_dep_arch =~ s/\n/ /g;
-	    $build_dep  .= ', ' if $build_dep_arch;
-	    $build_dep  .= $build_dep_arch;
+            $build_dep  .= ', ' if $build_dep_arch;
+            $build_dep  .= $build_dep_arch;
             $build_deps .= ', ' if $build_dep_arch;
             $build_deps .= $build_dep_arch;
         }
