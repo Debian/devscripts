@@ -3,6 +3,7 @@ package Devscripts::Salsa::push;
 use strict;
 use Devscripts::Output;
 use Devscripts::Utils;
+use Dpkg::Source::Format;
 use Moo::Role;
 use Dpkg::IPC;
 
