@@ -8,6 +8,7 @@ before_script:
 .test_template: &test
   script:
     - make test
+    - make destructive-test
 
 unstable:
   <<: *test

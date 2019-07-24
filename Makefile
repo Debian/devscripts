@@ -33,6 +33,12 @@ doc:
 online-test:
 	$(MAKE) -C test/ online-test
 
+destructive-test:
+	$(MAKE) -C test/ $@
+
+destructive-test-installed:
+	$(MAKE) -C test/ $@
+
 test:
 	$(MAKE) test_scripts
 	$(MAKE) test_test
