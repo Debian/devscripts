@@ -209,15 +209,15 @@ if ($user_ref) {    # User told us the tag/branch to archive
     # If there is only one candidate version tag, we're good to go.
     # Otherwise, let the user know they can tell us which one to use
     if (scalar @version_tags > 1) {
-        print "tags ", join(", ", @version_tags),
+        print STDERR "tags ", join(", ", @version_tags),
           " all exist in this repository\n";
-        print
+        print STDERR
 "tell me which one you want to make an orig.tar from: $orig_args TAG\n";
         exit 1;
     } elsif (scalar @version_tags < 1) {
-        print "couldn't find any of the following tags: ",
+        print STDERR "couldn't find any of the following tags: ",
           join(", ", @candidate_tags), "\n";
-        print
+        print STDERR
 "tell me a tag or branch head to make an orig.tar from: $orig_args COMMITTISH\n";
         exit 1;
     } else {
