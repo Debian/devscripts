@@ -292,9 +292,9 @@ while ($control = shift) {
         if (exists $ctrl->{'Build-Depends-Arch'}) {
             $build_dep_arch = $ctrl->{'Build-Depends-Arch'};
             $build_dep_arch =~ s/\n/ /g;
-            $build_dep  .= ', ' if $build_dep_arch;
+            $build_dep  .= ', ' if $build_dep;
             $build_dep  .= $build_dep_arch;
-            $build_deps .= ', ' if $build_dep_arch;
+            $build_deps .= ', ' if $build_deps;
             $build_deps .= $build_dep_arch;
         }
         if (exists $ctrl->{'Build-Depends-Indep'}) {
@@ -311,9 +311,9 @@ while ($control = shift) {
         if (exists $ctrl->{'Build-Conflicts-Arch'}) {
             $conflict_arch = $ctrl->{'Build-Conflicts-Arch'};
             $conflict_arch =~ s/\n/ /g;
-            $build_conflict  .= ', ' if $conflict_arch;
+            $build_conflict  .= ', ' if $build_conflict;
             $build_conflict  .= $conflict_arch;
-            $build_conflicts .= ', ' if $conflict_arch;
+            $build_conflicts .= ', ' if $build_conflicts;
             $build_conflicts .= $conflict_arch;
         }
         if (exists $ctrl->{'Build-Conflicts-Indep'}) {
