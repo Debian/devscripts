@@ -8,6 +8,11 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
   * git-deborig:
     + Print to stderr, not stdout, when appropriate.  Closes: #931509; MR: !134
 
+  [ Simon McVittie ]
+  * debi:
+    + Wait for apt/dpkg child processes, fixing a regression in MR !45.
+      Closes: #932896; MR: !135
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 22 Jul 2019 08:15:08 +0200
 
 devscripts (2.19.6) unstable; urgency=medium
