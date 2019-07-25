@@ -191,11 +191,8 @@ make_changes(qw(already-installed not-installed));
 ok(verbose_run([@debi, "$tmp/foo.changes",]), 'plain debi succeeds');
 is(version_of('devscripts-test-already-installed'),
     '1', 'already installed package was upgraded');
-TODO: {
-    local $TODO = '#932640';
-    is(version_of('devscripts-test-not-installed'),
-        '1', 'not-installed package was installed (regressed in #932640)');
-}
+is(version_of('devscripts-test-not-installed'),
+    '1', 'not-installed package was installed (regressed in #932640)');
 
 diag('debi foo.changes will also downgrade existing packages');
 purge_packages();
@@ -230,25 +227,21 @@ is(version_of('devscripts-test-not-installed'),
 
 diag('debi without --with-depends does not try to satisfy dependencies');
 purge_packages();
-TODO: {
-    local $TODO = 'in 2.19.6 both packages get installed';
-    ok(
-        verbose_run(
-            ['dpkg', '-i', "$tmp/devscripts-test-gains-dependency_0_all.deb",])
-    );
-    make_changes(qw(gains-dependency));
-    ok(!verbose_run([@debi, "$tmp/foo.changes",]),
-        'debi without --with-depends does not install dependency');
-    # It's OK for it to either be unpacked but fail to configure, or be
-    # left at version 0.
-    isnt(
-        version_of('devscripts-test-gains-dependency') . "::"
-          . status_of('devscripts-test-gains-dependency'),
-        '1::install ok installed',
-        'package with a dependency was not installed'
-    );
-    is(version_of('hello'), '', 'third party dependency was not installed');
-}
+ok(
+    verbose_run(
+        ['dpkg', '-i', "$tmp/devscripts-test-gains-dependency_0_all.deb",]));
+make_changes(qw(gains-dependency));
+ok(!verbose_run([@debi, "$tmp/foo.changes",]),
+    'debi without --with-depends does not install dependency');
+# It's OK for it to either be unpacked but fail to configure, or be
+# left at version 0.
+isnt(
+    version_of('devscripts-test-gains-dependency') . "::"
+      . status_of('devscripts-test-gains-dependency'),
+    '1::install ok installed',
+    'package with a dependency was not installed'
+);
+is(version_of('hello'), '', 'third party dependency was not installed');
 
 diag('debi --with-depends does satisfy dependencies');
 purge_packages();
