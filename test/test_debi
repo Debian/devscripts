@@ -277,15 +277,16 @@ purge_packages();
 verbose_run(
     ['dpkg', '-i', "$tmp/devscripts-test-gains-local-dependency_0_all.deb",]);
 make_changes(qw(dependency gains-local-dependency));
-# Not entirely clear what should happen here.
-# In 2.19.5, the package was unpacked at v1 and then removed rather than
-# leaving it at v0.
-verbose_run([@debi, '--upgrade', '--with-depends', "$tmp/foo.changes",]);
-# Maybe devscripts-test-dependency should be installed despite --upgrade,
-# because we said --with-depends and maybe that should "win"?
-diag('d-t-gains-local-dependency: '
-      . version_of('devscripts-test-gains-local-dependency'));
-diag('d-t-dependency: ' . version_of('devscripts-test-dependency'));
+ok(
+    verbose_run([@debi, '--upgrade', '--with-depends', "$tmp/foo.changes",]),
+    'corner case from #932963: debi --upgrade --with-depends can cope with '
+      . 'a new dependency on a binary from the same source'
+);
+is(version_of('devscripts-test-gains-local-dependency'),
+    '1', 'the package we wanted to upgrade is upgraded');
+is(version_of('devscripts-test-dependency'),
+    '1',
+    'the new dependency of the package we wanted to upgrade is installed');
 
 purge_packages();
 done_testing;
