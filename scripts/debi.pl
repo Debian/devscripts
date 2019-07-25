@@ -426,7 +426,7 @@ if ($progname eq 'debi') {
             spawn(exec => [$install_tool, '-f', 'install'], wait_child => 1);
         }
     } else {
-        if ($install_tool =~ /^apt(?:-get)?$/) {
+        if ($install_tool =~ /^apt(?:-get)?$/ && $opt_upgrade) {
             spawn(
                 exec => [
                     $install_tool,    'install',
