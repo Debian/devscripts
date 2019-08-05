@@ -2643,7 +2643,8 @@ sub extract_addresses {
     my @addresses;
 
     # Original regular expression from git-send-email, slightly modified
-    while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
+    while ($s and $s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/)
+    {
         push @addresses, $1;
         $s = $2;
     }
@@ -2655,7 +2656,11 @@ sub send_mail {
     my ($from, $to, $cc, $subject, $body) = @_;
 
     my @fromaddresses = extract_addresses($from);
-    my $fromaddress   = $fromaddresses[0];
+    unless (@fromaddresses) {
+        die "Something went wrong: no from address" unless $noaction;
+        @fromaddresses = ($from = '<undefined>');
+    }
+    my $fromaddress = $fromaddresses[0];
     # Message-ID algorithm from git-send-email
     my $msgid
       = sprintf("%s-%s", time(), int(rand(4200))) . "-bts-$fromaddress";
