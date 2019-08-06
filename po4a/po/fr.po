@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2019-07-20 10:43+0200\n"
-"PO-Revision-Date: 2019-04-28 16:32+0200\n"
+"POT-Creation-Date: 2019-08-06 20:28+0200\n"
+"PO-Revision-Date: 2019-08-06 20:43+0200\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -270,7 +270,7 @@ msgstr "B<-h>, B<--help>"
 #: ../scripts/annotate-output.1:19 ../scripts/debchange.1:401
 #: ../scripts/debclean.1:90 ../scripts/debrelease.1:102
 #: ../scripts/debsign.1:102 ../scripts/dep3changelog.1:19
-#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:83
+#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:89
 #: ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
@@ -367,7 +367,7 @@ msgstr ""
 #: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:79
 #: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:657
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
-#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:115
+#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:121
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:838
@@ -422,7 +422,7 @@ msgstr ""
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
-#: ../scripts/nmudiff.1:119 ../scripts/origtargz.pl:162
+#: ../scripts/nmudiff.1:125 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:842
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
@@ -2905,7 +2905,7 @@ msgstr ""
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:327
 #: ../scripts/dget.pl:687 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:43 ../scripts/grep-excuses.1:43
-#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:86
+#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:92
 #: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
 #: ../scripts/rmadison.pl:344 ../scripts/uupdate.1:107
 #: ../scripts/who-uploads.1:50
@@ -3020,7 +3020,7 @@ msgstr ""
 "place de B<mutt>. Équivalent à l'option de ligne de commande B<--mailreader>."
 
 #. type: TP
-#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:111
+#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:117
 #, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "B<BTS_SENDMAIL_COMMAND>"
@@ -3445,7 +3445,7 @@ msgstr "Exécuter le mode de débogage."
 #: ../scripts/build-rdeps.pl:109 ../scripts/cowpoke.1:131
 #: ../scripts/debclean.1:87 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:23 ../scripts/mass-bug.pl:117
-#: ../scripts/nmudiff.1:80 ../scripts/plotchangelog.1:92
+#: ../scripts/nmudiff.1:86 ../scripts/plotchangelog.1:92
 #: ../scripts/uscan.pl:1624
 #, no-wrap
 msgid "B<--help>"
@@ -3462,7 +3462,7 @@ msgstr "Afficher les informations sur l'utilisation."
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/debsnap.1:77
 #: ../scripts/dep3changelog.1:19 ../scripts/diff2patches.1:25
 #: ../scripts/dscverify.1:40 ../scripts/grep-excuses.1:26
-#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:83
+#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:89
 #: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
 #: ../scripts/rmadison.pl:331 ../scripts/uscan.pl:1628 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
@@ -6647,7 +6647,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/debc.1:108 ../scripts/debchange.1:410 ../scripts/debclean.1:99
 #: ../scripts/debi.1:115 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
-#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:92
+#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:98
 #: ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:113
 #: ../scripts/who-uploads.1:56
 msgid ""
@@ -7817,7 +7817,7 @@ msgstr ""
 #: ../scripts/debchange.1:404 ../scripts/debclean.1:93
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:105
 #: ../scripts/dep3changelog.1:22 ../scripts/dscverify.1:43
-#: ../scripts/nmudiff.1:86 ../scripts/pts-subscribe.1:34
+#: ../scripts/nmudiff.1:92 ../scripts/pts-subscribe.1:34
 #: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr "Afficher la version et le copyright, puis quitter avec succès."
@@ -16249,16 +16249,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:26
-#, fuzzy
-#| msgid ""
-#| "B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--"
-#| "version=>I<VERSION>] [I<COMMITTISH>]"
 msgid ""
 "B<git deborig> [B<--force>|B<-f>] [B<--just-print>|B<--just-print-tag-"
 "names>] [B<--version=>I<VERSION>] [I<COMMITTISH>]"
 msgstr ""
-"B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--"
-"version=>I<VERSION>] [I<objet_d'envoi>]"
+"B<git deborig> [B<--force>|B<-f>] [B<--just-print>|B<--just-print-tag-"
+"names>] [B<--version=>I<VERSION>] [I<COMMITTISH>]"
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:30
@@ -16345,10 +16341,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/git-deborig.pl:65
-#, fuzzy
-#| msgid "B<--just-print>"
 msgid "B<--just-print-tag-names>"
-msgstr "B<--just-print>"
+msgstr "B<--just-print-tag-names>"
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:67
@@ -16358,6 +16352,10 @@ msgid ""
 "in the first entry in the Debian changelog, or that supplied with B<--"
 "version>."
 msgstr ""
+"Au lieu d'appeler réellement git-archive (1), ou même de vérifier quels tags "
+"existent, affiche les noms de balises considérées comme numéro de version "
+"amont dans la première entrée du changelog Debian, ou celle fournie avec B<--"
+"version>."
 
 #. type: =item
 #: ../scripts/git-deborig.pl:72
@@ -16375,10 +16373,8 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:81
-#, fuzzy
-#| msgid "git-archive(1), dgit-maint-merge(7)"
 msgid "git-archive(1), dgit-maint-merge(7), dgit-maint-debrebase(7)"
-msgstr "B<git-archive>(1), B<dgit-maint-merge>(7)"
+msgstr "git-archive(1), dgit-maint-merge(7), dgit-maint-debrebase(7)"
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:85
@@ -18533,11 +18529,33 @@ msgstr "Équivalent à B<--delay 0>."
 #. type: TP
 #: ../scripts/nmudiff.1:76
 #, no-wrap
+msgid "B<--no-pending>, B<--nopending>"
+msgstr "B<--no-pending>, B<--nopending>"
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:79
+msgid "Do not add the I<pending> tag."
+msgstr "Ne pas ajouter le tag I<pending>."
+
+#. type: TP
+#: ../scripts/nmudiff.1:79
+#, no-wrap
+msgid "B<--no-dd>, B<--nodd>"
+msgstr "B<--no-dd>, B<--nodd>"
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:82
+msgid "Mention in the email that you require sponsorship."
+msgstr "Indique dans le courriel qu'un sponsorship est demandé."
+
+#. type: TP
+#: ../scripts/nmudiff.1:82
+#, no-wrap
 msgid "B<--template> I<TEMPLATEFILE>"
 msgstr "B<--template> I<fichier_modèle>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:80
+#: ../scripts/nmudiff.1:86
 msgid ""
 "Use content of TEMPLATEFILE for message body instead of default template.  "
 "If TEMPLATEFILE does not exist, default template is applied."
@@ -18547,13 +18565,13 @@ msgstr ""
 "est utilisé"
 
 #. type: TP
-#: ../scripts/nmudiff.1:92
+#: ../scripts/nmudiff.1:98
 #, no-wrap
 msgid "B<NMUDIFF_DELAY>"
 msgstr "B<NMUDIFF_DELAY>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:98
+#: ../scripts/nmudiff.1:104
 msgid ""
 "If this is set to a number, e-mails generated by B<nmudiff> will by default "
 "mention an upload to the DELAYED queue, delayed for the specified number of "
@@ -18565,13 +18583,13 @@ msgstr ""
 "valeur B<0> indique que la file d'attente différée n'a pas été utilisée."
 
 #. type: TP
-#: ../scripts/nmudiff.1:98
+#: ../scripts/nmudiff.1:104
 #, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:103
+#: ../scripts/nmudiff.1:109
 msgid ""
 "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> (or "
 "B<neomut>)to compose and send the message or not, as described above."
@@ -18581,13 +18599,13 @@ msgstr ""
 "dessus."
 
 #. type: TP
-#: ../scripts/nmudiff.1:103
+#: ../scripts/nmudiff.1:109
 #, no-wrap
 msgid "B<NMUDIFF_NEWREPORT>"
 msgstr "B<NMUDIFF_NEWREPORT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:111
+#: ../scripts/nmudiff.1:117
 msgid ""
 "This option controls whether a new bug report is made, or whether the diff "
 "is sent to the bugs closed by this NMU.  Can be I<maybe> (default), which "
@@ -18604,7 +18622,7 @@ msgstr ""
 "corrigé, auquel cas un nouveau rapport est toujours créé)."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:115
+#: ../scripts/nmudiff.1:121
 msgid ""
 "If this is set, specifies a B<sendmail> command to use instead of I</usr/"
 "sbin/sendmail>.  Same as the B<--sendmail> command line option."
@@ -18614,12 +18632,12 @@ msgstr ""
 "B<--sendmail>."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:119
+#: ../scripts/nmudiff.1:125
 msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 msgstr "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:123
+#: ../scripts/nmudiff.1:129
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
@@ -20368,30 +20386,25 @@ msgstr "Gérer les utilisateurs et les groupes"
 #. type: =item
 #: ../scripts/salsa.pl:63
 msgid "B<join>"
-msgstr ""
+msgstr "B<join>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:65
-#, fuzzy
-#| msgid "Add a user to a group."
 msgid "Request access to a group."
-msgstr "Ajouter un utilisateur à un groupe."
+msgstr "Demander l'accès à un groupe."
 
 #. type: verbatim
 #: ../scripts/salsa.pl:67
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  salsa --group js-team group\n"
-#| "  salsa --group-id 1234 group\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  salsa join js-team\n"
 "  salsa join --group js-team\n"
 "  salsa join --group-id 1234\n"
 "\n"
 msgstr ""
-"  salsa --group js-team group\n"
-"  salsa --group-id 1234 group\n"
+"  salsa join js-team\n"
+"  salsa join --group js-team\n"
+"  salsa join --group-id 1234\n"
 "\n"
 
 #. type: =item
@@ -20800,10 +20813,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/salsa.pl:210
-#, fuzzy
-#| msgid "B<push_repo>"
 msgid "B<push>"
-msgstr "B<push_repo>"
+msgstr "B<push>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:212
@@ -20811,18 +20822,17 @@ msgid ""
 "Push relevant packaging refs to origin Git remote. To be run from packaging "
 "working directory."
 msgstr ""
+"Poussez les références pertinentes du paquet vers le dépôt Git « origin ». À "
+"exécuter à partir du répertoire de travail d'empaquetage."
 
 #. type: verbatim
 #: ../scripts/salsa.pl:215
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  salsa mr\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  salsa push\n"
 "\n"
 msgstr ""
-"  salsa mr\n"
+"  salsa push\n"
 "\n"
 
 #. type: textblock
@@ -20831,39 +20841,46 @@ msgid ""
 "It pushes the following refs to the configured remote for the debian-branch "
 "or, falling back, to the \"origin\" remote:"
 msgstr ""
+"Il pousse les références suivantes vers le dépôt amont configuré pour la "
+"branche debian-branch ou, à défaut, vers le dépôt « origin »"
 
 #. type: =item
 #: ../scripts/salsa.pl:222
 msgid "\"master\" branch (or whatever is set to debian-branch in gbp.conf)"
 msgstr ""
+"branche « master » (ou celle indiqué dans debian-branch du fichier gbp.conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:224
 msgid "\"upstream\" branch (or whatever is set to upstream-branch in gbp.conf)"
 msgstr ""
+"branche « upstream » (ou celle indiqué dans upstream-branch du fichier gbp."
+"conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:226
-#, fuzzy
-#| msgid "B<pristine-tar> is tried."
 msgid "\"pristine-tar\" branch"
-msgstr "B<pristine-tar> est essayé ;"
+msgstr "Branche « pristine-tar »"
 
 #. type: =item
 #: ../scripts/salsa.pl:228
 msgid "tags named \"debian/*\" (or whatever is set to debian-tag in gbp.conf)"
 msgstr ""
+"les tags nommés \"debian/*\" (ou suivant ce qui est indiqué dans debian-tag "
+"du fichier gbp.conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:230
 msgid ""
 "tags named \"upstream/*\" (or whatever is set to upstream-tag in gbp.conf)"
 msgstr ""
+"les tags nommés \"upstream/*\" (ou suivant ce qui est indiqué dans upstream-"
+"tag di fichier gbp.conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:232
 msgid "all tags, if the package's source format is \"3.0 (native)\""
-msgstr ""
+msgstr "tous les tags si le format source du paquet est \"3.0 (native)\""
 
 #. type: =item
 #: ../scripts/salsa.pl:236
@@ -21500,19 +21517,16 @@ msgstr ""
 #. type: textblock
 #: ../scripts/salsa.pl:485
 msgid "or to use both .devscripts and .js.conf:"
-msgstr ""
+msgstr "ou pour utiliser à la fois .devscripts et .js.conf :"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:487
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  alias jsteam_admin=\"salsa --conf-file ~/.js.conf\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  alias jsteam_admin=\"salsa --conf-file +~/.js.conf\n"
 "\n"
 msgstr ""
-"  alias jsteam_admin=\"salsa --conf-file ~/.js.conf\n"
+"  alias jsteam_admin=\"salsa --conf-file +~/.js.conf\n"
 "\n"
 
 #. type: textblock
@@ -21522,13 +21536,11 @@ msgstr "on peut alors indiquer B<SALSA_GROUP> dans C<~/.js.conf>"
 
 #. type: textblock
 #: ../scripts/salsa.pl:491
-#, fuzzy
-#| msgid "Then to use it, add something like this in your C<.bashrc> file:"
 msgid ""
 "To enable bash completion for your alias, add this in your .bashrc file:"
 msgstr ""
-"Ensuite pour l'utiliser, ajouter quelque chose comme suit dans votre fichier "
-"C<.bashrc> :"
+"Pour activer l'autocomplétion bash pour l'alias, ajouter ceci dans le "
+"fichier C<.bashrc> :"
 
 #. type: verbatim
 #: ../scripts/salsa.pl:493
@@ -21538,6 +21550,9 @@ msgid ""
 "  complete -F _salsa_completion jsteam_admin\n"
 "\n"
 msgstr ""
+"  _completion_loader salsa\n"
+"  complete -F _salsa_completion jsteam_admin\n"
+"\n"
 
 #. type: =item
 #: ../scripts/salsa.pl:496

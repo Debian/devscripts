@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2019-07-20 10:43+0200\n"
+"POT-Creation-Date: 2019-08-06 20:28+0200\n"
 "PO-Revision-Date: 2019-01-27 10:18+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -259,7 +259,7 @@ msgstr "B<-h>, B<--help>"
 #: ../scripts/annotate-output.1:19 ../scripts/debchange.1:401
 #: ../scripts/debclean.1:90 ../scripts/debrelease.1:102
 #: ../scripts/debsign.1:102 ../scripts/dep3changelog.1:19
-#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:83
+#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:89
 #: ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
@@ -356,7 +356,7 @@ msgstr ""
 #: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:79
 #: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:657
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
-#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:115
+#: ../scripts/mk-origtargz.pl:207 ../scripts/nmudiff.1:121
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:393 ../scripts/sadt.pod:69 ../scripts/salsa.pl:838
@@ -411,7 +411,7 @@ msgstr ""
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:544
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118
 #: ../scripts/mk-origtargz.pl:211 ../scripts/namecheck.pl:24
-#: ../scripts/nmudiff.1:119 ../scripts/origtargz.pl:162
+#: ../scripts/nmudiff.1:125 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:397 ../scripts/salsa.pl:842
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
@@ -2903,7 +2903,7 @@ msgstr ""
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:327
 #: ../scripts/dget.pl:687 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:43 ../scripts/grep-excuses.1:43
-#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:86
+#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:92
 #: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
 #: ../scripts/rmadison.pl:344 ../scripts/uupdate.1:107
 #: ../scripts/who-uploads.1:50
@@ -3018,7 +3018,7 @@ msgstr ""
 "B<mutt> benutzt wird. Entspricht der Befehlszeilenoption B<--mailreader>."
 
 #. type: TP
-#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:111
+#: ../scripts/bts.pl:4291 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:117
 #, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "B<BTS_SENDMAIL_COMMAND>"
@@ -3439,7 +3439,7 @@ msgstr "führt den Fehlersuchmodus aus."
 #: ../scripts/build-rdeps.pl:109 ../scripts/cowpoke.1:131
 #: ../scripts/debclean.1:87 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:23 ../scripts/mass-bug.pl:117
-#: ../scripts/nmudiff.1:80 ../scripts/plotchangelog.1:92
+#: ../scripts/nmudiff.1:86 ../scripts/plotchangelog.1:92
 #: ../scripts/uscan.pl:1624
 #, no-wrap
 msgid "B<--help>"
@@ -3456,7 +3456,7 @@ msgstr "zeigt die Aufrufinformationen."
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/debsnap.1:77
 #: ../scripts/dep3changelog.1:19 ../scripts/diff2patches.1:25
 #: ../scripts/dscverify.1:40 ../scripts/grep-excuses.1:26
-#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:83
+#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:89
 #: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
 #: ../scripts/rmadison.pl:331 ../scripts/uscan.pl:1628 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
@@ -6621,7 +6621,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/debc.1:108 ../scripts/debchange.1:410 ../scripts/debclean.1:99
 #: ../scripts/debi.1:115 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
-#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:92
+#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:98
 #: ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:113
 #: ../scripts/who-uploads.1:56
 msgid ""
@@ -7795,7 +7795,7 @@ msgstr ""
 #: ../scripts/debchange.1:404 ../scripts/debclean.1:93
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:105
 #: ../scripts/dep3changelog.1:22 ../scripts/dscverify.1:43
-#: ../scripts/nmudiff.1:86 ../scripts/pts-subscribe.1:34
+#: ../scripts/nmudiff.1:92 ../scripts/pts-subscribe.1:34
 #: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr "zeigt Versions- und Copyright-Informationen an und endet erfolgreich."
@@ -18515,12 +18515,38 @@ msgstr "entspricht B<--delay 0>."
 
 #. type: TP
 #: ../scripts/nmudiff.1:76
+#, fuzzy, no-wrap
+#| msgid "B<--no-conf>, B<--noconf>"
+msgid "B<--no-pending>, B<--nopending>"
+msgstr "B<--no-conf>, B<--noconf>"
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:79
+#, fuzzy
+#| msgid "Do not unpack the orig tarball."
+msgid "Do not add the I<pending> tag."
+msgstr "entpackt nicht den Original-Tarball."
+
+#. type: TP
+#: ../scripts/nmudiff.1:79
+#, fuzzy, no-wrap
+#| msgid "B<--no-delay>, B<--nodelay>"
+msgid "B<--no-dd>, B<--nodd>"
+msgstr "B<--no-delay>, B<--nodelay>"
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:82
+msgid "Mention in the email that you require sponsorship."
+msgstr ""
+
+#. type: TP
+#: ../scripts/nmudiff.1:82
 #, no-wrap
 msgid "B<--template> I<TEMPLATEFILE>"
 msgstr "B<--template> I<SCHABLONENDATEI>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:80
+#: ../scripts/nmudiff.1:86
 msgid ""
 "Use content of TEMPLATEFILE for message body instead of default template.  "
 "If TEMPLATEFILE does not exist, default template is applied."
@@ -18530,13 +18556,13 @@ msgstr ""
 "Standardschablone genommen."
 
 #. type: TP
-#: ../scripts/nmudiff.1:92
+#: ../scripts/nmudiff.1:98
 #, no-wrap
 msgid "B<NMUDIFF_DELAY>"
 msgstr "B<NMUDIFF_DELAY>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:98
+#: ../scripts/nmudiff.1:104
 msgid ""
 "If this is set to a number, e-mails generated by B<nmudiff> will by default "
 "mention an upload to the DELAYED queue, delayed for the specified number of "
@@ -18548,13 +18574,13 @@ msgstr ""
 "gibt an, dass die DELAYED-Warteschlange nicht benutzt wurde."
 
 #. type: TP
-#: ../scripts/nmudiff.1:98
+#: ../scripts/nmudiff.1:104
 #, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:103
+#: ../scripts/nmudiff.1:109
 msgid ""
 "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> (or "
 "B<neomut>)to compose and send the message or not, as described above."
@@ -18564,13 +18590,13 @@ msgstr ""
 "wird oder nicht."
 
 #. type: TP
-#: ../scripts/nmudiff.1:103
+#: ../scripts/nmudiff.1:109
 #, no-wrap
 msgid "B<NMUDIFF_NEWREPORT>"
 msgstr "B<NMUDIFF_NEWREPORT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:111
+#: ../scripts/nmudiff.1:117
 msgid ""
 "This option controls whether a new bug report is made, or whether the diff "
 "is sent to the bugs closed by this NMU.  Can be I<maybe> (default), which "
@@ -18589,7 +18615,7 @@ msgstr ""
 "erstellt)."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:115
+#: ../scripts/nmudiff.1:121
 msgid ""
 "If this is set, specifies a B<sendmail> command to use instead of I</usr/"
 "sbin/sendmail>.  Same as the B<--sendmail> command line option."
@@ -18598,12 +18624,12 @@ msgstr ""
 "sbin/sendmail> zu benutzen. Entspricht der Befehlszeilenoption B<--sendmail>."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:119
+#: ../scripts/nmudiff.1:125
 msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 msgstr "B<debdiff>(1), B<sensible-editor>(1) und B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:123
+#: ../scripts/nmudiff.1:129
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
