@@ -1520,6 +1520,11 @@ sub mkorigtargz {
     my $target = $self->newfile_base;
     unless ($self->symlink eq "no") {
         require Devscripts::MkOrigtargz;
+        if ($Devscripts::MkOrigtargz::found_comp) {
+            uscan_verbose
+              "Forcing compression to $Devscripts::MkOrigtargz::found_comp";
+            $self->force_repack(1);
+        }
         @ARGV = ();
         push @ARGV, "--package", $self->pkg;
         push @ARGV, "--version", $self->shared->{common_mangled_newversion};
@@ -1536,7 +1541,8 @@ sub mkorigtargz {
         push @ARGV, "--force-repack" if $self->force_repack;
         push @ARGV, "--component", $self->component
           if $self->component;
-        push @ARGV, "--compression",    $self->compression;
+        push @ARGV, "--compression",
+          $Devscripts::MkOrigtargz::found_comp || $self->compression;
         push @ARGV, "--directory",      $self->config->destdir;
         push @ARGV, "--copyright-file", "debian/copyright"
           if ($self->config->exclusion && -e "debian/copyright");
