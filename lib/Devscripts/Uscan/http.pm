@@ -16,7 +16,8 @@ sub http_search {
     my ($self) = @_;
 
     # $content: web page to be scraped to find the URLs to be downloaded
-    if (defined($1) and $self->downloader->ssl) {
+    if ($self->{parse_result}->{base} =~ /^https/ and !$self->downloader->ssl)
+    {
         uscan_die
 "you must have the liblwp-protocol-https-perl package installed\nto use https URLs";
     }
