@@ -5,7 +5,7 @@ printf "\n--- /etc/devscripts.conf ---\n" >&3
 if [ -f /etc/devscripts.conf ]; then
     grep -E '^[^#]' /etc/devscripts.conf | \
     grep -E -v "^\s*BTS_SMTP_AUTH_" | \
-    grep -E -v "^\s*SALSA.*TOKEN" >&3
+    grep -E -v "^\s*SALSA.*TOKEN" >&3 || echo "Empty." >&3
 else
     echo "Not present" >&3
 fi
@@ -15,7 +15,7 @@ printf "\n--- ~/.devscripts ---\n" >&3
 if [ -f ~/.devscripts ]; then
     grep -E '^[^#]' ~/.devscripts | \
     grep -E -v "^\s*BTS_SMTP_AUTH_" | \
-    grep -E -v "^\s*SALSA.*TOKEN" >&3
+    grep -E -v "^\s*SALSA.*TOKEN" >&3 || echo "Empty." >&3
 else
     echo "Not present" >&3
 fi
