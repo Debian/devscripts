@@ -9,6 +9,7 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
   * Update French translation.
   * salsa:
     + Fix broken push command.  MR: !138
+    + Don't fail on checkout if --no-fail is set.  MR: !151
   * bts
     + Fix warning with "noaction" and undefined "from".
       Closes: #933607; MR: !145
