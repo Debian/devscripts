@@ -94,6 +94,10 @@ Valid options are:
    --unpack-tarballs      Unpack tarballs found in the top level source
                           directory (default)
    --no-unpack-tarballs   Do not do so
+   --apply-patches        If either old or new package is in 3.0 (quilt)
+                          format, apply the patch series and remove .pc
+                          before comparison
+   --no-unpack-tarballs   Do not do so (default)
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -126,6 +130,7 @@ my $show_diffstat        = 0;
 my $wdiff_source_control = 0;
 my $auto_ver_sort        = 0;
 my $unpack_tarballs      = 1;
+my $apply_patches        = 0;
 
 my $quiet = 0;
 
@@ -147,6 +152,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
         'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
         'DEBDIFF_AUTO_VER_SORT'        => 'no',
         'DEBDIFF_UNPACK_TARBALLS'      => 'yes',
+        'DEBDIFF_APPLY_PATCHES'        => 'no',
         'DEBRELEASE_DEBS_DIR'          => '..',
     );
     my %config_default = %config_vars;
@@ -178,6 +184,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'DEBDIFF_AUTO_VER_SORT'} = 'no';
     $config_vars{'DEBDIFF_UNPACK_TARBALLS'} =~ /^(yes|no)$/
       or $config_vars{'DEBDIFF_UNPACK_TARBALLS'} = 'yes';
+    $config_vars{'DEBDIFF_APPLY_PATCHES'} =~ /^(yes|no)$/
+      or $config_vars{'DEBDIFF_APPLY_PATCHES'} = 'no';
     # We do not replace this with a default directory to avoid accidentally
     # installing a broken package
     $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%/+%/%;
@@ -205,6 +213,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $auto_ver_sort = $config_vars{'DEBDIFF_AUTO_VER_SORT'} eq 'yes' ? 1 : 0;
     $unpack_tarballs
       = $config_vars{'DEBDIFF_UNPACK_TARBALLS'} eq 'yes' ? 1 : 0;
+    $apply_patches = $config_vars{'DEBDIFF_APPLY_PATCHES'} eq 'yes' ? 1 : 0;
 
 }
 
@@ -333,6 +342,12 @@ while (@ARGV) {
         shift;
     } elsif ($ARGV[0] =~ /^--no-?unpack-tarballs$/) {
         $unpack_tarballs = 0;
+        shift;
+    } elsif ($ARGV[0] eq '--apply-patches') {
+        $apply_patches = 1;
+        shift;
+    } elsif ($ARGV[0] =~ /^--no-?apply-patches$/) {
+        $apply_patches = 0;
         shift;
     } elsif ($ARGV[0] =~ /^--no-?conf$/) {
         fatal "--no-conf is only acceptable as the first command-line option!";
@@ -686,10 +701,13 @@ if ($type eq 'deb') {
     # or wdiffing debian/control
     our ($sdir1, $sdir2);
     mktmpdirs();
+
     for my $i (1, 2) {
         no strict 'refs';
         my @opts = ('-x');
-        push(@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
+        if ($dscformats[$i] eq '3.0 (quilt)' && !$apply_patches) {
+            push @opts, '--skip-patches';
+        }
         my $diri = ${"dir$i"};
         eval {
             spawn(
@@ -747,6 +765,12 @@ if ($type eq 'deb') {
             }
         }
         closedir(DIR);
+        if ($dscformats[$i] eq '3.0 (quilt)' && $apply_patches) {
+            spawn(
+                exec       => ['rm', '-fr', "$diri/$sdiri/.pc"],
+                wait_child => 1
+            );
+        }
     }
 
     my @command = ("diff", "-Nru", @diff_opts);

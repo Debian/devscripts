@@ -269,6 +269,9 @@
 #
 # Unpack tarballs found in the top level source directory.
 # DEBDIFF_UNPACK_TARBALLS=yes
+#
+# Apply patches when comparing 3.0 (quilt)-format packages
+# DEBDIFF_APPLY_PATCHES=no
 
 ##### debdiff-apply
 #

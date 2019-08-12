@@ -152,6 +152,14 @@ This is the default behaviour.
 .B \-\-no\-unpack\-tarballs
 Do not unpack tarballs inside source packages.
 .TP
+.B \-\-apply\-patches
+If the old and/or new package is in 3.0 (quilt) format, apply the
+quilt patches (and remove \fB.pc/\fR) before comparison.
+.TP
+.B \-\-no\-apply\-patches, \-\-noapply\-patches
+If the old and/or new package is in 3.0 (quilt) format, do not apply the
+quilt patches before comparison. This is the default behaviour.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -217,6 +225,11 @@ If this is set to \fIyes\fR, then it is the same as the
 .B DEBDIFF_UNPACK_TARBALLS
 If this is set to \fIno\fR, then it is the same as the
 \fB\-\-no\-unpack\-tarballs\fR command line parameter being used.
+.TP
+.B DEBDIFF_APPLY_PATCHES
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-apply\-patches\fR command line parameter being used.
+The default is \fIno\fR.
 .TP
 .B DEBRELEASE_DEBS_DIR
 This specifies the directory in which to look for the \fI.dsc\fR
