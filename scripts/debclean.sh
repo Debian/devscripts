@@ -161,10 +161,14 @@ fi
 
 OPWD="`pwd`"
 
+TESTDIR=$(echo $OPWD | egrep -o '.*/debian/?' | sed 's/\/debian\/\?$//')
+
 if [ -f debian/changelog ]; then
-    directories=./debian
+    directories=$OPWD
+elif [ -f "$TESTDIR/debian/changelog" ]; then
+    directories=$TESTDIR
 else
-    directories=$(find . -type d -name "debian")
+    directories=$(find . -type d -name "debian" -a ! -wholename '*.git*/debian')
 fi
 
 for i in $directories; do

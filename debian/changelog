@@ -1,5 +1,10 @@
 devscripts (2.19.7) UNRELEASED; urgency=medium
 
+  [ Joao Eriberto Mota Filho ]
+  * debclean:
+    + Allow debclean to work when in any path inside the package and
+      avoid searching in .git directories.  MR: !152
+
   [ Xavier Guimard ]
   * salsa:
     + Fix broken push command.  MR: !138
