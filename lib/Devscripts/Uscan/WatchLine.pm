@@ -1036,6 +1036,7 @@ Compare available and local versions.
 sub cmp_versions {
     my ($self) = @_;
     uscan_debug "line: cmp_versions()";
+    my $name                = $self->component || $self->pkg;
     my $mangled_lastversion = $self->parse_result->{mangled_lastversion};
     unless (defined $self->shared->{common_newversion}) {
         $self->shared->{common_newversion}
@@ -1066,13 +1067,13 @@ sub cmp_versions {
         and not $self->versionmode eq 'ignore') {
 
         # Pretend to find a newer upstream version to exit without error
-        uscan_msg "Newest version of $self->{pkg} on remote site is "
+        uscan_msg "Newest version of $name on remote site is "
           . "$self->{search_result}->{newversion}, "
           . "specified download version is $self->{shared}->{download_version}";
         $found++ unless ($self->versionmode =~ /(?:same|ignore)/);
     } elsif ($self->versionmode eq 'newer') {
         if ($compver eq 'newer') {
-            uscan_msg "Newest version of $self->{pkg} on remote site is "
+            uscan_msg "Newest version of $name on remote site is "
               . "$self->{search_result}->{newversion}, "
               . "local version is $self->{parse_result}->{lastversion}\n"
               . (
@@ -1088,7 +1089,7 @@ sub cmp_versions {
             $dehs_tags->{'status'} //= "newer package available";
             $main::found++;
         } elsif ($compver eq 'same') {
-            uscan_verbose "Newest version of $self->{pkg} on remote site is "
+            uscan_verbose "Newest version of $name on remote site is "
               . $self->search_result->{newversion}
               . ", local version is $self->{parse_result}->{lastversion}\n"
               . (
@@ -1109,7 +1110,7 @@ sub cmp_versions {
                 $self->shared->{download} = 0;
             }
         } else {    # $compver eq 'old'
-            uscan_verbose "Newest version of $self->{pkg} on remote site is "
+            uscan_verbose "Newest version of $name on remote site is "
               . $self->search_result->{newversion}
               . ", local version is $self->{parse_result}->{lastversion}\n"
               . (
@@ -1128,7 +1129,7 @@ sub cmp_versions {
             }
         }
     } elsif ($self->versionmode eq 'ignore') {
-        uscan_msg "Newest version of $self->{pkg} on remote site is "
+        uscan_msg "Newest version of $name on remote site is "
           . $self->search_result->{newversion}
           . ", ignore local version";
         $dehs_tags->{'status'} //= "package available";
