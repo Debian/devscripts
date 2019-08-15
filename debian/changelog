@@ -21,6 +21,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Invoke apt or apt-get with --reinstall.
       Otherwise repeated test-builds of a package with the intended next
       version number will not replace each other since MR !45.  MR: !136
+  * tests/test_mergechanges:
+    + Fix detection of --installed option.  MR: !140
 
   [ Sven Hartge ]
   * mk-build-deps:

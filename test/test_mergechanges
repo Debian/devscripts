@@ -31,7 +31,7 @@ my $srcdir = getcwd;
 my $top_srcdir = getcwd . '/..';
 my $mergechanges = "$top_srcdir/scripts/mergechanges.sh";
 
-if (defined $1 && $1 eq '--installed') {
+if (defined $ARGV[0] && $ARGV[0] eq '--installed') {
     $mergechanges = 'mergechanges';
 }
 
