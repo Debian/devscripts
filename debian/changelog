@@ -44,6 +44,10 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Document in the manpage the --no-pending and --no-dd options.
       Closes: #932848
 
+  [ Mike Salvatore ]
+  * hardening-check:
+    + Fix possible deadlock in stdout/stderr reading.  MR: !153
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 22 Jul 2019 08:15:08 +0200
 
 devscripts (2.19.6) unstable; urgency=medium
