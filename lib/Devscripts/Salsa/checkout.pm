@@ -24,6 +24,7 @@ sub checkout {
     @repos = map { $_->[1] } $self->get_repo(0, @repos) unless (@repos);
     my $cdir = `pwd`;
     chomp $cdir;
+    my $res = 0;
     foreach (@repos) {
         my $path = $self->project2path($_);
         s#.*/##;
@@ -32,8 +33,19 @@ sub checkout {
             ds_verbose "Updating existing checkout in $_";
             spawn(
                 exec       => ['gbp', 'pull', '--pristine-tar'],
-                wait_child => 1
+                wait_child => 1,
+                nocheck    => 1,
             );
+            if ($?) {
+                if ($self->config->no_fail) {
+                    print STDERR "gbp pull fails in $_, "
+                      . "continuing since --no-fail is set\n";
+                    $res++;
+                } else {
+                    ds_warn "gbp pull failed in $_\n";
+                    return 1;
+                }
+            }
             chdir $cdir;
         } else {
             spawn(
@@ -42,11 +54,22 @@ sub checkout {
                     '--all', $self->config->git_server_url . $path . ".git"
                 ],
                 wait_child => 1,
+                nocheck    => 1,
             );
+            if ($?) {
+                if ($self->config->no_fail) {
+                    print STDERR "gbp clone fails in $_, "
+                      . "continuing since --no-fail is set\n";
+                    $res++;
+                } else {
+                    ds_warn "gbp clone failed for $_\n";
+                    return 1;
+                }
+            }
             ds_warn "$_ ready in $_/";
         }
     }
-    return 0;
+    return $res;
 }
 
 1;

@@ -26,7 +26,7 @@ _salsa_completion () {
     commands+=" del_user group list_groups list_repos ls join push"
     commands+=" fork forks merge_request merge_requests mr mrs"
     commands+=" protect_branch protected_branches purge_cache push_repo"
-    commands+=" search_group search_project search_user"
+    commands+=" search search_group search_project search_user"
     commands+=" update_repo update_safe update_user whoami"
     case "${prev}" in
       --api-url) ;&
