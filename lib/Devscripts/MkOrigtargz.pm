@@ -32,6 +32,8 @@ has exclude_globs => (
 has status        => (is => 'rw', default => sub { 0 });
 has destfile_nice => (is => 'rw');
 
+our $found_comp;
+
 sub do {
     my ($self) = @_;
     $self->parse_copyrights or $self->make_orig_targz;
@@ -572,8 +574,9 @@ sub fix_dest_file {
         $self->config->compression($comp
               || &Devscripts::MkOrigtargz::Config::default_compression);
     }
-    return sprintf "%s.%s", $destfiletar,
-      compression_get_property($self->config->compression, "file_ext");
+    $comp = compression_get_property($self->config->compression, "file_ext");
+    $found_comp ||= $self->config->compression;
+    return sprintf "%s.%s", $destfiletar, $comp;
 }
 
 1;

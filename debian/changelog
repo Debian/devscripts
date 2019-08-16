@@ -16,6 +16,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Better displayed name when using components.  MR: !146
     + Include details about the components in the dehs output.  MR: !147
     + Fix bad https verification.  MR: !150
+    + Fore re-compression of components when their compression differ from the
+      main tarball.  Closes: #934464; MR: !149
 
   [ Sean Whitton ]
   * git-deborig:

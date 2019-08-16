@@ -1053,6 +1053,7 @@ testWatch4WebNonNativeGroup() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
+    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1067,6 +1068,7 @@ testWatch4WebNonNativeGroupRepackSuffix() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
+    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,repacksuffix=+ds,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1081,6 +1083,7 @@ testWatch4WebNonNativeGroupSigned() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
+    GZREPACK=gz
     WATCHLINE='
 opts="pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1095,6 +1098,7 @@ testWatch4WebNonNativeGroupSignedNext() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
+    GZREPACK=gz
     SIGMODE=ASC
     WATCHLINE='
 opts="pgpmode=next" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1103,6 +1107,20 @@ opts="component=bar,pgpmode=next" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@
 opts="component=bar,pgpmode=previous" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@.asc previous
 opts="component=baz,pgpmode=next" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=baz,pgpmode=previous" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@.asc previous'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
+}
+
+testWatch4WebNonNativeGroupWithCompression() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    GZREPACK=gz
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,repack,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ group'
     helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
 }
 
