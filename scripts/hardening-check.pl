@@ -189,11 +189,14 @@ sub output(@) {
     my $collect_out = "";
     my $collect_err = "";
 
-    while (!eof($stdout) || !eof($stderr)) {
-        my @ready = $selector->can_read();
+    while (my @ready = $selector->can_read()) {
         foreach my $fh (@ready) {
             my $buf;
-            read($fh, $buf, 4096);
+            my $len = sysread($fh, $buf, 4096);
+            if ($len == 0) {
+                $selector->remove($fh);
+                next;
+            }
 
             if ($fh == $stdout) {
                 $collect_out .= $buf;
