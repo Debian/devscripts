@@ -463,4 +463,46 @@ END
     cleanup
 }
 
+testComponentDehsOutput() {
+    PKG=foo
+    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
+    spawnHttpServer
+    PORT=$(cat "$TEMP_PKG_DIR"/repo/port)
+
+    mkdir -p "$TEMP_PKG_DIR"/$PKG/debian
+
+    cat <<END > "$TEMP_PKG_DIR"/$PKG/debian/watch
+version=4
+http://localhost:$PORT/$PKG-(\d).zip debian
+
+opts="searchmode=plain,component=baz" \
+http://localhost:$PORT/src.json http://localhost:$PORT/foo-(\d).zip
+END
+
+    cat <<END > "$TEMP_PKG_DIR"/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p "$TEMP_PKG_DIR"/repo/foo
+    touch "$TEMP_PKG_DIR"/repo/foo/content
+
+    ( cd "$TEMP_PKG_DIR"/repo ;
+      zip -q -r $PKG-1.zip *;
+      cat > src.json <<END
+{"1.0":{"tarball":"http://localhost:$PORT/foo-1.zip"}}
+END
+      )
+
+    OUTPUT=$( (cd "$TEMP_PKG_DIR"/$PKG ; $COMMANDDEHS --report --dehs) )
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" '<component id="baz">')
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<component-upstream-version>1</component-upstream-version>")
+}
+
 . shunit2

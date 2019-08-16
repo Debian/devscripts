@@ -1047,6 +1047,18 @@ sub cmp_versions {
     $dehs_tags->{'debian-mangled-uversion'} //= $mangled_lastversion;
     $dehs_tags->{'upstream-version'} //= $self->search_result->{newversion};
     $dehs_tags->{'upstream-url'}     //= $self->upstream_url;
+    $dehs_tags->{'component-name'}   //= [];
+    $dehs_tags->{'component-upstream-version'} //= [];
+    if ($self->component) {
+        push @{ $dehs_tags->{'component-name'} }, $self->component;
+        push @{ $dehs_tags->{'component-debian-uversion'} },
+          $self->parse_result->{lastversion};
+        push @{ $dehs_tags->{'component-debian-mangled-uversion'} },
+          $mangled_lastversion;
+        push @{ $dehs_tags->{'component-upstream-version'} },
+          $self->search_result->{newversion};
+        push @{ $dehs_tags->{'component-upstream-url'} }, $self->upstream_url;
+    }
 
     my $mangled_ver
       = Dpkg::Version->new("1:${mangled_lastversion}-0", check => 0);
