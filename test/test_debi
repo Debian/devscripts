@@ -54,6 +54,9 @@ my $tmp;
 if (defined $ARGV[0] && $ARGV[0] eq '--installed') {
     $debi[0] = 'debi';
 }
+else {
+    $ENV{PATH} = "$top_srcdir/scripts:$ENV{PATH}";
+}
 
 sub verbose_run {
     my $argv = shift;
