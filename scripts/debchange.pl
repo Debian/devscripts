@@ -1436,7 +1436,7 @@ if ((
         }
         if (@closes_text or $TEXT or $EMPTY_TEXT) {
             foreach (@closes_text) { format_line($_, 1); }
-            if (length $TEXT) { format_line($TEXT, 1); }
+            if (length $TEXT) { format_line($TEXT,   1); }
         } elsif ($opt_news) {
             print O "  \n";
         } else {
@@ -1611,7 +1611,7 @@ m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i
 
         if (@closes_text or $TEXT) {
             foreach (@closes_text) { format_line($_, 0); }
-            if (length $TEXT) { format_line($TEXT, 0); }
+            if (length $TEXT) { format_line($TEXT,   0); }
         } elsif ($opt_news) {
             print O "\n  \n";
             $line++;
@@ -1683,7 +1683,7 @@ m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i
 
     if (@closes_text or $TEXT) {
         foreach (@closes_text) { format_line($_, 1); }
-        if (length $TEXT) { format_line($TEXT, 1); }
+        if (length $TEXT) { format_line($TEXT,   1); }
     } elsif ($opt_news) {
         print O "  \n";
     } elsif ($opt_empty) {

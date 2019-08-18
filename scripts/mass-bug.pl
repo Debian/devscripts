@@ -228,7 +228,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
     shift;
 } else {
-    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my @config_files   = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars    = ('BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',);
     my %config_default = %config_vars;
 

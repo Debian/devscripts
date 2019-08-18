@@ -1811,7 +1811,7 @@ or B<EMAIL> (checked in that order) is used.
 =cut
 
 sub bts_claim {
-    my $bug = checkbug(shift) or die "bts claim: claim what bug?\n";
+    my $bug   = checkbug(shift) or die "bts claim: claim what bug?\n";
     my $claim = checkemail(shift) || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
     if (!length $claim) {
         die "bts claim: use what claim token?\n";
@@ -1831,7 +1831,7 @@ or B<EMAIL> (checked in that order) is used.
 =cut
 
 sub bts_unclaim {
-    my $bug = checkbug(shift) or die "bts unclaim: unclaim what bug?\n";
+    my $bug   = checkbug(shift) or die "bts unclaim: unclaim what bug?\n";
     my $claim = checkemail(shift) || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
     if (!length $claim) {
         die "bts unclaim: use what claim token?\n";

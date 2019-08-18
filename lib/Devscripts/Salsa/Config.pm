@@ -72,7 +72,7 @@ use constant keys => [
     ],
     ['group=s',    'SALSA_GROUP',    qr/^[\/\-\w]+$/],
     ['group-id=s', 'SALSA_GROUP_ID', qr/^\d+$/],
-    ['token', 'SALSA_TOKEN', sub { $_[0]->private_token($_[1]) }],
+    ['token',      'SALSA_TOKEN',    sub { $_[0]->private_token($_[1]) }],
     [
         'token-file',
         'SALSA_TOKEN_FILE',

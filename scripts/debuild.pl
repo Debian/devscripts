@@ -419,8 +419,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
         my $savearg = $arg;
         my $opt     = '';
 
-        $arg =~ /^(-h|--help)$/ and usage(), exit 0;
-        $arg eq '--version' and version(), exit 0;
+        $arg =~ /^(-h|--help)$/ and usage(),   exit 0;
+        $arg eq '--version'     and version(), exit 0;
 
         # Let's do the messy case first
         if ($arg eq '--preserve-envvar') {

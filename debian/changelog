@@ -34,6 +34,7 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
       version number will not replace each other since MR !45.  MR: !136
   * tests/test_mergechanges:
     + Fix detection of --installed option.  MR: !140
+  * Refresh formatting following the new perltidy version 20190601.  MR: !54
 
   [ Sven Hartge ]
   * mk-build-deps:
