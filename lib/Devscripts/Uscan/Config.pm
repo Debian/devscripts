@@ -143,7 +143,7 @@ use constant keys => [
             $_[0]->download(2);
         }
     ],
-    ['no-download', undef, sub { $_[0]->download(0); return 1; }],
+    ['no-download',        undef, sub { $_[0]->download(0); return 1; }],
     ['overwrite-download', undef, sub { $_[0]->download(3) }],
 
     # "pasv"
@@ -191,9 +191,9 @@ use constant keys => [
     ],
     # "signature" and its aliases
     ['signature!',                   undef, 'bool', 1],
-    ['skipsignature|skip-signature', undef, sub     { $_[0]->signature(-1) }],
+    ['skipsignature|skip-signature', undef, sub { $_[0]->signature(-1) }],
     # "verbose" and its aliases
-    ['debug', undef, sub { $verbose = 2 }],
+    ['debug',      undef, sub { $verbose = 2 }],
     ['no-verbose', undef, sub { $verbose = 0; return 1; }],
     [
         'verbose|v!', 'USCAN_VERBOSE',

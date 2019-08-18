@@ -89,7 +89,7 @@ sub _lock_and_tie {
       if ((
                $dbfile_data[1] && O_RDWR
             or $dbfile_data[1] && O_WRONLY
-        )                              # any kind of write access
+        )    # any kind of write access
         and $mode eq "read"            # and opening for reading
         and $tie_type ne "TIEARRAY"    # and not RECNO
       );

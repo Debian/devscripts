@@ -140,7 +140,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
     shift;
 } else {
-    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my @config_files   = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars    = ('DPKG_DEPCHECK_OPTIONS' => '',);
     my %config_default = %config_vars;
 
@@ -177,14 +177,14 @@ Getopt::Long::Configure('bundling', 'require_order');
 GetOptions(
     "h|help"    => sub { usage();   exit; },
     "v|version" => sub { version(); exit; },
-    "a|all"                      => sub { $opts{"allpkgs"} = 1; },
-    "b|build-depends"            => sub { $opts{"pkgs"}    = 'build'; },
-    "d|ignore-dev-deps"          => sub { $opts{"pkgs"}    = 'dev'; },
-    "m|min-deps"                 => sub { $opts{"pkgs"}    = 'min'; },
-    "C|C-locale"                 => \$opts{"C"},
-    "no-C-locale|noC-locale"     => sub { $opts{"C"}       = 0; },
+    "a|all"             => sub { $opts{"allpkgs"} = 1; },
+    "b|build-depends"   => sub { $opts{"pkgs"}    = 'build'; },
+    "d|ignore-dev-deps" => sub { $opts{"pkgs"}    = 'dev'; },
+    "m|min-deps"        => sub { $opts{"pkgs"}    = 'min'; },
+    "C|C-locale"        => \$opts{"C"},
+    "no-C-locale|noC-locale"     => sub { $opts{"C"} = 0; },
     "l|list-files"               => \$opts{"l"},
-    "no-list-files|nolist-files" => sub { $opts{"l"}       = 0; },
+    "no-list-files|nolist-files" => sub { $opts{"l"} = 0; },
     "o|output=s"                 => \$opts{"o"},
     "O|strace-output=s"          => \$opts{"strace-output"},
     "I|strace-input=s"           => \$opts{"strace-input"},
