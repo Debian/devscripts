@@ -18,12 +18,21 @@ OUR_TESTS= \
 	uscan_mangle \
 	perltidy \
 
+# Tests that must run as root, and alter the state of the system by
+# adding/removing packages
+DESTRUCTIVE_TESTS = \
+	debi \
+
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)
+
+destructive-test: $(foreach i,$(DESTRUCTIVE_TESTS),test_$(i).test)
 
 %.test: %
 	./$<
 
 test-installed: $(foreach i,$(OUR_TESTS),test_$(i).test_installed)
+
+destructive-test-installed: $(foreach i,$(DESTRUCTIVE_TESTS),test_$(i).test_installed)
 
 %.test_installed: %
 	./$< --installed
@@ -31,4 +40,4 @@ test-installed: $(foreach i,$(OUR_TESTS),test_$(i).test_installed)
 online-test:
 	./test_uscan_online
 
-.PHONY: test test-installed online-test
+.PHONY: test test-installed online-test destructive-test

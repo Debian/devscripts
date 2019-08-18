@@ -19,3 +19,12 @@ Depends:
  wdiff,
  zip,
 Restrictions: allow-stderr
+
+Tests: destructive
+Depends:
+ @,
+ apt,
+ libdpkg-perl,
+ libipc-run-perl,
+ perl,
+Restrictions: allow-stderr, breaks-testbed, needs-root
