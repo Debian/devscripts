@@ -98,6 +98,7 @@ use strict;
 use Devscripts::Uscan::Downloader;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::WatchLine;
+use Dpkg::Version;
 use File::Copy qw/copy move/;
 use List::Util qw/first/;
 use Moo;
@@ -287,7 +288,7 @@ sub BUILD {
                 watchfile     => $self->watchfile,
         });
         push @{ $self->group }, $lineNumber
-          if ($line->type and $line->type eq 'group');
+          if ($line->type and $line->type =~ /^(?:group|checksum)$/);
         push @{ $self->watchlines }, $line;
         $lineNumber++;
     }
@@ -315,16 +316,27 @@ sub process_group {
     my $saveDconfig = $self->config->download_version;
     # Build version
     my @cur_versions = split /\+~/, $self->pkg_version;
+    my $checksum     = 0;
+    my $newChecksum  = 0;
+    if (    $cur_versions[$#cur_versions]
+        and $cur_versions[$#cur_versions] =~ s/^cs//) {
+        $checksum = pop @cur_versions;
+    }
     my (@new_versions, @last_debian_mangled_uversions, @last_versions);
     my $download    = 0;
     my $last_shared = $self->shared;
     my $last_comp_version;
     my @dversion;
+    my @ck_versions;
     # Isolate component and following lines
+    if (my $v = $self->config->download_version) {
+        @dversion = map { s/\+.*$//; /^cs/ ? () : $_ } split /\+~/, $v;
+    }
     foreach my $line (@{ $self->watchlines }) {
-        if ($line->type and $line->type eq 'group') {
+        if (   $line->type and $line->type eq 'group'
+            or $line->type eq 'checksum') {
             $last_shared       = $self->new_shared;
-            $last_comp_version = shift @cur_versions;
+            $last_comp_version = shift @cur_versions if $line->type eq 'group';
         }
         if ($line->type and $line->type eq 'group') {
             $line->{groupDversion} = shift @dversion;
@@ -334,7 +346,7 @@ sub process_group {
     }
     # Check if download is needed
     foreach my $line (@{ $self->watchlines }) {
-        next unless ($line->type eq 'group');
+        next unless ($line->type eq 'group' or $line->type eq 'checksum');
         # Stop on error
         $self->config->download_version($line->{groupDversion})
           if $line->{groupDversion};
@@ -343,18 +355,41 @@ sub process_group {
             or $line->search
             or $line->get_upstream_url
             or $line->get_newfile_base
-            or $line->cmp_versions) {
+            or ($line->type eq 'group' and $line->cmp_versions)) {
             $self->{status} += $line->status;
             return $self->{status};
         }
         $download = $line->shared->{download}
-          if ($line->shared->{download} > $download);
+          if $line->shared->{download} > $download;
+    }
+    foreach my $line (@{ $self->watchlines }) {
+        next unless $line->type eq 'checksum';
+        $newChecksum
+          = $self->sum($newChecksum, $line->search_result->{newversion});
+        push @ck_versions, $line->search_result->{newversion};
+    }
+    foreach my $line (@{ $self->watchlines }) {
+        next unless ($line->type eq 'checksum');
+        $line->parse_result->{mangled_lastversion} = $checksum;
+        my $tmp = $line->search_result->{newversion};
+        $line->search_result->{newversion} = $newChecksum;
+        if ($line->cmp_versions) {
+            $self->{status} += $line->status;
+            return $self->{status};
+        }
+        $download = $line->shared->{download}
+          if $line->shared->{download} > $download;
+        $line->search_result->{newversion} = $tmp;
+        if ($line->component) {
+            pop @{ $dehs_tags->{'component-upstream-version'} };
+            push @{ $dehs_tags->{'component-upstream-version'} }, $tmp;
+        }
     }
     foreach my $line (@{ $self->watchlines }) {
         # Set same $download for all
         $line->shared->{download} = $download;
         # Non "group" lines where not initialized
-        unless ($line->type eq 'group') {
+        unless ($line->type eq 'group' or $line->type eq 'checksum') {
             if (   $line->parse
                 or $line->search
                 or $line->get_upstream_url
@@ -382,6 +417,13 @@ sub process_group {
         }
     }
     my $new_version = join '+~', @new_versions;
+    if ($newChecksum) {
+        $new_version .= "+~cs$newChecksum";
+    }
+    if ($checksum) {
+        push @last_versions,                 "cs$newChecksum";
+        push @last_debian_mangled_uversions, "cs$checksum";
+    }
     $dehs_tags->{'upstream-version'} = $new_version;
     $dehs_tags->{'debian-uversion'}  = join('+~', @last_versions)
       if (grep { $_ } @last_versions);
@@ -428,7 +470,39 @@ sub process_group {
             rename "$line->{destfile}.sig", "$path.sig";
         }
     }
+    if (@ck_versions) {
+        my $v = join '+~', @ck_versions;
+        if ($dehs) {
+            $dehs_tags->{'decoded-checksum'} = $v;
+        } else {
+            uscan_warn 'Checksum ref: ' . join('+~', @ck_versions) . "\n";
+        }
+    }
     return 0;
+}
+
+sub sum {
+    my ($self, @versions) = @_;
+    my (@res, @str);
+    foreach my $v (@versions) {
+        my @tmp = grep { $_ ne '.' } version_split_digits($v);
+        for (my $i = 0 ; $i < @tmp ; $i++) {
+            $str[$i] //= '';
+            $res[$i] //= 0;
+            if ($tmp[$i] =~ /^\d+$/) {
+                $res[$i] += $tmp[$i];
+            } else {
+                uscan_die
+"Checksum supports only digits in versions, $tmp[$i] is not accepted";
+            }
+        }
+    }
+    for (my $i = 0 ; $i < @res ; $i++) {
+        my $tmp = shift @str;
+        $res[$i] .= $tmp if $tmp ne '';
+    }
+    push @res, @str;
+    return join '.', @res;
 }
 
 1;

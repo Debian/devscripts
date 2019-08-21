@@ -70,7 +70,7 @@ sub dehs_output () {
 
     for my $tag (
         qw(package debian-uversion debian-mangled-uversion
-        upstream-version upstream-url
+        upstream-version upstream-url decoded-checksum
         status target target-path messages warnings errors)
     ) {
         if (exists $dehs_tags->{$tag}) {
