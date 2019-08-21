@@ -13,7 +13,7 @@ _pkg_names()
     return 0
 }
 
-complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe
+complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe
 
 
 # Local variables:

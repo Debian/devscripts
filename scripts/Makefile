@@ -23,7 +23,6 @@ COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 PKGNAMES := \
 	build-rdeps \
-	dcontrol \
 	dd-list \
 	debcheckout \
 	debsnap \
