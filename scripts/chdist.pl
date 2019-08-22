@@ -706,6 +706,8 @@ sub parseFile {
 ### Command parsing
 ########################################################
 
+my $recursed = 0;
+MAIN:
 my $command = shift @ARGV;
 given ($command) {
     when ('create') {
@@ -763,6 +765,16 @@ given ($command) {
         list;
     }
     default {
-        usage(1);
+        my $dist = $command;
+        my $dir = "$datadir/$dist";
+        if (-d $dir && !$recursed) {
+            splice @ARGV, 1, 0, $dist;
+            $recursed = 1;
+            goto MAIN;
+        } elsif ($dist && !$recursed) {
+            dist_check($dist);
+        } else {
+            usage(1);
+        }
     }
 }
