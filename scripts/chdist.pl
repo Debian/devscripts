@@ -766,7 +766,7 @@ given ($command) {
     }
     default {
         my $dist = $command;
-        my $dir = "$datadir/$dist";
+        my $dir  = "$datadir/$dist";
         if (-d $dir && !$recursed) {
             splice @ARGV, 1, 0, $dist;
             $recursed = 1;
