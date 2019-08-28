@@ -19,6 +19,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Fix bad https verification.  MR: !150
     + Fore re-compression of components when their compression differ from the
       main tarball.  Closes: #934464; MR: !149
+    + Fix git-shallow download when tag contains a "/";
+      Closes: #935949; MR: !158
 
   [ Sean Whitton ]
   * git-deborig:
