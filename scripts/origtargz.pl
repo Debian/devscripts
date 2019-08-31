@@ -220,9 +220,9 @@ $fileversion =~ s/^\d+://;        # strip epoch
 sub download_origtar () {
     # look for an existing file
 
-    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+    if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
         print "Using existing $f[0]\n";
-        return $f[0];
+        return @f;
     }
 
     # try other directories
@@ -230,28 +230,33 @@ sub download_origtar () {
     foreach my $dir (@dirs) {
         $dir =~ s!/$!!;
 
-        if (my @f = glob "$dir/${package}_$fileversion.orig.tar.*") {
-            print "Using $f[0]\n";
-            my $basename = $f[0];
-            $basename =~ s!.*/!!;
-            link $f[0],         "../$basename"
-              or symlink $f[0], "../$basename"
-              or die "symlink: $!";
-            return "../$basename";
+        if (my @f = glob "$dir/${package}_$fileversion.orig*.tar.*") {
+            my @res;
+            for my $f (@f) {
+                print "Using $f\n";
+                my $basename = $f;
+                $basename =~ s!.*/!!;
+                link $f,         "../$basename"
+                  or symlink $f, "../$basename"
+                  or die "symlink: $!";
+                push @res, "../$basename";
+            }
+            return @res;
         }
     }
 
     # try pristine-tar
 
-    my @files = grep { /^\Q${package}_$fileversion.orig.tar.\E/ }
+    my @files
+      = grep { /^\Q${package}_$fileversion.orig\E(?:-[\w\-]+)?\.tar\./ }
       map { chomp; $_; }    # remove newlines
       `pristine-tar list 2>&1`;
     if (@files) {
-        system "pristine-tar checkout ../$files[0]";
+        system "pristine-tar checkout ../$_" for @files;
     }
 
-    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-        return $f[0];
+    if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
+        return @f;
     }
 
     # try apt-get source
@@ -288,8 +293,8 @@ sub download_origtar () {
 "cd .. && apt-get source --only-source --download-only $t '$package=$bestsrcversion'";
     }
 
-    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-        return $f[0];
+    if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
+        return @f;
     }
 
     # try uscan
@@ -299,8 +304,8 @@ sub download_origtar () {
         system "uscan --download --download-current-version --rename\n";
     }
 
-    if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
-        return $f[0];
+    if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
+        return @f;
     }
 
     print
@@ -333,45 +338,57 @@ sub clean_checkout () {
     system('rm', '-rf', '--', @rm);
 }
 
-sub unpack_tarball ($) {
-    my $origtar = shift;
-    my $tmpdir  = File::Temp->newdir(DIR => ".", CLEANUP => 1);
+sub unpack_tarball (@) {
+    my @origtar = @_;
 
-    print "Unpacking $origtar\n";
-
-    # unpack
-    system('tar', "--directory=$tmpdir", '-xf', "$origtar");
-    if ($? >> 8) {
-        print STDERR "unpacking $origtar failed\n";
-        return 0;
-    }
-
-    # figure out which subdirectory was created by unpacking
-    my $directory;
-    my @files = glob "$tmpdir/*";
-    if (@files == 1 and -d $files[0])
-    {    # exactly one directory, move its contents over
-        $directory = $files[0];
-    } else {   # several files were created, move these to the target directory
-        $directory = $tmpdir;
-    }
-
-    # move all files over, except the debian directory
-    opendir DIR, $directory or die "opendir $directory: $!";
-    foreach my $file (readdir DIR) {
-        if ($file eq 'debian') {
-            system('rm', '-rf', '--', "$directory/$file");
-            next;
-        } elsif ($file eq '.' or $file eq '..') {
-            next;
+    for my $origtar (@origtar) {
+        my $tmpdir = File::Temp->newdir(DIR => ".", CLEANUP => 1);
+        print "Unpacking $origtar\n";
+        my $cmp = ($origtar =~ /orig(?:-([\w\-]+))?\.tar/)[0] || '';
+        if ($cmp) {
+            mkdir $cmp;
+            $cmp = "/$cmp";
+            mkdir "$tmpdir$cmp";
         }
-        unless (rename "$directory/$file", "$file") {
-            print STDERR "rename $directory/$file $file: $!\n";
+        #print STDERR Dumper(\@origtar,$cmp);use Data::Dumper;exit;
+
+        # unpack
+        system('tar', "--directory=$tmpdir$cmp", '-xf', "$origtar");
+        if ($? >> 8) {
+            print STDERR "unpacking $origtar failed\n";
             return 0;
         }
+
+        # figure out which subdirectory was created by unpacking
+        my $directory;
+        my @files = glob "$tmpdir$cmp/*";
+        if (@files == 1 and -d $files[0])
+        {    # exactly one directory, move its contents over
+            $directory = $files[0];
+        } else
+        {    # several files were created, move these to the target directory
+            $directory = $tmpdir . $cmp;
+        }
+
+        # move all files over, except the debian directory
+        opendir DIR, $directory or die "opendir $directory: $!";
+        foreach my $file (readdir DIR) {
+            if ($file eq 'debian') {
+                system('rm', '-rf', '--', "$directory/$file");
+                next;
+            } elsif ($file eq '.' or $file eq '..') {
+                next;
+            }
+            my $dest = './' . ($cmp ? "$cmp/" : '') . $file;
+            unless (rename "$directory/$file", $dest) {
+                print `ls -l $directory/$file`;
+                print STDERR "rename $directory/$file $dest: $!\n";
+                return 0;
+            }
+        }
+        closedir DIR;
+        rmdir $directory;
     }
-    closedir DIR;
-    rmdir $directory;
 
     return 1;
 }
@@ -383,18 +400,18 @@ if ($clean) {
     exit 0;
 }
 
-my $origtar = download_origtar;
-exit 1 unless ($origtar);
+my @origtar = download_origtar;
+exit 1 unless (@origtar);
 
 if ($unpack eq 'once') {
     my @files = glob '*';    # ignores dotfiles
     if (@files == 1)
     {    # this is debian/, we have already opened debian/changelog
-        unpack_tarball($origtar) or exit 1;
+        unpack_tarball(@origtar) or exit 1;
     }
 } elsif ($unpack eq 'yes') {
     clean_checkout;
-    unpack_tarball($origtar) or exit 1;
+    unpack_tarball(@origtar) or exit 1;
 }
 
 exit 0;
