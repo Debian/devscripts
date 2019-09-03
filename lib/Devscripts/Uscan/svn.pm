@@ -25,13 +25,18 @@ sub svn_search {
             wait_child => 1,
             to_string  => \$newversion
         );
-        # FIXME: default for 'pretty' has to be changed
-        if ($self->pretty !~ /git/) {
-            $newversion = sprintf '0.0~svn%d', $newversion;
-        } else {
-            $newversion = sprintf $self->pretty, $newversion;
-        }
         chomp($newversion);
+        $newversion = sprintf '0.0~svn%d', $newversion;
+        if (
+            mangle(
+                $self->watchfile,  \$self->line,
+                'uversionmangle:', \@{ $self->uversionmangle },
+                \$newversion
+            )
+        ) {
+            return undef;
+        }
+
     }
     ################################################
     # search $newfile $newversion (git mode w/tag)
