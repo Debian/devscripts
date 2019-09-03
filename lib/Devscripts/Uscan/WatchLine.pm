@@ -580,7 +580,8 @@ EOF
 
         # Check $filepattern has ( ...)
         if ($filepattern !~ /\([^?].*\)/) {
-            if ($self->mode eq 'git' and $filepattern eq 'HEAD') {
+            if (($self->mode eq 'git' or $self->mode eq 'svn')
+                and $filepattern eq 'HEAD') {
                 $self->versionless(1);
             } elsif ($self->mode eq 'git'
                 and $filepattern =~ m&^heads/&) {
