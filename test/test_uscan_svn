@@ -24,7 +24,6 @@ TESTTYPE=Svn
 COMMAND="chronic_sh uscan --no-conf --compression=xz --dehs"
 
 # prevent the local from messing with this test
-export GIT_CONFIG_NOGLOBAL=1
 export HOME=""
 export XDG_CONFIG_HOME=""
 
@@ -98,16 +97,6 @@ END
     cp -f "$test_dir/uscan/PUBLIC_KEY.asc" "$TEMP_PKG_DIR/$PKG/debian/upstream/signing-key.asc"
 }
 
-makeDebianDirWithUpstream() {
-    WATCHARGS=$1
-    makeDebianDir "$WATCHARGS"
-    cd "$TEMP_PKG_DIR/$PKG" || exit 1
-    chronic_sh git init
-    chronic_sh git remote add upstream "file:///$TEMP_PKG_DIR/repo"
-    chronic_sh git fetch upstream
-    cd - > /dev/null || exit 1
-}
-
 makeDebianDirHead() {
     WATCHARGS=$1
     makeDebianDir "$WATCHARGS"
@@ -121,9 +110,7 @@ END
 helperLaunch() {
     WATCHARGS=$1
     ARG="${2:-}"
-    if test "$ARG" = "upstream"; then
-        makeDebianDirWithUpstream "$WATCHARGS"
-    elif test "$ARG" = "HEAD"; then
+    if test "$ARG" = "HEAD"; then
         makeDebianDirHead "$WATCHARGS"
     else
         makeDebianDir "$WATCHARGS"
