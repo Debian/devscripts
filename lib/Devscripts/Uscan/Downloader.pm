@@ -5,6 +5,7 @@ use Cwd qw/cwd abs_path/;
 use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
+use File::Temp qw/tempdir/;
 use Moo;
 
 our $haveSSL;
@@ -121,13 +122,10 @@ sub download ($$$$$$$$) {
         my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 
         if ($mode eq 'svn') {
-            uscan_exec('svn', 'export', $url,
-                "$destdir/$gitrepo_dir/$pkg-$ver");
-            uscan_exec(
-                'tar',                    '-C',
-                "$destdir/$gitrepo_dir",  '-cvf',
-                "$abs_dst/$pkg-$ver.tar", "$pkg-$ver"
-            );
+            my $tempdir = tempdir(CLEANUP => 1);
+            uscan_exec('svn', 'export', $url, "$tempdir/$pkg-$ver");
+            uscan_exec('tar', '-C', $tempdir, '-cvf',
+                "$abs_dst/$pkg-$ver.tar", "$pkg-$ver");
         } elsif ($self->git_upstream) {
             uscan_exec_no_fail('git', 'archive', '--format=tar',
                 "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
