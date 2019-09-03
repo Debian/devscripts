@@ -53,48 +53,25 @@ sub svn_search {
             );
             $self->downloader->gitrepo_state(2);
         }
-        if ($self->pretty eq 'describe') {
-
-            # use unannotated tags to be on safe side
             spawn(
                 exec => [
-                    'git',
-"--git-dir=$self->{downloader}->{destdir}/$self->{gitrepo_dir}",
-                    'describe',
-                    '--tags'
+                    'svn',
+                    'info',
+                    '--show-item',
+                    'revision',
+                    '--no-newline',
+                    $self->parse_result->{base}
                 ],
                 wait_child => 1,
                 to_string  => \$newversion
             );
-            $newversion =~ s/-/./g;
-            chomp($newversion);
-            if (
-                mangle(
-                    $self->watchfile,  \$self->line,
-                    'uversionmangle:', \@{ $self->uversionmangle },
-                    \$newversion
-                )
-            ) {
-                return undef;
+            # FIXME: default for 'pretty' has to be changed
+            if( $self->pretty !~ /git/ ) {
+                $newversion = sprintf '0.0~svn%d', $newversion;
+            } else {
+                $newversion = sprintf $self->pretty, $newversion;
             }
-        } else {
-            my $tmp = $ENV{TZ};
-            $ENV{TZ} = 'UTC';
-            spawn(
-                exec => [
-                    'git',
-"--git-dir=$self->{downloader}->{destdir}/$self->{gitrepo_dir}",
-                    'log',
-                    '-1',
-                    "--date=format-local:$self->{date}",
-                    "--pretty=$self->{pretty}"
-                ],
-                wait_child => 1,
-                to_string  => \$newversion
-            );
-            $ENV{TZ} = $tmp;
             chomp($newversion);
-        }
     }
     ################################################
     # search $newfile $newversion (git mode w/tag)
