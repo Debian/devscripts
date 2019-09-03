@@ -113,8 +113,8 @@ makeDebianDirHead() {
     makeDebianDir "$WATCHARGS"
     cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
-opts="mode=git,pretty=0.0+git%cd.%h" \
-file:///$TEMP_PKG_DIR/repo HEAD
+opts="mode=svn,pretty=0.0+svn%d" \
+file:///$TEMP_PKG_DIR/repo/trunk HEAD
 END
 }
 
@@ -141,22 +141,13 @@ testSvn() {
     cleanup
 }
 
-testGitHead() {
+testSvnHead() {
     helperLaunch "pgpmode=none" HEAD
     ORIG=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*\.orig\.tar\.xz$/')
     UPSTREAM=$(find "$TEMP_PKG_DIR" | perl -ne 'print if/\/foo.*(?<!orig)\.tar\.xz$/')
     assertTrue 'downloaded tarfile not present' "[ -f '$UPSTREAM' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$ORIG' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$ORIG' ]"
-    cleanup
-}
-
-testGitUpstream() {
-    helperLaunch "pgpmode=none" upstream
-    TARBALL=${PKG}_2.0.orig.tar.xz
-    assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
-    assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
-    assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
     cleanup
 }
 

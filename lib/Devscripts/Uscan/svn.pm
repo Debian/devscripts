@@ -15,44 +15,7 @@ sub svn_search {
     my ($self) = @_;
     my ($newfile, $newversion);
     if ($self->versionless) {
-        $newfile = $self->parse_result->{filepattern}; # HEAD or heads/<branch>
-        if ($self->pretty eq 'describe') {
-            $self->gitmode('full');
-        }
-        if (    $self->gitmode eq 'shallow'
-            and $self->parse_result->{filepattern} eq 'HEAD') {
-            uscan_exec(
-                'git',
-                'clone',
-                '--bare',
-                '--depth=1',
-                $self->parse_result->{base},
-                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
-            );
-            $self->downloader->gitrepo_state(1);
-        } elsif ($self->gitmode eq 'shallow'
-            and $self->parse_result->{filepattern} ne 'HEAD')
-        {    # heads/<branch>
-            $newfile =~ s&^heads/&&;    # Set to <branch>
-            uscan_exec(
-                'git',
-                'clone',
-                '--bare',
-                '--depth=1',
-                '-b',
-                "$newfile",
-                $self->parse_result->{base},
-                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
-            );
-            $self->downloader->gitrepo_state(1);
-        } else {
-            uscan_exec(
-                'git', 'clone', '--bare',
-                $self->parse_result->{base},
-                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
-            );
-            $self->downloader->gitrepo_state(2);
-        }
+        $newfile = $self->parse_result->{base};
             spawn(
                 exec => [
                     'svn',
@@ -146,8 +109,10 @@ sub svn_search {
 
 sub svn_upstream_url {
     my ($self) = @_;
-    my $upstream_url
-      = $self->parse_result->{base} . '/' . $self->search_result->{newfile};
+    my $upstream_url = $self->parse_result->{base};
+    if (!$self->versionless) {
+        $upstream_url .= '/' . $self->search_result->{newfile};
+    }
     return $upstream_url;
 }
 
