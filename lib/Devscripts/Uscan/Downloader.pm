@@ -122,7 +122,10 @@ sub download ($$$$$$$$) {
 
         if ($mode eq 'svn') {
             uscan_exec('svn', 'export', $url, "$destdir/$gitrepo_dir");
-            uscan_exec('tar', '-cvf', "$abs_dst/$pkg-$ver.tar", "$destdir/$gitrepo_dir");
+            uscan_exec(
+                'tar',                    '-cvf',
+                "$abs_dst/$pkg-$ver.tar", "$destdir/$gitrepo_dir"
+            );
         } elsif ($self->git_upstream) {
             uscan_exec_no_fail('git', 'archive', '--format=tar',
                 "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",

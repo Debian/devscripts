@@ -16,25 +16,22 @@ sub svn_search {
     my ($newfile, $newversion);
     if ($self->versionless) {
         $newfile = $self->parse_result->{base};
-            spawn(
-                exec => [
-                    'svn',
-                    'info',
-                    '--show-item',
-                    'revision',
-                    '--no-newline',
-                    $self->parse_result->{base}
-                ],
-                wait_child => 1,
-                to_string  => \$newversion
-            );
-            # FIXME: default for 'pretty' has to be changed
-            if( $self->pretty !~ /git/ ) {
-                $newversion = sprintf '0.0~svn%d', $newversion;
-            } else {
-                $newversion = sprintf $self->pretty, $newversion;
-            }
-            chomp($newversion);
+        spawn(
+            exec => [
+                'svn',          'info',
+                '--show-item',  'revision',
+                '--no-newline', $self->parse_result->{base}
+            ],
+            wait_child => 1,
+            to_string  => \$newversion
+        );
+        # FIXME: default for 'pretty' has to be changed
+        if ($self->pretty !~ /git/) {
+            $newversion = sprintf '0.0~svn%d', $newversion;
+        } else {
+            $newversion = sprintf $self->pretty, $newversion;
+        }
+        chomp($newversion);
     }
     ################################################
     # search $newfile $newversion (git mode w/tag)
@@ -46,28 +43,29 @@ sub svn_search {
             uscan_verbose "Execute: svn @args";
         }
         open(REFS, "-|", 'svn', @args)
-          || uscan_die "$progname: you must have the subversion package installed";
+          || uscan_die
+          "$progname: you must have the subversion package installed";
         my @refs;
         my $ref;
         my $version;
         while (<REFS>) {
             chomp;
             uscan_debug "$_";
-                $ref = $_;
-                foreach my $_pattern (@{ $self->patterns }) {
-                    $version = join(".",
-                        map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
-                    if (
-                        mangle(
-                            $self->watchfile,  \$self->line,
-                            'uversionmangle:', \@{ $self->uversionmangle },
-                            \$version
-                        )
-                    ) {
-                        return undef;
-                    }
-                    push @refs, [$version, $ref];
+            $ref = $_;
+            foreach my $_pattern (@{ $self->patterns }) {
+                $version = join(".",
+                    map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
+                if (
+                    mangle(
+                        $self->watchfile,  \$self->line,
+                        'uversionmangle:', \@{ $self->uversionmangle },
+                        \$version
+                    )
+                ) {
+                    return undef;
                 }
+                push @refs, [$version, $ref];
+            }
         }
         if (@refs) {
             @refs = Devscripts::Versort::upstream_versort(@refs);
@@ -124,6 +122,6 @@ sub svn_newfile_base {
     return $newfile_base;
 }
 
-sub svn_clean {}
+sub svn_clean { }
 
 1;
