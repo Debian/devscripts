@@ -309,6 +309,11 @@ following keys:
 # or
 #   http://site.name/dir/path/project.git HEAD [version [action]]
 #
+# For svn sites:
+#   http://site.name/dir/path/project/tags v([\d\.]+)\/ [version [action]]
+# or
+#   http://site.name/dir/path/project/trunk HEAD [version [action]]
+#
 # watch_version=3 and 4: See POD for details.
 #
 # Lines can be prefixed with opts=<opts> but can be folded for readability.
@@ -908,6 +913,7 @@ Search new file link and new version on the remote site using either:
 =item L<Devscripts::Uscan::http>::http_search()
 =item L<Devscripts::Uscan::ftp>::ftp_search()
 =item L<Devscripts::Uscan::git>::git_search()
+=item L<Devscripts::Uscan::svn>::svn_search()
 
 =back
 
@@ -975,6 +981,7 @@ Transform newfile/newversion into upstream url using either:
 =item L<Devscripts::Uscan::http>::http_upstream_url()
 =item L<Devscripts::Uscan::ftp>::ftp_upstream_url()
 =item L<Devscripts::Uscan::git>::git_upstream_url()
+=item L<Devscripts::Uscan::svn>::svn_upstream_url()
 
 =back
 
@@ -1009,6 +1016,7 @@ Calculates the filename (filenamemangled) for downloaded file using either:
 =item L<Devscripts::Uscan::http>::http_newfile_base()
 =item L<Devscripts::Uscan::ftp>::ftp_newfile_base()
 =item L<Devscripts::Uscan::git>::git_newfile_base()
+=item L<Devscripts::Uscan::svn>::svn_newfile_base()
 
 =back
 
@@ -1712,6 +1720,7 @@ Clean temporary files using either:
 =item L<Devscripts::Uscan::http>::http_clean()
 =item L<Devscripts::Uscan::ftp>::ftp_clean()
 =item L<Devscripts::Uscan::git>::git_clean()
+=item L<Devscripts::Uscan::svn>::svn_clean()
 
 =back
 
