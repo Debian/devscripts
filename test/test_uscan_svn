@@ -102,7 +102,7 @@ makeDebianDirHead() {
     makeDebianDir "$WATCHARGS"
     cat <<END > "$TEMP_PKG_DIR/$PKG/debian/watch"
 version=4
-opts="mode=svn,pretty=0.0+svn%d" \
+opts="mode=svn,$WATCHARGS" \
 file:///$TEMP_PKG_DIR/repo/trunk HEAD
 END
 }
@@ -132,6 +132,16 @@ testSvnHead() {
     helperLaunch "pgpmode=none" HEAD
     ORIG="$TEMP_PKG_DIR/foo_0.0~svn5.orig.tar.xz"
     UPSTREAM="$TEMP_PKG_DIR/foo-0.0~svn5.tar.xz"
+    assertTrue 'downloaded tarfile not present' "[ -f '$UPSTREAM' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$ORIG' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$ORIG' ]"
+    cleanup
+}
+
+testSvnHeadMangle() {
+    helperLaunch "pgpmode=none,uversionmangle=s/^[^~]+/1.23.45/" HEAD
+    ORIG="$TEMP_PKG_DIR/foo_1.23.45~svn5.orig.tar.xz"
+    UPSTREAM="$TEMP_PKG_DIR/foo-1.23.45~svn5.tar.xz"
     assertTrue 'downloaded tarfile not present' "[ -f '$UPSTREAM' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$ORIG' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$ORIG' ]"
