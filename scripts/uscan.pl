@@ -400,6 +400,19 @@ listed among the registered "remotes", then uscan will use it instead of cloning
 separately.  The only local change is that uscan will run a "fetch" command to
 refresh the repository.
 
+=item B<svn>
+
+This mode accesses the upstream Subversion archive directly with the B<svn>
+command and packs the source tree.
+
+For svn mode, I<matching-pattern> specifies the full string matching pattern for
+directories under Subversion repository directory, specified via URL.  The
+upstream version is extracted from concatenating the matched parts in B<(> ...
+B<)> with B<.> .
+
+If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads the latest source
+tree of the URL.  The last revision number becomes I<version>.
+
 =back
 
 =item B<pretty=>I<rule>
