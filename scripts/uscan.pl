@@ -1321,6 +1321,33 @@ behavior.
 The generation of the upstream version string may the adjusted to your taste by
 adding B<pretty> and B<date> options to the B<opts> arguments.
 
+=head2 direct access to the Subversion repository (tags)
+
+If the upstream only publishes its code via the Subversion repository and its
+code has no web interface to obtain the release tarball, you can use B<uscan>
+with the tags of the Subversion repository to track and package the new upstream
+release.
+
+  version=4
+  opts="mode=svn, pgpmode=none" \
+  svn://svn.code.sf.net/p/jmol/code/tags/ \
+  ([\d.]+)\/ debian uupdate
+
+=head2 direct access to the Subversion repository (HEAD)
+
+If the upstream only publishes its code via the Subversion repository and its
+code has no web interface to obtain the release tarball, you can use B<uscan>
+to get the most recent source of a subtree in the repository with an
+automatically generated version string.
+
+  version=4
+  opts="mode=svn, pgpmode=none" \
+  svn://svn.code.sf.net/p/jmol/code/trunk/ \
+  HEAD debian uupdate
+
+By default, B<uscan> generates the new upstream version by appending the
+revision number to "0.0~svn". This can later be changed using B<uversionmangle>.
+
 =head1 COPYRIGHT FILE EXAMPLES
 
 Here is an example for the F<debian/copyright> file which initiates automatic
