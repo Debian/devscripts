@@ -19,7 +19,7 @@ sub svn_search {
         spawn(
             exec => [
                 'svn',          'info',
-                '--show-item',  'revision',
+                '--show-item',  'last-changed-revision',
                 '--no-newline', $self->parse_result->{base}
             ],
             wait_child => 1,
