@@ -59,6 +59,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Remove, the backend on qa.debian.org has not been maintained for years.
 
   [ Paul Wise ]
+  * Avoid needing to shell quote configuration filenames by using arguments
+    + Move String::ShellQuote from depends to recommends
   * chdist:
     + Allow putting the dist name before the command instead of after.
   * grep-excuses:
