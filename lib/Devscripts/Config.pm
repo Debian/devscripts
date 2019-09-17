@@ -230,7 +230,11 @@ sub parse_conf_files {
         $shell_cmd .= join(' ', @shell_key_names);
         my $shell_out;
         spawn(
-            exec       => ['/bin/bash', '-c', $shell_cmd, 'devscripts-config-loader', @cfg_files],
+            exec => [
+                '/bin/bash', '-c',
+                $shell_cmd,  'devscripts-config-loader',
+                @cfg_files
+            ],
             wait_child => 1,
             to_string  => \$shell_out
         );
