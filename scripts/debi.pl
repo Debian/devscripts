@@ -419,11 +419,20 @@ if ($progname eq 'debi') {
                 wait_child => 1
             );
         } else {
+            my @apt_opts;
+
+            if ($install_tool =~ /^apt(?:-get)?$/) {
+                push @apt_opts, '--with-source', "./$changes";
+            }
+
             spawn(
                 exec       => ['debpkg', @upgrade, '--unpack', @debs],
                 wait_child => 1
             );
-            spawn(exec => [$install_tool, '-f', 'install'], wait_child => 1);
+            spawn(
+                exec       => [$install_tool, @apt_opts, '-f', 'install'],
+                wait_child => 1
+            );
         }
     } else {
         if ($install_tool =~ /^apt(?:-get)?$/ && $opt_upgrade) {
