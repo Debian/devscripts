@@ -412,7 +412,7 @@ if (!@debs) {
 if ($progname eq 'debi') {
     my @upgrade = $opt_upgrade ? ('-O') : ();
     if ($opt_with_depends) {
-        if ($install_tool =~ /^apt(?:-get)?$/) {
+        if ($install_tool =~ /^apt(?:-get)?$/ && !$opt_upgrade) {
             spawn(
                 exec =>
                   [$install_tool, 'install', '--reinstall', "./$changes"],

@@ -35,6 +35,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
       version number will not replace each other since MR !45.  MR: !136
     + Don't use apt if applying neither --upgrade nor --with-depends
       Closes: #932640; MR: !142
+    + Don't use apt install ./*.changes for --with-depends --upgrade.
+      Closes: #932963; MR: !143
   * tests:
     + test_mergechanges: Fix detection of --installed option.  MR: !140
     + test_debi:

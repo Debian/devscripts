@@ -263,11 +263,8 @@ ok(verbose_run([@debi, '--with-depends', '--upgrade', "$tmp/foo.changes",]),
 is(version_of('devscripts-test-gains-dependency'),
     '1', 'package with a dependency was installed');
 isnt(version_of('hello'), '', 'third party dependency was installed');
-TODO: {
-    local $TODO = 'in 2.19.6 this gets installed, ignoring --upgrade';
-    is(version_of('devscripts-test-not-installed'),
-        '', 'not-installed package was not installed (#932963)');
-}
+is(version_of('devscripts-test-not-installed'),
+    '', 'not-installed package was not installed (#932963)');
 
 purge_packages();
 verbose_run(
