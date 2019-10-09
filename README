@@ -155,6 +155,9 @@ And now, in alphabetical order, the scripts:
 - deb-reversion: increases a binary package version number and repacks the
   package, useful for porters and the like.
 
+- deb-why-removed: shows the reason a package was removed from the archive.
+  [libdpkg-perl]
+
 - dep3changelog: generate a changelog entry from a DEP3-style patch header.
 
 - desktop2menu: given a freedesktop.org desktop file, generate a skeleton
