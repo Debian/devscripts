@@ -59,7 +59,7 @@ sub ds_debug($) {
 
 sub ds_error($) {
     my $msg = $_[0];
-    $msg = "$progname error $msg" . who_called;
+    $msg = "$progname error: $msg" . who_called;
     if ($die_on_error) {
         print STDERR "$msg\n";
         exit 1;
