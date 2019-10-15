@@ -57,6 +57,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
   * nmudiff:
     + Document in the manpage the --no-pending and --no-dd options.
       Closes: #932848
+  * debchange:
+    + Document the Ubuntu special case when running --release.  Closes: #942370
 
   [ Mike Salvatore ]
   * hardening-check:

@@ -119,7 +119,8 @@ Options:
   -r, --release
          Update the changelog timestamp. If the distribution is set to
          "UNRELEASED", change it to unstable (or another distribution as
-         specified by --distribution).
+         specified by --distribution, or the name of the current development
+         release when run under Ubuntu).
   --force-save-on-release
          When --release is used and an editor opened to allow inspection
          of the changelog, require the user to save the changelog their
