@@ -64,6 +64,8 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
     + Document the Ubuntu special case when running --release.  Closes: #942370
   * d/bug-script:
     + Use `grep -E` instead of the non-standard `egrep`.
+  * d/control:
+    + Build depend on pylint, which is now python3-based, instead of pylint3.
 
   [ Mike Salvatore ]
   * hardening-check:

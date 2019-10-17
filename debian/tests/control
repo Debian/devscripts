@@ -1,6 +1,5 @@
 Tests: shunit2
 Depends:
- @,
  build-essential,
  debhelper,
  fakeroot,
@@ -18,13 +17,14 @@ Depends:
  shunit2,
  wdiff,
  zip,
+ @,
 Restrictions: allow-stderr
 
 Tests: destructive
 Depends:
- @,
  apt,
  libdpkg-perl,
  libipc-run-perl,
  perl,
+ @,
 Restrictions: allow-stderr, breaks-testbed, needs-root
