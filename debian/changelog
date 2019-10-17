@@ -84,6 +84,10 @@ devscripts (2.19.7) UNRELEASED; urgency=medium
   [ Laurent Bigonville ]
   * Fix typo in the French translation.
 
+  [ Nicolas Boulenguez ]
+  * debclean, uupdate, who-uploads:
+    + Add `set -e` to these shell scripts.  MR: !164
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 31 Aug 2019 11:00:40 +0200
 
 devscripts (2.19.6) unstable; urgency=medium

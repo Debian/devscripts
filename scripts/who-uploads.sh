@@ -21,6 +21,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+set -e
+
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 
