@@ -411,7 +411,8 @@ upstream version is extracted from concatenating the matched parts in B<(> ...
 B<)> with B<.> .
 
 If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads the latest source
-tree of the URL.  The last revision number becomes I<version>.
+tree of the URL.  The upstream version is then constructed by appending the last
+revision of the URL to B<0.0~svn>.
 
 =back
 
