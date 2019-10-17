@@ -9,7 +9,7 @@ use File::Path 'remove_tree';
 use Moo::Role;
 
 ######################################################
-# search $newfile $newversion (git mode/versionless)
+# search $newfile $newversion (svn mode/versionless)
 ######################################################
 sub svn_search {
     my ($self) = @_;
@@ -39,7 +39,7 @@ sub svn_search {
 
     }
     ################################################
-    # search $newfile $newversion (git mode w/tag)
+    # search $newfile $newversion (svn mode w/tag)
     ################################################
     elsif ($self->mode eq 'svn') {
         my @args = ('list', $self->parse_result->{base});
