@@ -76,7 +76,6 @@ makeDebianDir() {
         echo "Failed to create temporary directory" >&2
         exit 1
     fi
-    mkdir -p "$TEMP_PKG_DIR/$PKG/debian/upstream"
     mkdir -p "$TEMP_PKG_DIR/$PKG/debian/source"
     spawnSvnRepo
 
@@ -94,7 +93,6 @@ $PKG (0-1) unstable; urgency=low
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
     echo '3.0 (quilt)' > "$TEMP_PKG_DIR/$PKG/debian/source/format"
-    cp -f "$test_dir/uscan/PUBLIC_KEY.asc" "$TEMP_PKG_DIR/$PKG/debian/upstream/signing-key.asc"
 }
 
 makeDebianDirHead() {
