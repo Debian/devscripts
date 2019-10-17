@@ -4,6 +4,7 @@ use strict;
 use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
+use Devscripts::Uscan::_vcs;
 use Dpkg::IPC;
 use File::Path 'remove_tree';
 use Moo::Role;
@@ -201,13 +202,7 @@ sub git_upstream_url {
     return $upstream_url;
 }
 
-sub git_newfile_base {
-    my ($self) = @_;
-    my $zsuffix = get_suffix($self->compression);
-    my $newfile_base
-      = "$self->{pkg}-$self->{search_result}->{newversion}.tar.$zsuffix";
-    return $newfile_base;
-}
+*git_newfile_base = \&Devscripts::Uscan::_vcs::_vcs_newfile_base;
 
 sub git_clean {
     my ($self) = @_;
