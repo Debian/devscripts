@@ -110,7 +110,6 @@ use Dpkg::IPC;
 use File::HomeDir;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Moo;
-use String::ShellQuote;
 
 # Common options
 has common_opts => (
@@ -223,10 +222,7 @@ sub parse_conf_files {
         my @key_names = map { $_->[1] ? $_->[1] : () } @$keys;
         my %config_vars;
 
-        my $shell_cmd       = q{for file in };
-        my @shell_cfg_files = map { shell_quote($_) } @cfg_files;
-        $shell_cmd .= join(' ', @shell_cfg_files);
-        $shell_cmd .= q{ ; do . "$file"; done;};
+        my $shell_cmd = q{for file ; do . "$file"; done ;};
 
         # Read back values
         $shell_cmd .= q{ printf '%s\0' };
@@ -234,7 +230,11 @@ sub parse_conf_files {
         $shell_cmd .= join(' ', @shell_key_names);
         my $shell_out;
         spawn(
-            exec       => ['/bin/bash', '-c', $shell_cmd],
+            exec => [
+                '/bin/bash', '-c',
+                $shell_cmd,  'devscripts-config-loader',
+                @cfg_files
+            ],
             wait_child => 1,
             to_string  => \$shell_out
         );

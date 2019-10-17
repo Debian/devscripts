@@ -39,7 +39,7 @@ Build-Depends:
  perltidy <!nocheck>,
  pkg-config,
  po4a,
- pylint3 <!nocheck>,
+ pylint (>= 2.2.2-2) <!nocheck>,
  python3-all:any,
  python3-apt <!nocheck>,
  python3-debian <!nocheck>,
@@ -57,7 +57,7 @@ Build-Depends:
  xsltproc,
  xz-utils <!nocheck>,
  zip <!nocheck>,
-Standards-Version: 4.4.0
+Standards-Version: 4.4.1
 Rules-Requires-Root: no
 Vcs-Browser: https://salsa.debian.org/debian/devscripts
 Vcs-Git: https://salsa.debian.org/debian/devscripts.git
@@ -75,7 +75,6 @@ Depends:
  libfile-which-perl,
  libipc-run-perl,
  libmoo-perl,
- libstring-shellquote-perl,
  libwww-perl,
  patchutils,
  sensible-utils,
@@ -95,6 +94,7 @@ Recommends:
  libgit-wrapper-perl,
  libgitlab-api-v4-perl,
  liblist-compare-perl,
+ libstring-shellquote-perl,
  libtry-tiny-perl,
  liburi-perl,
  licensecheck,

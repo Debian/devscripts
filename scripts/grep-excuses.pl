@@ -336,16 +336,6 @@ sub print_migration_excuse_info ($;$) {
     if (exists $source->{maintainer}) {
         printf("    Maintainer: $source->{maintainer}\n");
     }
-    if (exists $source->{policy_info} and exists $source->{policy_info}{age}) {
-        my %age = %{ $source->{policy_info}{age} };
-        if ($age{'current-age'} >= $age{'age-requirement'}) {
-            printf("    %d days old (needed %d days)\n",
-                $age{'current-age'}, $age{'age-requirement'});
-        } else {
-            printf("    Too young, only %d of %d days old\n",
-                $age{'current-age'}, $age{'age-requirement'});
-        }
-    }
     if (exists $source->{dependencies}) {
         for my $blocker (@{ $source->{dependencies}{'blocked-by'} }) {
             printf("    Depends: %s %s (not considered)\n",

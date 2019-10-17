@@ -42,6 +42,7 @@ PKGNAMES := \
 	wnpp-check \
 
 GEN_MAN1S += \
+	deb-why-removed.1 \
 	debrepro.1 \
 	ltnu.1 \
 	mk-origtargz.1 \

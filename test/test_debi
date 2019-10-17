@@ -54,6 +54,9 @@ my $tmp;
 if (defined $ARGV[0] && $ARGV[0] eq '--installed') {
     $debi[0] = 'debi';
 }
+else {
+    $ENV{PATH} = "$top_srcdir/scripts:$ENV{PATH}";
+}
 
 sub verbose_run {
     my $argv = shift;
@@ -188,11 +191,8 @@ make_changes(qw(already-installed not-installed));
 ok(verbose_run([@debi, "$tmp/foo.changes",]), 'plain debi succeeds');
 is(version_of('devscripts-test-already-installed'),
     '1', 'already installed package was upgraded');
-TODO: {
-    local $TODO = '#932640';
-    is(version_of('devscripts-test-not-installed'),
-        '1', 'not-installed package was installed (regressed in #932640)');
-}
+is(version_of('devscripts-test-not-installed'),
+    '1', 'not-installed package was installed (regressed in #932640)');
 
 diag('debi foo.changes will also downgrade existing packages');
 purge_packages();
@@ -227,25 +227,21 @@ is(version_of('devscripts-test-not-installed'),
 
 diag('debi without --with-depends does not try to satisfy dependencies');
 purge_packages();
-TODO: {
-    local $TODO = 'in 2.19.6 both packages get installed';
-    ok(
-        verbose_run(
-            ['dpkg', '-i', "$tmp/devscripts-test-gains-dependency_0_all.deb",])
-    );
-    make_changes(qw(gains-dependency));
-    ok(!verbose_run([@debi, "$tmp/foo.changes",]),
-        'debi without --with-depends does not install dependency');
-    # It's OK for it to either be unpacked but fail to configure, or be
-    # left at version 0.
-    isnt(
-        version_of('devscripts-test-gains-dependency') . "::"
-          . status_of('devscripts-test-gains-dependency'),
-        '1::install ok installed',
-        'package with a dependency was not installed'
-    );
-    is(version_of('hello'), '', 'third party dependency was not installed');
-}
+ok(
+    verbose_run(
+        ['dpkg', '-i', "$tmp/devscripts-test-gains-dependency_0_all.deb",]));
+make_changes(qw(gains-dependency));
+ok(!verbose_run([@debi, "$tmp/foo.changes",]),
+    'debi without --with-depends does not install dependency');
+# It's OK for it to either be unpacked but fail to configure, or be
+# left at version 0.
+isnt(
+    version_of('devscripts-test-gains-dependency') . "::"
+      . status_of('devscripts-test-gains-dependency'),
+    '1::install ok installed',
+    'package with a dependency was not installed'
+);
+is(version_of('hello'), '', 'third party dependency was not installed');
 
 diag('debi --with-depends does satisfy dependencies');
 purge_packages();
@@ -267,25 +263,23 @@ ok(verbose_run([@debi, '--with-depends', '--upgrade', "$tmp/foo.changes",]),
 is(version_of('devscripts-test-gains-dependency'),
     '1', 'package with a dependency was installed');
 isnt(version_of('hello'), '', 'third party dependency was installed');
-TODO: {
-    local $TODO = 'in 2.19.6 this gets installed, ignoring --upgrade';
-    is(version_of('devscripts-test-not-installed'),
-        '', 'not-installed package was not installed (#932963)');
-}
+is(version_of('devscripts-test-not-installed'),
+    '', 'not-installed package was not installed (#932963)');
 
 purge_packages();
 verbose_run(
     ['dpkg', '-i', "$tmp/devscripts-test-gains-local-dependency_0_all.deb",]);
 make_changes(qw(dependency gains-local-dependency));
-# Not entirely clear what should happen here.
-# In 2.19.5, the package was unpacked at v1 and then removed rather than
-# leaving it at v0.
-verbose_run([@debi, '--upgrade', '--with-depends', "$tmp/foo.changes",]);
-# Maybe devscripts-test-dependency should be installed despite --upgrade,
-# because we said --with-depends and maybe that should "win"?
-diag('d-t-gains-local-dependency: '
-      . version_of('devscripts-test-gains-local-dependency'));
-diag('d-t-dependency: ' . version_of('devscripts-test-dependency'));
+ok(
+    verbose_run([@debi, '--upgrade', '--with-depends', "$tmp/foo.changes",]),
+    'corner case from #932963: debi --upgrade --with-depends can cope with '
+      . 'a new dependency on a binary from the same source'
+);
+is(version_of('devscripts-test-gains-local-dependency'),
+    '1', 'the package we wanted to upgrade is upgraded');
+is(version_of('devscripts-test-dependency'),
+    '1',
+    'the new dependency of the package we wanted to upgrade is installed');
 
 purge_packages();
 done_testing;

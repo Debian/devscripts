@@ -120,6 +120,10 @@ Download binary packages for a specific xterm version but for all architectures.
 .BR "debsnap --binary xterm"
 Download binary packages for all versions of xterm for all architectures.
 .TP
+.BR "debsnap -v --first 347-1 --last 348-2 xterm"
+Download source packages for local architecture of xterm, between 347-1 and
+348-2 revisions, inclusive, showing the progress when doing it.
+.TP
 .BR "aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done" 
 Download binary packages of all packages that are installed on the system.
 
