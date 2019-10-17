@@ -49,7 +49,7 @@ Options:
   -u, --url URL     URL to the removals deb822 file list (defaults to
                       <$url_map{$default_url_origin}>).
       --no-refresh  Do not refresh the cached removals file even if old.
-  -?, --help        Print this help text.
+  -h, -?, --help    Print this help text.
       --version     Print the version.
 HELP
 }
@@ -130,7 +130,7 @@ my $opts;
 GetOptions(
     'url|u=s'    => \$opts->{'url'},
     'no-refresh' => \$opts->{'no-refresh'},
-    'help|?'     => sub { usage(); exit 0 },
+    'help|h|?'   => sub { usage(); exit 0 },
     'version'    => sub { version(); exit 0 },
   )
   or die "\nUsage: $PROGNAME [<option>...] <package>...\n"
@@ -222,7 +222,7 @@ Currently the only origin name known is B<debian>.
 Do not refresh the cached removals file even if there is a newer version
 in the archive.
 
-=item B<-?>, B<--help>
+=item B<-h>, B<-?>, B<--help>
 
 Show a help message and exit.
 
