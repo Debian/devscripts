@@ -45,6 +45,7 @@ sub svn_search {
     elsif ($self->mode eq 'svn') {
         my @args = ('list', $self->parse_result->{base});
         my ($command, $package) = ('svn', 'subversion');
+        my $ref_pattern = qr/(.+)/;
         {
             local $, = ' ';
             uscan_verbose "Execute: $command @args";
@@ -58,20 +59,22 @@ sub svn_search {
         while (<REFS>) {
             chomp;
             uscan_debug "$_";
-            $ref = $_;
-            foreach my $_pattern (@{ $self->patterns }) {
-                $version = join(".",
-                    map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
-                if (
-                    mangle(
-                        $self->watchfile,  \$self->line,
-                        'uversionmangle:', \@{ $self->uversionmangle },
-                        \$version
-                    )
-                ) {
-                    return undef;
+            if ($_ =~ $ref_pattern) {
+                $ref = $1;
+                foreach my $_pattern (@{ $self->patterns }) {
+                    $version = join(".",
+                        map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
+                    if (
+                        mangle(
+                            $self->watchfile,  \$self->line,
+                            'uversionmangle:', \@{ $self->uversionmangle },
+                            \$version
+                        )
+                    ) {
+                        return undef;
+                    }
+                    push @refs, [$version, $ref];
                 }
-                push @refs, [$version, $ref];
             }
         }
         if (@refs) {

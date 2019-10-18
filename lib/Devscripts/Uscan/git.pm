@@ -128,6 +128,7 @@ sub git_search {
             }
         }
         my ($command, $package) = ('git', 'git');
+        my $ref_pattern = qr/^\S+\s+([^\^\{\}]+)$/; # ref w/o ^{}
         {
             local $, = ' ';
             uscan_verbose "Execute: $command @args";
@@ -141,8 +142,8 @@ sub git_search {
         while (<REFS>) {
             chomp;
             uscan_debug "$_";
-            if (m&^\S+\s+([^\^\{\}]+)$&) {
-                $ref = $1;    # ref w/o ^{}
+            if ($_ =~ $ref_pattern) {
+                $ref = $1;
                 foreach my $_pattern (@{ $self->patterns }) {
                     $version = join(".",
                         map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
