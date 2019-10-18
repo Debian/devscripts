@@ -129,7 +129,7 @@ sub git_search {
         }
         {
             local $, = ' ';
-            uscan_verbose "Execute: git @args $self->{parse_result}->{base}";
+            uscan_verbose "Execute: git @args";
         }
         open(REFS, "-|", 'git', @args)
           || uscan_die "$progname: you must have the git package installed";
