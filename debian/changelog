@@ -1,3 +1,9 @@
+devscripts (2.19.8) UNRELEASED; urgency=medium
+
+
+
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 18 Oct 2019 12:05:10 +0200
+
 devscripts (2.19.7) unstable; urgency=medium
 
   [ Joao Eriberto Mota Filho ]
@@ -54,7 +60,7 @@ devscripts (2.19.7) unstable; urgency=medium
   [ Sven Hartge ]
   * mk-build-deps:
     + Implement parsing of Build-Depends-Arch and Build-Conflicts-Arch.
-      Closes: #891664; MR: !139
+      Closes: #891664; LP: #1794314; MR: !139
 
   [ Mattia Rizzolo ]
   * nmudiff:
