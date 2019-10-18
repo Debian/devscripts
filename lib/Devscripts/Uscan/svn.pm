@@ -44,13 +44,14 @@ sub svn_search {
     ################################################
     elsif ($self->mode eq 'svn') {
         my @args = ('list', $self->parse_result->{base});
+        my ($command, $package) = ('svn', 'subversion');
         {
             local $, = ' ';
-            uscan_verbose "Execute: svn @args";
+            uscan_verbose "Execute: $command @args";
         }
-        open(REFS, "-|", 'svn', @args)
+        open(REFS, "-|", $command, @args)
           || uscan_die
-          "$progname: you must have the subversion package installed";
+          "$progname: you must have the $package package installed";
         my @refs;
         my $ref;
         my $version;

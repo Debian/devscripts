@@ -127,12 +127,14 @@ sub git_search {
                 @args = ('show-ref');
             }
         }
+        my ($command, $package) = ('git', 'git');
         {
             local $, = ' ';
-            uscan_verbose "Execute: git @args";
+            uscan_verbose "Execute: $command @args";
         }
-        open(REFS, "-|", 'git', @args)
-          || uscan_die "$progname: you must have the git package installed";
+        open(REFS, "-|", $command, @args)
+          || uscan_die
+          "$progname: you must have the $package package installed";
         my @refs;
         my $ref;
         my $version;
