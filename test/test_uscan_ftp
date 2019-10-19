@@ -62,11 +62,12 @@ cleanup(){
 spawnFtpServer(){
     (
         local USCAN_FTP_SERVER=${USCAN_FTP_SERVER:-ftpserver.py}
-        mkdir -p $TMPDIR/$REPOPATH
-        cd $TMPDIR/$REPOPATH
+        mkdir -p "$TMPDIR/$REPOPATH"
+        cd "$TMPDIR/$REPOPATH" || exit 1
         echo "FTP starting ... $TMPDIR/$REPOPATH"
+        local pid
         python3 "$test_dir/uscan/$USCAN_FTP_SERVER" 2>log &
-        local pid=$!
+        pid=$!
         echo $pid > pid
         while ! [ -s port ]; do
             sleep 2s
