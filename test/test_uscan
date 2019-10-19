@@ -49,9 +49,8 @@ COMMANDDEHS="$COMMAND --dehs"
 #COMMAND="$COMMAND --debug"
 
 cleanup(){
-    kill -9 $(cat "$TEMP_PKG_DIR"/repo/pid)
-    rm -rf "$TEMP_PKG_DIR"
-    echo ""
+    killHttpServer
+    echo
 }
 
 trap cleanup 1 2 3 13 15

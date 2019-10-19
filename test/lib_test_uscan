@@ -116,3 +116,12 @@ spawnHttpServer () {
         done
     )
 }
+
+killHttpServer () {
+    if [ -n "${TEMP_PKG_DIR:-}" ] && [ -f "$TEMP_PKG_DIR/repo/pid" ]; then
+        local pid
+        pid=$(< "$TEMP_PKG_DIR/repo/pid")
+        kill -9 "$pid"
+        rm -rf "$TEMP_PKG_DIR"
+    fi
+}
