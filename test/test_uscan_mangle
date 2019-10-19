@@ -45,12 +45,12 @@ if which dpkg-vendor >/dev/null 2>&1; then
     esac
 fi
 
-cleanup(){
+tearDown(){
     killHttpServer
     echo
 }
 
-trap cleanup 1 2 3 13 15
+trap tearDown EXIT
 
 containsName(){
   echo "$1" | fgrep -q "$2"
@@ -350,7 +350,6 @@ helperWatch() {
     fi
     $DEBUGBASH
     cd $ORIGDIR
-    cleanup
     unset REPOPATH
     unset POOLPATH
     unset GZREPACK
@@ -397,7 +396,6 @@ helperWatchUA() {
     echo "GOT : \"$USERAGENTX\""
     $DEBUGBASH
     cd $ORIGDIR
-    cleanup
     unset REPOPATH
     unset POOLPATH
     unset XCOMMAND
