@@ -231,7 +231,7 @@ helperWatch() {
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
     local PREFIX="${4:-}"
-    local TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
+    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
