@@ -102,9 +102,8 @@ spawnHttpServer () {
     (
         mkdir -p "$TEMP_PKG_DIR"/repo
         cd "$TEMP_PKG_DIR"/repo || exit 1
-        python3 "$test_dir/uscan/server.py" 2>log &
+        python3 "$test_dir/uscan/httpserver.py" 2>log &
         pid=$!
-        echo Starting: $pid
         echo "$pid" > pid
         while ! [ -s port ]; do
             sleep 2s
