@@ -54,19 +54,6 @@ cleanup(){
     echo ""
 }
 
-spawnHttpServer(){
-    unset http_proxy
-    (
-        mkdir -p "$TEMP_PKG_DIR"/repo
-        cd "$TEMP_PKG_DIR"/repo
-        chronic_sh python3 "$test_dir/uscan/server.py" &
-        echo $! > pid
-        while ! [ -s port ]; do
-            :
-        done
-    )
-}
-
 trap cleanup 1 2 3 13 15
 
 containsName(){

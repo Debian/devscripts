@@ -51,21 +51,6 @@ cleanup(){
     echo ""
 }
 
-spawnHttpServer(){
-    unset http_proxy
-    (
-        USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
-        mkdir -p "$TEMP_PKG_DIR"/$REPOPATH
-        cd "$TEMP_PKG_DIR"/$REPOPATH
-        python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
-        echo $! > pid
-        while ! [ -s port ]; do
-            :
-        done
-        unset USCAN_HTTP_SERVER
-    )
-}
-
 trap cleanup 1 2 3 13 15
 
 containsName(){
