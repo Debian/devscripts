@@ -1,3 +1,14 @@
+devscripts (2.19.8) UNRELEASED; urgency=medium
+
+  [ Xavier Guimard ]
+  * d/bug-script: fix return value if a file is empty.  MR: !148
+
+  [ Mattia Rizzolo ]
+  * test/uscan: Fixup and improve the httpserver cleanup functions to prevent
+    stray process to persist at the end of the build.  Closes: 933642
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 19 Oct 2019 14:28:57 +0200
+
 devscripts (2.19.7) unstable; urgency=medium
 
   [ Joao Eriberto Mota Filho ]
@@ -54,7 +65,7 @@ devscripts (2.19.7) unstable; urgency=medium
   [ Sven Hartge ]
   * mk-build-deps:
     + Implement parsing of Build-Depends-Arch and Build-Conflicts-Arch.
-      Closes: #891664; MR: !139
+      Closes: #891664; LP: #1794314; MR: !139
 
   [ Mattia Rizzolo ]
   * nmudiff:

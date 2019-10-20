@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2013, Rafael Laboissiere <rafael@laboissiere.net>
 #
@@ -45,28 +45,12 @@ if which dpkg-vendor >/dev/null 2>&1; then
     esac
 fi
 
-cleanup(){
-    kill -9 $(cat "$TEMP_PKG_DIR"/$REPOPATH/pid)
-    rm -rf "$TEMP_PKG_DIR"
-    echo ""
+tearDown(){
+    killHttpServer
+    echo
 }
 
-spawnHttpServer(){
-    unset http_proxy
-    (
-        USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
-        mkdir -p "$TEMP_PKG_DIR"/$REPOPATH
-        cd "$TEMP_PKG_DIR"/$REPOPATH
-        python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
-        echo $! > pid
-        while ! [ -s port ]; do
-            :
-        done
-        unset USCAN_HTTP_SERVER
-    )
-}
-
-trap cleanup 1 2 3 13 15
+trap tearDown EXIT
 
 containsName(){
   echo "$1" | fgrep -q "$2"
@@ -247,7 +231,7 @@ helperWatch() {
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
     local PREFIX="${4:-}"
-    local TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
+    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
@@ -366,7 +350,6 @@ helperWatch() {
     fi
     $DEBUGBASH
     cd $ORIGDIR
-    cleanup
     unset REPOPATH
     unset POOLPATH
     unset GZREPACK
@@ -413,7 +396,6 @@ helperWatchUA() {
     echo "GOT : \"$USERAGENTX\""
     $DEBUGBASH
     cd $ORIGDIR
-    cleanup
     unset REPOPATH
     unset POOLPATH
     unset XCOMMAND
@@ -861,13 +843,11 @@ testWatch4XmlNonNative() {
 testWatch4WebNonNativeUA() {
     WATCHVER=4
     KEYMODE=BIN
-    USCAN_HTTP_SERVER="server-head.py"
     USERAGENT="foo/bar; baz:12,3.45"
     WATCHLINE='opts="useragent= '$USERAGENT' "'" \
 "'@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatchUA
     unset USERAGENT
-    unset USCAN_HTTP_SERVER
 }
 
 # test repack and compression

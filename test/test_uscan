@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2013, Rafael Laboissiere <rafael@laboissiere.net>
 #
@@ -48,26 +48,12 @@ COMMANDDEHS="$COMMAND --dehs"
 # comment out for debug
 #COMMAND="$COMMAND --debug"
 
-cleanup(){
-    kill -9 $(cat "$TEMP_PKG_DIR"/repo/pid)
-    rm -rf "$TEMP_PKG_DIR"
-    echo ""
+tearDown(){
+    killHttpServer
+    echo
 }
 
-spawnHttpServer(){
-    unset http_proxy
-    (
-        mkdir -p "$TEMP_PKG_DIR"/repo
-        cd "$TEMP_PKG_DIR"/repo
-        chronic_sh python3 "$test_dir/uscan/server.py" &
-        echo $! > pid
-        while ! [ -s port ]; do
-            :
-        done
-    )
-}
-
-trap cleanup 1 2 3 13 15
+trap tearDown EXIT
 
 containsName(){
   echo "$1" | fgrep -q "$2"
@@ -133,8 +119,6 @@ END
     assertTrue "malfored target in dehs output: $OUTPUT" \
                $(containsName "$OUTPUT" "<target>$TARBALL</target>")
 
-    cleanup
-
 }
 
 testRepackGZ_XZ() { helperTestRepack "tar.gz" "xz" "XZ compressed data" ; }
@@ -189,8 +173,6 @@ END
                 $(containsName "$CONTENTS" content)
     assertTrue "malfored target in dehs output: $OUTPUT" \
                $(containsName "$OUTPUT" "<target>$TARBALL</target>")
-
-    cleanup
 
 }
 
@@ -294,8 +276,6 @@ testFileExclusion() {
     DVERSION=`dpkg-parsechangelog -l"$TEMP_PKG_DIR"/${PKG}-1+dfsg1/debian/changelog -SVersion`
     assertEquals "uscan: Version should be 1+dfsg1-$SUFFIX but $DVERSION" "$DVERSION" "1+dfsg1-$SUFFIX"
 
-    cleanup
-
 }
 
 # the same, but run from a separate directory (no way for uupdate, just download)
@@ -331,8 +311,6 @@ testFileExclusionSeparateDir() {
     CONTENTS="$(tar atf "$TEMP_PKG_DIR"/$TARBALL)"
 
     helperTestContent
-
-    cleanup
 
 }
 
@@ -372,8 +350,6 @@ END
     assertTrue 'pristine tarball is not extracted' "[ -f "$TEMP_PKG_DIR"/${PKG}-1+dfsg1/debian/changelog ]"
     DVERSION=`dpkg-parsechangelog -l"$TEMP_PKG_DIR"/${PKG}-1+dfsg1/debian/changelog -SVersion`
     assertEquals "uscan: Version should be 1+dfsg1-$SUFFIX but $DVERSION" "$DVERSION" "1+dfsg1-$SUFFIX"
-
-    cleanup
 
 }
 
@@ -415,7 +391,6 @@ END
     TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'unrepacked zipfile present' "[ -f "$TEMP_PKG_DIR"/${PKG}-1.zip ]"
 
-    cleanup
 }
 
 testLinksWithRelativeBase() {
@@ -460,7 +435,6 @@ END
     TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'unrepacked zipfile present' "[ -f "$TEMP_PKG_DIR"/${PKG}-1.zip ]"
 
-    cleanup
 }
 
 testComponentDehsOutput() {

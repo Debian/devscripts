@@ -95,3 +95,32 @@ oneTimeTearDown () {
     rm -rf "$GPGHOME"
 }
 
+spawnHttpServer () {
+    unset http_proxy
+    local pid
+    [ -n "$TEMP_PKG_DIR" ] || fail "unexpected testsuite error"
+    (
+        mkdir -p "$TEMP_PKG_DIR"/repo
+        cd "$TEMP_PKG_DIR"/repo || exit 1
+        python3 "$test_dir/uscan/httpserver.py" 2>log &
+        pid=$!
+        echo "$pid" > pid
+        while ! [ -s port ]; do
+            sleep 2s
+            if ! kill -0 "$pid" 2> /dev/null ; then
+                echo "The HTTP server returned an error:"
+                cat log
+                exit 1
+            fi
+        done
+    )
+}
+
+killHttpServer () {
+    if [ -n "${TEMP_PKG_DIR:-}" ] && [ -f "$TEMP_PKG_DIR/repo/pid" ]; then
+        local pid
+        pid=$(< "$TEMP_PKG_DIR/repo/pid")
+        kill -9 "$pid"
+        rm -rf "$TEMP_PKG_DIR"
+    fi
+}
