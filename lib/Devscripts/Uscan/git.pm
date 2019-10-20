@@ -127,73 +127,8 @@ sub git_search {
                 @args = ('show-ref');
             }
         }
-        my ($command, $package) = ('git', 'git');
-        my $ref_pattern = qr/^\S+\s+([^\^\{\}]+)$/; # ref w/o ^{}
-        {
-            local $, = ' ';
-            uscan_verbose "Execute: $command @args";
-        }
-        open(REFS, "-|", $command, @args)
-          || uscan_die
-          "$progname: you must have the $package package installed";
-        my @refs;
-        my $ref;
-        my $version;
-        while (<REFS>) {
-            chomp;
-            uscan_debug "$_";
-            if ($_ =~ $ref_pattern) {
-                $ref = $1;
-                foreach my $_pattern (@{ $self->patterns }) {
-                    $version = join(".",
-                        map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
-                    if (
-                        mangle(
-                            $self->watchfile,  \$self->line,
-                            'uversionmangle:', \@{ $self->uversionmangle },
-                            \$version
-                        )
-                    ) {
-                        return undef;
-                    }
-                    push @refs, [$version, $ref];
-                }
-            }
-        }
-        if (@refs) {
-            @refs = Devscripts::Versort::upstream_versort(@refs);
-            my $msg = "Found the following matching refs:\n";
-            foreach my $ref (@refs) {
-                $msg .= "     $$ref[1] ($$ref[0])\n";
-            }
-            uscan_verbose "$msg";
-            if ($self->shared->{download_version}
-                and not $self->versionmode eq 'ignore') {
-
-# extract ones which has $version in the above loop matched with $download_version
-                my @vrefs
-                  = grep { $$_[0] eq $self->shared->{download_version} } @refs;
-                if (@vrefs) {
-                    ($newversion, $newfile) = @{ $vrefs[0] };
-                } else {
-                    uscan_warn
-                      "$progname warning: In $self->{watchfile} no matching"
-                      . " refs for version "
-                      . $self->shared->{download_version}
-                      . " in watch line\n  "
-                      . $self->{line};
-                    return undef;
-                }
-
-            } else {
-                ($newversion, $newfile) = @{ $refs[0] };
-            }
-        } else {
-            uscan_warn "$progname warning: In $self->{watchfile},\n"
-              . " no matching refs for watch line\n"
-              . " $self->{line}";
-            return undef;
-        }
+        ($newversion, $newfile) = get_refs($self, ['git', @args], qr/^\S+\s+([^\^\{\}]+)$/, 'git');
+        return undef if !defined $newversion;
     }
     return ($newversion, $newfile);
 }
