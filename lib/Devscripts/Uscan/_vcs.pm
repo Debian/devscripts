@@ -28,8 +28,7 @@ sub get_refs {
         uscan_verbose "Execute: @command";
     }
     open(REFS, "-|", @command)
-      || uscan_die
-      "$progname: you must have the $package package installed";
+      || uscan_die "$progname: you must have the $package package installed";
     my @refs;
     my $ref;
     my $version;

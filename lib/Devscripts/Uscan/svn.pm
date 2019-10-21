@@ -44,7 +44,8 @@ sub svn_search {
     ################################################
     elsif ($self->mode eq 'svn') {
         my @args = ('list', $self->parse_result->{base});
-        ($newversion, $newfile) = get_refs($self, ['svn', @args], qr/(.+)/, 'subversion');
+        ($newversion, $newfile)
+          = get_refs($self, ['svn', @args], qr/(.+)/, 'subversion');
         return undef if !defined $newversion;
     }
     return ($newversion, $newfile);

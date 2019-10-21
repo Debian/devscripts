@@ -127,7 +127,8 @@ sub git_search {
                 @args = ('show-ref');
             }
         }
-        ($newversion, $newfile) = get_refs($self, ['git', @args], qr/^\S+\s+([^\^\{\}]+)$/, 'git');
+        ($newversion, $newfile)
+          = get_refs($self, ['git', @args], qr/^\S+\s+([^\^\{\}]+)$/, 'git');
         return undef if !defined $newversion;
     }
     return ($newversion, $newfile);
