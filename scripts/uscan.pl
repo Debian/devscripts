@@ -400,6 +400,24 @@ listed among the registered "remotes", then uscan will use it instead of cloning
 separately.  The only local change is that uscan will run a "fetch" command to
 refresh the repository.
 
+=item B<svn>
+
+This mode accesses the upstream Subversion archive directly with the B<svn>
+command and packs the source tree.
+
+For svn mode, I<matching-pattern> specifies the full string matching pattern for
+directories under Subversion repository directory, specified via URL.  The
+upstream version is extracted from concatenating the matched parts in B<(> ...
+B<)> with B<.> .
+
+If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads the latest source
+tree of the URL.  The upstream version is then constructed by appending the last
+revision of the URL to B<0.0~svn>.
+
+As commit signing is not possible with Subversion, the default B<pgpmode> is set
+to B<none> when B<mode=svn>. Settings of B<pgpmode> other than B<default> and
+B<none> are reported as errors.
+
 =back
 
 =item B<pretty=>I<rule>
@@ -1307,6 +1325,33 @@ behavior.
 
 The generation of the upstream version string may the adjusted to your taste by
 adding B<pretty> and B<date> options to the B<opts> arguments.
+
+=head2 direct access to the Subversion repository (tags)
+
+If the upstream only publishes its code via the Subversion repository and its
+code has no web interface to obtain the release tarball, you can use B<uscan>
+with the tags of the Subversion repository to track and package the new upstream
+release.
+
+  version=4
+  opts="mode=svn, pgpmode=none" \
+  svn://svn.code.sf.net/p/jmol/code/tags/ \
+  ([\d.]+)\/ debian uupdate
+
+=head2 direct access to the Subversion repository (HEAD)
+
+If the upstream only publishes its code via the Subversion repository and its
+code has no web interface to obtain the release tarball, you can use B<uscan>
+to get the most recent source of a subtree in the repository with an
+automatically generated version string.
+
+  version=4
+  opts="mode=svn, pgpmode=none" \
+  svn://svn.code.sf.net/p/jmol/code/trunk/ \
+  HEAD debian uupdate
+
+By default, B<uscan> generates the new upstream version by appending the
+revision number to "0.0~svn". This can later be changed using B<uversionmangle>.
 
 =head1 COPYRIGHT FILE EXAMPLES
 
