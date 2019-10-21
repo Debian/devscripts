@@ -648,6 +648,15 @@ EOF
             $self->pgpmode('default');
         }
 
+        # For mode=svn, make pgpmode=none the default
+        if ($self->mode eq 'svn') {
+            if ($self->pgpmode eq 'default') {
+                $self->pgpmode('none');
+            } elsif ($self->pgpmode ne 'none') {
+                uscan_die "Only pgpmode=none can be used with mode=svn.\n";
+            }
+        }
+
         # If PGP used, check required programs and generate files
         if (@{ $self->pgpsigurlmangle }) {
             my $pgpsigurlmanglestring = join(";", @{ $self->pgpsigurlmangle });
