@@ -15,6 +15,7 @@ OUR_TESTS= \
 	uscan \
 	uscan_ftp \
 	uscan_git \
+	uscan_svn \
 	uscan_mangle \
 	perltidy \
 
