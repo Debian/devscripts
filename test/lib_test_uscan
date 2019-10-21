@@ -55,9 +55,10 @@ PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 # This uses a pipe, so it has limited capacity.  Do not use it with stuff
 # outputting too much data.
 chronic_sh (){
-    local pipe
-    pipe=$(mktemp -u)
-    mkfifo "$pipe"
+    local pipe pipe_q
+    pipe=$(mktemp -p "$SHUNIT_TMPDIR" devscripts_chronic_sh.XXXXXXXXXX)
+    printf -v pipe_q '%q' "$pipe"
+    trap 'rm -fv '"$pipe_q" RETURN
     # one can't open a reading fd and a writing fd without blocking, because
     # they want to already have something on the other side of the pipe.
     # the temporary fd 5 will be that something.
@@ -67,10 +68,12 @@ chronic_sh (){
     exec 5>&-       # end hack
     rm "$pipe"
 
-    if ! "$@" >&3 2>&3 ; then
+    local ret=0
+    "$@" >&3 2>&3 || ret=$?
+    if [ "$ret" -ne 0 ] ; then
         exec 3>&-
         cat <&4-
-        return 1
+        return $ret
     fi
 }
 
