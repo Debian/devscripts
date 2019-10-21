@@ -118,6 +118,18 @@ helperLaunch() {
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 }
 
+helperLaunchFail() {
+    WATCHARGS=$1
+    ARG="${2:-}"
+    if test "$ARG" = "HEAD"; then
+        makeDebianDirHead "$WATCHARGS"
+    else
+        makeDebianDir "$WATCHARGS"
+    fi
+    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
+    assertEquals "uscan: exit_code!=2 but exit_code=2" "$?" "2"
+}
+
 testSvn() {
     helperLaunch "pgpmode=none"
     TARBALL="${PKG}_2.0.orig.tar.xz"
@@ -133,6 +145,11 @@ testSvnPgpmodeDefault() {
     assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
+    cleanup
+}
+
+testSvnPgpmodeNext() {
+    helperLaunchFail "pgpmode=next"
     cleanup
 }
 
