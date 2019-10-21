@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2018, Xavier <yadd@debian.org>
 #               2019, Andrius Merkys <merkys@debian.org>
@@ -115,7 +115,7 @@ helperLaunch() {
         makeDebianDir "$WATCHARGS"
     fi
     ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
-    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "0" "$?"
 }
 
 helperLaunchFail() {
@@ -126,8 +126,9 @@ helperLaunchFail() {
     else
         makeDebianDir "$WATCHARGS"
     fi
-    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
-    assertEquals "uscan: exit_code!=2 but exit_code=2" "$?" "2"
+    # discard output as it's expected to fail
+    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch > /dev/null)
+    assertEquals "uscan: exit_code!=2 but exit_code=2" "2" "$?"
 }
 
 testSvn() {
