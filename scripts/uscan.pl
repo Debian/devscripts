@@ -414,6 +414,10 @@ If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads the latest source
 tree of the URL.  The upstream version is then constructed by appending the last
 revision of the URL to B<0.0~svn>.
 
+As commit signing is not possible with Subversion, the default B<pgpmode> is set
+to B<none> when B<mode=svn>. Settings of B<pgpmode> other than B<default> and
+B<none> are reported as errors.
+
 =back
 
 =item B<pretty=>I<rule>
