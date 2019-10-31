@@ -39,7 +39,7 @@ Build-Depends:
  perltidy <!nocheck>,
  pkg-config,
  po4a,
- pylint (>= 2.2.2-2) <!nocheck>,
+ pylint (>= 2.2.2-2) <!nocheck> | pylint3 <!nocheck>,
  python3-all:any,
  python3-apt <!nocheck>,
  python3-debian <!nocheck>,

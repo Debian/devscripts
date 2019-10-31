@@ -9,6 +9,8 @@ devscripts (2.19.8) UNRELEASED; urgency=medium
       stray process to persist at the end of the build.  Closes: #933642
     + Go back to use a real temporary file instead of a named pipe in
       chronic_sh.  This should also fix the Hurd FTBFS.
+  * d/control:
+    + Use an alternative dependency to pylint | pylint3, to supprt backports.
 
   [ Andrius Merkys ]
   * uscan:
