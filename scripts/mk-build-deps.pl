@@ -115,6 +115,20 @@ Ignored if used without the B<--install> switch.
 
 =back
 
+=head1 ENVIRONMENT
+
+=head2 External environment
+
+=over 4
+
+=item B<DEB_BUILD_PROFILES>
+
+If set, it will be used as the active build profile(s) for the
+build dependencies to be installed.
+It is a space separated list of profile names.
+
+=back
+
 =head1 AUTHOR
 
 B<mk-build-deps> is copyright by Vincent Fourmond and was modified for the
