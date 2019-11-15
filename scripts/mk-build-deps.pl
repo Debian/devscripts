@@ -100,6 +100,14 @@ dependencies.
 Generate a package which only depends on the source package's
 Build-Depends-Indep dependencies.
 
+=item B<-P>, B<--build-profiles> I<profile[,...]>
+
+Generate a package which only depends on build dependencies
+with the build profile(s), given as a comma-separated list.
+The default behavior is to use no specific profile.
+Setting this option will override the B<DEB_BUILD_PROFILES>
+environment variable.
+
 =item B<-h>, B<--help>
 
 Show a summary of options.
@@ -126,6 +134,7 @@ Ignored if used without the B<--install> switch.
 If set, it will be used as the active build profile(s) for the
 build dependencies to be installed.
 It is a space separated list of profile names.
+Overridden by the B<-P> option.
 
 =back
 
@@ -157,7 +166,7 @@ my $progname = basename($0);
 my $opt_install;
 my $opt_remove = 0;
 my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep, $opt_hostarch,
-    $opt_buildarch);
+    $opt_buildarch, $opt_buildprofiles);
 my $control;
 my $install_tool;
 my $root_cmd;
@@ -225,17 +234,18 @@ EOF
 }
 
 GetOptions(
-    "help|h"        => \$opt_help,
-    "version|v"     => \$opt_version,
-    "install|i"     => \$opt_install,
-    "remove|r"      => \$opt_remove,
-    "tool|t=s"      => \$install_tool,
-    "arch|a=s"      => \$opt_arch,
-    "host-arch=s"   => \$opt_hostarch,
-    "build-arch=s"  => \$opt_buildarch,
-    "build-dep|B"   => \$opt_dep,
-    "build-indep|A" => \$opt_indep,
-    "root-cmd|s=s"  => \$root_cmd,
+    "help|h"             => \$opt_help,
+    "version|v"          => \$opt_version,
+    "install|i"          => \$opt_install,
+    "remove|r"           => \$opt_remove,
+    "tool|t=s"           => \$install_tool,
+    "arch|a=s"           => \$opt_arch,
+    "host-arch=s"        => \$opt_hostarch,
+    "build-arch=s"       => \$opt_buildarch,
+    "build-dep|B"        => \$opt_dep,
+    "build-indep|A"      => \$opt_indep,
+    "build-profiles|P=s" => \$opt_buildprofiles,
+    "root-cmd|s=s"       => \$root_cmd,
 ) or usage(1);
 
 usage(0) if ($opt_help);
@@ -511,6 +521,9 @@ sub build_equiv {
     }
 
     my $build_profiles = [split /\s+/, ($ENV{'DEB_BUILD_PROFILES'} // "")];
+    if (defined $opt_buildprofiles) {
+        $build_profiles = [split /,/, $opt_buildprofiles];
+    }
 
     my $positive = deps_parse(
         $opts->{depends} // "",
