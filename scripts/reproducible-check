@@ -136,7 +136,7 @@ class ReproducibleCheck:
                 (x['package'], y['architecture'], x['version'])
                 for x in json.loads(f.read().decode('utf-8'))
                 for y in x['architecture_details']
-                if y['status'] == 'unreproducible'
+                if y['status'] in ['FTBR', 'unreproducible']
             }
 
     @staticmethod
