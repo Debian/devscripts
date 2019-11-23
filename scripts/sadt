@@ -373,8 +373,7 @@ class TestGroup:
             skip = Skip(error)
             self._depends_cache = skip
             raise skip
-        else:
-            self._depends_checked = True
+        self._depends_checked = True
 
     def check_restrictions(self, ignored_restrictions):
         options = TestOptions()

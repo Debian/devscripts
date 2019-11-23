@@ -187,7 +187,7 @@ def debdiff_apply(patch, patch_name, args):
         return False
 
     if args.repl:
-        import code
+        import code  # pylint: disable=import-outside-toplevel
         code.interact(local=locals())
 
     return True
@@ -273,8 +273,7 @@ def main(args):
         except Exception:  # pylint: disable=broad-except
             if enc == TRY_ENCODINGS[-1]:
                 raise
-            else:
-                continue
+            continue
 
     patch_name = '%s:%s' % (
         os.path.basename(args.patch_file),
