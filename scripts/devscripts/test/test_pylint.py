@@ -20,12 +20,19 @@ import re
 import subprocess
 import sys
 import unittest
+import pylint
+from debian.debian_support import Version
 
 from . import get_source_files, unittest_verbosity
 
 CONFIG = os.path.join(os.path.dirname(__file__), "pylint.conf")
 
 
+def check_pylint_version():
+    return Version(pylint.__version__) >= Version('2.4.4')
+
+
+@unittest.skipIf(not check_pylint_version(), "pylint version not supported")
 class PylintTestCase(unittest.TestCase):
     """
     This unittest class provides a test that runs the pylint code check
