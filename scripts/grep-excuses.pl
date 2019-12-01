@@ -90,6 +90,7 @@ Options:
                       must be the first option given
   --wipnity, -w       Check <https://qa.debian.org/excuses.php>.  A package
                       name must be given when using this option.
+  --autopkgtests      Investigate and show autopkgtest (ci.debian.net) failures
   --no-autoremovals   Do not investigate and report autoremovals
   --help              Show this help
   --version           Give version information
