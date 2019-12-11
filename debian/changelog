@@ -20,6 +20,10 @@ devscripts (2.19.8) UNRELEASED; urgency=medium
     + Add support for direct access to Subversion repositories using a new
       mode=svn.  Closes: #939538; MR: !160
 
+  [ Hans Jerry Illikainen ]
+  * reproducible-check:
+    + Consider 'FTBR' as unreproducible.  MR: !169
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 19 Oct 2019 14:28:57 +0200
 
 devscripts (2.19.7) unstable; urgency=medium
