@@ -1,4 +1,4 @@
-devscripts (2.19.8) UNRELEASED; urgency=medium
+devscripts (2.19.9) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
   * d/bug-script: fix return value if a file is empty.  MR: !148
@@ -24,7 +24,12 @@ devscripts (2.19.8) UNRELEASED; urgency=medium
   * reproducible-check:
     + Consider 'FTBR' as unreproducible.  MR: !169
 
- -- Mattia Rizzolo <mattia@debian.org>  Sat, 19 Oct 2019 14:28:57 +0200
+  [ Timo Furrer ]
+  * mk-build-deps:  MR: !168
+    + Document the DEB_BUILD_PROFILES environment variable.
+    + Introduce a -P / --build-profiles option.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 28 Dec 2019 21:40:45 +0100
 
 devscripts (2.19.7) unstable; urgency=medium
 
