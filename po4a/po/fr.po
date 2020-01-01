@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2020-01-01 07:43+0100\n"
-"PO-Revision-Date: 2019-10-10 07:22+0200\n"
+"PO-Revision-Date: 2020-01-01 08:12+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -6943,13 +6943,6 @@ msgstr "B<--release>, B<-r>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:188
-#, fuzzy
-#| msgid ""
-#| "Finalize the changelog for a release.  Update the changelog timestamp. If "
-#| "the distribution is set to B<UNRELEASED>, change it to the distribution "
-#| "from the previous changelog entry (or another distribution as specified "
-#| "by B<--distribution>).  If there are no previous changelog entries and an "
-#| "explicit distribution has not been specified, B<unstable> will be used."
 msgid ""
 "Finalize the changelog for a release.  Update the changelog timestamp. If "
 "the distribution is set to B<UNRELEASED>, change it to the distribution from "
@@ -6963,7 +6956,8 @@ msgstr ""
 "elle prend la valeur de l'entrée précédente du fichier (ou de la "
 "distribution indiquée par l'option B<--distribution>). S'il n'y a pas "
 "d'entrée précédente, et qu'aucune distribution n'a été indiquée "
-"explicitement, la distribution sera B<unstable>."
+"explicitement, la distribution sera B<unstable> (ou le nom de la version en "
+"cours de développement lorsqu'utilisé avec Ubuntu)."
 
 #. type: TP
 #: ../scripts/debchange.1:188
@@ -11233,13 +11227,13 @@ msgstr ""
 msgid ""
 "deb-why-removed - shows the reason a package was removed from the archive"
 msgstr ""
+"deb-why-removed - affiche la raison pour laquelle un paquet a été supprimé "
+"de l'archive"
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:202
-#, fuzzy
-#| msgid "B<cvs-debc> [I<options>] [I<package> ...]"
 msgid "B<deb-why-removed> [I<option>...] I<package>..."
-msgstr "B<cvs-debc> [I<options>] [I<paquet> ...]"
+msgstr "B<deb-why-removed> [I<option>...] I<package>..."
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:206
@@ -11247,13 +11241,14 @@ msgid ""
 "This program will download the removals metadata from the archive, search "
 "and print the entries within for a source or binary package name match."
 msgstr ""
+"Ce programme télécharge les metadonnées de l'archive liées aux suppressions, "
+"cherche et affiche les entrées dont le nom de paquet source ou binaire "
+"correspond."
 
 #. type: =item
 #: ../scripts/deb-why-removed.pl:213
-#, fuzzy
-#| msgid "B<-a>, B<--arch> I<ARCH>"
 msgid "B<-u>, B<--url> I<URL>"
-msgstr "B<-a>, B<--arch> I<ARCH>"
+msgstr "B<-u>, B<--url> I<URL>"
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:215
@@ -11262,13 +11257,14 @@ msgid ""
 "an actual URL (https://, http://, file://), an pathname or an origin name.  "
 "Currently the only origin name known is B<debian>."
 msgstr ""
+"URL de la liste des suppressions de l'archive au format deb822. Ceci peut "
+"être une URL (https://, http://, file://), un chemin de fichier ou un nom "
+"original. Actuellement, le seul nom origine connu est B<debian>."
 
 #. type: =item
 #: ../scripts/deb-why-removed.pl:220
-#, fuzzy
-#| msgid "B<--no-force-refresh>"
 msgid "B<--no-refresh>"
-msgstr "B<--no-force-refresh>"
+msgstr "B<--no-refresh>"
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:222
@@ -11276,13 +11272,13 @@ msgid ""
 "Do not refresh the cached removals file even if there is a newer version in "
 "the archive."
 msgstr ""
+"Ne pas rafraîchir le cache des fichiers supprimés même s'il y a une nouvelle "
+"version."
 
 #. type: =item
 #: ../scripts/deb-why-removed.pl:225
-#, fuzzy
-#| msgid "B<-h>, B<--help>"
 msgid "B<-h>, B<-?>, B<--help>"
-msgstr "B<-h>, B<--help>"
+msgstr "B<-h>, B<-?>, B<--help>"
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:227 ../scripts/sadt.pod:61
@@ -11291,10 +11287,8 @@ msgstr "Afficher un message d'aide et quitter."
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:231
-#, fuzzy
-#| msgid "Show the version information."
 msgid "Show the program version."
-msgstr "Afficher les informations sur la version."
+msgstr "Afficher la version du programme."
 
 #. type: SH
 #: ../scripts/deb-why-removed.pl:235 ../scripts/debsnap.1:130
@@ -11306,7 +11300,7 @@ msgstr "FICHIERS"
 #. type: =item
 #: ../scripts/deb-why-removed.pl:239
 msgid "I<cachedir>B</devscripts/deb-why-removed/>"
-msgstr ""
+msgstr "I<cachedir>B</devscripts/deb-why-removed/>"
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:241
@@ -11315,13 +11309,14 @@ msgid ""
 "archive.  I<cachedir> will be either B<$XDG_CACHE_HOME> or if that is not "
 "defined B<$HOME/.cache/>."
 msgstr ""
+"Ce répertoire contient le cache de la liste des fichiers supprimés "
+"téléchargée depuis l'archive. I<cachedir> se trouve dans B<$XDG_CACHE_HOME> "
+"ou à défaut dans B<$HOME/.cache/>."
 
 #. type: textblock
 #: ../scripts/deb-why-removed.pl:249
-#, fuzzy
-#| msgid "https://www.debian.org/devel/wnpp"
 msgid "L<https://ftp-master.debian.org/#removed>"
-msgstr "https://www.debian.org/devel/wnpp"
+msgstr "L<https://ftp-master.debian.org/#removed>"
 
 #. type: TH
 #: ../scripts/debrsign.1:1
@@ -12106,7 +12101,7 @@ msgstr ""
 #: ../scripts/debsnap.1:122
 #, no-wrap
 msgid "B<debsnap -v --first 347-1 --last 348-2 xterm>"
-msgstr ""
+msgstr "B<debsnap -v --first 347-1 --last 348-2 xterm>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:126
@@ -12114,6 +12109,8 @@ msgid ""
 "Download source packages for local architecture of xterm, between 347-1 and "
 "348-2 revisions, inclusive, showing the progress when doing it."
 msgstr ""
+"Télécharge les paquets source pour l'architecture locale de xterm, entre les "
+"versions 347-1 et 348-2 comprises, et montre la progression."
 
 #. type: TP
 #: ../scripts/debsnap.1:126
@@ -14042,15 +14039,15 @@ msgstr ""
 
 #. type: IP
 #: ../doc/devscripts.1:87
-#, fuzzy, no-wrap
-#| msgid "I<deb-reversion>(1)"
+#, no-wrap
 msgid "I<deb-why-removed>(1)"
-msgstr "B<deb-reversion>(1)"
+msgstr "I<deb-why-removed>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:89
 msgid "shows the reason a package was removed from the archive. [libdpkg-perl]"
 msgstr ""
+"affiche la raison pour laquelle le paquet a été supprimé. [libdpkg-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:89
@@ -17762,10 +17759,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:103
-#, fuzzy
-#| msgid "B<-s>, B<--sources> I<Sources_file>"
 msgid "B<-P>, B<--build-profiles> I<profile[,...]>"
-msgstr "B<-s>, B<--sources> I<fichier_Sources>"
+msgstr "B<-P>, B<--build-profiles> I<profile[,...]>"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:105
@@ -17775,6 +17770,10 @@ msgid ""
 "no specific profile.  Setting this option will override the "
 "B<DEB_BUILD_PROFILES> environment variable."
 msgstr ""
+"Génère un paquet qui ne dépend que des dépendances de construction avec les "
+"profils de construction passés en paramètre, séparés par des virgules. Le "
+"comportement par défaut est de n'utiliser aucun profile spécifique. Cette "
+"option surcharge la variable d'environnement B<DEB_BUILD_PROFILES>."
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:119
@@ -17794,14 +17793,12 @@ msgstr ""
 #. type: =head2
 #: ../scripts/mk-build-deps.pl:128
 msgid "External environment"
-msgstr ""
+msgstr "Environnement externe"
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:132
-#, fuzzy
-#| msgid "B<DEBUILD_PRESERVE_ENV>"
 msgid "B<DEB_BUILD_PROFILES>"
-msgstr "B<DEBUILD_PRESERVE_ENV>"
+msgstr "B<DEB_BUILD_PROFILES>"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:134
@@ -17810,6 +17807,9 @@ msgid ""
 "dependencies to be installed.  It is a space separated list of profile "
 "names.  Overridden by the B<-P> option."
 msgstr ""
+"Si activé, sera utilisé comme profil(s) actif(s) pour les dépendances de "
+"construction à installer. Liste de nom de profils séparés par des espaces. "
+"Surchargé par l'option B<-P>"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:143
@@ -23887,67 +23887,41 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:403
-#, fuzzy
-#| msgid "B<svnpath>"
 msgid "B<svn>"
-msgstr "B<svnpath>"
+msgstr "B<svn>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:405
-#, fuzzy
-#| msgid ""
-#| "This mode accesses the upstream git archive directly with the B<git> "
-#| "command and packs the source tree with the specified tag via I<matching-"
-#| "pattern> into I<spkg-version>B<.tar.xz>."
 msgid ""
 "This mode accesses the upstream Subversion archive directly with the B<svn> "
 "command and packs the source tree."
 msgstr ""
-"Ce mode accède directement à l'archive git amont avec la commande B<git> et "
-"empaquette l'arborescence source avec l'étiquette spécifiée par "
-"I<motif_correspondant> dans I<spkg-version>B<.tar.xz>."
+"Ce mode accède directement à l'archive Subversion amont avec la commande "
+"B<svn> et empaquette l'arborescence source."
 
 #. type: textblock
 #: ../scripts/uscan.pl:408
-#, fuzzy
-#| msgid ""
-#| "For git mode, I<matching-pattern> specifies the full string matching "
-#| "pattern for tags instead of hrefs. If I<matching-pattern> is set to "
-#| "B<refs/tags/>I<tag-matching-pattern>, B<uscan> downloads source from the "
-#| "B<refs/tags/>I<matched-tag> of the git repository.  The upstream version "
-#| "is extracted from concatenating the matched parts in B<(> ... B<)> with "
-#| "B<.> .  See L<WATCH FILE EXAMPLES>."
 msgid ""
 "For svn mode, I<matching-pattern> specifies the full string matching pattern "
 "for directories under Subversion repository directory, specified via URL.  "
 "The upstream version is extracted from concatenating the matched parts in "
 "B<(> ...  B<)> with B<.> ."
 msgstr ""
-"Dans le mode git, I<motif_correspondant> spécifie le motif correspondant "
-"complet de la chaîne pour les étiquettes au lieu des références href. Si "
-"I<motif_correspondant> est réglé à B<refs/tags/>I<étiquette-"
-"motif_correspondant>, B<uscan> télécharge le fichier source à partir de "
-"B<refs/tags/>I<étiquette-correspondante> du dépôt git. La version amont est "
-"extraite en concaténant les parties correspondantes de B<(> ... B<)> avec B<."
-">. Voir L<EXEMPLES DE FICHIER DE VEILLE>."
+"Dans le mode svn, I<motif_correspondant> spécifie le motif correspondant "
+"complet de la chaîne pour les répertoires su dépôt Subversion. La version "
+"amont est extraite en concaténant les parties correspondantes de B<(> ... "
+"B<)> avec B<.>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:413
-#, fuzzy
-#| msgid ""
-#| "If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads source from "
-#| "the B<HEAD> of the git repository and the pertinent I<version> is "
-#| "automatically generated with the date and hash of the B<HEAD> of the git "
-#| "repository."
 msgid ""
 "If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads the latest "
 "source tree of the URL.  The upstream version is then constructed by "
 "appending the last revision of the URL to B<0.0~svn>."
 msgstr ""
-"Si I<motif_correspondant> est réglé à B<HEAD>, B<uscan> télécharge le "
-"fichier source à partir du B<HEAD> du dépôt git et la I<version> pertinente "
-"est automatiquement générée avec la date et l'empreinte du B<HEAD> du dépôt "
-"git."
+"Si I<matching-pattern> est réglé à B<HEAD>, B<uscan> télécharge la dernière "
+"arborescence de l'URL. La version amont est construite en ajoutant "
+"B<0.0~svn> à la dernière révision."
 
 #. type: textblock
 #: ../scripts/uscan.pl:417
@@ -23956,6 +23930,9 @@ msgid ""
 "set to B<none> when B<mode=svn>. Settings of B<pgpmode> other than "
 "B<default> and B<none> are reported as errors."
 msgstr ""
+"Comme la signature des commits n'est pas possible avec Subversion, "
+"B<pgpmode> est mis d'office à B<none> lorsque B<mode=svn>. Les valeurs de "
+"B<pgpmode> autres que B<default> et B<none> affichent des erreurs."
 
 #. type: =item
 #: ../scripts/uscan.pl:423
@@ -26354,39 +26331,25 @@ msgstr ""
 
 #. type: =head2
 #: ../scripts/uscan.pl:1329
-#, fuzzy
-#| msgid "direct access to the git repository (tags)"
 msgid "direct access to the Subversion repository (tags)"
-msgstr "accès direct au dépôt git (étiquettes)"
+msgstr "accès direct au dépôt Subversion (étiquettes)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1331
-#, fuzzy
-#| msgid ""
-#| "If the upstream only publishes its code via the git repository and its "
-#| "code has no web interface to obtain the release tarball, you can use "
-#| "B<uscan> with the tags of the git repository to track and package the new "
-#| "upstream release."
 msgid ""
 "If the upstream only publishes its code via the Subversion repository and "
 "its code has no web interface to obtain the release tarball, you can use "
 "B<uscan> with the tags of the Subversion repository to track and package the "
 "new upstream release."
 msgstr ""
-"Si l'équipe amont ne publie son code que dans un dépôt git et que son code "
-"n'a pas d'interface web pour obtenir l'archive publiée, il est possible "
-"d'utiliser B<uscan> avec les étiquettes du dépôt git pour suivre et "
+"Si l'équipe amont ne publie son code que dans un dépôt Subversion et que son "
+"code n'a pas d'interface web pour obtenir l'archive publiée, il est possible "
+"d'utiliser B<uscan> avec les étiquettes du dépôt Subversion pour suivre et "
 "empaqueter la nouvelle publication amont."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1336
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=git, pgpmode=none\" \\\n"
-#| "  https://github.com/Debian/dh-make-golang \\\n"
-#| "  HEAD debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
@@ -26395,48 +26358,33 @@ msgid ""
 "\n"
 msgstr ""
 "  version=4\n"
-"  opts=\"mode=git, pgpmode=none\" \\\n"
-"  https://github.com/Debian/dh-make-golang \\\n"
-"  HEAD debian uupdate\n"
+"  opts=\"mode=svn, pgpmode=none\" \\\n"
+"  svn://svn.code.sf.net/p/jmol/code/tags/ \\\n"
+"  ([\\d.]+)\\/ debian uupdate\n"
 "\n"
 
 #. type: =head2
 #: ../scripts/uscan.pl:1341
-#, fuzzy
-#| msgid "direct access to the git repository (HEAD)"
 msgid "direct access to the Subversion repository (HEAD)"
-msgstr "accès direct au dépôt git (HEAD)"
+msgstr "accès direct au dépôt Subversion (HEAD)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1343
-#, fuzzy
-#| msgid ""
-#| "If the upstream only publishes its code via the git repository and its "
-#| "code has no web interface nor the tags to obtain the released tarball, "
-#| "you can use B<uscan> with the HEAD of the git repository to track and "
-#| "package the new upstream release with an automatically generated version "
-#| "string."
 msgid ""
 "If the upstream only publishes its code via the Subversion repository and "
 "its code has no web interface to obtain the release tarball, you can use "
 "B<uscan> to get the most recent source of a subtree in the repository with "
 "an automatically generated version string."
 msgstr ""
-"Si l'équipe amont ne publie son code que dans un dépôt git et que son code "
-"n'a pas d'interface web ni les étiquettes pour obtenir l'archive publiée, il "
-"est possible d'utiliser B<uscan> avec le HEAD du dépôt git pour suivre et "
-"empaqueter la nouvelle publication amont avec une chaîne de version générée "
+"Si l'équipe amont ne publie son code que dans un dépôt Subversion et que son "
+"code n'a pas d'interface web ni les étiquettes pour obtenir l'archive "
+"publiée, il est possible d'utiliser B<uscan> pour obtenir les dernières "
+"sources d'une sous-arborescence avec une chaîne de version générée "
 "automatiquement."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1348
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=git, pgpmode=none\" \\\n"
-#| "  https://github.com/Debian/dh-make-golang \\\n"
-#| "  HEAD debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
@@ -26445,8 +26393,8 @@ msgid ""
 "\n"
 msgstr ""
 "  version=4\n"
-"  opts=\"mode=git, pgpmode=none\" \\\n"
-"  https://github.com/Debian/dh-make-golang \\\n"
+"  opts=\"mode=svn, pgpmode=none\" \\\n"
+"  svn://svn.code.sf.net/p/jmol/code/trunk/ \\\n"
 "  HEAD debian uupdate\n"
 "\n"
 
@@ -26457,6 +26405,8 @@ msgid ""
 "revision number to \"0.0~svn\". This can later be changed using "
 "B<uversionmangle>."
 msgstr ""
+"Par défaut, B<uscan> génère la nouvelle version en ajoutant \"0.0~svn\" au "
+"numéro de révision. Ce peut être changé en utilisant B<uversionmangle>."
 
 #. type: =head1
 #: ../scripts/uscan.pl:1356
