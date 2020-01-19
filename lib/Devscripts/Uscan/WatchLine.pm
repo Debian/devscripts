@@ -1549,7 +1549,7 @@ sub mkorigtargz {
     my $mk_origtargz_out;
     my $path   = "$self->{config}->{destdir}/$self->{newfile_base}";
     my $target = $self->newfile_base;
-    unless ($self->symlink eq "no") {
+    unless ($self->symlink eq "no" or $self->symlink eq "0") {
         require Devscripts::MkOrigtargz;
         if ($Devscripts::MkOrigtargz::found_comp) {
             uscan_verbose
