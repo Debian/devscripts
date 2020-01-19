@@ -30,6 +30,10 @@ devscripts (2.19.9) UNRELEASED; urgency=medium
     + Document the DEB_BUILD_PROFILES environment variable.
     + Introduce a -P / --build-profiles option.
 
+  [ Ximin Luo ]
+  * mk-origtargz: restore old behaviour that skips mk-origtargz when
+    --no-symlink is given
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 28 Dec 2019 21:40:45 +0100
 
 devscripts (2.19.7) unstable; urgency=medium
