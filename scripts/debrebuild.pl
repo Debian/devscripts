@@ -54,7 +54,7 @@ if (not $cdata->load($buildinfo)) {
 
 my @architectures = split /\s+/, $cdata->{"Architecture"};
 my $build_source  = (scalar(grep /^source$/, @architectures)) == 1;
-my $build_archall = (scalar(grep /^all$/,    @architectures)) == 1;
+my $build_archall = (scalar(grep /^all$/, @architectures)) == 1;
 @architectures = grep { !/^source$/ && !/^all$/ } @architectures;
 if (scalar @architectures > 1) {
     die "more than one architecture in Architecture field";
@@ -146,6 +146,7 @@ if (!defined($dpkg_version)) {
 }
 
 # figure out the debian release from the version of base-files and dpkg
+# FIXME - this really shouldn't be hardcoded here
 my $base_dist;
 
 my %base_files_map = (
@@ -166,7 +167,7 @@ my %dpkg_map = (
 );
 
 $base_files_version =~ s/^(\d+).*/$1/;
-$dpkg_version =~ s/1\.(\d+)\..*/$1/;
+#$dpkg_version =~ s/1\.(\d+)\..*/$1/;
 
 $base_dist = $base_files_map{$base_files_version};
 
@@ -174,9 +175,9 @@ if (!defined $base_dist) {
     die "base-files version didn't map to any Debian release";
 }
 
-if ($base_dist ne $dpkg_map{$dpkg_version}) {
-    die "base-files and dpkg versions point to different Debian releases\n";
-}
+#if ($base_dist ne $dpkg_map{$dpkg_version}) {
+#    die "base-files and dpkg versions point to different Debian releases\n";
+#}
 
 # test if all checksums in the buildinfo file check out
 
@@ -200,7 +201,7 @@ foreach my $d ((
     make_path("$tempdir/$d");
 }
 
-# FIXME - make optional + configurable
+# FIXME - make optional + configurable.  check if the key is actually the expected one
 my $armored_key   = "$tempdir/etc/apt/trusted.gpg.d/reproducible.asc";
 my $dearmored_key = "$tempdir/etc/apt/trusted.gpg.d/reproducible.gpg";
 my $http_code     = LWP::Simple::mirror(
@@ -210,17 +211,13 @@ my $http_code     = LWP::Simple::mirror(
 if ($http_code != 200) {
     die "got http $http_code when trying to retrieve reproducible.asc\n";
 }
-# FIXME - that's not future-proof
-my $expected_gpg = <<'END';
-pub:-:4096:1:5DB7CA67EA59A31F:1412221944:1582552412::-:
-fpr:::::::::49B6574736D0B637CC3701EA5DB7CA67EA59A31F:
-uid:::::::::Debian Reproducible Builds Archive Signing Key:
-END
-if (qx(gpg --with-colons --with-fingerprint $armored_key) ne $expected_gpg) {
-    die "wrong reproducible.asc key\n";
+$http_code = LWP::Simple::mirror(
+    "https://tests.reproducible-builds.org/debian/repository/reproducible.gpg",
+    $dearmored_key
+);
+if ($http_code != 200) {
+    die "got http $http_code when trying to retrieve reproducible.gpg\n";
 }
-system 'gpg', '--yes', '--batch', '--output', $dearmored_key, '--dearmor',
-  $armored_key;
 
 open(FH, '>', "$tempdir/etc/apt/sources.list");
 print FH <<EOF;
