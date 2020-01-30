@@ -15,6 +15,12 @@ devscripts (2.19.9) UNRELEASED; urgency=medium
   * Make the Python code compliant with pylint-2.4.4.  Closes: #945267
   * grep-excuses:
     + Document the --autopkgtests option also in the --help.  Closes: #941329
+  * debrebuild:
+    + Add a new script that accepts a .buildinfo file as input and provides
+      instructions on how to drive APT (and sbuild) to perform a rebuild.
+      This script is still considered WIP, and its interface will likely
+      change in the future.
+      Thanks to Johannes Schauer for authoring the script.  Closes: #774415
 
   [ Andrius Merkys ]
   * uscan:
