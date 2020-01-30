@@ -200,6 +200,7 @@ foreach my $d ((
     make_path("$tempdir/$d");
 }
 
+# FIXME - make optional + configurable
 my $armored_key   = "$tempdir/etc/apt/trusted.gpg.d/reproducible.asc";
 my $dearmored_key = "$tempdir/etc/apt/trusted.gpg.d/reproducible.gpg";
 my $http_code     = LWP::Simple::mirror(
@@ -209,6 +210,7 @@ my $http_code     = LWP::Simple::mirror(
 if ($http_code != 200) {
     die "got http $http_code when trying to retrieve reproducible.asc\n";
 }
+# FIXME - that's not future-proof
 my $expected_gpg = <<'END';
 pub:-:4096:1:5DB7CA67EA59A31F:1412221944:1582552412::-:
 fpr:::::::::49B6574736D0B637CC3701EA5DB7CA67EA59A31F:
@@ -226,6 +228,7 @@ deb https://tests.reproducible-builds.org/debian/repository/debian/ ./
 deb http://httpredir.debian.org/debian/ $base_dist main
 EOF
 close FH;
+# FIXME - document what's dpkg's status for
 # Create dpkg status
 open(FH, '>', "$tempdir/var/lib/dpkg/status");
 close FH;    #empty file
@@ -402,7 +405,7 @@ foreach my $pkg (@inst_build_deps) {
         # concrete architecture
         $pkg->{architecture} = $pkg_arch;
     }
-    # assumption: package is from Debian official (and not ports)
+    # FIXME - assumption: package is from Debian official (and not ports)
     my @package_from_main = grep { $_->{archive_name} eq "debian" }
       @{ $json_text->{fileinfo}->{$pkg_hash} };
     if (scalar @package_from_main > 1) {
