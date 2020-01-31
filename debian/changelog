@@ -40,6 +40,9 @@ devscripts (2.19.9) UNRELEASED; urgency=medium
   * mk-origtargz: restore old behaviour that skips mk-origtargz when
     --no-symlink is given
 
+  [ Nicolas Boulenguez ]
+  * Improve reporting in case of --no-conf misuse for several tools.  MR: !163
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 28 Dec 2019 21:40:45 +0100
 
 devscripts (2.19.7) unstable; urgency=medium

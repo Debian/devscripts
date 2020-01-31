@@ -152,6 +152,8 @@ unless (
         '--greaterthan'       => \$params->{'greaterthan'},
         '-h'                  => \$params->{'help'},
         '--help'              => \$params->{'help'},
+        '--noconf'            => \$params->{'noconf'},
+        '--no-conf'           => \$params->{'noconf'},
         '-r'                  => \$params->{'regex'},
         '--regex'             => \$params->{'regex'},
         '-s=s'                => \$params->{'suite'},
@@ -174,6 +176,10 @@ if ($params->{help}) {
 if ($params->{version}) {
     version(\*STDOUT);
     exit 0;
+}
+if ($params->{'noconf'}) {
+    print '--noconf must come first on the command line.';
+    usage(\*STDOUT, 1);
 }
 
 unless (@ARGV) {

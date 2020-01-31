@@ -347,6 +347,7 @@ if (
         "R|release-use-changelog!" => \$release_use_changelog,
         "h|help"                   => sub { usage(); exit 0; },
         "v|version"                => sub { version(); exit 0; },
+        'noconf|no-conf' => sub { die '--noconf must be first option'; },
     )
 ) {
     die "Usage: $progname [options] [--all | files to commit]\n";
