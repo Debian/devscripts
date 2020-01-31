@@ -1,4 +1,4 @@
-devscripts (2.19.9) UNRELEASED; urgency=medium
+devscripts (2.20.1) unstable; urgency=medium
 
   [ Xavier Guimard ]
   * d/bug-script: fix return value if a file is empty.  MR: !148
@@ -38,13 +38,13 @@ devscripts (2.19.9) UNRELEASED; urgency=medium
     + Introduce a -P / --build-profiles option.
 
   [ Ximin Luo ]
-  * mk-origtargz: restore old behaviour that skips mk-origtargz when
-    --no-symlink is given
+  * mk-origtargz:
+    + Restore old behaviour that skips mk-origtargz when --no-symlink is given.
 
   [ Nicolas Boulenguez ]
   * Improve reporting in case of --no-conf misuse for several tools.  MR: !163
 
- -- Mattia Rizzolo <mattia@debian.org>  Sat, 28 Dec 2019 21:40:45 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 31 Jan 2020 12:10:18 +0100
 
 devscripts (2.19.7) unstable; urgency=medium
 
