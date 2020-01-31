@@ -12,6 +12,7 @@ devscripts (2.19.9) UNRELEASED; urgency=medium
       chronic_sh.  This should also fix the Hurd FTBFS.
   * d/control:
     + Use an alternative dependency to pylint | pylint3, to supprt backports.
+    + Bump Standards-Version to 4.5.0, no changes needed.
   * Make the Python code compliant with pylint-2.4.4.  Closes: #945267
   * grep-excuses:
     + Document the --autopkgtests option also in the --help.  Closes: #941329
