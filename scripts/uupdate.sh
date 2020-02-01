@@ -528,7 +528,7 @@ if [ "$OPMODE" = 1 ]; then
 	fi
 	chmod a+x debian/rules
 	if [ -z "$BADVERSION" ]; then
-	    debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	    debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release."
 	else
 	    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" " "
 	fi
@@ -944,7 +944,7 @@ elif [ "$OPMODE" = 2 ]; then
     [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
 	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
     if [ -z "$BADVERSION" ]; then
-	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release."
     else
 	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" " "
     fi
@@ -1126,7 +1126,7 @@ else
     [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
 	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
     if [ -z "$BADVERSION" ]; then
-	debchange -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release"
+	debchange -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release."
     else
 	debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" " "
     fi
