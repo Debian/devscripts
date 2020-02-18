@@ -42,8 +42,9 @@ spawnGitRepo(){
     chronic_sh git init
     git config user.name "Joe Developer"
     git config user.email "none@debian.org"
-    touch changelog file.c
-    chronic_sh git add changelog file.c
+    touch changelog file.c extra.c
+    echo 'extra.c export-ignore' >.gitattributes
+    chronic_sh git add changelog file.c extra.c .gitattributes
     chronic_sh git commit -a -m 'Init'
     for version in 1.0 2.0; do
         echo "# Version $version" >> file.c
@@ -173,6 +174,20 @@ testGitUpstreamSignedTag() {
     assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
+    cleanup
+}
+
+testGitIgnoreExclusions() {
+    helperLaunch ""
+    assertTrue 'downloaded tarfile is incomplete' \
+        "tar tf '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' '${PKG}-2.0/extra.c'"
+    cleanup
+}
+
+testGitUpstreamIgnoreExclusions() {
+    helperLaunch "" upstream
+    assertTrue 'downloaded tarfile is incomplete' \
+        "tar tf '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' '${PKG}-2.0/extra.c'"
     cleanup
 }
 
