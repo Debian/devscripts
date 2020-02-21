@@ -25,6 +25,7 @@ sub git_search {
             uscan_exec(
                 'git',
                 'clone',
+                '--quiet',
                 '--bare',
                 '--depth=1',
                 $self->parse_result->{base},
@@ -38,6 +39,7 @@ sub git_search {
             uscan_exec(
                 'git',
                 'clone',
+                '--quiet',
                 '--bare',
                 '--depth=1',
                 '-b',
@@ -48,7 +50,7 @@ sub git_search {
             $self->downloader->gitrepo_state(1);
         } else {
             uscan_exec(
-                'git', 'clone', '--bare',
+                'git', 'clone', '--quiet', '--bare',
                 $self->parse_result->{base},
                 "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
