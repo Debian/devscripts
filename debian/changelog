@@ -1,10 +1,15 @@
 devscripts (2.20.2) unstable; urgency=medium
 
+  [ Mattia Rizzolo ]
   * d/tests/control: add missing dependency on subversion.
   * uupdate:
     + Apply patch from Unit 193, adding full stops to the generated changelog.
   * uscan:
     + Apply patch from Unit 193, adding --queit to the `git clone` calls.
+
+  [ Andrius Merkys ]
+  * uscan:
+    + Fix svn mode with HTTP URLs.  Closes: #951568; MR: !173
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 05 Feb 2020 16:41:11 +0100
 

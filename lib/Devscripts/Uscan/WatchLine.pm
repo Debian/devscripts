@@ -1002,7 +1002,7 @@ sub get_upstream_url {
     my ($self) = @_;
     uscan_debug "line: get_upstream_url()";
     if ($self->parse_result->{site} =~ m%^https?://%
-        and not $self->mode eq 'git') {
+        and not $self->mode eq 'git' and not $self->mode eq 'svn') {
         $self->mode('http');
     } elsif (not $self->mode) {
         $self->mode('ftp');
