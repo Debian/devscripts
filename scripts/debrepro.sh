@@ -141,7 +141,7 @@ build() {
 
     if [ "$which_build" = second ] && [ -n "$before_second_build_command" ]; then
         banner "I: running before second build: $before_second_build_command"
-        $before_second_build_command
+        sh -c "$before_second_build_command"
     fi
 
     cp -r "$SOURCE" "$tmpdir/build/source"
