@@ -1,7 +1,6 @@
-devscripts (2.20.2) unstable; urgency=medium
+devscripts (2.20.3) UNRELEASED; urgency=medium
 
   [ Mattia Rizzolo ]
-  * d/tests/control: add missing dependency on subversion.
   * uupdate:
     + Apply patch from Unit 193, adding full stops to the generated changelog.
   * uscan:
@@ -10,6 +9,12 @@ devscripts (2.20.2) unstable; urgency=medium
   [ Andrius Merkys ]
   * uscan:
     + Fix svn mode with HTTP URLs.  Closes: #951568; MR: !173
+
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
+
+devscripts (2.20.2) unstable; urgency=medium
+
+  * d/tests/control: add missing dependency on subversion.
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 05 Feb 2020 16:41:11 +0100
 
