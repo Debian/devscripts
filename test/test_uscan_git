@@ -178,14 +178,14 @@ testGitUpstreamSignedTag() {
 }
 
 testGitIgnoreExclusions() {
-    helperLaunch ""
+    helperLaunch "gitexport=all"
     assertTrue 'downloaded tarfile is incomplete' \
         "tar tf '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' '${PKG}-2.0/extra.c'"
     cleanup
 }
 
 testGitUpstreamIgnoreExclusions() {
-    helperLaunch "" upstream
+    helperLaunch "gitexport=all" upstream
     assertTrue 'downloaded tarfile is incomplete' \
         "tar tf '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' '${PKG}-2.0/extra.c'"
     cleanup

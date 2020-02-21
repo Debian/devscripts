@@ -167,6 +167,10 @@ has decompress => (
     is      => 'rw',
     default => sub { 0 },
 );
+has gitexport => (
+    is      => 'rw',
+    default => sub { 'default' },
+);
 has gitmode => (
     is      => 'rw',
     default => sub { 'shallow' },
@@ -467,6 +471,7 @@ EOF
                 # $ regexp-assemble <<EOF
                 # component
                 # date
+                # gitexport
                 # gitmode
                 # hrefdecode
                 # mode
@@ -477,7 +482,7 @@ EOF
                 # unzipopt
                 # EOF
                 elsif ($opt
-                    =~ /^\s*((?:(?:(?:search|git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
+                    =~ /^\s*((?:(?:(?:search)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|git(?:export|mode)|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
                 ) {
                     $self->$1($2);
                 } elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
@@ -607,6 +612,12 @@ EOF
             and @{ $self->downloadurlmangle }) {
             uscan_warn "downloadurlmangle option invalid for ftp sites,\n"
               . "  ignoring downloadurlmangle in $watchfile:\n"
+              . "  $self->{line}";
+            return $self->status(1);
+        }
+        if ($self->mode ne 'git' and $self->gitexport ne 'default') {
+            uscan_warn "gitexport option is valid only in git mode,\n"
+              . "  ignoring gitexport in $watchfile:\n"
               . "  $self->{line}";
             return $self->status(1);
         }
@@ -1189,6 +1200,9 @@ sub download_file_and_sig {
     if (!$self->shared->{download} || $self->shared->{signature} == -1) {
         return 0;
     }
+
+    # configure downloader
+    $self->downloader->git_export_all($self->gitexport eq 'all');
 
     # 6.1 download tarball
     my $download_available = 0;
