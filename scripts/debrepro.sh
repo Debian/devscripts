@@ -139,14 +139,14 @@ build() {
     export which_build="$1"
     mkdir "$tmpdir/build"
 
+    cp -r "$SOURCE" "$tmpdir/build/source"
+    cd "$tmpdir/build/source"
+
     if [ "$which_build" = second ] && [ -n "$before_second_build_command" ]; then
         banner "I: running before second build: $before_second_build_command"
         sh -c "$before_second_build_command"
     fi
 
-    cp -r "$SOURCE" "$tmpdir/build/source"
-
-    cd "$tmpdir/build/source"
     create_build_script > ../build.sh
     sh ../build.sh
     cd -
