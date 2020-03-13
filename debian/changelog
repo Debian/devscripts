@@ -10,6 +10,10 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   * uscan:
     + Fix svn mode with HTTP URLs.  Closes: #951568; MR: !173
 
+  [ Lars Kruse ]
+  * checkbashisms:
+    + Remove check for "sleep" (not a shell builtin).  Closes: #843913; MR: !176
+
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
 devscripts (2.20.2) unstable; urgency=medium
