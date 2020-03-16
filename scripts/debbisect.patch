@@ -1,0 +1,147 @@
+Description: Currently, the snapshot.d.o API does not allow one to query when a
+ package version was first seen in a given suite. This makes it impossible to
+ obtain the right timestamps for a given package when one wants to limit
+ checking to only those timestamps when the package changed in the given suite.
+ See also: https://salsa.debian.org/debian/devscripts/-/merge_requests/177
+
+diff --git a/scripts/debbisect b/scripts/debbisect
+index 455d10cb..d7cb98b6 100755
+--- a/scripts/debbisect
++++ b/scripts/debbisect
+@@ -27,10 +42,13 @@ import argparse
+ import email.utils
+ import http.server
+ from http import HTTPStatus
++import io
+ import logging
++import lzma
+ import math
+ import os
+ import re
++import requests
+ import shutil
+ import socketserver
+ import subprocess
+@@ -54,6 +72,14 @@ try:
+ except ImportError:
+     have_parsedatetime = False
+ 
++have_debian_deb822 = True
++try:
++    import debian.deb822
++    import debian.debian_support
++except ImportError:
++    have_debian_deb822 = False
++
++
+ DINSTALLRATE = 21600
+ 
+ 
+@@ -275,7 +301,23 @@ def datetimestr(val):
+     raise argparse.ArgumentTypeError("not a valid datetime: %s" % val)
+ 
+ 
++def srcpkgversions_by_timestamp(srcpkgname, timestamp, suite):
++    versions = set()
++    r = requests.get(
++        "http://snapshot.debian.org/archive/debian/%s/dists/%s/main/source/Sources.xz"
++        % (timestamp.strftime("%Y%m%dT%H%M%SZ"), suite)
++    )
++    data = lzma.decompress(r.content)
++    for src in debian.deb822.Sources.iter_paragraphs(io.BytesIO(data)):
++        if src["Package"] != srcpkgname:
++            continue
++        versions.add(debian.debian_support.Version(src["Version"]))
++    return versions
++
++
+ def main():
++    nativearch = subprocess.check_output(["dpkg", "--print-architecture"])
++
+     parser = argparse.ArgumentParser(
+         formatter_class=argparse.RawDescriptionHelpFormatter,
+         description="""\
+@@ -397,6 +439,12 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
+     parser.add_argument(
+         "--cache", help="cache directory -- by default $TMPDIR is used", type=str
+     )
++    parser.add_argument(
++        "--limit-dates",
++        help="limit dates to those where the binary packages built by the "
++        + "listed source packages (separated by comma) changed in the archive",
++        type=str,
++    )
+     parser.add_argument("--nocache", help="disable cache")
+     parser.add_argument(
+         "--port",
+@@ -405,6 +453,20 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
+         type=int,
+         default=0,
+     )
++    parser.add_argument(
++        "--architecture",
++        help="architecture used for snapshot version lookups and chroot "
++        + "creation. By default, the native architecture will be used.",
++        type=str,
++        default=nativearch,
++    )
++    parser.add_argument(
++        "--suite",
++        help="suite name used for snapshot version lookups and chroot "
++        + "creation. Default: unstable",
++        type=str,
++        default="unstable",
++    )
+     parser.add_argument(
+         "good",
+         type=datetimestr,
+@@ -429,6 +491,49 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
+         print("good is later than bad")
+         sys.exit(1)
+ 
++    timestamps = set()
++    if args.limit_dates:
++        if not have_debian_deb822:
++            logging.error("Install python3-debian in order to use the --limit-dates option")
++            sys.exit(1)
++        for srcpkg in args.limit_dates.split(","):
++            logging.info("obtaining versions for %s", srcpkg)
++            oldest_versions = srcpkgversions_by_timestamp(srcpkg, args.good, args.suite)
++            if len(oldest_versions) == 0:
++                logging.error("source package %s cannot be found in good timestamp", srcpkg)
++                sys.exit(1)
++            elif len(oldest_versions) == 1:
++                oldest_version = oldest_versions.pop()
++            else:
++                oldest_version = min(oldest_versions)
++            newest_versions = srcpkgversions_by_timestamp(srcpkg, args.bad, args.suite)
++            if len(newest_versions) == 0:
++                logging.error("source package %s cannot be found in bad timestamp", srcpkg)
++                sys.exit(1)
++            elif len(newest_versions) == 1:
++                newest_version = newest_versions.pop()
++            else:
++                newest_version = max(newest_versions)
++
++            r = requests.get("http://snapshot.debian.org/mr/package/%s/" % srcpkg)
++            for result in r.json()["result"]:
++                if debian.debian_support.Version(result["version"]) < oldest_version:
++                    continue
++                if debian.debian_support.Version(result["version"]) > newest_version:
++                    continue
++                r = requests.get(
++                    "http://snapshot.debian.org/mr/package/%s/%s/allfiles?fileinfo=1"
++                    % (srcpkg, result["version"])
++                )
++                logging.info("retrieving for: %s", result["version"])
++                for fileinfos in r.json()["fileinfo"].values():
++                    for fileinfo in fileinfos:
++                        timestamps.add(
++                            datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%SZ")
++                        )
++    print(timestamps)
++    sys.exit(0)
++
+     port = None
+     if not args.nocache:
+         if args.cache:

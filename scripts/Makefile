@@ -43,6 +43,7 @@ PKGNAMES := \
 
 GEN_MAN1S += \
 	deb-why-removed.1 \
+	debbisect.1 \
 	debrepro.1 \
 	ltnu.1 \
 	mk-origtargz.1 \
@@ -134,9 +135,11 @@ install: all
 	done
 	ln -sf debchange $(DESTDIR)$(COMPL_DIR)/dch
 	ln -sf debi $(DESTDIR)$(COMPL_DIR)/debc
-	# Special treatment for debpkg
+	# Special treatment for debpkg and run_bisect
 	install -d $(DESTDIR)$(DATA_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
+	mv $(DESTDIR)$(BINDIR)/run_bisect $(DESTDIR)$(DATA_DIR)
+	mv $(DESTDIR)$(BINDIR)/run_bisect_qemu $(DESTDIR)$(DATA_DIR)
 
 .PHONY: test test_pl test_sh test_py all install clean scripts

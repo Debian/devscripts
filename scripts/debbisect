@@ -1,0 +1,751 @@
+#!/usr/bin/env python3
+#
+# Copyright 2020 Johannes 'josch' Schauer <josch@debian.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# snapshot.d.o API feature requests:
+#
+# Currently, I can ask for a snapshot of *any* date and snapshot.d.o will
+# resolve my date to the next possible. This is neat but I would like to know
+# to which exact snapshot timestamp my request got resolved to.
+#
+# Currently, the API does not allow to list all dates for which a snapshot
+# was made. This would be useful to allow skipping snapshots. Currently we
+# blindly bisect but without knowing which date on snapshot.d.o a given
+# timestamp resolves to, we cannot mark it as untestable (see feature request
+# above) and without a list of testable timestamps we cannot reliably test
+# a timestamp before and after the one to skip.
+#
+# It would be useful to know when a package version was first seen in a given
+# suite. Without this knowledge we cannot reliably pick the snapshot timestamps
+# at which we want to test a given suite. For example, a package version might
+# appear in experimental long before it appears in unstable or any other suite
+# that is to be tested. Thus, the first_seen attribute of the snapshot API is
+# not very useful to determine a limited set of timestamps to test.
+
+# pylint disagrees with the indentation chosen by black
+# pylint: disable=C0330
+#
+# complains about log_message cannot be fixed because the original function
+# names one of its arguments "format" which is also forbidden...
+# pylint: disable=W0221
+#
+# pylint complains about too many branches but the code would not become more
+# readable by spreading it out across more functions
+# pylint: disable=R0912
+
+import argparse
+import collections
+import email.utils
+import http.server
+from http import HTTPStatus
+import logging
+import math
+import os
+import re
+import shutil
+import socketserver
+import subprocess
+import sys
+import tempfile
+import threading
+import urllib.error
+import urllib.request
+from datetime import datetime, timedelta, timezone
+from functools import partial
+
+have_dateutil = True
+try:
+    import dateutil.parser
+except ImportError:
+    have_dateutil = False
+
+have_parsedatetime = True
+try:
+    import parsedatetime
+except ImportError:
+    have_parsedatetime = False
+
+DINSTALLRATE = 21600
+
+
+class Proxy(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        # check validity and extract the timestamp
+        try:
+            c1, c2, c3, timestamp, _ = self.path.split("/", 4)
+        except ValueError:
+            logging.error("don't know how to handle this request: %s", self.path)
+            self.send_error(HTTPStatus.BAD_REQUEST, "Bad request path (%s)" % self.path)
+            return
+        if ["", "archive", "debian"] != [c1, c2, c3]:
+            logging.error("don't know how to handle this request: %s", self.path)
+            self.send_error(HTTPStatus.BAD_REQUEST, "Bad request path (%s)" % self.path)
+            return
+        # make sure the pool directory is symlinked to the global pool
+        linkname = os.path.join(self.directory, c2, c3, timestamp, "pool")
+        if not os.path.exists(linkname):
+            os.makedirs(os.path.join(self.directory, c2, c3, timestamp), exist_ok=True)
+            os.symlink("../../../pool", linkname)
+        path = os.path.abspath(self.translate_path(self.path))
+        if not os.path.exists(path):
+            try:
+                with urllib.request.urlopen(
+                    "http://snapshot.debian.org/" + self.path
+                ) as f:
+                    # save file in local cache
+                    head, _ = os.path.split(path)
+                    os.makedirs(head, exist_ok=True)
+                    with open(path, "wb") as out:
+                        shutil.copyfileobj(f, out)
+            except urllib.error.HTTPError as e:
+                self.send_error(e.code)
+                return
+        f = self.send_head()
+        if f:
+            try:
+                self.copyfile(f, self.wfile)
+            finally:
+                f.close()
+
+    def log_message(self, fmt, *args):
+        pass
+
+
+def get_mirror(port, timestamp):
+    if port is not None:
+        return "http://%s:%d/archive/debian/%s" % (
+            "127.0.0.1",
+            port,
+            timestamp.strftime("%Y%m%dT%H%M%SZ"),
+        )
+    return "http://snapshot.debian.org/archive/debian/%s" % timestamp.strftime(
+        "%Y%m%dT%H%M%SZ"
+    )
+
+
+def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
+    ret = 0
+    goodmirror = get_mirror(staticargs.port, timestamp)
+    env = {
+        "DEBIAN_BISECT_EPOCH": "%d" % int(timestamp.timestamp()),
+        "DEBIAN_BISECT_TIMESTAMP": timestamp.strftime("%Y%m%dT%H%M%SZ"),
+    }
+    if staticargs.port is not None:
+        env["DEBIAN_BISECT_MIRROR"] = goodmirror
+    if staticargs.depends or staticargs.qemu:
+        scriptname = "run_bisect"
+        if staticargs.qemu:
+            scriptname = "run_bisect_qemu"
+        # first try run_bisect.sh from the directory where debbisect lives in
+        # case we run this from a git clone
+        run_bisect = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), scriptname + ".sh"
+        )
+        if not os.path.exists(run_bisect):
+            run_bisect = os.path.join("/usr/share/devscripts/scripts/", scriptname)
+        cmd = [
+            run_bisect,
+            staticargs.depends,
+            staticargs.script,
+            goodmirror,
+            staticargs.suite,
+            staticargs.components,
+        ]
+        if toupgrade:
+            badmirror = get_mirror(staticargs.port, badtimestamp)
+            cmd.extend([badmirror, toupgrade])
+    else:
+        # execute it directly if it's an executable file or if it there are no
+        # shell metacharacters
+        if (
+            os.access(staticargs.script, os.X_OK)
+            or re.search(r"[^\w@\%+=:,.\/-]", staticargs.script, re.ASCII) is None
+        ):
+            cmd = [staticargs.script]
+        else:
+            cmd = ["sh", "-c", staticargs.script]
+    output = b""
+    try:
+        # we only use the more complex Popen method is live output is required
+        # for logging levels of INFO or lower
+        if logging.root.isEnabledFor(logging.INFO):
+            process = subprocess.Popen(
+                cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, env=env
+            )
+            for line in iter(process.stdout.readline, b""):
+                sys.stdout.buffer.write(line)
+                sys.stdout.buffer.flush()
+                output += line
+            ret = process.wait()
+        else:
+            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, env=env)
+    except subprocess.CalledProcessError as e:
+        ret = e.returncode
+        output = e.output
+    return (ret, output)
+
+
+def finish_log_pkglist(goodbad, output, depends):
+    with open("log.%s" % goodbad, "wb") as f:
+        f.write(output)
+    if depends and os.path.exists("./pkglist"):
+        os.rename("./pkglist", "./pkglist.%s" % goodbad)
+
+
+def bisect(good, bad, staticargs):
+    diff = bad - good
+    print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
+
+    stepnum = 1
+    starttime = datetime.now(timezone.utc)
+
+    steps = math.ceil(
+        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 3
+    )
+    print("approximately %d steps left to test" % steps)
+    # verify that the good timestamp is really good and the bad timestamp is really bad
+    # we try the bad timestamp first to make sure that the problem exists
+    print("#%d: trying known bad %s..." % (stepnum, bad))
+    ret, output = runtest(bad, staticargs)
+    finish_log_pkglist("bad", output, staticargs.depends)
+    if ret == 0:
+        print("bad timestamp was actually good -- see log.bad for details")
+        return None
+    stepnum += 1
+    steps = math.ceil(
+        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 2
+    )
+    timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
+    print("computation time left: %s" % timeleft)
+    print("approximately %d steps left to test" % steps)
+    print("#%d: trying known good %s..." % (stepnum, good))
+    ret, output = runtest(good, staticargs)
+    finish_log_pkglist("good", output, staticargs.depends)
+    if ret != 0:
+        print("good timestamp was actually bad -- see log.good for details")
+        return None
+    stepnum += 1
+
+    while True:
+        diff = bad - good
+        if diff.total_seconds() < DINSTALLRATE:
+            break
+        print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
+        steps = math.ceil(
+            (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
+        )
+        timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
+        print("computation time left: %s" % timeleft)
+        print("approximately %d steps left to test" % steps)
+        # One may be tempted to try and optimize this step by finding all the
+        # packages that differ between the two timestamps and then finding
+        # all the snapshot timestamps where the involved packages changed
+        # in their version. But since dependencies can arbitrarily change
+        # between two given timestamps, drawing in more packages or requiring
+        # less packages, the only reliable method is really to strictly bisect
+        # by taking the timestamp exactly between the two and not involve
+        # other guessing magic.
+        newts = good + diff / 2
+        print("#%d: trying %s..." % (stepnum, newts))
+        ret, output = runtest(newts, staticargs)
+        if ret == 0:
+            print("test script output: good")
+            finish_log_pkglist("good", output, staticargs.depends)
+            good = newts
+        else:
+            print("test script output: bad")
+            finish_log_pkglist("bad", output, staticargs.depends)
+            bad = newts
+        stepnum += 1
+    return good, bad
+
+
+def datetimestr(val):
+    # since py3 we don't need pytz to figure out the local timezone
+    localtz = datetime.now(timezone.utc).astimezone().tzinfo
+
+    # first trying known formats
+    for fmt in [
+        "%Y%m%dT%H%M%SZ",  # snapshot.debian.org style
+        # ISO 8601
+        "%Y-%m-%d",
+        "%Y-%m-%dT%H:%M",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S%z",
+    ]:
+        try:
+            dt = datetime.strptime(val, fmt)
+        except ValueError:
+            continue
+        else:
+            # if we don't know the timezone, assume the local one
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=localtz)
+            return dt
+
+    # try parsing the debian/changelog datetime format as specified by RFC 2822
+    # we cannot use strptime() because that honors the locale and RFC
+    # 2822 requires that day and month names be the English abbreviations.
+    try:
+        dt = email.utils.parsedate_to_datetime(val)
+    except TypeError:
+        pass
+    else:
+        return dt
+
+    # next, try parsing using dateutil.parser
+    if have_dateutil:
+        try:
+            dt = dateutil.parser.parse(val)
+        except ValueError:
+            pass
+        else:
+            # if we don't know the timezone, assume the local one
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=localtz)
+            return dt
+
+    # if that didn't work, try freeform formats
+    if have_parsedatetime:
+        cal = parsedatetime.Calendar()
+        dt, ret = cal.parseDT(val)
+        if ret != 0:
+            # if we don't know the timezone, assume the local one
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=localtz)
+            return dt
+
+    if not have_dateutil:
+        logging.info("parsing date failed -- maybe install python3-dateutil")
+    if not have_parsedatetime:
+        logging.info("parsing date failed -- maybe install python3-parsedatetime")
+
+    # all failed, we cannot parse this
+    raise argparse.ArgumentTypeError("not a valid datetime: %s" % val)
+
+
+def read_pkglist(infile):
+    result = dict()
+    with open(infile) as f:
+        for line in f:
+            pkg, version = line.split("\t")
+            result[pkg] = version.strip()
+    return result
+
+
+def upgrade_single_package(toupgrade, goodpkgs, badpkgs, good, bad, staticargs):
+    if toupgrade in goodpkgs:
+        print(
+            "test upgrading %s %s -> %s..."
+            % (toupgrade, goodpkgs[toupgrade], badpkgs[toupgrade])
+        )
+    else:
+        print("test installing %s %s..." % (toupgrade, badpkgs[toupgrade]))
+    ret, output = runtest(good, staticargs, toupgrade, bad)
+    finish_log_pkglist("intermediate", output, staticargs.depends)
+    if ret == 0:
+        if toupgrade in goodpkgs:
+            print("  upgrading %s does not cause the problem" % toupgrade)
+        else:
+            print("  installing %s does not cause the problem" % toupgrade)
+        return
+    print("  upgrading %s triggered the problem" % toupgrade)
+    # this package introduced the regression check if more than
+    # just the package in question got upgraded
+    newbadpkgs = read_pkglist("./pkglist.intermediate")
+    # find all packages that are completely new or of a
+    # different version than those in the last good test
+    newupgraded = list()
+    for pkg, version in newbadpkgs.items():
+        if pkg not in goodpkgs or version != goodpkgs[pkg]:
+            newupgraded.append(pkg)
+    if not newupgraded:
+        logging.error("no difference -- this should never happen")
+        sys.exit(1)
+    elif len(newupgraded) == 1:
+        # the only upgraded package should be the one that was
+        # requested to be upgraded
+        assert newupgraded[0] == toupgrade
+    else:
+        print("  additional packages that got upgraded/installed at the same time:")
+        for newtoupgrade in newupgraded:
+            if newtoupgrade == toupgrade:
+                continue
+            print(
+                "    %s %s -> %s"
+                % (
+                    newtoupgrade,
+                    goodpkgs.get(newtoupgrade, "(n.a.)"),
+                    newbadpkgs[newtoupgrade],
+                )
+            )
+
+
+def parseargs():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="""\
+
+Execute a script or a shell snippet for a known good timestamp and a known bad
+timestamp and then bisect the timestamps until a timestamp from
+snapshot.debian.org is found where the script first fails. Environment
+variables are used to tell the script which timestamp to test. See ENVIRONMENT
+VARIABLES below. At the end of the execution, the files log.good and log.bad
+are the log files of the last good and last bad run, respectively. By default,
+a temporary caching mirror is executed to reduce bandwidth usage on
+snapshot.debian.org.  If you plan to run debbisect multiple times on a similar
+range of timestamps, consider setting a non-temporary cache directory with the
+--cache option.
+
+The program has three basic modes of operation. In the first, the given script
+is responsible to set up everything as needed:
+
+    $ {progname} "last week" today script.sh
+    $ diff -u log.good log.bad
+
+If also the --depends option is given, then a chroot of the correct timestamp
+will be created each time and the script will receive as first argument the
+path to that chroot. Additionally, this mode allows debbisect to figure out the
+exact package that was responsible for the failure instead of only presenting
+you the last good and first bad timestamp.
+
+Lastly, you can also provide the --qemu option. In this mode, your test will be
+create a qemu virtual machine of the correct timestamp each time. The script
+will receive the correct ssh config to log into a host named qemu and execute
+arbitrary commands.
+
+""",
+        epilog="""\
+
+EXAMPLES
+--------
+
+Just run "do_something" which runs the test and returns a non-zero exit on
+failure.
+
+    $ {progname} "last week" today "mmdebstrap --customize-hook='chroot """
+        + """\\"\\$1\\" do_something' unstable - \\$DEBIAN_BISECT_MIRROR >/dev/null"
+    $ diff -u log.good log.bad
+
+Since the command can easily become very long and quoting very involved, lets
+instead use a script:
+
+    $ cat << END > script.sh
+    > #!/bin/sh
+    > set -exu
+    > mmdebstrap \\
+    >     --verbose \\
+    >     --aptopt='Acquire::Check-Valid-Until "false"' \\
+    >     --variant=apt \\
+    >     --include=pkga,pkgb,pkgc \\
+    >     --customize-hook='chroot "$1" dpkg -l' \\
+    >     --customize-hook='chroot "$1" do_something' \\
+    >     unstable \\
+    >     - \\
+    >     $DEBIAN_BISECT_MIRROR \\
+    >     >/dev/null
+    > END
+    $ chmod +x script.sh
+    $ {progname} --verbose --cache=./cache "two years ago" yesterday ./script.sh
+    $ diff -u log.good log.bad
+    $ rm -r ./cache
+
+This example sets Acquire::Check-Valid-Until to not fail on snapshot timestamps
+from "two years ago", uses the "apt" variant (only Essential:yes plus apt),
+installs the packages required for the test using --include, runs "dpkg -l" so
+that we can see which packages differed in the logs at the end and uses
+--cache=cache so that the apt cache does not get discarded at the end and the
+command can be re-run without downloading everything from snapshot.debian.org
+again.
+
+Once debbisect has finished bisecting and figured out the last good and the
+first bad timestamp, there might be more than one package that differs in
+version between these two timestamps. debbisect can figure out which package is
+the culprit if you hand it control over installing dependencies for you via the
+--depends option. With that option active, the script will not be responsible
+to set up a chroot itself but is given the path to an existing chroot as the
+first argument. Here is a real example that verifies the package responsible
+for Debian bug #912935:
+
+    $ {progname} --depends=botch "2018-11-17" """.format(
+            progname=sys.argv[0]
+        )
+        + """"2018-11-22" 'chroot "$1" botch-dose2html --packages=/dev/null --help'
+    [...]
+    test upgrading python3-minimal 3.6.7-1 -> 3.7.1-2...
+      upgrading python3-minimal triggered the problem
+
+If you want to run above test under qemu, then you would run:
+
+    $ {progname} --depends=botch --qemu "2018-11-17" """.format(
+            progname=sys.argv[0]
+        )
+        + """"2018-11-22" 'ssh -F "$1" qemu botch-dose2html --packages=/dev/null --help'
+
+In the last two examples we omitted the --cache argument for brevity. But
+please make use of it to reduce the load on snapshot.debian.org.
+
+TIMESTAMPS
+----------
+
+Valid good and bad timestamp formats are either:
+
+ - the format used by snapshot.debian.org
+ - ISO 8601 (with or without time, seconds and timezone)
+ - RFC 2822 (used in debian/changelog)
+ - all formats understood by the Python dateutil module (if installed)
+ - all formats understood by the Python parsedatetime module (if installed)
+
+Without specifying the timezone explicitly, the local offset is used.
+
+Examples (corresponding to the items in above list, respectively):
+
+ - 20200313T065326Z
+ - 2020-03-13T06:53:26+00:00
+ - Fri, 29 Nov 2019 14:00:08 +0100
+ - 5:50 A.M. on June 13, 1990
+ - two weeks ago
+
+ENVIRONMENT VARIABLES
+---------------------
+
+The following environment variables are available to the test script:
+
+DEBIAN_BISECT_MIRROR    Contains the caching mirror address.
+
+DEBIAN_BISECT_EPOCH     Contains an integer representing the unix epoch of the
+                        current timestamp. The value of this variable can
+                        directly be assigned to SOURCE_DATE_EPOCH.
+
+DEBIAN_BISECT_TIMESTAMP Contains a timestamp in the format used by
+                        snapshot.debian.org. Can also be generated from
+                        DEBIAN_BISECT_EPOCH via:
+                        date --utc --date=@$DEBIAN_BISECT_EPOCH +%Y%m%dT%H%M%SZ
+
+Written by Johannes 'josch' Schauer <josch@debian.org>
+""",
+    )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        help="Print lots of debugging statements",
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
+        default=logging.WARNING,
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="Be verbose",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
+    )
+    parser.add_argument(
+        "--cache", help="cache directory -- by default $TMPDIR is used", type=str
+    )
+    parser.add_argument("--nocache", help="disable cache")
+    parser.add_argument(
+        "--port",
+        help="manually choose port number for the apt cache instead of "
+        + "automatically choosing a free port",
+        type=int,
+        default=0,
+    )
+    parser.add_argument(
+        "--depends",
+        help="Comma separated list of binary packages the test script "
+        + "requires. With this option, the test script will run inside a "
+        + "chroot with the requested packages installed.",
+        type=str,
+    )
+    parser.add_argument(
+        "--qemu",
+        help="Create qemu virtual machine and pass a ssh config file to the "
+        + "test script",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--suite",
+        help="Chosen suite when creating the chroot with --depends or --qemu "
+        + "(default: unstable)",
+        default="unstable",
+        type=str,
+    )
+    parser.add_argument(
+        "--components",
+        help="Chosen components (separated by comma or whitespace) when "
+        + "creating the chroot with --depends or --qemu (default: main)",
+        default="main",
+        type=str,
+    )
+    parser.add_argument(
+        "--no-find-exact-package",
+        help="Normally, when the --depends argument is given so that "
+        + "debbisect takes care of managing dependencies, the precise package "
+        + "that introduced the problem is determined after bisection by "
+        + "installing the packages that differ between the last good and "
+        + "first bad timestamp one by one. This option disables this feature.",
+        action="store_true",
+    )
+    parser.add_argument(
+        "good",
+        type=datetimestr,
+        help="good timestamp -- see section TIMESTAMPS for valid formats",
+    )
+    parser.add_argument(
+        "bad",
+        type=datetimestr,
+        help="bad timestamp -- see section TIMESTAMPS for valid formats",
+    )
+    parser.add_argument(
+        "script",
+        type=str,
+        help="test script -- can either be a shell code snippet or an "
+        + "executable script. A non zero exit code indicates failure. "
+        + "When also --depends is used, then the first argument to the "
+        + "script will be the chroot directory. When --qemu is used, then "
+        + "the first argument to the script will an ssh config for a host "
+        + "named qemu.",
+    )
+    return parser.parse_args()
+
+
+def setupcache(cache, port):
+    if cache:
+        cachedir = cache
+    else:
+        cachedir = tempfile.mkdtemp(prefix="debbisect")
+    logging.debug("using cache directory: %s", cachedir)
+    os.makedirs(cachedir + "/pool", exist_ok=True)
+    httpd = socketserver.TCPServer(
+        # the default address family for socketserver is AF_INET so we
+        # explicitly bind to ipv4 localhost
+        ("127.0.0.1", port),
+        partial(Proxy, directory=cachedir),
+        # to avoid "Address already in use" when the port is specified
+        # manually, we set socket.SO_REUSEADDR
+        # to do so, we must set allow_reuse_address and then bind and
+        # activate manually
+        bind_and_activate=False,
+    )
+    # this sets socket.SO_REUSEADDR
+    httpd.allow_reuse_address = True
+    httpd.server_bind()
+    httpd.server_activate()
+    # run server in a new thread
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    # start thread
+    server_thread.start()
+    # retrieve port (in case it was generated automatically)
+    _, port = httpd.server_address
+
+    def teardown():
+        httpd.shutdown()
+        httpd.server_close()
+        server_thread.join()
+        if not cache:
+            # this should be a temporary directory but lets still be super
+            # careful
+            if os.path.exists(cachedir + "/pool"):
+                shutil.rmtree(cachedir + "/pool")
+            if os.path.exists(cachedir + "/archive"):
+                shutil.rmtree(cachedir + "/archive")
+            os.rmdir(cachedir)
+
+    return port, teardown
+
+
+def main():
+    args = parseargs()
+
+    logging.basicConfig(level=args.loglevel)
+
+    if args.good > args.bad:
+        print("good is later than bad")
+        sys.exit(1)
+
+    port = None
+    if not args.nocache:
+        port, teardown = setupcache(args.cache, args.port)
+
+    staticargs = collections.namedtuple(
+        "args", ["script", "port", "depends", "suite", "components", "qemu"]
+    )
+    staticargs.port = port
+    for a in ["script", "depends", "suite", "components", "qemu"]:
+        setattr(staticargs, a, getattr(args, a))
+    res = bisect(args.good, args.bad, staticargs)
+    if res is not None:
+        good, bad = res
+        print("bisection finished successfully")
+        print("  last good timestamp: %s" % good)
+        print("  first bad timestamp: %s" % bad)
+
+        if not os.path.exists("./pkglist.good"):
+            logging.error("./pkglist.good doesn't exist")
+            sys.exit(1)
+        if not os.path.exists("./pkglist.bad"):
+            logging.error("./pkglist.bad doesn't exist")
+            sys.exit(1)
+
+        # Create a set of packages for which either the version in the last good
+        # and first bad run differs or which only exist in the first bad run.
+        goodpkgs = read_pkglist("./pkglist.good")
+        badpkgs = read_pkglist("./pkglist.bad")
+        upgraded = set()
+        for pkg, version in goodpkgs.items():
+            if pkg in badpkgs and version != badpkgs[pkg]:
+                upgraded.add(pkg)
+        for pkg, version in badpkgs.items():
+            if pkg not in goodpkgs or version != goodpkgs[pkg]:
+                upgraded.add(pkg)
+        upgraded = list(sorted(upgraded))
+        if not upgraded:
+            logging.error("no difference -- this should never happen")
+            sys.exit(1)
+        elif len(upgraded) == 1:
+            print(
+                "only one package differs: %s %s -> %s"
+                % (
+                    upgraded[0],
+                    goodpkgs.get(upgraded[0], "(n.a.)"),
+                    badpkgs[upgraded[0]],
+                )
+            )
+        else:
+            print(
+                "the following packages differ between the last good and "
+                + "first bad timestamp:"
+            )
+            for toupgrade in upgraded:
+                print(
+                    "  %s %s -> %s"
+                    % (toupgrade, goodpkgs.get(toupgrade, "(n.a.)"), badpkgs[toupgrade])
+                )
+
+            # if debbisect was tasked with handling dependencies itself, try to
+            # figure out the exact package that introduce the break
+            if args.depends and not args.no_find_exact_package:
+                for toupgrade in upgraded:
+                    upgrade_single_package(
+                        toupgrade, goodpkgs, badpkgs, good, bad, staticargs
+                    )
+
+    if not args.nocache:
+        teardown()
+
+
+if __name__ == "__main__":
+    main()
