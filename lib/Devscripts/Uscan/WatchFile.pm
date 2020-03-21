@@ -312,17 +312,22 @@ sub process_lines {
 
 sub process_group {
     my ($self) = @_;
+    my $saveDconfig = $self->config->download_version;
     # Build version
     my @cur_versions = split /\+~/, $self->pkg_version;
     my (@new_versions, @last_debian_mangled_uversions, @last_versions);
     my $download    = 0;
     my $last_shared = $self->shared;
     my $last_comp_version;
+    my @dversion;
     # Isolate component and following lines
     foreach my $line (@{ $self->watchlines }) {
         if ($line->type and $line->type eq 'group') {
             $last_shared       = $self->new_shared;
             $last_comp_version = shift @cur_versions;
+        }
+        if ($line->type and $line->type eq 'group') {
+            $line->{groupDversion} = shift @dversion;
         }
         $line->shared($last_shared);
         $line->pkg_version($last_comp_version || 0);
@@ -331,6 +336,9 @@ sub process_group {
     foreach my $line (@{ $self->watchlines }) {
         next unless ($line->type eq 'group');
         # Stop on error
+        $self->config->download_version($line->{groupDversion})
+          if $line->{groupDversion};
+        $self->config->download_version(undef) if $line->type eq 'checksum';
         if (   $line->parse
             or $line->search
             or $line->get_upstream_url
