@@ -17,6 +17,7 @@ OUR_TESTS= \
 	uscan_git \
 	uscan_svn \
 	uscan_mangle \
+	uscan_group \
 	perltidy \
 
 # Tests that must run as root, and alter the state of the system by
