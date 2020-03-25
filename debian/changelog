@@ -38,6 +38,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   * uscan:
     + Split --debug option to add a --extra-debug option that shows remote
       HTTP content.  MR: !191
+    + Add new "ctype" line option to help to find current component version
+      when this one is ignored in package version. Only "nodejs" and "perl"
+      values are accepted for now.  MR: !178
 
   [ Matthijs Kooijman ]
   * uscan:

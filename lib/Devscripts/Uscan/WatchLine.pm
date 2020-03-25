@@ -112,7 +112,7 @@ has sigfile  => (is => 'rw');
 # 2 - Line options read/write attributes
 
 foreach (qw(
-    component hrefdecode repacksuffix unzipopt searchmode
+    component ctype hrefdecode repacksuffix unzipopt searchmode
     dirversionmangle downloadurlmangle dversionmangle filenamemangle pagemangle
     oversionmangle oversionmanglepagemangle pgpsigurlmangle uversionmangle
     versionmangle
@@ -466,6 +466,7 @@ EOF
                 #
                 # $ regexp-assemble <<EOF
                 # component
+                # ctype
                 # date
                 # gitmode
                 # hrefdecode
@@ -477,7 +478,7 @@ EOF
                 # unzipopt
                 # EOF
                 elsif ($opt
-                    =~ /^\s*((?:(?:(?:search|git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
+                    =~ /^\s*((?:(?:(?:search|git)?m|hrefdec)od|dat)e|c(?:omponent|type)|p(?:gpmode|retty)|repacksuffix|unzipopt)\s*=\s*(.+?)\s*$/
                 ) {
                     $self->$1($2);
                 } elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
@@ -733,6 +734,24 @@ EOF
               =~ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwatch.debian.net%;
         }
 
+    }
+
+    if ($self->ctype) {
+        my $version;
+        my $mod = "Devscripts::Uscan::Ctype::$self->{ctype}";
+        eval "require $mod";
+        if ($@) {
+            uscan_warn "unknown ctype $self->{ctype}";
+            uscan_debug $@;
+            return $self->status(1);
+        }
+        my $dir            = $self->component || '.';
+        my $ctypeTransform = $mod->new({ dir => $dir });
+        if ($version = $ctypeTransform->version) {
+            $lastversion = $version;
+            uscan_verbose "Found version $version for component $dir";
+            $self->versionmode('newer');
+        }
     }
 
     # End parsing the watch line for all version=1/2/3/4
