@@ -163,6 +163,7 @@ my $new_cache_format_version = '2.9.6';
 # Note that it is also in the POD documentation in the bts_tag
 # function below, look for "potato".
 our (@gTags, @valid_tags, %valid_tags);
+#<<< This variable definition should be kept verbatim from the BTS config
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible",
 	   "help", "security", "upstream", "pending", "confirmed",
 	   "ipv6", "lfs", "d-i", "l10n", "newcomer", "a11y", "ftbfs",
@@ -175,6 +176,7 @@ our (@gTags, @valid_tags, %valid_tags);
 	   "stretch", "stretch-ignore", "buster", "buster-ignore",
 	   "bullseye", "bullseye-ignore","bookworm","bookworm-ignore",
          );
+#>>>
 
 *valid_tags = \@gTags;
 %valid_tags = map { $_ => 1 } @valid_tags;
