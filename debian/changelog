@@ -14,6 +14,10 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   * checkbashisms:
     + Remove check for "sleep" (not a shell builtin).  Closes: #843913; MR: !176
 
+  [ Xavier Guimard ]
+  * uscan:
+    + Better DEHS output for components.  MR: !179
+
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
 devscripts (2.20.2) unstable; urgency=medium

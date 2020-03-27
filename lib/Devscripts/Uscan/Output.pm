@@ -93,7 +93,7 @@ sub dehs_output () {
         print qq'<component id="$cmp">\n';
         foreach my $tag (
             qw(debian-uversion debian-mangled-uversion
-            upstream-version upstream-url)
+            upstream-version upstream-url target target-path)
         ) {
             my $v = shift @{ $dehs_tags->{"component-$tag"} };
             print "  <component-$tag>$v</component-$tag>\n" if $v;
