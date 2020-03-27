@@ -163,29 +163,18 @@ my $new_cache_format_version = '2.9.6';
 # Note that it is also in the POD documentation in the bts_tag
 # function below, look for "potato".
 our (@gTags, @valid_tags, %valid_tags);
-@gTags = (
-    "patch",          "wontfix",
-    "moreinfo",       "unreproducible",
-    "fixed",          "potato",
-    "woody",          "sid",
-    "help",           "security",
-    "upstream",       "pending",
-    "sarge",          "sarge-ignore",
-    "experimental",   "d-i",
-    "confirmed",      "ipv6",
-    "lfs",            "fixed-in-experimental",
-    "fixed-upstream", "l10n",
-    "newcomer",       "a11y",
-    "ftbfs",          "etch",
-    "etch-ignore",    "lenny",
-    "lenny-ignore",   "squeeze",
-    "squeeze-ignore", "wheezy",
-    "wheezy-ignore",  "jessie",
-    "jessie-ignore",  "stretch",
-    "stretch-ignore", "buster",
-    "buster-ignore",  "bullseye",
-    "bullseye-ignore",
-);
+@gTags = ( "patch", "wontfix", "moreinfo", "unreproducible",
+	   "help", "security", "upstream", "pending", "confirmed",
+	   "ipv6", "lfs", "d-i", "l10n", "newcomer", "a11y", "ftbfs",
+	   "fixed-upstream", "fixed", "fixed-in-experimental",
+	   "sid", "experimental",
+	   "potato", "woody",
+	   "sarge", "sarge-ignore", "etch", "etch-ignore",
+	   "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
+	   "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
+	   "stretch", "stretch-ignore", "buster", "buster-ignore",
+	   "bullseye", "bullseye-ignore","bookworm","bookworm-ignore",
+         );
 
 *valid_tags = \@gTags;
 %valid_tags = map { $_ => 1 } @valid_tags;
