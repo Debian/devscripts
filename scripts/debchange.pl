@@ -449,21 +449,21 @@ if ($opt_release_heuristic !~ $opt_release_heuristic_re) {
 fatal
 "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -R/--rebuild, -s/--security, --lts, --team, --bpo, --stable, -l/--local is allowed;\ntry $progname --help for more help"
   if ($opt_i ? 1 : 0)
-  + ($opt_a      ? 1 : 0)
-  + ($opt_e      ? 1 : 0)
-  + ($opt_r      ? 1 : 0)
-  + ($opt_v      ? 1 : 0)
-  + ($opt_d      ? 1 : 0)
-  + ($opt_n      ? 1 : 0)
-  + ($opt_bn     ? 1 : 0)
-  + ($opt_qa     ? 1 : 0)
-  + ($opt_R      ? 1 : 0)
-  + ($opt_s      ? 1 : 0)
-  + ($opt_lts    ? 1 : 0)
-  + ($opt_team   ? 1 : 0)
-  + ($opt_bpo    ? 1 : 0)
+  + ($opt_a ? 1 : 0)
+  + ($opt_e ? 1 : 0)
+  + ($opt_r ? 1 : 0)
+  + ($opt_v ? 1 : 0)
+  + ($opt_d ? 1 : 0)
+  + ($opt_n ? 1 : 0)
+  + ($opt_bn ? 1 : 0)
+  + ($opt_qa ? 1 : 0)
+  + ($opt_R ? 1 : 0)
+  + ($opt_s ? 1 : 0)
+  + ($opt_lts ? 1 : 0)
+  + ($opt_team ? 1 : 0)
+  + ($opt_bpo ? 1 : 0)
   + ($opt_stable ? 1 : 0)
-  + ($opt_l      ? 1 : 0) > 1;
+  + ($opt_l ? 1 : 0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -787,7 +787,7 @@ if (-e "$changelog_path.dch") {
 # Is this a native Debian package, i.e., does it have a - in the
 # version number?
 (my $EPOCH) = ($VERSION =~ /^(\d+):/);
-(my $SVERSION = $VERSION) =~ s/^\d+://;
+(my $SVERSION = $VERSION)  =~ s/^\d+://;
 (my $UVERSION = $SVERSION) =~ s/-[^-]*$//;
 
 # Check, sanitise and decode these environment variables
@@ -1213,7 +1213,7 @@ if ((
             }
         }
 
-        ($NEW_SVERSION = $NEW_VERSION) =~ s/^\d+://;
+        ($NEW_SVERSION = $NEW_VERSION)  =~ s/^\d+://;
         ($NEW_UVERSION = $NEW_SVERSION) =~ s/-[^-]*$//;
     }
 
@@ -1359,7 +1359,7 @@ if ((
             if ($useextra) {
                 $NEW_VERSION .= $extra;
             }
-            ($NEW_SVERSION = $NEW_VERSION) =~ s/^\d+://;
+            ($NEW_SVERSION = $NEW_VERSION)  =~ s/^\d+://;
             ($NEW_UVERSION = $NEW_SVERSION) =~ s/-[^-]*$//;
         } else {
             fatal "Error parsing version number: $VERSION";
@@ -1437,7 +1437,7 @@ if ((
         }
         if (@closes_text or $TEXT or $EMPTY_TEXT) {
             foreach (@closes_text) { format_line($_, 1); }
-            if (length $TEXT) { format_line($TEXT,   1); }
+            if (length $TEXT) { format_line($TEXT, 1); }
         } elsif ($opt_news) {
             print O "  \n";
         } else {
@@ -1612,7 +1612,7 @@ m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i
 
         if (@closes_text or $TEXT) {
             foreach (@closes_text) { format_line($_, 0); }
-            if (length $TEXT) { format_line($TEXT,   0); }
+            if (length $TEXT) { format_line($TEXT, 0); }
         } elsif ($opt_news) {
             print O "\n  \n";
             $line++;
@@ -1684,7 +1684,7 @@ m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i
 
     if (@closes_text or $TEXT) {
         foreach (@closes_text) { format_line($_, 1); }
-        if (length $TEXT) { format_line($TEXT,   1); }
+        if (length $TEXT) { format_line($TEXT, 1); }
     } elsif ($opt_news) {
         print O "  \n";
     } elsif ($opt_empty) {

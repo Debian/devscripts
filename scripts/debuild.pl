@@ -694,7 +694,7 @@ my $pkg = $changelog{'Source'};
 fatal "no version number in changelog!"
   unless exists $changelog{'Version'};
 my $version = $changelog{'Version'};
-(my $sversion = $version) =~ s/^\d+://;
+(my $sversion = $version)  =~ s/^\d+://;
 (my $uversion = $sversion) =~ s/-[a-z0-9+\.]+$//i;
 
 # Is the directory name acceptable?
@@ -858,8 +858,8 @@ while ($_ = shift) {
     $_ eq '-ap'                  and $usepause      = 1, next;
     /^-a(.*)/ and $targetarch = $1, push(@dpkg_opts, $_), next;
     $_ eq '-tc' and push(@dpkg_opts, $_), next;
-    /^-t(.*)/ and $targetgnusystem = $1, next;
-    $_ eq '-b' and $binaryonly = $_, $binarytarget = 'binary',
+    /^-t(.*)/  and $targetgnusystem = $1, next;
+    $_ eq '-b' and $binaryonly      = $_, $binarytarget = 'binary',
       push(@dpkg_opts, $_), next;
     $_ eq '-B' and $binaryonly = $_, $binarytarget = 'binary-arch',
       push(@dpkg_opts, $_), next;
@@ -1067,9 +1067,9 @@ if (@ARGV) {
     # and the remaining changes described
     my $ch = join "\n", @changefilecontents;
     if (   $sourceonly
-        && $version =~ /ubuntu1$/
+        && $version         =~ /ubuntu1$/
         && $ENV{'DEBEMAIL'} =~ /ubuntu/
-        && $ch =~ /(merge|sync).*Debian/i) {
+        && $ch              =~ /(merge|sync).*Debian/i) {
         push(@warnings,
 "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used"
         ) unless $since;

@@ -428,8 +428,8 @@ sub main {
         'default-keyrings!' => \$use_default_keyrings,
         'keyring=s@'        => sub {
             my $ring = $_[1];
-            if (-r $ring) { push @rings, $ring; }
-            else          { die "Keyring $ring unreadable\n" }
+            if   (-r $ring) { push @rings, $ring; }
+            else            { die "Keyring $ring unreadable\n" }
         },
         'verbose' => \$verbose,
       )

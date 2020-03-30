@@ -42,7 +42,7 @@ GetOptions(
     "help|h|?"               => \$help,
     "man|H"                  => \$man,
 ) or pod2usage(2);
-pod2usage(1) if $help;
+pod2usage(1)                                                if $help;
 pod2usage(-exitstatus => 0, -verbose => 2, -noperldoc => 1) if $man;
 
 my $overall = 0;
@@ -232,7 +232,7 @@ sub find_functions($$) {
 
     my $relocs = output("readelf", "-sW", $file);
     for my $line (split("\n", $relocs)) {
-        next if ($line !~ /$func_regex/);
+        next if ($line               !~ /$func_regex/);
         next if ($undefined && $line !~ /$func_regex.* UND /);
 
         $line =~ s/ \([0-9]+\)$//;

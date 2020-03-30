@@ -58,7 +58,7 @@ use constant keys => [
             return 1;
         }
     ],
-    ['debug', undef, sub { $verbose = 2 }],
+    ['debug',  undef,        sub { $verbose = 2 }],
     ['info|i', 'SALSA_INFO', sub { info(-1, 'SALSA_INFO', @_) }],
     [
         'path=s',
@@ -95,7 +95,7 @@ use constant keys => [
     ['user=s',    'SALSA_USER',    qr/^[\-\w]+$/],
     ['user-id=s', 'SALSA_USER_ID', qr/^\d+$/],
     ['verbose',   'SALSA_VERBOSE', sub { $verbose = 1 }],
-    ['yes!', 'SALSA_YES', sub { info(1, "SALSA_YES", @_) },],
+    ['yes!',      'SALSA_YES',     sub { info(1, "SALSA_YES", @_) },],
 
     # Update/create repo options
     ['all'],
