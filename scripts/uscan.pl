@@ -1688,6 +1688,36 @@ See more in the B<--destdir> explanation.
 Disable all site specific special case codes to perform URL redirections and
 page content alterations.
 
+=item B<--http-header>
+
+Add speficied header in HTTP requests for matching url. This option can be used
+more than one time, values must be in the form "baseUrl@Name=value. Example:
+
+  uscan --http-header https://example.org@My-Token=qwertyuiop
+
+Security:
+
+=over
+
+=item The given I<baseUrl> must exactly match the base url before '/'.
+Examples:
+
+  |        --http-header value         |           Good for          | Never used |
+  +------------------------------------+-----------------------------+------------+
+  | https://example.org.com@Hdr=Value  | https://example.org.com/... |            |
+  | https://example.org.com/@Hdr=Value |                             |     X      |
+  | https://e.com:1879@Hdr=Value       | https://e.com:1879/...      |            |
+  | https://e.com:1879/dir@Hdr=Value   | https://e.com:1879/dir/...  |            |
+  | https://e.com:1879/dir/@Hdr=Value  |                             |     X      |
+
+=item It is strongly recommended to not use this feature to pass a secret
+token over unciphered connection I<(http://)>
+
+=item You can use C<USCAN_HTTP_HEADER> variable (in C<~/.devscripts>) to hide
+secret token from scripts
+
+=back
+
 =item B<--no-exclusion>
 
 Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>.
@@ -1849,6 +1879,11 @@ B<--compression>). This is equivalent to the B<--repack> option.
 If this is set to no, files mentioned in the field B<Files-Excluded> of
 F<debian/copyright> will be ignored and no exclusion of files will be tried.
 This is equivalent to the B<--no-exclusion> option.
+
+=item B<USCAN_HTTP_HEADER>
+
+If set, the specified http header will be used if URL match. This is equivalent
+to B<--http-header> option.
 
 =back
 

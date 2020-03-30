@@ -22,7 +22,23 @@ sub http_search {
 "you must have the liblwp-protocol-https-perl package installed\nto use https URLs";
     }
     uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
-    my $request  = HTTP::Request->new('GET', $self->parse_result->{base});
+    my $request = HTTP::Request->new('GET', $self->parse_result->{base});
+    foreach my $k (keys %{ $self->downloader->headers }) {
+        if ($k =~ /^(.*?)@(.*)$/) {
+            my $baseUrl = $1;
+            my $hdr     = $2;
+            if ($self->parse_result->{base} =~ m#^\Q$baseUrl\E(?:/.*)?$#) {
+                $request->header($hdr => $self->headers->{$k});
+                uscan_verbose "Set per-host custom header $hdr for "
+                  . $self->parse_result->{base};
+            } else {
+                uscan_debug
+                  "$self->parse_result->{base} does not start with $1";
+            }
+        } else {
+            uscan_warn "Malformed http-header: $k";
+        }
+    }
     my $response = $self->downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn

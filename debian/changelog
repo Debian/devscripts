@@ -73,6 +73,7 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + Fix DEHS <target> output for components.  MR: !179
     + Fix --download-version with grouped packages.  MR: !156
     + Add "checksum" target to reduce grouped version size.  MR: !156
+    + Add --http-header option.  Closes: #955268; MR: !181
   * Update French translation.
   * salsa:
     + Fix error when trying to display an error with "update_repo".
