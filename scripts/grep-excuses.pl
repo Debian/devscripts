@@ -48,7 +48,7 @@ my $term_size_broken;
 
 sub have_term_size {
     return ($term_size_broken ? 0 : 1) if defined $term_size_broken;
-    pop @INC if $INC[-1] eq '.';
+    pop @INC                           if $INC[-1] eq '.';
     # Load the Term::Size module safely
     eval { require Term::Size; };
     if ($@) {
@@ -348,9 +348,9 @@ sub print_migration_excuse_info ($;$) {
     }
     for my $excuse (@{ $source->{excuses} }) {
         next if $summary and $excuse =~ m/^autopkgtest /;
-        $excuse =~ s@</?[^>]+>@@g;
-        $excuse =~ s@&lt;@<@g;
-        $excuse =~ s@&gt;@>@g;
+        $excuse                      =~ s@</?[^>]+>@@g;
+        $excuse                      =~ s@&lt;@<@g;
+        $excuse                      =~ s@&gt;@>@g;
         print "    $excuse\n";
     }
 }

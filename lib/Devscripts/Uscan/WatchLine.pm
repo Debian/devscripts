@@ -357,7 +357,7 @@ sub parse {
           $self->line, 5;
         if (  !$lastversion
             or $site =~ /\(.*\)/
-            or $dir =~ /\(.*\)/) {
+            or $dir  =~ /\(.*\)/) {
             uscan_warn <<EOF;
 there appears to be a version 2 format line in
 the version 1 watch file $watchfile;

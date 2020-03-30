@@ -3533,7 +3533,7 @@ sub deletecache {
     unlink cachefile($thing, $thgopts);
     if ($thing =~ /^\d+$/) {
         rmtree("$cachedir/$thing", 0, 1) if -d "$cachedir/$thing";
-        unlink("$cachedir/$thing.mbox") if -f "$cachedir/$thing.mbox";
+        unlink("$cachedir/$thing.mbox")  if -f "$cachedir/$thing.mbox";
         unlink("$cachedir/$thing.status.mbox")
           if -f "$cachedir/$thing.status.mbox";
         unlink("$cachedir/$thing.raw.mbox") if -f "$cachedir/$thing.raw.mbox";

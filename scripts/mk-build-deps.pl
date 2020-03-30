@@ -407,7 +407,7 @@ while ($control = shift) {
           sort { $b->[1] <=> $a->[1] }
           map { [$_, Dpkg::Version->new($_)] } @versions;
         push(@packages,
-            map  { build_equiv($_) }
+            map { build_equiv($_) }
             grep { $versions[0] eq $_->{version} } @pkgInfo);
     } elsif (@pkgInfo) {
         push(@packages, build_equiv($pkgInfo[0]));

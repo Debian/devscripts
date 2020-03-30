@@ -182,7 +182,7 @@ STANZA: foreach my $entry ($meta->get) {
           and not defined $entry->{Binaries};
 
         next
-          if ($entry->{Sources}  // '') !~ m/\Q$pkg\E_/
+          if ($entry->{Sources} // '')  !~ m/\Q$pkg\E_/
           && ($entry->{Binaries} // '') !~ m/\Q$pkg\E_/;
 
         print $entry->output();

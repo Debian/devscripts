@@ -49,7 +49,7 @@ sub normalize_package {
 sub sort_developers {
     return map { $_->[0] }
       sort     { $a->[1] cmp $b->[1] }
-      map { [$_, uc] } @_;
+      map      { [$_, uc] } @_;
 }
 
 sub help {

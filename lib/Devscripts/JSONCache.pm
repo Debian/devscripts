@@ -75,7 +75,7 @@ sub NEXTKEY {
     my $i    = 0;
     my @keys = map {
         return $_ if ($i);
-        $i++ if ($_ eq $last);
+        $i++      if ($_ eq $last);
         return ()
       }
       sort { $a cmp $b } keys %{ $_[0]->data };

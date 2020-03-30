@@ -602,8 +602,8 @@ sub checkout_repo($$$$) {
                     $push_url);
             }
         }
-        when ("hg")  { @cmd = ("hg",  "clone", $repo_url); }
-        when ("svn") { @cmd = ("svn", "co",    $repo_url); }
+        when ("hg")  { @cmd = ("hg", "clone", $repo_url); }
+        when ("svn") { @cmd = ("svn", "co", $repo_url); }
         default { die "unsupported version control system '$repo_type'.\n"; }
     }
     @cmd = set_destdir($repo_type, $destdir, @cmd) if length $destdir;
@@ -1208,7 +1208,7 @@ EOF
         $anon_repo_url = $repo_url;
         $repo_url      = set_auth($repo_type, $repo_url, $user, $dont_act);
     }
-    print_repo($repo_type, $repo_url) if $print_mode;    # ... then quit
+    print_repo($repo_type, $repo_url)    if $print_mode;      # ... then quit
     print_details($repo_type, $repo_url) if $details_mode;    # ... then quit
     if (length $pkg) {
         print "declared $repo_type repository at $repo_url\n";
