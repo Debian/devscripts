@@ -203,7 +203,7 @@ foreach my $d ((
 
 open(FH, '>', "$tempdir/etc/apt/sources.list");
 print FH <<EOF;
-deb http://httpredir.debian.org/debian/ $base_dist main
+deb http://deb.debian.org/debian/ $base_dist main
 EOF
 close FH;
 # FIXME - document what's dpkg's status for
