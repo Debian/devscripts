@@ -17,7 +17,8 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   [ Holger Levsen ]
   * debrebuild:
     + stop using the reproducible-builds.org apt repo. Closes: #955280
-    + switch to use deb.debian.org as the base apt repo. Closes: #955298 
+    + switch to use deb.debian.org as the base apt repo. Closes: #955298
+    + add support for bookworm.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 

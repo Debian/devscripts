@@ -156,6 +156,7 @@ my %base_files_map = (
     "9"  => "stretch",
     "10" => "buster",
     "11" => "bullseye",
+    "12" => "bookworm",
 );
 my %dpkg_map = (
     "15" => "squeeze",
@@ -164,6 +165,7 @@ my %dpkg_map = (
     "18" => "stretch",
     "19" => "buster",
     "20" => "bullseye",
+    "21" => "bookworm",
 );
 
 $base_files_version =~ s/^(\d+).*/$1/;
