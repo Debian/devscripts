@@ -201,27 +201,8 @@ foreach my $d ((
     make_path("$tempdir/$d");
 }
 
-# FIXME - make optional + configurable.  check if the key is actually the expected one
-my $armored_key   = "$tempdir/etc/apt/trusted.gpg.d/reproducible.asc";
-my $dearmored_key = "$tempdir/etc/apt/trusted.gpg.d/reproducible.gpg";
-my $http_code     = LWP::Simple::mirror(
-    "https://tests.reproducible-builds.org/debian/repository/reproducible.asc",
-    $armored_key
-);
-if ($http_code != 200) {
-    die "got http $http_code when trying to retrieve reproducible.asc\n";
-}
-$http_code = LWP::Simple::mirror(
-    "https://tests.reproducible-builds.org/debian/repository/reproducible.gpg",
-    $dearmored_key
-);
-if ($http_code != 200) {
-    die "got http $http_code when trying to retrieve reproducible.gpg\n";
-}
-
 open(FH, '>', "$tempdir/etc/apt/sources.list");
 print FH <<EOF;
-deb https://tests.reproducible-builds.org/debian/repository/debian/ ./
 deb http://httpredir.debian.org/debian/ $base_dist main
 EOF
 close FH;
