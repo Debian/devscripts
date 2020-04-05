@@ -95,6 +95,15 @@ Set the BTS pseudo-header for a usertags' user.
 
 Set the BTS pseudo-header for usertags.
 
+=item B<--control=>I<COMMAND>
+
+Add a BTS control command. This option may be repeated to add multiple
+control commands. For example, if you are mass-bug-filing "please stop
+depending on this deprecated package", and bug 123456 represents removal
+of the deprecated package, you could use:
+
+    mass-bug --control='block 123456 by -1' ...
+
 =item B<--source>
 
 Specify that package names refer to source packages rather than binary
@@ -187,6 +196,7 @@ Valid options are:
    --tags=tags            Set the BTS pseudo-header for tags.
    --user=user            Set the BTS pseudo-header for a usertags' user
    --usertags=usertags    Set the BTS pseudo-header for usertags
+   --control="COMMAND"    Add an arbitrary BTS control command (repeatable)
    --source               Specify that package names refer to source packages
 
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
@@ -288,6 +298,7 @@ sub gen_bug {
     my $usertags      = shift;
     my $nowrap        = shift;
     my $type          = shift;
+    my $control       = shift;
     my $version       = "";
     my $bugtext;
 
@@ -315,8 +326,13 @@ sub gen_bug {
             $template_text = fill("", "", $template_text);
         }
     }
+    if (defined $control) {
+        $control = join '', map { "Control: $_\n" } @$control;
+    } else {
+        $control = '';
+    }
     $bugtext = "$type: $package\n$version"
-      . "Severity: $severity\n$tags$user$usertags\n$template_text";
+      . "Severity: $severity\n$tags$user$usertags$control\n$template_text";
     return $bugtext;
 }
 
@@ -380,6 +396,7 @@ my $severity = "normal";
 my $tags     = "";
 my $user     = "";
 my $usertags = "";
+my @control  = ();
 my $type     = "Package";
 my $opt_sendmail;
 my $nowrap = "";
@@ -393,6 +410,7 @@ if (
         "tags=s"     => \$tags,
         "user=s"     => \$user,
         "usertags=s" => \$usertags,
+        "control=s"  => \@control,
         "source"     => sub { $type = "Source"; },
         "sendmail=s" => \$opt_sendmail,
         "help"       => sub { usage(); exit 0; },
@@ -485,9 +503,10 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: " . gen_subject($subject, $package) . "\n";
     print "\n";
-    print gen_bug($template_text, $package, $severity, $tags, $user,
-        $usertags, $nowrap, $type)
-      . "\n";
+    print gen_bug(
+        $template_text, $package, $severity, $tags, $user,
+        $usertags,      $nowrap,  $type,     \@control
+    ) . "\n";
 }
 
 if ($mode eq 'display') {
@@ -526,8 +545,9 @@ if ($mode eq 'display') {
         mailbts(
             gen_subject($subject, $package),
             gen_bug(
-                $template_text, $package,  $severity, $tags,
-                $user,          $usertags, $nowrap,   $type
+                $template_text, $package, $severity,
+                $tags,          $user,    $usertags,
+                $nowrap,        $type,    \@control,
             ),
             $submission_email,
             $from
