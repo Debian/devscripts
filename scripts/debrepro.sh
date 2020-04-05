@@ -127,8 +127,10 @@ cd source'
             "$disorderfs_commands"
     fi
 
+    echo 'build_prefix=""'
+
     vary time \
-        'build_prefix=""' \
+        '' \
         'build_prefix="faketime +213days+7hours+13minutes"; export NO_FAKE_STAT=1'
 
     if [ -n "$timeout" ]; then
