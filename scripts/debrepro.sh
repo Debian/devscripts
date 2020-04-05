@@ -131,6 +131,10 @@ cd source'
         'build_prefix=""' \
         'build_prefix="faketime +213days+7hours+13minutes"; export NO_FAKE_STAT=1'
 
+    if [ -n "$timeout" ]; then
+        echo "build_prefix=\"timeout $timeout \$build_prefix\""
+    fi
+
     echo '${build_prefix:-} dpkg-buildpackage -b -us -uc'
 }
 
@@ -181,13 +185,14 @@ compare() {
     return "$rc"
 }
 
-TEMP=$(getopt -n "debrepro" -o 'hs:b:' \
-    -l 'help,skip:,before-second-build:' \
+TEMP=$(getopt -n "debrepro" -o 'hs:b:t:' \
+    -l 'help,skip:,before-second-build:,timeout:' \
     -- "$@") || (rc=$?; usage >&2; exit $rc)
 eval set -- "$TEMP"
 
 skip_variations=""
 before_second_build_command=''
+timeout=''
 while true; do
     case "$1" in
         -s|--skip)
@@ -204,6 +209,10 @@ while true; do
             ;;
         -b|--before-second-build)
             before_second_build_command="$2"
+            shift
+            ;;
+        -t|--timeout)
+            timeout="$2"
             shift
             ;;
         -h|--help)

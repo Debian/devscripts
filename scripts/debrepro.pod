@@ -110,6 +110,12 @@ Examples:
 
   $ debrepro --before-second-build "patch -p1 < /path/to/patch"
 
+=item -t TIME, --timeout TIME
+
+Apply a timeout to all builds. I<TIME> must be a time specification
+compatible with GNU timeout(1).
+
+
 =item -h, --help
 
 Display this help message and exit.
@@ -145,7 +151,7 @@ Required programs are missing.
 
 =head1 SEE ALSO
 
-diffoscope (1), disorderfs (1),
+diffoscope (1), disorderfs (1), timeout(1)
 
 =head1  AUTHOR
 

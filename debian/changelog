@@ -25,6 +25,7 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + run command before second build via sh -c
     + run command before second build in the source tree copy, to avoid
       modifying the original tree.
+    + add --timeout option.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
