@@ -699,7 +699,8 @@ qr'(?:^|\s)(?<func>function\s)?\s*(?:[^<>\(\)\[\]\{\};|\s]*[^<>\(\)\[\]\{\};|\s\
         $LEADIN . qr'jobs\s'   => q<jobs>,
  #	$LEADIN . qr'jobs\s+-[^lp]\s' =>  q<'jobs' with option other than -l or -p>,
         $LEADIN
-          . qr'command\s+(?:-[pvV]+\s+)*-(?:[pvV])*[^pvV\s]' => q<'command' with option other than -p, -v or -V>,
+          . qr'command\s+(?:-[pvV]+\s+)*-(?:[pvV])*[^pvV\s]' =>
+          q<'command' with option other than -p, -v or -V>,
         $LEADIN
           . qr'setvar\s' =>
           q<setvar 'foo' 'bar' should be eval 'foo="'"$bar"'"'>,
