@@ -14,18 +14,25 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   * checkbashisms:
     + Remove check for "sleep" (not a shell builtin).  Closes: #843913; MR: !176
 
+  [ Paul Wise ]
+  * bts:
+    + Sync the known tags with bugs.debian.org.
+
+  [ Xavier Guimard ]
+  * Reformat perl scripts with the new perltidy 20200110.
+
   [ Holger Levsen ]
   * debrebuild:
-    + stop using the reproducible-builds.org apt repo. Closes: #955280
-    + switch to use deb.debian.org as the base apt repo. Closes: #955298
-    + add support for bookworm.
+    + Stop using the reproducible-builds.org apt repo.  Closes: #955280
+    + Switch to use deb.debian.org as the base apt repo.  Closes: #955298
+    + Add support for Debian 12 bookworm.
 
   [ Antonio Terceiro ]
   * debrepro:
-    + run command before second build via sh -c
-    + run command before second build in the source tree copy, to avoid
+    + Run command before second build via `sh -c`.
+    + Run command before second build in the source tree copy, to avoid
       modifying the original tree.
-    + add --timeout option.
+    + Add a new --timeout option.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
