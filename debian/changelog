@@ -5,6 +5,12 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + Apply patch from Unit 193, adding full stops to the generated changelog.
   * uscan:
     + Apply patch from Unit 193, adding --queit to the `git clone` calls.
+  * checkbashisms:
+    + Improve check for `command` to properly detect options other than -p
+      also when -p is not the first option.  Closes: #835498
+      Thanks to Eero Vuojolahti <eero@vuojolahti.com> for the initial patch.
+    + After Policy v4.1.5, the POSIX standard for shell script is
+      POSIX.1-2017.  Recognize `command -v` and `command -V` as valid.
 
   [ Andrius Merkys ]
   * uscan:

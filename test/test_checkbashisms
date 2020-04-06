@@ -20,6 +20,7 @@ if test "${1:-}" = --installed; then
     COMMAND=checkbashisms
     shift
 else
+    # shellcheck disable=SC2034
     COMMAND="../scripts/checkbashisms.pl"
 fi
 

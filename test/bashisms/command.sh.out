@@ -1,4 +1,12 @@
-possible bashism in bashisms/command.sh line 5 ('command' with option other than -p):
-command -v test # BASHISM
-possible bashism in bashisms/command.sh line 6 ('command' with option other than -p):
-command -V test # BASHISM
+possible bashism in bashisms/command.sh line 10 ('command' with option other than -p, -v or -V):
+command -p -v -a test # BASHISM
+possible bashism in bashisms/command.sh line 11 ('command' with option other than -p, -v or -V):
+command -p -a -v test # BASHISM
+possible bashism in bashisms/command.sh line 12 ('command' with option other than -p, -v or -V):
+command -pa test # BASHISM
+possible bashism in bashisms/command.sh line 13 ('command' with option other than -p, -v or -V):
+command -ap test # BASHISM
+possible bashism in bashisms/command.sh line 14 ('command' with option other than -p, -v or -V):
+command -p -a test # BASHISM
+possible bashism in bashisms/command.sh line 15 ('command' with option other than -p, -v or -V):
+command -pV -a test # BASHISM
