@@ -481,7 +481,7 @@ for my $arg (@ARGV) {
 
     # case 1: URL
     if ($arg
-        =~ /^((?:copy|file|ftp|gopher|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/
+        =~ /^((?:copy|file|ftp|gopher|http|rsh|rsync|scp|sftp|ssh|www).*)\/([^\/]+\.\w+)$/
     ) {
         get_file($1, $2, "unlink") or exit 1;
         if ($found_dsc) {

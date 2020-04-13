@@ -11,6 +11,9 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
       Thanks to Eero Vuojolahti <eero@vuojolahti.com> for the initial patch.
     + After Policy v4.1.5, the POSIX standard for shell script is
       POSIX.1-2017.  Recognize `command -v` and `command -V` as valid.
+  * dget:
+    + Apply patch from Bilal Muhammad to add support for scp:// and sftp://
+      protocols.  Closes: #956498
 
   [ Andrius Merkys ]
   * uscan:
