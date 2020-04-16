@@ -16,6 +16,7 @@ my $skip_stackprotector = 0;
 my $skip_fortify        = 0;
 my $skip_relro          = 0;
 my $skip_bindnow        = 0;
+my $skip_cfprotection   = 0;
 my $report_functions    = 0;
 my $find_libc_functions = 0;
 my $color               = 0;
@@ -32,6 +33,7 @@ GetOptions(
     "nofortify|f+"           => \$skip_fortify,
     "norelro|r+"             => \$skip_relro,
     "nobindnow|b+"           => \$skip_bindnow,
+    "nocfprotection|x+"      => \$skip_cfprotection,
     "report-functions|R!"    => \$report_functions,
     "find-libc-functions|F!" => \$find_libc_functions,
     "color|c!"               => \$color,
@@ -282,6 +284,9 @@ foreach my $file (@ARGV) {
     my $DISASM
       = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
 
+    # Get notes
+    my $NOTES = output("readelf", "-n", $file);
+
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
 
@@ -468,13 +473,12 @@ foreach my $file (@ARGV) {
             "unknown, no -fstack-clash-protection instructions found");
     }
 
-    # For cf-protection look for endbr32/64 in objdump disassembly which
-    # mark possible indirect branch targets
+    # For cf-protection look for x86 feature: IBT, SHSTK
     $name = " Control flow integrity";
-    if ($DISASM =~ /^\s+[0-9a-f]+:\s+endbr(32|64)/m) {
+    if ($NOTES =~ /^\s+Properties: x86 feature: IBT, SHSTK/m) {
         good($name, "yes");
     } else {
-        unknown($name, "unknown, no -fcf-protection instructions found!");
+        bad("no-cfprotection", $file, $name, "no, not found!", $skip_cfprotection);
     }
 
     if (!$lintian && (!$quiet || $rc != 0)) {
@@ -597,6 +601,10 @@ Do not require that the checked binaries be built with RELRO.
 =item B<--nobindnow>, B<-b>
 
 Do not require that the checked binaries be built with BIND_NOW.
+
+=item B<--nocfprotection>, B<-b>
+
+Do not require that the checked binaries be built with control flow protection.
 
 =item B<--quiet>, B<-q>
 
