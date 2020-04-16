@@ -298,6 +298,7 @@ foreach my $file (@ARGV) {
     my $elftype = $1 || "";
     if ($elftype eq "DYN") {
         if ($PROG_REPORT =~ /^ *\bPHDR\b/m) {
+
             # Executable, DYN ELF type.
             good($name, "yes");
         } else {
@@ -305,10 +306,12 @@ foreach my $file (@ARGV) {
             good($name, "no, regular shared library (ignored)");
         }
     } elsif ($elftype eq "EXEC") {
+
         # Executable, EXEC ELF type.
         bad("no-pie", $file, $name, "no, normal executable!", $skip_pie);
     } else {
         $elf = 0;
+
         # Is this an ar file with objects?
         open(AR, "<$file");
         my $header = <AR>;
@@ -346,6 +349,7 @@ foreach my $file (@ARGV) {
     }
     if ($#protected > -1) {
         if ($#unprotected == -1) {
+
             # Certain.
             good($name, "yes");
         } else {
@@ -426,6 +430,7 @@ foreach my $file (@ARGV) {
     );
     my $found = 0;
     foreach my $line (split /\n/, $DISASM) {
+
         # look for each regex from patterns in succession - they all
         # should be consecutive in the binary so we always fall back to
         # index 0 if we fail to find the next one
@@ -433,6 +438,7 @@ foreach my $file (@ARGV) {
             if ($index == 0) {
                 $cmp_addr = hex($matches[0]);
             } elsif ($index == 4) {
+
                 # this could be either the jmp or cmp - if is jump then
                 # this is the last instruction in the sequence otherwise
                 # cmp has a jne following for index 5
@@ -449,6 +455,7 @@ foreach my $file (@ARGV) {
                         next;
                     }
                 }
+
                 # nothing to do for the cmp case
             } elsif ($index == 5) {
                 my $arg = hex($matches[1]);
@@ -478,7 +485,8 @@ foreach my $file (@ARGV) {
     if ($NOTES =~ /^\s+Properties: x86 feature: IBT, SHSTK/m) {
         good($name, "yes");
     } else {
-        bad("no-cfprotection", $file, $name, "no, not found!", $skip_cfprotection);
+        bad("no-cfprotection", $file, $name, "no, not found!",
+            $skip_cfprotection);
     }
 
     if (!$lintian && (!$quiet || $rc != 0)) {
