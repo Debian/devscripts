@@ -126,7 +126,7 @@ runCommandOutCmpFile() {
 test_debuild() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
+  COMMAND='LC_ALL=C debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test
@@ -269,7 +269,7 @@ EOS
 test_debuild2() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
+  COMMAND='LC_ALL=C debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test
@@ -300,7 +300,7 @@ EOS
 test_debuild_forcesign() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1 --force-sign'
+  COMMAND='LC_ALL=C debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1 --force-sign'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test

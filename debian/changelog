@@ -59,6 +59,9 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   [ Jiří Paleček ]
   * uscan:
     + Fix operation with simple git branches (rather than tags).  MR: !175
+  * tests:
+    + test_package_lifecycle:
+      - Fix test failures under non-EN locales.  Closes: #953281
 
   [ Alex Murray ]
   * hardening-check:
