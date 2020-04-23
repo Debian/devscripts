@@ -49,7 +49,8 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
 
   [ Simon McVittie ]
   * tests:
-    + test_package_lifecycle: fix test with debhelper 13.  Closes: #958350
+    + test_package_lifecycle:
+      + Fix test with debhelper 13.  Closes: #958350; MR: 185
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
