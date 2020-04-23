@@ -96,7 +96,7 @@ EOS
 	
 	 -- Testophilus Testownik <tester@testity.org>  ${_DATE}
 EOS
-	echo 9 > ${WORKDIR}/package_lifecycle/test/debian/compat
+	echo 12 > ${WORKDIR}/package_lifecycle/test/debian/compat
 	echo '3.0 (quilt)' > ${WORKDIR}/package_lifecycle/test/debian/source/format
 	touch ${WORKDIR}/package_lifecycle/test/CONTENTS
 	cd ${WORKDIR}/package_lifecycle/ && tar cvf test_1.0.orig.tar --exclude debian -- test/CONTENTS 2>&1 > /dev/null && xz -f test_1.0.orig.tar
