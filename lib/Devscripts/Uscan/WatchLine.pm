@@ -1661,8 +1661,13 @@ sub mkorigtargz {
     }
 
     dehs_verbose "$mk_origtargz_out\n" if $mk_origtargz_out;
-    $dehs_tags->{target}        = $target;
-    $dehs_tags->{'target-path'} = $path;
+    if ($self->component) {
+        push @{ $dehs_tags->{"component-target"} },      $target;
+        push @{ $dehs_tags->{"component-target-path"} }, $path;
+    } else {
+        $dehs_tags->{target}        = $target;
+        $dehs_tags->{'target-path'} = $path;
+    }
 
 #######################################################################
     # code 3.10: call uupdate

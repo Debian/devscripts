@@ -65,6 +65,10 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + Change to a more reliable to way of detecting control flow protection,
       and add a new --nocfprotection flag to disable the check.  MR: !184
 
+  [ Xavier Guimard ]
+  * uscan:
+    + Fix DEHS <target> output for components.  MR: !179
+
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
 devscripts (2.20.2) unstable; urgency=medium

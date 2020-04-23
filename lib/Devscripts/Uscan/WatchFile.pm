@@ -395,8 +395,26 @@ sub process_group {
         my $path = $line->destfile or next;
         my $ver  = $line->shared->{common_mangled_newversion};
         $path =~ s/\Q$ver\E/$new_version/;
-        print STDERR "mv $line->{destfile} to $path\n";
+        uscan_warn "rename $line->{destfile} to $path\n";
         rename $line->{destfile}, $path;
+        if ($dehs_tags->{"target-path"} eq $line->{destfile}) {
+            $dehs_tags->{"target-path"} = $path;
+            $dehs_tags->{target} =~ s/\Q$ver\E/$new_version/;
+        } else {
+            for (
+                my $i = 0 ;
+                $i < @{ $dehs_tags->{"component-target-path"} } ;
+                $i++
+            ) {
+                if ($dehs_tags->{"component-target-path"}->[$i] eq
+                    $line->{destfile}) {
+                    $dehs_tags->{"component-target-path"}->[$i] = $path;
+                    $dehs_tags->{"component-target"}->[$i]
+                      =~ s/\Q$ver\E/$new_version/
+                      or die $ver;
+                }
+            }
+        }
         if ($line->signature_available) {
             rename "$line->{destfile}.asc", "$path.asc";
             rename "$line->{destfile}.sig", "$path.sig";
