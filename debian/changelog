@@ -14,6 +14,10 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
   * dget:
     + Apply patch from Bilal Muhammad to add support for scp:// and sftp://
       protocols.  Closes: #956498
+  * tests:
+    + test_package_lifecycle:
+      - Require dpkg-dev >= 1.19.1, use Rules-Requires-Root in the test package
+        and therefore drop the fakeroot Build-Depends.
 
   [ Andrius Merkys ]
   * uscan:
