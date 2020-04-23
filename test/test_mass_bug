@@ -1,0 +1,157 @@
+#!/usr/bin/perl
+
+# Copyright 2020 Simon McVittie
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd);
+use File::Temp qw(tempdir);
+use IPC::Run qw(run);
+use Test::More;
+
+# Disable l10n: we look for specific messages
+$ENV{LC_ALL} = 'C.UTF-8';
+
+my $srcdir = getcwd;
+my $top_srcdir = getcwd . '/..';
+my $mass_bug = "$top_srcdir/scripts/mass-bug.pl";
+
+if (defined $ARGV[0] && $ARGV[0] eq '--installed') {
+    $mass_bug = 'mass-bug';
+}
+
+my $tmp = tempdir(CLEANUP => 1);
+
+sub verbose_run {
+    my $argv = shift;
+    diag("Running: @{$argv}");
+    return run($argv, @_);
+}
+
+sub capture {
+    my $output;
+    my $argv = shift;
+    ok(verbose_run($argv, '>', \$output), "@{$argv}");
+    chomp $output;
+    return $output;
+}
+
+my $stdout;
+my $stderr;
+
+diag('Help');
+$stdout = capture([
+    $mass_bug,
+    '--help',
+]);
+like($stdout, qr{Usage:});
+
+diag('Version');
+$stdout = capture([
+    $mass_bug,
+    '--version',
+]);
+like($stdout, qr{devscripts package});
+
+diag('Basic use');
+$stdout = capture([
+    $mass_bug,
+    '--no-conf',
+    '--subject=Is broken',
+    "$srcdir/mass-bug/template",
+    "$srcdir/mass-bug/one-package",
+]);
+like($stdout, qr{^Subject: test-package: Is broken$}m);
+like($stdout, qr{^Package: test-package$}m);
+like($stdout, qr{^Version: 1\.2-3$}m);
+like($stdout, qr{^test-package has a bug\. Please fix\.$}m);
+like($stdout, qr{^This long line gets word-wrapped because}m);
+unlike($stdout, qr{text/plain; format=flowed never really took off\.$}m);
+like($stdout, qr{^These short lines also get wrapped\.$}m);
+like($stdout, qr{^test-package version=1\.2-3$}m);
+like($stdout, qr{^test-package epoch=$}m);
+like($stdout, qr{^test-package upstream=1\.2$}m);
+like($stdout, qr{^test-package revision=-3$}m);
+like($stdout, qr{^test-package reassembled=1\.2-3$}m);
+like($stdout, qr{^-- $}m);
+like($stdout, qr{^This signature does not get word-wrapped because it is a signature, even though it is longer than a line ought to be\.$}m);
+
+diag('Subject is mandatory');
+ok(! verbose_run([
+    $mass_bug,
+    '--no-conf',
+    "$srcdir/mass-bug/template",
+    "$srcdir/mass-bug/one-package",
+], '>', \$stdout, '2>', \$stderr));
+isnt($?, 0);
+like($stderr, qr{You must specify a subject}m);
+is($stdout, '');
+
+diag('Various options');
+$stdout = capture([
+    $mass_bug,
+    '--no-conf',
+    '--subject=Is broken',
+    '--source',
+    '--tags=ftbfs sid',
+    '--user=me@example.com',
+    '--usertags=bad wrong',
+    '--no-wrap',
+    "$srcdir/mass-bug/template",
+    "$srcdir/mass-bug/one-package",
+]);
+like($stdout, qr{^Subject: test-package: Is broken$}m);
+like($stdout, qr{^Source: test-package$}m);
+unlike($stdout, qr{^Package: test-package$}m);
+like($stdout, qr{^test-package has a bug\. Please fix\.$}m);
+like($stdout, qr{^Tags: ftbfs sid$}m);
+like($stdout, qr{^User: me\@example\.com$}m);
+like($stdout, qr{^Usertags: bad wrong$}m);
+like($stdout, qr{^This long line gets word-wrapped because text/plain; format=flowed never really took off\.$}m);
+unlike($stdout, qr{^These short lines also get wrapped\.$}m);
+
+diag('Version numbers');
+$stdout = capture([
+    $mass_bug,
+    '--no-conf',
+    '--subject=Is broken',
+    "$srcdir/mass-bug/template",
+    "$srcdir/mass-bug/packages",
+]);
+like($stdout, qr{^native-package version=1\.0$}m);
+like($stdout, qr{^native-package epoch=$}m);
+like($stdout, qr{^native-package upstream=1\.0$}m);
+like($stdout, qr{^native-package revision=$}m);
+like($stdout, qr{^native-package reassembled=1\.0$}m);
+like($stdout, qr{^upstream-package version=1\.2-3$}m);
+like($stdout, qr{^upstream-package epoch=$}m);
+like($stdout, qr{^upstream-package upstream=1\.2$}m);
+like($stdout, qr{^upstream-package revision=-3$}m);
+like($stdout, qr{^upstream-package reassembled=1\.2-3$}m);
+like($stdout, qr{^epoch-native-package version=1:2\.3$}m);
+like($stdout, qr{^epoch-native-package epoch=1:$}m);
+like($stdout, qr{^epoch-native-package upstream=2\.3$}m);
+like($stdout, qr{^epoch-native-package revision=$}m);
+like($stdout, qr{^epoch-native-package reassembled=1:2\.3$}m);
+like($stdout, qr{^epoch-package version=1:2\.3-4\.5$}m);
+like($stdout, qr{^epoch-package epoch=1:$}m);
+like($stdout, qr{^epoch-package upstream=2\.3$}m);
+like($stdout, qr{^epoch-package revision=-4\.5$}m);
+like($stdout, qr{^epoch-package reassembled=1:2\.3-4\.5$}m);
+
+done_testing;

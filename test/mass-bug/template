@@ -1,0 +1,20 @@
+#PACKAGE# has a bug. Please fix.
+
+This long line gets word-wrapped because text/plain; format=flowed never really took off.
+
+These short lines
+also get
+wrapped.
+
+#PACKAGE# version=#VERSION#
+
+#PACKAGE# epoch=#EPOCH#
+
+#PACKAGE# upstream=#UPSTREAM_VERSION#
+
+#PACKAGE# revision=#REVISION#
+
+#PACKAGE# reassembled=#EPOCH##UPSTREAM_VERSION##REVISION#
+
+-- 
+This signature does not get word-wrapped because it is a signature, even though it is longer than a line ought to be.
