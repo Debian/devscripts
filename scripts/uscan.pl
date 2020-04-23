@@ -387,7 +387,7 @@ If I<matching-pattern> is set to B<HEAD>, B<uscan> downloads source from the
 B<HEAD> of the git repository and the pertinent I<version> is automatically
 generated with the date and hash of the B<HEAD> of the git repository.
 
-If I<matching-pattern> is set to B<heads/>I<branch>, B<uscan> downloads source
+If I<matching-pattern> is set to B<refs/heads/>I<branch>, B<uscan> downloads source
 from the named I<branch> of the git repository.
 
 The local repository is temporarily created as a bare git repository directory

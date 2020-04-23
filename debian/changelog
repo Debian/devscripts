@@ -52,6 +52,10 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + test_package_lifecycle:
       + Fix test with debhelper 13.  Closes: #958350; MR: 185
 
+  [ Jiří Paleček ]
+  * uscan:
+    + Fix operation with simple git branches (rather than tags).  MR: !175
+
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 21 Feb 2020 17:06:17 +0100
 
 devscripts (2.20.2) unstable; urgency=medium
