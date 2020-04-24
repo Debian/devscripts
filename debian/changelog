@@ -76,6 +76,7 @@ devscripts (2.20.3) UNRELEASED; urgency=medium
     + Fix error when trying to display an error with "update_repo".
     + Enable "enable_ssl_verification" KGB option by default since GitLab sets
       it
+    + Enable "job_events" KGB option by default
     + During webhook configuration, don't fail when --no-fail is set and
       GitLab fails
 
