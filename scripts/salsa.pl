@@ -685,7 +685,7 @@ C<.devscripts> value: B<SALSA_KGB> (yes/ignore/no, default: ignore)
 
 List of KGB enabled options (comma separated). Default: issues_events,
 merge_requests_events, note_events, pipeline_events, push_events,
-tag_push_events, wiki_page_events, enable_ssl_verification, job_events
+tag_push_events, wiki_page_events, enable_ssl_verification
 
   $ salsa update_safe debian/devscripts --kgb --irc-channel devscripts \
     --kgb-options 'merge_requests_events,issues_events,enable_ssl_verification'
