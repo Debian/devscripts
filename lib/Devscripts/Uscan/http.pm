@@ -381,7 +381,7 @@ sub html_search {
                   =~ s%/[^/]*$%/%;
             } else {
                 uscan_verbose
-                  "base is not absolute ($self->parse_result->{urlbase})";
+                  "base is not absolute (${\$self->parse_result->{urlbase}})";
                 $self->parse_result->{base} =~ m#^(https?://[^/]+)#;
                 my $base = $1;
                 $self->parse_result->{urlbase} =~ s#^/+#$base/#;
