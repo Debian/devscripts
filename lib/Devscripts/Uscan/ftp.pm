@@ -140,9 +140,10 @@ sub ftp_upstream_url {
 *ftp_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
 sub ftp_newdir {
-    my ($downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile,
+    my ($line, $site, $dir, $pattern, $dirversionmangle, $watchfile,
         $lineptr, $download_version)
       = @_;
+    my $downloader = $line->downloader;
 
     my ($request, $response, $newdir);
     my ($download_version_short1, $download_version_short2,

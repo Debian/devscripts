@@ -31,7 +31,7 @@ sub fix_href ($) {
 sub recursive_regex_dir ($$$$$$) {
 
     # If return '', parent code to cause return 1
-    my ($downloader, $base, $dirversionmangle, $watchfile, $lineptr,
+    my ($line, $base, $dirversionmangle, $watchfile, $lineptr,
         $download_version)
       = @_;
 
@@ -46,7 +46,7 @@ sub recursive_regex_dir ($$$$$$) {
     foreach my $dirpattern (@dirs) {
         if ($dirpattern =~ /\(.*\)/) {
             uscan_verbose "dir=>$dir  dirpattern=>$dirpattern";
-            my $newest_dir = newest_dir($downloader, $site, $dir, $dirpattern,
+            my $newest_dir = newest_dir($line, $site, $dir, $dirpattern,
                 $dirversionmangle, $watchfile, $lineptr, $download_version);
             uscan_verbose "newest_dir => '$newest_dir'";
             if ($newest_dir ne '') {
@@ -67,7 +67,7 @@ sub newest_dir ($$$$$$$$) {
 
     # return string $newdir as success
     # return string '' if error, to cause grand parent code to return 1
-    my ($downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile,
+    my ($line, $site, $dir, $pattern, $dirversionmangle, $watchfile,
         $lineptr, $download_version)
       = @_;
     my ($newdir);

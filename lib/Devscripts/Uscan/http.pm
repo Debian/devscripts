@@ -213,12 +213,11 @@ sub http_upstream_url {
 }
 
 sub http_newdir {
-    my (
-        $https,     $downloader, $site,
-        $dir,       $pattern,    $dirversionmangle,
-        $watchfile, $lineptr,    $download_version
-    ) = @_;
+    my ($https, $line, $site, $dir, $pattern, $dirversionmangle,
+        $watchfile, $lineptr, $download_version)
+      = @_;
 
+    my $downloader = $line->downloader;
     my ($request, $response, $newdir);
     my ($download_version_short1, $download_version_short2,
         $download_version_short3)

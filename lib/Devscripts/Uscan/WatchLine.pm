@@ -855,7 +855,7 @@ EOF
 
             # Find the path with the greatest version number matching the regex
             $base
-              = recursive_regex_dir($self->downloader, $base,
+              = recursive_regex_dir($self, $base,
                 $self->dirversionmangle, $watchfile, \$self->line,
                 $self->shared->{download_version});
             if ($base eq '') {
