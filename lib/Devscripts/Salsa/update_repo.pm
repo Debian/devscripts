@@ -39,14 +39,14 @@ sub _update_repo {
     # get repo list using Devscripts::Salsa::Repo
     my @repos = $self->get_repo($prompt, @reponames);
     return @repos unless (ref $repos[0]);    # get_repo returns 1 when fails
-    foreach (@repos) {
-        ds_verbose "Configuring $_->[1]";
-        my $id  = $_->[0];
-        my $str = $_->[1];
+    foreach my $repo (@repos) {
+        ds_verbose "Configuring $repo->[1]";
+        my $id  = $repo->[0];
+        my $str = $repo->[1];
         eval {
             # apply new parameters
             $self->api->edit_project($id,
-                { %$configparams, $self->desc($_->[1]) });
+                { %$configparams, $self->desc($repo->[1]) });
             # add hooks if needed
             $str =~ s#^.*/##;
             $self->add_hooks($id, $str);
@@ -56,7 +56,7 @@ sub _update_repo {
             if ($self->config->no_fail) {
                 ds_verbose $@;
                 ds_warn
-"update_repo has failed for $_->[1]. Use --verbose to see errors\n";
+"update_repo has failed for $repo->[1]. Use --verbose to see errors\n";
                 next;
             } else {
                 ds_warn $@;
@@ -93,7 +93,7 @@ sub _update_repo {
                     if ($self->config->no_fail) {
                         ds_verbose $@;
                         ds_warn
-"Branch rename has failed for $_->[1]. Use --verbose to see errors\n";
+"Branch rename has failed for $repo->[1]. Use --verbose to see errors\n";
                         next;
                     } else {
                         ds_warn $@;
