@@ -867,6 +867,7 @@ EOF
             # It's fine even for ftp sites
             $basedir = $base;
             $basedir =~ s%^\w+://[^/]+/%/%;
+            $basedir =~ s%/[^/]*(?:[#?].*)?$%/%;
             $pattern
               = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
         } else {

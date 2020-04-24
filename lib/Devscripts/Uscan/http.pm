@@ -56,6 +56,7 @@ sub http_search {
         my $base_dir = $_redir;
 
         $base_dir =~ s%^\w+://[^/]+/%/%;
+        $base_dir =~ s%/[^/]*(?:[#?].*)?$%/%;
         if ($_redir =~ m%^(\w+://[^/]+)%) {
             my $base_site = $1;
 
