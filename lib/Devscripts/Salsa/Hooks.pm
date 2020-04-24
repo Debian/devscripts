@@ -34,15 +34,23 @@ sub add_hooks {
             if ($self->config->irc_channel->[0]
                 and not $self->config->disable_kgb) {
                 # TODO: if useful, add parameters for this options
-                $self->api->create_project_hook(
-                    $repo_id,
-                    {
-                        url => $self->config->kgb_server_url
-                          . $self->config->irc_channel->[0],
-                        map { ($_ => 1) } @{ $self->config->kgb_options },
-                    });
-                ds_verbose "KGB hook added to project $repo_id (channel: "
-                  . $self->config->irc_channel->[0] . ')';
+                eval {
+                    $self->api->create_project_hook(
+                        $repo_id,
+                        {
+                            url => $self->config->kgb_server_url
+                              . $self->config->irc_channel->[0],
+                            map { ($_ => 1) } @{ $self->config->kgb_options },
+                        });
+                    ds_verbose "KGB hook added to project $repo_id (channel: "
+                      . $self->config->irc_channel->[0] . ')';
+                };
+                if ($@) {
+                    ds_warn "Fail to add KGB hook: $@";
+                    if (!$self->config->no_fail) {
+                        return 1;
+                    }
+                }
             }
         }
         # Irker hook (IRC)
@@ -116,14 +124,22 @@ sub add_hooks {
             }
             my $repo_name = $self->api->project($repo_id)->{name};
             unless ($self->config->disable_tagpending) {
-                $self->api->create_project_hook(
-                    $repo_id,
-                    {
-                        url => $self->config->tagpending_server_url
-                          . $repo_name,
-                        push_events => 1,
-                    });
-                ds_verbose "Tagpending hook added to project $repo_id";
+                eval {
+                    $self->api->create_project_hook(
+                        $repo_id,
+                        {
+                            url => $self->config->tagpending_server_url
+                              . $repo_name,
+                            push_events => 1,
+                        });
+                    ds_verbose "Tagpending hook added to project $repo_id";
+                };
+                if ($@) {
+                    ds_warn "Fail to add Tagpending hook: $@";
+                    if (!$self->config->no_fail) {
+                        return 1;
+                    }
+                }
             }
         }
     }
