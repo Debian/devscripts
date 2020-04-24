@@ -187,7 +187,7 @@ use constant keys => [
         'SALSA_KGB_OPTIONS',
         qr/\w/,
         'push_events,issues_events,merge_requests_events,tag_push_events,'
-          . 'note_events,pipeline_events,wiki_page_events'
+          . 'note_events,pipeline_events,wiki_page_events,enable_ssl_verification'
     ],
 
     ['no-fail',      'SALSA_NO_FAIL',     'bool'],
