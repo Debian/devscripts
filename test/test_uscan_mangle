@@ -496,22 +496,6 @@ siteWebNonNative() {
 END
 }
 
-siteWebNonNative() {
-    siteNonNative
-    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
-<html>
-<head>
-  <meta charset="utf-8">
-</head>
-<body>
-<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
-</body>
-<html>
-END
-}
-
 siteWebNonNativeR() {
     makeUpstreamTar foo 0.0 gz non-native
     makeUpstreamTar foo 1.0 gz non-native
