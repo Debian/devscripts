@@ -12,6 +12,42 @@ use Moo::Role;
 ##################################
 # search $newversion (http mode)
 ##################################
+
+#returns (\@patterns, \@base_sites, \@base_dirs)
+sub handle_redirection {
+    my ($self, $pattern, @additional_bases) = @_;
+    my @redirections = @{ $self->downloader->user_agent->get_redirections };
+    my (@patterns, @base_sites, @base_dirs);
+
+    uscan_verbose "redirections: @redirections" if @redirections;
+
+    foreach my $_redir (@redirections, @additional_bases) {
+        my $base_dir = $_redir;
+
+        $base_dir =~ s%^\w+://[^/]+/%/%;
+        $base_dir =~ s%/[^/]*(?:[#?].*)?$%/%;
+        if ($_redir =~ m%^(\w+://[^/]+)%) {
+            my $base_site = $1;
+
+            push @patterns,
+              quotemeta($base_site) . quotemeta($base_dir) . "$pattern";
+            push @base_sites, $base_site;
+            push @base_dirs,  $base_dir;
+
+            # remove the filename, if any
+            my $base_dir_orig = $base_dir;
+            $base_dir =~ s%/[^/]*$%/%;
+            if ($base_dir ne $base_dir_orig) {
+                push @patterns,
+                  quotemeta($base_site) . quotemeta($base_dir) . "$pattern";
+                push @base_sites, $base_site;
+                push @base_dirs,  $base_dir;
+            }
+        }
+    }
+    return (\@patterns, \@base_sites, \@base_dirs);
+}
+
 sub http_search {
     my ($self) = @_;
 
@@ -48,38 +84,11 @@ sub http_search {
         return undef;
     }
 
-    my @redirections = @{ $self->downloader->user_agent->get_redirections };
-
-    uscan_verbose "redirections: @redirections" if @redirections;
-
-    foreach my $_redir (@redirections) {
-        my $base_dir = $_redir;
-
-        $base_dir =~ s%^\w+://[^/]+/%/%;
-        $base_dir =~ s%/[^/]*(?:[#?].*)?$%/%;
-        if ($_redir =~ m%^(\w+://[^/]+)%) {
-            my $base_site = $1;
-
-            push @{ $self->patterns },
-                "(?:(?:$base_site)?"
-              . quotemeta($base_dir)
-              . ")?$self->{parse_result}->{filepattern}";
-            push @{ $self->sites },    $base_site;
-            push @{ $self->basedirs }, $base_dir;
-
-            # remove the filename, if any
-            my $base_dir_orig = $base_dir;
-            $base_dir =~ s%/[^/]*$%/%;
-            if ($base_dir ne $base_dir_orig) {
-                push @{ $self->patterns },
-                    "(?:(?:$base_site)?"
-                  . quotemeta($base_dir)
-                  . ")?$self->{parse_result}->{filepattern}";
-                push @{ $self->sites },    $base_site;
-                push @{ $self->basedirs }, $base_dir;
-            }
-        }
-    }
+    my ($patterns, $base_sites, $base_dirs)
+      = handle_redirection($self, $self->{parse_result}->{filepattern});
+    push @{ $self->patterns }, @$patterns;
+    push @{ $self->sites },    @$base_sites;
+    push @{ $self->basedirs }, @$base_dirs;
 
     my $content = $response->decoded_content;
     uscan_debug
