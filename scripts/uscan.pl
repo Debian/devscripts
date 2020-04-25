@@ -225,6 +225,12 @@ tarballs. (Maybe useful for MUT)
 the version obtained from F<debian/changelog>. Package version is the
 concatenation of all "group" upstream version.
 
+=item * B<checksum> requires the downloading upstream tarball to be newer than
+the version obtained from F<debian/changelog>. Package version is the
+concatenation of the version of the main tarball, followed by a checksum of all
+the tarballs using the "checksum" version system.
+At least the main upstream source has to be declared as "group".
+
 =back
 
 =item * I<script> is executed at the end of B<uscan> execution with appropriate
@@ -1285,6 +1291,46 @@ a way to group them:
 
 Package version is then the concatenation of upstream versions separated by
 "+~".
+
+To avoid having a too long version, the "checksum" method can be used.
+In this case, the main source has to be declared as "group":
+
+  version=4
+  opts="searchmode=plain,pgpmode=none" \
+    https://registry.npmjs.org/mongodb \
+    https://registry.npmjs.org/mongodb/-/mongodb-(\d[\d\.]*)@ARCHIVE_EXT@ group
+  opts="searchmode=plain,pgpmode=none,component=bson" \
+    https://registry.npmjs.org/bson \
+    https://registry.npmjs.org/bson/-/bson-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+  opts="searchmode=plain,pgpmode=none,component=mongodb-core" \
+    https://registry.npmjs.org/mongodb-core \
+    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+  opts="searchmode=plain,pgpmode=none,component=requireoptional" \
+    https://registry.npmjs.org/require_optional \
+    https://registry.npmjs.org/require_optional/-/require_optional-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+
+The "checksum" is made up of the separate sum of each number composing the
+component versions.  Following is an example with 3 components whose versions
+are "1.2.4", "2.0.1" and "10.0", with the main tarball having version "2.0.6":
+
+  Main: 2.0.6
+  Comp1:         1 .     2 .     4
+  Comp2:         2 .     0 .     1
+  Comp3:        10 .     0
+  ================================
+  Result  : 1+2.10 . 2+0+0 .   4+1
+  Checksum:     13 .     2 .     5
+  ================================
+  Final Version:   2.0.6+~cs13.2.5
+
+uscan will also display the original version string before being encoded into
+the checksum, which can for example be used in a debian/changelog entry to
+easily follow the changes:
+
+  2.0.6+~1.2.4+~2.0.1+~10.0
+
+B<Note>: This feature currently accepts only versions composed of digits and
+full stops (`.`).
 
 =head2 direct access to the git repository (tags)
 

@@ -564,7 +564,8 @@ EOF
 
         # Set $lastversion to the numeric last version
         # Update $self->versionmode (its default "newer")
-        if (!length($lastversion) or $lastversion =~ /^(group|debian)$/) {
+        if (!length($lastversion)
+            or $lastversion =~ /^(group|checksum|debian)$/) {
             if (!defined $self->pkg_version) {
                 uscan_warn "Unable to determine the current version\n"
                   . "  in $watchfile, skipping:\n  $self->{line}";

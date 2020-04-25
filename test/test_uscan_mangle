@@ -1104,4 +1104,46 @@ opts="component=baz,repack,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHI
     helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~3.0
 }
 
+testWatch4WebNonNativeGroupWithChecksum1() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    GZREPACK=gz
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=baz,repack,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ checksum'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~3.0+~cs3.0
+}
+
+testWatch4WebNonNativeGroupWithChecksum2() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    GZREPACK=gz
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ checksum
+opts="component=baz,repack,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ checksum'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~cs6.0
+}
+
+testWatch4WebNonNativeGroupWithChecksumAndIgnore() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILEEXCLUDE=3
+    UVERSION=2.0
+    CMPVERSION=3.0
+    GZREPACK=gz
+    WATCHLINE='
+opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
+opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ checksum
+opts="component=baz,repack,pgpmode=none" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ ignore'
+    helperWatch siteWebNonNativeMUT 1.0 2.0+~cs3.0
+}
+
 . shunit2
