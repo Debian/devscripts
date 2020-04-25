@@ -1690,7 +1690,7 @@ page content alterations.
 
 =item B<--http-header>
 
-Add speficied header in HTTP requests for matching url. This option can be used
+Add specified header in HTTP requests for matching url. This option can be used
 more than one time, values must be in the form "baseUrl@Name=value. Example:
 
   uscan --http-header https://example.org@My-Token=qwertyuiop
