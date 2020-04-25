@@ -273,11 +273,18 @@ sub parse_conf_files {
             }
             $self->{$kname} = $config_vars{$name};
             $self->{modified_conf_msg} .= "  $name=$config_vars{$name}\n";
-            if (ref $default and ref($default->()) eq 'ARRAY') {
-                my @tmp = ($config_vars{$name} =~ /\s+"([^"]*)"\s+/g);
+            if (ref $default) {
+                my $ref = ref $default->();
+                my @tmp = ($config_vars{$name} =~ /\s+"([^"]*)"(?>\s+)/g);
                 $config_vars{$name} =~ s/\s+"([^"]*)"\s+/ /g;
                 push @tmp, split(/\s+/, $config_vars{$name});
-                $self->{$kname} = \@tmp;
+                if ($ref eq 'ARRAY') {
+                    $self->{$kname} = \@tmp;
+                } elsif ($ref eq 'HASH') {
+                    $self->{$kname}
+                      = { map { /^(.*?)=(.*)$/ ? ($1 => $2) : ($_ => 1) }
+                          @tmp };
+                }
             }
         }
     }
@@ -316,7 +323,8 @@ sub parse_command_line {
         my $name = $kname;
         $kname =~ s/-/_/g;
         if (defined $opts->{$name}) {
-            next if (ref $opts->{$name} and !@{ $opts->{$name} });
+            next if (ref $opts->{$name} eq 'ARRAY' and !@{ $opts->{$name} });
+            next if (ref $opts->{$name} eq 'HASH'  and !%{ $opts->{$name} });
             if (defined $check) {
                 if (not(ref $check)) {
                     $check

@@ -132,6 +132,7 @@ has downloader => (
             agent   => $_[0]->config->user_agent,
             pasv    => $_[0]->config->pasv,
             destdir => $_[0]->config->destdir,
+            headers => $_[0]->config->http_header,
         });
     },
 );

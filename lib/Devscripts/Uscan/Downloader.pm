@@ -7,6 +7,7 @@ use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use File::Temp qw/tempdir/;
 use Moo;
+use URI;
 
 our $haveSSL;
 
@@ -74,6 +75,10 @@ has user_agent => (
 
 has ssl => (is => 'rw', default => sub { $haveSSL });
 
+has headers => (
+    is      => 'ro',
+    default => sub { {} });
+
 sub download ($$$$$$$$) {
     my ($self, $url, $fname, $optref, $base, $pkg_dir, $pkg, $mode) = @_;
     my ($request, $response);
@@ -91,6 +96,21 @@ sub download ($$$$$$$$) {
         my $headers = HTTP::Headers->new;
         $headers->header('Accept'  => '*/*');
         $headers->header('Referer' => $base);
+        my $uri_o = URI->new($url);
+        foreach my $k (keys %{ $self->headers }) {
+            if ($k =~ /^(.*?)@(.*)$/) {
+                my $baseUrl = $1;
+                my $hdr     = $2;
+                if ($url =~ m#^\Q$baseUrl\E(?:/.*)?$#) {
+                    $headers->header($hdr => $self->headers->{$k});
+                    uscan_verbose "Set per-host custom header $hdr for $url";
+                } else {
+                    uscan_debug "$url does not start with $1";
+                }
+            } else {
+                uscan_warn "Malformed http-header: $k";
+            }
+        }
         $request  = HTTP::Request->new('GET', $url, $headers);
         $response = $self->user_agent->request($request, $fname);
         if (!$response->is_success) {
@@ -104,7 +124,8 @@ sub download ($$$$$$$$) {
         $request  = HTTP::Request->new('GET', "$url");
         $response = $self->user_agent->request($request, $fname);
         if (!$response->is_success) {
-            uscan_warn((defined $pkg_dir ? "In directory $pkg_dir, d" : "D")
+            uscan_warn(
+                  (defined $pkg_dir ? "In directory $pkg_dir, d" : "D")
                 . "ownloading\n  $url failed: "
                   . $response->status_line);
             return 0;

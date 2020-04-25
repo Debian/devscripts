@@ -51,6 +51,7 @@ has log                      => (is => 'rw');
 has orig                     => (is => 'rw');
 has package                  => (is => 'rw');
 has pasv                     => (is => 'rw');
+has http_header              => (is => 'rw', default => sub { {} });
 
 # repack to .tar.$zsuffix if 1
 has repack     => (is => 'rw');
@@ -111,6 +112,8 @@ use constant keys => [
     ['uversion|upstream-version=s'],
     ['watchfile=s'],
     # 2.3 - More complex options
+    # http headers (#955268)
+    ['http-header=s', 'USCAN_HTTP_HEADER', undef, sub { {} }],
 
     # "download" and its aliases
     [
