@@ -96,7 +96,7 @@ sub http_search {
 
     my @hrefs;
     if (!$self->searchmode or $self->searchmode eq 'html') {
-        @hrefs = $self->html_search($content);
+        @hrefs = $self->html_search($content, $self->patterns);
     } elsif ($self->searchmode eq 'plain') {
         @hrefs = $self->plain_search($content);
     } else {
@@ -234,11 +234,15 @@ sub http_newdir {
       = partial_version($download_version);
     my $base = $site . $dir;
 
+    $pattern .= "/?";
+
     if (defined($https) and !$downloader->ssl) {
         uscan_die
 "$progname: you must have the liblwp-protocol-https-perl package installed\n"
           . "to use https URLs";
     }
+    # At least for now, set base in the line object - other methods need it
+    local $line->parse_result->{base} = $base;
     $request  = HTTP::Request->new('GET', $base);
     $response = $downloader->user_agent->request($request);
     if (!$response->is_success) {
@@ -268,45 +272,32 @@ sub http_newdir {
 
     clean_content(\$content);
 
-    my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
+    my ($dirpatterns, $base_sites, $base_dirs)
+      = handle_redirection($line, $pattern, $base);
+    $downloader->user_agent->clear_redirections;    # we won't be needing that
 
-    uscan_verbose "Matching pattern:\n   $dirpattern";
     my @hrefs;
-    my $match = '';
-    while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
-        my $href = fix_href($2);
-        uscan_verbose "Matching target for dirversionmangle:   $href";
-        if ($href =~ m&^$dirpattern/?$&) {
-            my $mangled_version
-              = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
-            if (
-                mangle(
-                    $watchfile,          $lineptr,
-                    'dirversionmangle:', \@{$dirversionmangle},
-                    \$mangled_version
-                )
-            ) {
-                return 1;
-            }
-            $match = '';
-            if (defined $download_version
-                and $mangled_version eq $download_version) {
-                $match = "matched with the download version";
-            }
-            if (defined $download_version_short3
-                and $mangled_version eq $download_version_short3) {
-                $match = "matched with the download version (partial 3)";
-            }
-            if (defined $download_version_short2
-                and $mangled_version eq $download_version_short2) {
-                $match = "matched with the download version (partial 2)";
-            }
-            if (defined $download_version_short1
-                and $mangled_version eq $download_version_short1) {
-                $match = "matched with the download version (partial 1)";
-            }
-            push @hrefs, [$mangled_version, $href, $match];
+    for my $parsed (
+        html_search($line, $content, $dirpatterns, 'dirversionmangle')) {
+        my ($priority, $mangled_version, $href, $match) = @$parsed;
+        $match = '';
+        if (defined $download_version
+            and $mangled_version eq $download_version) {
+            $match = "matched with the download version";
         }
+        if (defined $download_version_short3
+            and $mangled_version eq $download_version_short3) {
+            $match = "matched with the download version (partial 3)";
+        }
+        if (defined $download_version_short2
+            and $mangled_version eq $download_version_short2) {
+            $match = "matched with the download version (partial 2)";
+        }
+        if (defined $download_version_short1
+            and $mangled_version eq $download_version_short1) {
+            $match = "matched with the download version (partial 1)";
+        }
+        push @hrefs, [$mangled_version, $href, $match];
     }
 
     # extract ones which has $match in the above loop defined
@@ -351,8 +342,36 @@ sub clean_content {
     return $content;
 }
 
+sub url_canonicalize_dots {
+    my ($base, $url) = @_;
+
+    if ($url !~ m{^[^:]+://}) {
+        if ($url =~ m{^//}) {
+            $base =~ m{^[^:]+:}
+              and $url = $& . $url;
+        } elsif ($url =~ m{^/}) {
+            $base =~ m{^[^:]+://[^/]*}
+              and $url = $& . $url;
+        } else {
+            uscan_debug "Resolving urls with query part unimplemented"
+              if ($url =~ m/^[#?]/);
+            $base =~ m{^[^:]+://[^/]*(?:/(?:[^#?/]*/)*)?} and do {
+                my $base_to_path = $&;
+                $base_to_path .= '/' unless $base_to_path =~ m|/$|;
+                $url = $base_to_path . $url;
+            };
+        }
+    }
+    $url =~ s{^([^:]+://[^/#?]*)(/[^#?]*)}{
+       my ($h, $p) = ($1, $2);
+       $p =~ s{/\.(?:/|$|(?=[#?]))}{/}g;
+       1 while $p =~ s{/(?!\.\./)[^/]*/\.\.(?:/|(?=[#?])|$)}{/}g;
+       $h.$p;}e;
+    $url;
+}
+
 sub html_search {
-    my ($self, $content) = @_;
+    my ($self, $content, $patterns, $mangle) = @_;
 
     # pagenmangle: should not abuse this slow operation
     if (
@@ -414,10 +433,13 @@ sub html_search {
     while ($content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi) {
         my $href = $2;
         $href = fix_href($href);
+        my $href_canonical
+          = url_canonicalize_dots($self->parse_result->{urlbase}, $href);
         if (defined $self->hrefdecode) {
             if ($self->hrefdecode eq 'percent-encoding') {
                 uscan_debug "... Decoding from href: $href";
-                $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
+                $href           =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
+                $href_canonical =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
             } else {
                 uscan_warn "Illegal value for hrefdecode: "
                   . "$self->{hrefdecode}";
@@ -425,9 +447,17 @@ sub html_search {
             }
         }
         uscan_debug "Checking href $href";
-        foreach my $_pattern (@{ $self->patterns }) {
-            if ($href =~ /^$_pattern$/) {
-                push @hrefs, $self->parse_href($href, $_pattern, $1);
+        foreach my $_pattern (@$patterns) {
+            if (my @match = $href =~ /^$_pattern$/) {
+                push @hrefs,
+                  parse_href($self, $href_canonical, $_pattern, \@match,
+                    $mangle);
+            }
+            uscan_debug "Checking href $href_canonical";
+            if (my @match = $href_canonical =~ /^$_pattern$/) {
+                push @hrefs,
+                  parse_href($self, $href_canonical, $_pattern, \@match,
+                    $mangle);
             }
         }
     }
