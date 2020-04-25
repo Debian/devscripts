@@ -446,14 +446,19 @@ sub plain_search {
 }
 
 sub parse_href {
-    my ($self, $href, $_pattern, $match) = @_;
+    my ($self, $href, $_pattern, $match, $mangle) = @_;
+    $mangle //= 'uversionmangle';
+
     my $mangled_version;
     if ($self->watch_version == 2) {
 
         # watch_version 2 only recognised one group; the code
         # below will break version 2 watch files with a construction
         # such as file-([\d\.]+(-\d+)?) (bug #327258)
-        $mangled_version = $match;
+        $mangled_version
+          = ref $match eq 'ARRAY'
+          ? $match->[0]
+          : $match;
     } else {
         # need the map { ... } here to handle cases of (...)?
         # which may match but then return undef values
@@ -462,14 +467,15 @@ sub parse_href {
             # exception, otherwise $mangled_version = 1
             $mangled_version = '';
         } else {
-            $mangled_version
-              = join(".", map { $_ if defined($_) } $href =~ m&^$_pattern$&);
+            $mangled_version = join(".",
+                map { $_ if defined($_) }
+                  ref $match eq 'ARRAY' ? @$match : $href =~ m&^$_pattern$&);
         }
 
         if (
             mangle(
-                $self->watchfile,  \$self->line,
-                'uversionmangle:', \@{ $self->uversionmangle },
+                $self->watchfile, \$self->line,
+                '$mangle:',       \@{ $self->$mangle },
                 \$mangled_version
             )
         ) {
