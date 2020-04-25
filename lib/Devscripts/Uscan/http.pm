@@ -399,25 +399,10 @@ sub html_search {
 
     # Is there a base URL given?
     if ($content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i) {
-
-        $self->parse_result->{urlbase} = $2;
-        if ($self->parse_result->{urlbase} !~ /^https?:/) {
-            if ($self->parse_result->{urlbase} !~ m#^/#) {
-                uscan_warn "Malfored <base> tag, ignoring it";
-                ($self->parse_result->{urlbase} = $self->parse_result->{base})
-                  =~ s%/[^/#?]*(?:[#?].*)?$%/%;
-            } else {
-                uscan_verbose
-                  "base is not absolute (${\$self->parse_result->{urlbase}})";
-                $self->parse_result->{base} =~ m#^(https?://[^/]+)#;
-                my $base = $1;
-                $self->parse_result->{urlbase} =~ s#^/+#$base/#;
-            }
-        }
+        $self->parse_result->{urlbase}
+          = url_canonicalize_dots($self->parse_result->{base}, $2);
     } else {
-        # May have to strip a base filename
-        ($self->parse_result->{urlbase} = $self->parse_result->{base})
-          =~ s%/[^/#?]*(?:[#?].*)?$%/%;
+        $self->parse_result->{urlbase} = $self->parse_result->{base};
     }
     uscan_debug
 "processed content:\n$content\n[End of processed content] by fix bad HTML code";
