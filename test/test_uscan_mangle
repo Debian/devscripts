@@ -496,6 +496,23 @@ siteWebNonNative() {
 END
 }
 
+siteWebNonNativeRecWithBase() {
+    siteNonNative "$@"
+    for DIR in "$TEMP_PKG_DIR"/$REPOPATH/[0-9].*; do
+    [ -d "$DIR" ] && cat <<END > "$DIR"/index.html
+<html>
+<head>
+  <meta charset="utf-8">
+<base href="/${DIR##*/}/foo/ooo/x.html"/>
+</head>
+<body>
+<a href="foo-${DIR##*/}.tar.gz">Blah</a> <br/ >
+</body>
+<html>
+END
+    done
+}
+
 siteWebNonNativeR() {
     makeUpstreamTar foo 0.0 gz non-native
     makeUpstreamTar foo 1.0 gz non-native
@@ -718,6 +735,30 @@ testWatch4NonNative() {
     WATCHVER=4
     WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative
+}
+
+# test non-native package with uupdate, bare HTTP server with dirversionmangle
+testWatch4NonNativeDMangle() {
+    WATCHVER=4
+    WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch "siteNonNative foo EXTRA"
+
+    rm -rf "$TEMP_PKG_DIR"/foo/debian
+    #and without dirversionmangle, should return version 3
+    WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch ":" 1.0 3.0
+}
+
+# test non-native package with uupdate, bare HTTP server with dirversionmangle and base
+testWatch4NonNativeDMangleB() {
+    WATCHVER=4
+    WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch "siteWebNonNativeRecWithBase foo EXTRA"
+
+    rm -rf "$TEMP_PKG_DIR"/foo/debian
+    #and without dirversionmangle, should return version 3
+    WATCHLINE='@@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch ":" 1.0 3.0
 }
 
 # test 3 parameter watch line
