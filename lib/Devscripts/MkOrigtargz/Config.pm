@@ -49,7 +49,8 @@ has version            => (is => 'rw');
 has mode          => (is => 'rw');
 has orig          => (is => 'rw', default => sub { 'orig' });
 has excludestanza => (is => 'rw', default => sub { 'Files-Excluded' });
-has excludeignorestanza => (is => 'rw', default => sub { 'Files-ExcludeIgnored' });
+has excludeignorestanza =>
+  (is => 'rw', default => sub { 'Files-ExcludeIgnored' });
 has upstream      => (is => 'rw');
 has upstream_type => (is => 'rw');
 has upstream_comp => (is => 'rw');
@@ -70,7 +71,7 @@ use constant keys => [
         }
     ],
     ['directory|C=s'],
-    ['exclude-file=s', undef, undef, sub { [] }],
+    ['exclude-file=s',       undef, undef, sub { [] }],
     ['excludeignore-file=s', undef, undef, sub { [] }],
     ['force-repack'],
     ['copyright-file=s', undef, undef, sub { [] }],
