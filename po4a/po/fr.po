@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2020-04-25 21:15+0200\n"
-"PO-Revision-Date: 2020-04-24 15:55+0200\n"
+"PO-Revision-Date: 2020-04-26 08:28+0200\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23492,11 +23492,6 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:228
-#, fuzzy
-#| msgid ""
-#| "* B<group> requires the downloading upstream tarball to be newer than the "
-#| "version obtained from F<debian/changelog>. Package version is the "
-#| "concatenation of all \"group\" upstream version."
 msgid ""
 "* B<checksum> requires the downloading upstream tarball to be newer than the "
 "version obtained from F<debian/changelog>. Package version is the "
@@ -23504,9 +23499,12 @@ msgid ""
 "all the tarballs using the \"checksum\" version system.  At least the main "
 "upstream source has to be declared as \"group\"."
 msgstr ""
-"– B<group> réclame que l'archive amont à télécharger soit plus récente que "
+"– B<checksum> exige que l'archive amont à télécharger soit plus récente que "
 "la version obtenue à partir de F<debian/changelog>. La version du paquet est "
-"la concaténation de toutes les versions amont."
+"la concaténation de la version de la prinicpale source, suivie de la somme "
+"de contrôle de toutes les versions amont utilisant le système de version « "
+"checksum ». À minima, la source principale doit être déclarée comme « group "
+"»."
 
 #. type: =item
 #: ../scripts/uscan.pl:236
@@ -26293,25 +26291,13 @@ msgid ""
 "To avoid having a too long version, the \"checksum\" method can be used.  In "
 "this case, the main source has to be declared as \"group\":"
 msgstr ""
+"Pour éviter d'avoir un trop long numéro de version, la méthode « checksum » "
+"peut être utilisée. Dans ce cas la principale source doit être déclarée "
+"comme « group » :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1298
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
-#| "    https://registry.npmjs.org/mongodb \\\n"
-#| "    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
-#| "    https://registry.npmjs.org/bson \\\n"
-#| "    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
-#| "    https://registry.npmjs.org/mongodb-core \\\n"
-#| "    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
-#| "    https://registry.npmjs.org/require_optional \\\n"
-#| "    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
@@ -26334,13 +26320,13 @@ msgstr ""
 "    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
 "    https://registry.npmjs.org/bson \\\n"
-"    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
 "    https://registry.npmjs.org/mongodb-core \\\n"
-"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
 "    https://registry.npmjs.org/require_optional \\\n"
-"    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
 "\n"
 
 #. type: textblock
@@ -26351,6 +26337,10 @@ msgid ""
 "versions are \"1.2.4\", \"2.0.1\" and \"10.0\", with the main tarball having "
 "version \"2.0.6\":"
 msgstr ""
+"Le « checksum » est composé des sommes séparées de chaque chiffre composant "
+"la version des composants. Ci-dessous un exemple avec 3 composants dont les "
+"versions respectives sont : « 1.2.4 », « 2.0.1 » et « 10.0 », et la version "
+"de la source principale « 2.0.6 » :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1316
@@ -26367,6 +26357,16 @@ msgid ""
 "  Final Version:   2.0.6+~cs13.2.5\n"
 "\n"
 msgstr ""
+"  Main: 2.0.6\n"
+"  Comp1:         1 .     2 .     4\n"
+"  Comp2:         2 .     0 .     1\n"
+"  Comp3:        10 .     0\n"
+"  ================================\n"
+"  Résultat: 1+2.10 . 2+0+0 .   4+1\n"
+"  Checksum:     13 .     2 .     5\n"
+"  ================================\n"
+"  Version finale:   2.0.6+~cs13.2.5\n"
+"\n"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1326
@@ -26375,6 +26375,9 @@ msgid ""
 "into the checksum, which can for example be used in a debian/changelog entry "
 "to easily follow the changes:"
 msgstr ""
+"uscan affichera également la chaîne de version originale avant encodage en "
+"checksum, ce qui peut être utilisé par exemple dans une entrée de debian/"
+"changelog pour suivre facilement les changements :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1330
@@ -26383,6 +26386,8 @@ msgid ""
 "  2.0.6+~1.2.4+~2.0.1+~10.0\n"
 "\n"
 msgstr ""
+"  2.0.6+~1.2.4+~2.0.1+~10.0\n"
+"\n"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1332
@@ -26390,6 +26395,8 @@ msgid ""
 "B<Note>: This feature currently accepts only versions composed of digits and "
 "full stops (`.`)."
 msgstr ""
+"B<Note>: cette fonctionnalité n'accepte actuellement que les versions "
+"composées exclusivement de chiffres et de points (\".\")."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1335
@@ -27272,10 +27279,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1691
-#, fuzzy
-#| msgid "B<--host-arch>"
 msgid "B<--http-header>"
-msgstr "B<--host-arch>"
+msgstr "B<--http-header>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1693
@@ -27284,6 +27289,9 @@ msgid ""
 "used more than one time, values must be in the form \"baseUrl@Name=value. "
 "Example:"
 msgstr ""
+"Ajoute l'en-tête spécifié dans les requêtes HTTP correspondant à l'url. "
+"Cette option peut être multivaluée, les valeurs doivent être de la forme « "
+"baseUrl@NomEnTête=valeur »"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1696
@@ -27292,17 +27300,21 @@ msgid ""
 "  uscan --http-header https://example.org@My-Token=qwertyuiop\n"
 "\n"
 msgstr ""
+"  uscan --http-header https://example.org@My-Token=azertyuiop\n"
+"\n"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1698
 msgid "Security:"
-msgstr ""
+msgstr "Sécurité :"
 
 #. type: =item
 #: ../scripts/uscan.pl:1702
 msgid ""
 "The given I<baseUrl> must exactly match the base url before '/'.  Examples:"
 msgstr ""
+"L'URL I<baseUrl> doit exactement correspondre à l'URL de base avant « / ».  "
+"Exemples :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1705
@@ -27317,6 +27329,14 @@ msgid ""
 "  | https://e.com:1879/dir/@Hdr=Value  |                             |     X      |\n"
 "\n"
 msgstr ""
+"  |        valeur --http-header        |           Bonne pour        | Inutilisée |\n"
+"  +------------------------------------+-----------------------------+------------+\n"
+"  | https://example.org.com@Hdr=Value  | https://example.org.com/... |            |\n"
+"  | https://example.org.com/@Hdr=Value |                             |     X      |\n"
+"  | https://e.com:1879@Hdr=Value       | https://e.com:1879/...      |            |\n"
+"  | https://e.com:1879/dir@Hdr=Value   | https://e.com:1879/dir/...  |            |\n"
+"  | https://e.com:1879/dir/@Hdr=Value  |                             |     X      |\n"
+"\n"
 
 #. type: =item
 #: ../scripts/uscan.pl:1713
@@ -27324,6 +27344,8 @@ msgid ""
 "It is strongly recommended to not use this feature to pass a secret token "
 "over unciphered connection I<(http://)>"
 msgstr ""
+"Il est vivement recommandé de ne pas utiliser cette fonctionnalité pour "
+"passer un jeton secret via une connexion non chiffrée I<(http://)>"
 
 #. type: =item
 #: ../scripts/uscan.pl:1716
@@ -27331,6 +27353,8 @@ msgid ""
 "You can use C<USCAN_HTTP_HEADER> variable (in C<~/.devscripts>) to hide "
 "secret token from scripts"
 msgstr ""
+"On peut utiliser la variable C<USCAN_HTTP_HEADER> (dans C<~/.devscripts>) "
+"pour masquer les jetons secrets des scripts"
 
 #. type: =item
 #: ../scripts/uscan.pl:1721
@@ -27722,24 +27746,17 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1883
-#, fuzzy
-#| msgid "B<USCAN_SAFE>"
 msgid "B<USCAN_HTTP_HEADER>"
-msgstr "B<USCAN_SAFE>"
+msgstr "B<USCAN_HTTP_HEADER>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1885
-#, fuzzy
-#| msgid ""
-#| "If set, the specified user agent string will be used in place of the "
-#| "default.  This is equivalent to the B<--user-agent> option."
 msgid ""
 "If set, the specified http header will be used if URL match. This is "
 "equivalent to B<--http-header> option."
 msgstr ""
-"Si elle est définie, elle spécifie la chaîne à utiliser pour annoncer le "
-"navigateur (« user agent ») à la place de la valeur par défaut. C'est "
-"équivalent à l'option B<--user-agent>."
+"Si définie, l'en-tête spécifié sera utilisé pour toutes les URLs "
+"correspondantes. C'est équivalent à l'option B<--http-header>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1892
