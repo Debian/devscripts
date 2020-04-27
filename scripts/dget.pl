@@ -561,7 +561,7 @@ for my $arg (@ARGV) {
 
 =head1 NAME
 
-dget -- Download Debian source and binary packages
+dget - Download Debian source and binary packages
 
 =head1 SYNOPSIS
 
