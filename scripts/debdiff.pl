@@ -348,6 +348,13 @@ while (@ARGV) {
     }
 }
 
+for my $exclude (@excludes) {
+    if ($exclude =~ m{/}) {
+        print STDERR
+"$progname: warning: --exclude patterns are matched against the basename, so --exclude='$exclude' will not exclude anything\n";
+    }
+}
+
 my $guessed_version = 0;
 
 if ($opt_debsdir) {
