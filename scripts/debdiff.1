@@ -125,8 +125,12 @@ package in the first list called \fIFROM\fR as if it were called
 \fITO\fR.  Multiple uses of this option are permitted.
 .TP
 .BI \-\-exclude " PATTERN"
-Exclude files that match \fIPATTERN\fR.  Multiple uses of this option
-are permitted.
+Exclude files whose basenames match \fIPATTERN\fR.
+Multiple uses of this option are permitted.
+Note that this option is passed on to \fBdiff\fR and has the same
+behaviour, so only the basename of the file is considered:
+in particular, \fB--exclude='*.patch'\fR will work, but
+\fB--exclude='debian/patches/*'\fR will have no practical effect.
 .TP
 .B \-\-diffstat
 Include the result of \fBdiffstat\fR before the generated diff.

@@ -84,7 +84,7 @@ Valid options are:
                             renamed TO; only of interest with --show-moved
                             (multiple permitted)
    --quiet, -q            Be quiet if no differences were found
-   --exclude PATTERN      Exclude files that match PATTERN
+   --exclude PATTERN      Exclude files whose basenames match PATTERN
    --ignore-space, -w     Ignore whitespace in diffs
    --diffstat             Include the result of diffstat before the diff
    --no-diffstat          Do not do so (default)
