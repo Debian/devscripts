@@ -7,9 +7,9 @@ use File::Basename;
 
 our @EXPORT = (
     @Devscripts::Output::EXPORT, qw(
-      uscan_msg uscan_verbose dehs_verbose uscan_warn uscan_debug uscan_die
-      dehs_output $dehs $verbose $dehs_tags $dehs_start_output $dehs_end_output
-      $found
+      uscan_msg uscan_verbose dehs_verbose uscan_warn uscan_debug
+      uscan_extra_debug uscan_die dehs_output $dehs $verbose $dehs_tags
+      $dehs_start_output $dehs_end_output $found
       ));
 
 # ACCESSORS
@@ -31,6 +31,8 @@ sub printwarn {
 *uscan_msg = \&ds_msg;
 
 *uscan_verbose = \&ds_verbose;
+
+*uscan_extra_debug = \&ds_extra_debug;
 
 sub dehs_verbose ($) {
     my $msg = $_[0];

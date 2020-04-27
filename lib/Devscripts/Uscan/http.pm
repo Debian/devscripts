@@ -80,7 +80,7 @@ sub http_search {
     }
 
     my $content = $response->decoded_content;
-    uscan_debug
+    uscan_extra_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
     my @hrefs;
@@ -239,7 +239,7 @@ sub http_newdir {
     }
 
     my $content = $response->content;
-    uscan_debug
+    uscan_extra_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
     clean_content(\$content);
@@ -349,7 +349,7 @@ sub html_search {
         uscan_warn
 "*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead";
         $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g;
-        uscan_debug
+        uscan_extra_debug
 "processed content:\n$content\n[End of processed content] by Amazon AWS special case code";
     }
     clean_content(\$content);
@@ -378,7 +378,7 @@ sub html_search {
         ($self->parse_result->{urlbase} = $self->parse_result->{base})
           =~ s%/[^/]*$%/%;
     }
-    uscan_debug
+    uscan_extra_debug
 "processed content:\n$content\n[End of processed content] by fix bad HTML code";
 
 # search hrefs in web page to obtain a list of uversionmangled version and matching download URL
@@ -400,7 +400,7 @@ sub html_search {
                 return undef;
             }
         }
-        uscan_debug "Checking href $href";
+        uscan_extra_debug "Checking href $href";
         foreach my $_pattern (@{ $self->patterns }) {
             if ($href =~ /^$_pattern$/) {
                 push @hrefs, $self->parse_href($href, $_pattern, $1);

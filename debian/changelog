@@ -3,6 +3,9 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   [ Xavier Guimard ]
   * Update French translation
   * dget: fix POD.  Closes: #958940
+  * uscan:
+    + Split --debug option to add a --extra-debug option that shows remote
+      HTTP content.  MR: !191
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 
