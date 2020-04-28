@@ -513,7 +513,7 @@ testGoVendorIncludeIgnore () {
     # adjust existing test cases slightly
     cat <<'END' >> $TMPDIR/foo/debian/copyright
  vendor
-Files-ExcludeIgnored:
+Files-Included:
  vendor/includeme
 END
 

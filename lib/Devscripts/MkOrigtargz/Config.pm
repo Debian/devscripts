@@ -30,27 +30,26 @@ use constant tar_regex =>
 extends 'Devscripts::Config';
 
 # Command-line parameters
-has component          => (is => 'rw');
-has compression        => (is => 'rw');
-has copyright_file     => (is => 'rw');
-has directory          => (is => 'rw');
-has exclude_file       => (is => 'rw');
-has excludeignore_file => (is => 'rw');
-has force_repack       => (is => 'rw');
-has package            => (is => 'rw');
-has signature          => (is => 'rw');
-has signature_file     => (is => 'rw');
-has repack             => (is => 'rw');
-has repack_suffix      => (is => 'rw');
-has unzipopt           => (is => 'rw');
-has version            => (is => 'rw');
+has component      => (is => 'rw');
+has compression    => (is => 'rw');
+has copyright_file => (is => 'rw');
+has directory      => (is => 'rw');
+has exclude_file   => (is => 'rw');
+has include_file   => (is => 'rw');
+has force_repack   => (is => 'rw');
+has package        => (is => 'rw');
+has signature      => (is => 'rw');
+has signature_file => (is => 'rw');
+has repack         => (is => 'rw');
+has repack_suffix  => (is => 'rw');
+has unzipopt       => (is => 'rw');
+has version        => (is => 'rw');
 
 # Internal accessors
 has mode          => (is => 'rw');
 has orig          => (is => 'rw', default => sub { 'orig' });
 has excludestanza => (is => 'rw', default => sub { 'Files-Excluded' });
-has excludeignorestanza =>
-  (is => 'rw', default => sub { 'Files-ExcludeIgnored' });
+has includestanza => (is => 'rw', default => sub { 'Files-Included' });
 has upstream      => (is => 'rw');
 has upstream_type => (is => 'rw');
 has upstream_comp => (is => 'rw');
@@ -71,8 +70,8 @@ use constant keys => [
         }
     ],
     ['directory|C=s'],
-    ['exclude-file=s',       undef, undef, sub { [] }],
-    ['excludeignore-file=s', undef, undef, sub { [] }],
+    ['exclude-file=s', undef, undef, sub { [] }],
+    ['include-file=s', undef, undef, sub { [] }],
     ['force-repack'],
     ['copyright-file=s', undef, undef, sub { [] }],
     ['signature=i',      undef, undef, 0],

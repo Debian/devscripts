@@ -46,7 +46,7 @@ B<Files-Excluded->I<component> in F<debian/copyright>. The resulting file is
 placed in F<debian/../..>. (In F<debian/copyright>, the B<Files-Excluded> and
 B<Files-Excluded->I<component> stanzas are a part of the first paragraph and
 there is a blank line before the following paragraphs which contain B<Files>
-and other stanzas. The B<Files-ExcludeIgnored> stanza may be used to ignore
+and other stanzas. The B<Files-Included> stanza may be used to ignore
 parts of subdirectories specified by the B<Files-Excluded> stanza See
 B<uscan>(1) "COPYRIGHT FILE EXAMPLE".)
 
