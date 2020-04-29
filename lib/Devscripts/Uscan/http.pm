@@ -488,7 +488,7 @@ sub parse_href {
         if (
             mangle(
                 $self->watchfile, \$self->line,
-                '$mangle:',       \@{ $self->$mangle },
+                "$mangle:",       \@{ $self->$mangle },
                 \$mangled_version
             )
         ) {
