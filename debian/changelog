@@ -1,8 +1,9 @@
 devscripts (2.20.4) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
-  * Update French translation
-  * dget: fix POD.  Closes: #958940
+  * Update French translations.
+  * dget:
+    + Fix POD formatting.  Closes: #958940
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 
@@ -39,9 +40,6 @@ devscripts (2.20.3) unstable; urgency=medium
   * bts:
     + Sync the known tags with bugs.debian.org.
 
-  [ Xavier Guimard ]
-  * Reformat perl scripts with the new perltidy 20200110.
-
   [ Holger Levsen ]
   * debrebuild:
     + Stop using the reproducible-builds.org apt repo.  Closes: #955280
@@ -77,6 +75,7 @@ devscripts (2.20.3) unstable; urgency=medium
       and add a new --nocfprotection flag to disable the check.  MR: !184
 
   [ Xavier Guimard ]
+  * Reformat perl scripts with the new perltidy 20200110.
   * uscan:
     + Fix DEHS <target> output for components.  MR: !179
     + Fix --download-version with grouped packages.  MR: !156
