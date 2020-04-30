@@ -5,6 +5,10 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * dget:
     + Fix POD formatting.  Closes: #958940
 
+  [ Mattia Rizzolo ]
+  * sadt:
+    + Also consider Build-Depends-Arch for @builddeps@.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 
 devscripts (2.20.3) unstable; urgency=medium

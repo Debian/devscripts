@@ -485,7 +485,9 @@ def main():
             if n == 0:
                 # FIXME statement with no effect
                 # para['Source']
-                for field in 'Build-Depends', 'Build-Depends-Indep':
+                for field in (
+                        'Build-Depends', 'Build-Depends-Indep',
+                        'Build-Depends-Arch'):
                     try:
                         build_depends += parse_relations(para[field])
                     except KeyError:
