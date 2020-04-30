@@ -8,6 +8,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * sadt:
     + Also consider Build-Depends-Arch for @builddeps@.
+    + Ignore udebs when computing the list of binaries produced by a package.
 
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 

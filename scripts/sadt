@@ -493,6 +493,9 @@ def main():
                     except KeyError:
                         continue
             else:
+                if para.get("Package-Type") == "udeb":
+                    # udebs can't be tested
+                    continue
                 binary_packages.add(para['Package'])
     test_groups = []
     try:
