@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2020-04-25 21:15+0200\n"
+"POT-Creation-Date: 2020-04-30 16:13+0200\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -14676,7 +14676,9 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:564
-msgid "dget -- Download Debian source and binary packages"
+#, fuzzy
+#| msgid "dget -- Download Debian source and binary packages"
+msgid "dget - Download Debian source and binary packages"
 msgstr "dget -- lädt Debian-Quell- und -Binärpakete herunter"
 
 #. type: =item
@@ -23607,8 +23609,9 @@ msgstr ""
 msgid ""
 "If I<matching-pattern> is set to B<refs/heads/>I<branch>, B<uscan> downloads "
 "source from the named I<branch> of the git repository."
-msgstr "Falls I<Vergleichsmuster> auf B<refs/heads/>I<Zweig> gesetzt ist, lädt"
-" B<uscan> die Quelle von dem angegebenen I<Zweig> des Git-Depots herunter."
+msgstr ""
+"Falls I<Vergleichsmuster> auf B<refs/heads/>I<Zweig> gesetzt ist, lädt "
+"B<uscan> die Quelle von dem angegebenen I<Zweig> des Git-Depots herunter."
 
 #. type: textblock
 #: ../scripts/uscan.pl:399
