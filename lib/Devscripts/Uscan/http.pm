@@ -345,24 +345,24 @@ sub clean_content {
 sub url_canonicalize_dots {
     my ($base, $url) = @_;
 
-    if ($url !~ m{^[^:]+://}) {
+    if ($url !~ m{^[^:#?/]+://}) {
         if ($url =~ m{^//}) {
-            $base =~ m{^[^:]+:}
+            $base =~ m{^[^:#?/]+:}
               and $url = $& . $url;
         } elsif ($url =~ m{^/}) {
-            $base =~ m{^[^:]+://[^/]*}
+            $base =~ m{^[^:#?/]+://[^/#?]*}
               and $url = $& . $url;
         } else {
             uscan_debug "Resolving urls with query part unimplemented"
               if ($url =~ m/^[#?]/);
-            $base =~ m{^[^:]+://[^/]*(?:/(?:[^#?/]*/)*)?} and do {
+            $base =~ m{^[^:#?/]+://[^/#?]*(?:/(?:[^#?/]*/)*)?} and do {
                 my $base_to_path = $&;
                 $base_to_path .= '/' unless $base_to_path =~ m|/$|;
                 $url = $base_to_path . $url;
             };
         }
     }
-    $url =~ s{^([^:]+://[^/#?]*)(/[^#?]*)}{
+    $url =~ s{^([^:#?/]+://[^/#?]*)(/[^#?]*)}{
        my ($h, $p) = ($1, $2);
        $p =~ s{/\.(?:/|$|(?=[#?]))}{/}g;
        1 while $p =~ s{/(?!\.\./)[^/]*/\.\.(?:/|(?=[#?])|$)}{/}g;
