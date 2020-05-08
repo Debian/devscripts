@@ -255,7 +255,7 @@ use constant rules => [
     # Reject unless token exists
     sub {
         return (1,
-            "SALSA_TOKEN not set in ~/.devscripts. Some commands may fail")
+            "SALSA_TOKEN not set in configuration files. Some commands may fail")
           unless ($_[0]->private_token);
     },
     # Get command
