@@ -817,7 +817,7 @@ EOF
 "Unable to set versionmode=prev for the line without opts=pgpmode=prev\n"
                   . "  in $watchfile, skipping:\n  $self->{line}";
             } else {
-                uscan_warn "Nothing was downloaded before, skipping pgp check";
+                uscan_verbose "Nothing was downloaded before, skipping pgp check";
                 uscan_verbose "  line " . $self->line;
             }
             return $self->status(1);

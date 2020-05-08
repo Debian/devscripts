@@ -5,7 +5,9 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * dget:
     + Fix POD formatting.  Closes: #958940
   * salsa:
-    + Fix "TOKEN missing" error message
+    + Fix "TOKEN missing" error message.
+  * uscan:
+    + Decrease pgp message level to "info" when "pgpmode=previous" is set.
 
   [ Mattia Rizzolo ]
   * sadt:
