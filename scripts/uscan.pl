@@ -42,8 +42,14 @@ B<uscan> [I<options>] [I<path>]
 =head1 DESCRIPTION
 
 For basic usage, B<uscan> is executed without any arguments from the root
-of the Debianized source tree where you see the F<debian/> directory.  Then
-typically the following happens:
+of the Debianized source tree where you see the F<debian/> directory, or
+a directory containing multiple source trees.
+
+Unless --watchfile is given, B<uscan> looks recursively for valid source
+trees starting from the current directory (see the below section
+L<Directory name checking> for details).
+
+For each valid source tree found, typically the following happens:
 
 =over
 
@@ -1910,10 +1916,6 @@ No newer upstream versions were located for any of the F<watch> files examined.
 
 B<uscan> has many other enhanced features which are skipped in the above
 section for the simplicity.  Let's check their highlights.
-
-B<uscan> actually scans not just the current directory but all its
-subdirectories looking for F<debian/watch> to process them all.
-See L<Directory name checking>.
 
 B<uscan> can be executed with I<path> as its argument to change the starting
 directory of search from the current directory to I<path> .
