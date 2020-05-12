@@ -207,7 +207,7 @@ sub scan_changelog {
     my $out
       = $die
       ? sub { uscan_die(@_) }
-      : sub { uscan_warn($_[0] . ', skipping') };
+      : sub { uscan_warn($_[0] . ', skipping'); return undef; };
 
     # Figure out package info we need
     my $changelog = eval { changelog_parse(); };
