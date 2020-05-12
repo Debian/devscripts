@@ -241,7 +241,7 @@ sub scan_changelog {
               . " doesn't match the requirement of\n"
               . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
               . "   Set --check-dirname-level=0 to disable this sanity check feature."
-        ) unless defined $good_dirname;
+        ) unless $good_dirname;
     }
 
     # Get current upstream version number
