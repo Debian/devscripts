@@ -1644,7 +1644,7 @@ directory of B<uscan> execution. If this I<path> is a absolute path, the
 destination directory is set to I<path> irrespective of the internal current
 directory of B<uscan> execution.
 
-The above is true not only for the sinple B<uscan> run in the single source tree
+The above is true not only for the simple B<uscan> run in the single source tree
 but also for the advanced scanning B<uscan> run with subdirectories holding
 multiple source trees.
 
