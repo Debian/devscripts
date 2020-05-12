@@ -212,7 +212,7 @@ sub scan_changelog {
     # Figure out package info we need
     my $changelog = eval { changelog_parse(); };
     if ($@) {
-        return $out->("Problems parsing debian/changelog:");
+        return $out->("Problems parsing debian/changelog");
     }
 
     my ($package, $debversion, $uversion);
