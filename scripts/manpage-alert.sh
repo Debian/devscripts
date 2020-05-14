@@ -99,7 +99,12 @@ while [ -n "$1" ]; do
 done
 
 if [ $# -lt 1 ]; then
-    set -- /bin /sbin /usr/bin /usr/sbin /usr/games
+    # check if we're running on a usrmerge system
+    if [ -L /bin -a -L /sbin ]; then
+        set -- /usr/bin /usr/sbin /usr/games
+     else
+        set -- /bin /sbin /usr/bin /usr/sbin /usr/games
+    fi
 fi
 
 NUM_EXECUTABLES=0
