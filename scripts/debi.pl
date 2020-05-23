@@ -32,8 +32,6 @@ use filetest 'access';
 use Cwd;
 use Dpkg::Control;
 use Dpkg::Changelog::Parse qw(changelog_parse);
-use IPC::Run qw(run);
-use IO::Handle;
 use Dpkg::IPC;
 
 my $progname = basename($0, '.pl');    # the '.pl' is for when we're debugging
@@ -373,8 +371,7 @@ for (split(/\n/, $ctrl->{Files})) {
     if (   (($progname eq 'debi') && (/ (\S*\.deb)$/))
         || (($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
         my $deb    = $1;
-        my $stdout = IO::Handle->new();
-        run(['dpkg-deb', '-f', $deb], '>pipe', \*$stdout);
+        open(my $stdout, '-|', 'dpkg-deb', '-f', $deb);
         my $fields = Dpkg::Control->new(name => $deb, type => CTRL_PKG_DEB);
         $fields->parse($stdout, $deb);
         my $pkg = $fields->{Package};
