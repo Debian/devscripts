@@ -370,7 +370,7 @@ for (split(/\n/, $ctrl->{Files})) {
     # udebs are only supported for debc
     if (   (($progname eq 'debi') && (/ (\S*\.deb)$/))
         || (($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
-        my $deb    = $1;
+        my $deb = $1;
         open(my $stdout, '-|', 'dpkg-deb', '-f', $deb);
         my $fields = Dpkg::Control->new(name => $deb, type => CTRL_PKG_DEB);
         $fields->parse($stdout, $deb);
