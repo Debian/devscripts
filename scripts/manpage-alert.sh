@@ -110,10 +110,10 @@ for DIR in "$@"; do
     for F in "$DIR"/*; do
         # Skip as it's a symlink to /usr/bin
         if [ "$F" = "/usr/bin/X11" ]; then continue; fi
-        NUM_EXECUTABLES=$(( $NUM_EXECUTABLES + 1 ))
+        NUM_EXECUTABLES=$(( NUM_EXECUTABLES + 1 ))
 
         if OUT=$(man -w -S 1:8:6 "${F##*/}" 2>&1 >/dev/null); then
-            NUM_MANPAGES_FOUND=$(( $NUM_MANPAGES_FOUND + 1 ))
+            NUM_MANPAGES_FOUND=$(( NUM_MANPAGES_FOUND + 1 ))
         else
             if [ $SHOWPACKAGE = "PACKAGE" ]; then 
                 # echo "<packagename>: <filename>"
@@ -126,7 +126,7 @@ for DIR in "$@"; do
                 echo "$OUT" | perl -ne "next if /^.*'man 7 undocumented'.*$/;" \
                   -e "s,(\W)\Q${F##*/}\E(?:\b|$),\1$F,; s,//,/,; print;"
             fi
-            NUM_MANPAGES_MISSING=$(( $NUM_MANPAGES_MISSING + 1 ))
+            NUM_MANPAGES_MISSING=$(( NUM_MANPAGES_MISSING + 1 ))
         fi
     done
 done

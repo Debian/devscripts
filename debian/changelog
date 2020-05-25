@@ -13,6 +13,8 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * sadt:
     + Also consider Build-Depends-Arch for @builddeps@.
     + Ignore udebs when computing the list of binaries produced by a package.
+  * manpage-alert:
+    + Fix some shellcheck warnings.
 
   [ Niko Tyni ]
   * debc:
