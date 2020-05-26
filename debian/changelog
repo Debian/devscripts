@@ -17,6 +17,10 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
     + Fix some shellcheck warnings.
   * origtargz:
     + Add pristine-tar to Recommends.  Closes: #961532
+  * build-rdeps:
+    + Apply patch from Helmut Grohne to add the new options --no-arch-all and
+      --no-arch-any to ignore respectively Build-Depends-Indep and
+      Build-Depends-Arch.  Closes: #961545
 
   [ Niko Tyni ]
   * debc:

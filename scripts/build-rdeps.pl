@@ -81,6 +81,17 @@ Explicitly set the host architecture. The default is the value of
 `dpkg-architecture -qDEB_HOST_ARCH`. This option only works if dose-extra >=
 4.0 is installed.
 
+=item B<--build-arch>
+
+Explicitly set the build architecture. The default is the value of
+`dpkg-architecture -qDEB_BUILD_ARCH`. This option only works if dose-extra >=
+4.0 is installed.
+
+=item B<--no-arch-all>, B<--no-arch-any>
+
+Ignore Build-Depends-Indep or Build-Depends-Arch while looking for reverse
+dependencies.
+
 =item B<--old>
 
 Force the old simple behaviour without dose-ceve support even if dose-extra >=
@@ -90,12 +101,6 @@ Notice, that the old behaviour only finds direct dependencies, ignores virtual
 dependencies, does not find transitive dependencies and does not take version
 relationships, architecture restrictions, build profiles or multiarch
 relationships into account.
-
-=item B<--build-arch>
-
-Explicitly set the build architecture. The default is the value of
-`dpkg-architecture -qDEB_BUILD_ARCH`. This option only works if dose-extra >=
-4.0 is installed.
 
 =item B<--quiet>
 
@@ -155,6 +160,8 @@ my $opt_buildarch;
 my $opt_hostarch;
 my $opt_without_ceve;
 my $opt_quiet;
+my $opt_noarchall;
+my $opt_noarchany;
 
 sub version {
     print <<"EOT";
@@ -190,6 +197,8 @@ Options:
    --exclude-component COMPONENT  Ignore the specified component (can be given multiple times)
    --host-arch                    Set the host architecture (requires dose-extra >= 4.0)
    --build-arch                   Set the build architecture (requires dose-extra >= 4.0)
+   --no-arch-all                  Ignore Build-Depends-Indep
+   --no-arch-any                  Ignore Build-Depends-Arch
    --old                          Use the old simple reverse dependency resolution
 
 EOT
@@ -336,6 +345,8 @@ sub findreversebuilddeps {
                 "--deb-host-arch=$opt_hostarch",
                 "deb://$hostarch_file");
         }
+        push(@ceve_cmd, "--deb-drop-b-d-indep") if ($opt_noarchall);
+        push(@ceve_cmd, "--deb-drop-b-d-arch") if ($opt_noarchany);
         my %sources;
         print STDERR 'DEBUG: executing: ' . join(' ', @ceve_cmd)
           if ($opt_debug);
@@ -415,6 +426,8 @@ GetOptions(
     "origin=s"            => \$opt_origin,
     "host-arch=s"         => \$opt_hostarch,
     "build-arch=s"        => \$opt_buildarch,
+    "no-arch-all"         => \$opt_noarchall,
+    "no-arch-any"         => \$opt_noarchany,
     #   "profiles=s" => \$opt_profiles, # FIXME: add build profile support
     #                                            once dose-ceve has a
     #                                            --deb-profiles option
