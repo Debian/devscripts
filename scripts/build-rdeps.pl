@@ -346,7 +346,7 @@ sub findreversebuilddeps {
                 "deb://$hostarch_file");
         }
         push(@ceve_cmd, "--deb-drop-b-d-indep") if ($opt_noarchall);
-        push(@ceve_cmd, "--deb-drop-b-d-arch") if ($opt_noarchany);
+        push(@ceve_cmd, "--deb-drop-b-d-arch")  if ($opt_noarchany);
         my %sources;
         print STDERR 'DEBUG: executing: ' . join(' ', @ceve_cmd)
           if ($opt_debug);
