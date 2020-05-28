@@ -8,6 +8,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
     + Fix "TOKEN missing" error message.
   * uscan:
     + Decrease pgp message level to "info" when "pgpmode=previous" is set.
+    + Able to decode gzipped HTML page.  Closes: #961744; MR: !196
 
   [ Mattia Rizzolo ]
   * sadt:
