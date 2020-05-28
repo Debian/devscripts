@@ -34,7 +34,7 @@ sub new {
           debian/upstream-signing-key.pgp
         );
         if (defined $binkeyring) {
-            make_path('debian/upstream', 0700, 'true');
+            make_path('debian/upstream', { mode => 0700, verbose => 'true' });
 
             # convert to the policy complying armored key
             uscan_verbose(
