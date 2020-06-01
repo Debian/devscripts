@@ -39,6 +39,7 @@ sub http_search {
             uscan_warn "Malformed http-header: $k";
         }
     }
+    $request->header('Accept-Encoding' => 'gzip');
     my $response = $self->downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn
@@ -239,6 +240,20 @@ sub http_newdir {
     }
 
     my $content = $response->content;
+    if (    $response->header('Content-Encoding')
+        and $response->header('Content-Encoding') =~ /^gzip$/i) {
+        require IO::Uncompress::Gunzip;
+        require IO::String;
+        uscan_debug "content seems gzip encoded, let's decode it";
+        my $out;
+        if (IO::Uncompress::Gunzip::gunzip(IO::String->new($content), \$out)) {
+            $content = $out;
+        } else {
+            uscan_warn 'Unable to decode remote content: '
+              . $IO::Uncompress::GunzipError;
+            return '';
+        }
+    }
     uscan_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
