@@ -95,7 +95,7 @@ class ReproducibleCheck:
 
     def main(self):
         if self.args.version:
-            print("{} version {}".format(self.NAME, self.VERSION))
+            print(f"{self.NAME} version {self.VERSION}")
             return 0
 
         self.update_cache()
@@ -171,23 +171,17 @@ class ReproducibleCheck:
             print(
                 "{}{} ({}) is unreproducible {}".format(
                     source,
-                    "/{}".format(architecture)
-                    if architecture != default_architecture
-                    else "",
+                    f"/{architecture}" if architecture != default_architecture else "",
                     version,
                     binaries_fmt,
                 ),
                 end="",
             )
-            print("<https://tests.reproducible-builds.org/debian/{}>".format(source,))
+            print(f"<https://tests.reproducible-builds.org/debian/{source}>")
 
-        msg = "{}/{} ({:.2f}%) of installed binary packages are unreproducible."
+        percent = 100.0 * num_unreproducible / num_installed
         print(
-            msg.format(
-                num_unreproducible,
-                num_installed,
-                100.0 * num_unreproducible / num_installed,
-            )
+            f"{num_unreproducible}/{num_installed} ({percent:.2f}%) of installed binary packages are unreproducible."
         )
 
     @staticmethod
