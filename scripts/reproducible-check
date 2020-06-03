@@ -114,6 +114,12 @@ class ReproducibleCheck:
         else:
             self.output_by_source(unreproducible, installed)
 
+        self.log.info(
+            "These results are based on data from the Reproducible Builds "
+            "CI framework, showing only the show the theoretical (and "
+            "unofficial) reproducibility of these Debian packages."
+        )
+
         return 0
 
     def get_distributor_id(self):
