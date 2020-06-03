@@ -127,7 +127,7 @@ class ReproducibleCheck:
 
         os.makedirs(os.path.dirname(self.CACHE), exist_ok=True)
 
-        with open(self.CACHE, "wb+") as f:
+        with open(self.CACHE, "wb") as f:
             f.write(response.content)
 
     def get_data(self):
