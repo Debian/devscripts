@@ -143,7 +143,7 @@ class ReproducibleCheck:
 
             for x in all_packages:
                 for y in x["architecture_details"]:
-                    if y["status"] != ['FTBR', 'unreproducible']:
+                    if y["status"] == "reproducible":
                         continue
 
                     data.add((x["package"], y["architecture"], x["version"]))
