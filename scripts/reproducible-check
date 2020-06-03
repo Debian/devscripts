@@ -137,13 +137,18 @@ class ReproducibleCheck:
     def get_data(self):
         self.log.debug("Loading data from cache %s", self.CACHE)
 
+        data = set()
         with bz2.open(self.CACHE) as f:
-            return {
-                (x['package'], y['architecture'], x['version'])
-                for x in json.loads(f.read().decode('utf-8'))
-                for y in x['architecture_details']
-                if y['status'] in ['FTBR', 'unreproducible']
-            }
+            all_packages = json.loads(f.read().decode("utf-8"))
+
+            for x in all_packages:
+                for y in x["architecture_details"]:
+                    if y["status"] != ['FTBR', 'unreproducible']:
+                        continue
+
+                    data.add((x["package"], y["architecture"], x["version"]))
+
+        return data
 
     @staticmethod
     def get_installed_packages():
