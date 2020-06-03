@@ -121,15 +121,18 @@ class ReproducibleCheck:
         except OSError:
             pass
 
-        self.log.info("Updating cache...")
+        new_cache = f"{self.CACHE}.new"
+        self.log.info("Updating cache to %s...", new_cache)
 
         response = requests.get(self.STATUS_URL)
 
         os.makedirs(os.path.dirname(self.CACHE), exist_ok=True)
 
-        with open(self.CACHE, "wb") as f:
+        with open(new_cache, "wb") as f:
             for x in response.iter_content(chunk_size=2 ** 16):
                 f.write(x)
+
+        os.rename(new_cache, self.CACHE)
 
     def get_data(self):
         self.log.debug("Loading data from cache %s", self.CACHE)
