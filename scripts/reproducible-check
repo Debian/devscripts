@@ -21,6 +21,7 @@ import collections
 import json
 import logging
 import os
+import subprocess
 import sys
 import time
 
@@ -98,6 +99,10 @@ class ReproducibleCheck:
             print(f"{self.NAME} version {self.VERSION}")
             return 0
 
+        if self.get_distributor_id() != "Debian":
+            self.log.error("Refusing to return results for non-Debian distributions")
+            return 2
+
         self.update_cache()
 
         data = self.get_data()
@@ -110,6 +115,18 @@ class ReproducibleCheck:
             self.output_by_source(unreproducible, installed)
 
         return 0
+
+    def get_distributor_id(self):
+        try:
+            distribution_id = (
+                subprocess.check_output(("lsb_release", "-is")).decode("utf-8").strip()
+            )
+        except subprocess.CalledProcessError:
+            distribution_id = ""
+
+        self.log.debug("Detected distribution %s", distribution_id or "(unknown)")
+
+        return distribution_id
 
     def update_cache(self):
         self.log.debug("Checking cache file %s ...", self.CACHE)
