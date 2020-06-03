@@ -128,7 +128,8 @@ class ReproducibleCheck:
         os.makedirs(os.path.dirname(self.CACHE), exist_ok=True)
 
         with open(self.CACHE, "wb") as f:
-            f.write(response.content)
+            for x in response.iter_content(chunk_size=2 ** 16):
+                f.write(x)
 
     def get_data(self):
         self.log.debug("Loading data from cache %s", self.CACHE)
