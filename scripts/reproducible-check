@@ -21,6 +21,7 @@ import collections
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -105,14 +106,13 @@ class ReproducibleCheck:
 
         self.update_cache()
 
-        data = self.get_data()
         installed = self.get_installed_packages()
-        unreproducible = {x: y for x, y in installed.items() if x in data}
+        reproducible = self.get_reproducible_packages()
 
         if self.args.raw:
-            self.output_raw(unreproducible, installed)
+            self.output_raw(installed, reproducible)
         else:
-            self.output_by_source(unreproducible, installed)
+            self.output_by_source(installed, reproducible)
 
         self.log.info(
             "These results are based on data from the Reproducible Builds "
@@ -157,69 +157,106 @@ class ReproducibleCheck:
 
         os.rename(new_cache, self.CACHE)
 
-    def get_data(self):
+    def get_reproducible_packages(self):
+        """
+        Return (source, architecture, version) triplets for reproducible source
+        packages.
+        """
+
         self.log.debug("Loading data from cache %s", self.CACHE)
 
         data = set()
+        source_packages = set()
+
         with bz2.open(self.CACHE) as f:
             all_packages = json.loads(f.read().decode("utf-8"))
 
             for x in all_packages:
                 for y in x["architecture_details"]:
-                    if y["status"] == "reproducible":
+                    if y["status"] != "reproducible":
                         continue
 
                     data.add((x["package"], y["architecture"], x["version"]))
 
+                    source_packages.add(x["package"])
+
+        self.log.debug("Parsed data about %d source packages", len(source_packages))
+
         return data
 
-    @staticmethod
-    def get_installed_packages():
-        result = collections.defaultdict(list)
+    def get_installed_packages(self):
+        """
+        Return (binary_package, architecture, version) triplets, mapped to
+        their corresponding source package.
+        """
 
+        result = {}
         for x in apt.Cache():
             for y in x.versions:
                 if not y.is_installed:
                     continue
 
-                key = (y.source_name, y.architecture, y.version)
-                result[key].append(x.shortname)
+                # We may have installed a binNMU version locally so we need to
+                # strip these off when looking up against the JSON of results.
+                version = re.sub(r"\+b\d+$", "", y.version)
+
+                result[(x.shortname, y.architecture, version)] = y.source_name
+
+        self.log.debug("Parsed %d installed binary packages", len(result))
 
         return result
 
-    @staticmethod
-    def output_by_source(unreproducible, installed):
-        num_installed = sum(len(x) for x in installed.keys())
-        num_unreproducible = sum(len(x) for x in unreproducible.keys())
+    def iter_installed_unreproducible(self, installed, reproducible):
+        # "Architecture: all" binary packages should pretend to the system's
+        # default architecture for lookup purposes.
         default_architecture = apt.apt_pkg.config.find("APT::Architecture")
+        self.log.debug("Using %s as our 'Architecture: all' lookup")
 
-        for key, binaries in sorted(unreproducible.items()):
-            source, architecture, version = key
+        for x, source in sorted(installed.items()):
+            binary, architecture, version = x
 
-            binaries_fmt = (
-                "({}) ".format(", ".join(binaries)) if binaries != [source] else ""
-            )
+            if architecture == "all":
+                architecture = default_architecture
+
+            lookup_key = (source, architecture, version)
+
+            if lookup_key not in reproducible:
+                yield binary, source, version
+
+    def output_by_source(self, installed, reproducible):
+        by_source = collections.defaultdict(set)
+
+        num_unreproducible = 0
+        for binary, source, version in self.iter_installed_unreproducible(
+                installed, reproducible
+        ):
+            by_source[(source, version)].add(binary)
+            num_unreproducible += 1
+
+        for (source, version), binaries in sorted(by_source.items()):
+            # Calculate some clarifying suffixes/prefixes
+            src = ""
+            pkgs = ""
+            if binaries != {source}:
+                src = "src:"
+                pkgs = " ({})".format(", ".join(binaries))
 
             print(
-                "{}{} ({}) is unreproducible {}".format(
-                    source,
-                    f"/{architecture}" if architecture != default_architecture else "",
-                    version,
-                    binaries_fmt,
-                ),
-                end="",
+                f"{src}{source} ({version}){pkgs} is not reproducible "
+                f"<https://tests.reproducible-builds.org/debian/{source}>"
             )
-            print(f"<https://tests.reproducible-builds.org/debian/{source}>")
 
-        percent = 100.0 * num_unreproducible / num_installed
+        num_installed = len(installed)
+        num_reproducible = len(installed) - num_unreproducible
+        percent = 100.0 * num_reproducible / num_installed
         print(
-            f"{num_unreproducible}/{num_installed} ({percent:.2f}%) of installed binary packages are unreproducible."
+            f"{num_unreproducible}/{num_installed} ({percent:.2f}%) of "
+            f"installed binary packages are reproducible."
         )
 
-    @staticmethod
-    def output_raw(unreproducible, installed):  # pylint: disable=unused-argument
-        for x in sorted(x for xs in unreproducible.values() for x in set(xs)):
-            print(x)
+    def output_raw(self, installed, reproducible):
+        for binary, _, _ in self.iter_installed_unreproducible(installed, reproducible):
+            print(binary)
 
 
 if __name__ == "__main__":
