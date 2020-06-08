@@ -120,6 +120,9 @@ And now, in alphabetical order, the scripts:
   version to upload, and then calls dupload or dput to actually perform
   the upload. [dupload | dput, ssh-client]
 
+- debrebuild: A script that provided a .buildinfo file reports the
+  instructions on how to try to reproduce the reported build.
+
 - debrepro: A script that tests reproducibility of Debian packages. It will
   build a given source directory twice, with a set of variation between the
   first and second build, and compare the binary packages produced. If
