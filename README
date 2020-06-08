@@ -235,6 +235,9 @@ And now, in alphabetical order, the scripts:
 - rc-alert: list installed packages which have release-critical bugs.
   [wget | curl]
 
+- reproducible-check: reports on the reproducible status of installed
+  packages. For more details please see <https://reproducible-builds.org>.
+
 - rmadison: remotely query the Debian archive database about packages.
   [liburi-perl, wget | curl]
 
