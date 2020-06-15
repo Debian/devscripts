@@ -1117,8 +1117,8 @@ sub cmp_versions {
 
             # There's a newer upstream version available, which may already
             # be on our system or may not be
-            uscan_msg "   => Newer package available from\n"
-              . "      $self->{upstream_url}";
+            uscan_msg " => Newer package available from\n"
+              . "        => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "newer package available";
             $main::found++;
         } elsif ($compver eq 'same') {
@@ -1130,13 +1130,13 @@ sub cmp_versions {
                 ? ""
                 : " (mangled local version is $mangled_lastversion)\n"
               );
-            uscan_verbose "   => Package is up to date for from\n"
-              . "      $self->{upstream_url}";
+            uscan_verbose " => Package is up to date from\n"
+              . "             => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "up to date";
             if ($self->shared->{download} > 1) {
 
                 # 2=force-download or 3=overwrite-download
-                uscan_verbose "   => Forcing download as requested";
+                uscan_verbose " => Forcing download as requested";
                 $main::found++;
             } else {
                 # 0=no-download or 1=download
@@ -1151,11 +1151,11 @@ sub cmp_versions {
                 ? ""
                 : " (mangled local version is $mangled_lastversion)\n"
               );
-            uscan_verbose "   => Only older package available from\n"
-              . "      $self->{upstream_url}";
+            uscan_verbose " => Only older package available from\n"
+              . "             => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "only older package available";
             if ($self->shared->{download} > 1) {
-                uscan_verbose "   => Forcing download as requested";
+                uscan_verbose " => Forcing download as requested";
                 $main::found++;
             } else {
                 $self->shared->{download} = 0;
