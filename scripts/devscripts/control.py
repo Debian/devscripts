@@ -90,4 +90,4 @@ class Control:
         for paragraph in self.paragraphs:
             for item in paragraph:
                 lines = paragraph[item].split("\n")
-                paragraph[item] = "\n".join([l.rstrip() for l in lines])
+                paragraph[item] = "\n".join([line.rstrip() for line in lines])

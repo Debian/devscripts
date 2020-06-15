@@ -153,9 +153,9 @@ class Install:
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
         self.content = [
-            l.strip()
-            for l in open(filename).readlines()
-            if l.strip()
+            line.strip()
+            for line in open(filename).readlines()
+            if line.strip()
         ]
 
     def save(self):
