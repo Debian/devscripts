@@ -310,7 +310,7 @@ sub download_origtar () {
 
     print
       "Could not find any location for ${package}_$fileversion.orig.tar.*\n";
-    return undef;
+    return;
 }
 
 sub clean_checkout () {
