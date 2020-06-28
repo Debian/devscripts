@@ -53,6 +53,11 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * origtargz:
     + Properly exit the program when it fails to obtain the tarball.  MR: !198
 
+  [ Jakob Haufe ]
+  * uscan:
+    + Fix perl call to make_path to not create unexpected directories.
+      Closes: #932715; MR: !195
+
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 
 devscripts (2.20.3) unstable; urgency=medium
