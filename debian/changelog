@@ -12,6 +12,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
     + Repack component only if compression differs.  MR: !199
 
   [ Mattia Rizzolo ]
+  * Fix some new flake8 issues.  Closes: #963329
   * sadt:
     + Also consider Build-Depends-Arch for @builddeps@.
     + Ignore udebs when computing the list of binaries produced by a package.
