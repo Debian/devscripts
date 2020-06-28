@@ -1,4 +1,4 @@
-devscripts (2.20.4) UNRELEASED; urgency=medium
+devscripts (2.20.4) unstable; urgency=medium
 
   [ Xavier Guimard ]
   * Update French translations.
@@ -43,7 +43,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * reproducible-check:
     + Overhaul of the whole script:  MR: !197
       - Improve code style.
-      - Improve caching machanism.
+      - Improve caching mechanism.
       - Correct logic for checking for *reproducible* packages.  Closes: #961857
       - Don't return results for non-Debian distributions.  Closes: #961859
       - Show a warning that the data should not be treated as "official"
@@ -58,7 +58,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
     + Fix perl call to make_path to not create unexpected directories.
       Closes: #932715; MR: !195
 
- -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
+ -- Mattia Rizzolo <mattia@debian.org>  Sun, 28 Jun 2020 15:39:02 +0200
 
 devscripts (2.20.3) unstable; urgency=medium
 
