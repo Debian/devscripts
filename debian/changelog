@@ -48,6 +48,10 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
       - Show a warning that the data should not be treated as "official"
         or similar.  Closes: #961858
 
+  [ Yuri Konotopov ]
+  * origtargz:
+    + Properly exit the program when it fails to obtain the tarball.  MR: !198
+
  -- Mattia Rizzolo <mattia@debian.org>  Sun, 26 Apr 2020 08:29:24 +0200
 
 devscripts (2.20.3) unstable; urgency=medium
