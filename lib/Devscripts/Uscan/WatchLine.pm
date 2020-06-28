@@ -1557,7 +1557,7 @@ sub mkorigtargz {
         if ($Devscripts::MkOrigtargz::found_comp) {
             uscan_verbose
               "Forcing compression to $Devscripts::MkOrigtargz::found_comp";
-            $self->force_repack(1);
+            $self->repack(1);
         }
         @ARGV = ();
         push @ARGV, "--package", $self->pkg;

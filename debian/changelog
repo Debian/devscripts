@@ -9,6 +9,7 @@ devscripts (2.20.4) UNRELEASED; urgency=medium
   * uscan:
     + Decrease pgp message level to "info" when "pgpmode=previous" is set.
     + Add ability to handle gzipped HTTP responses.  Closes: #961744; MR: !196
+    + Repack component only if compression differs.  MR: !199
 
   [ Mattia Rizzolo ]
   * sadt:
