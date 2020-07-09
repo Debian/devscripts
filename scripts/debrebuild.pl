@@ -483,7 +483,7 @@ print "------------\n";
 print "\n";
 print "You can try to build the package with sbuild like this:\n";
 print "\n";
-print "$environment sbuild";
+print "SBUILD_CMDLINE=$environment sbuild";
 open(FH, '<', "$tempdir/etc/apt/sources.list");
 
 while (my $line = <FH>) {
@@ -525,3 +525,4 @@ if ($build_archall) {
 }
 print " -d $base_dist";
 print " $dsc_fname\n";
+print "BASE_DIST=$base_dist\n";
