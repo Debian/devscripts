@@ -50,7 +50,7 @@ class ReproducibleCheck:
     VERSION = 1
 
     STATUS_URL = (
-        "https://tests.reproducible-builds.org/debian/" "reproducible-tracker.json.bz2"
+        "https://tests.reproducible-builds.org/debian/reproducible-tracker.json.bz2"
     )
 
     CACHE = os.path.join(xdg_cache_home, NAME, os.path.basename(STATUS_URL))
