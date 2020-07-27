@@ -15,7 +15,7 @@ _debsign()
     case $prev in
         -k)
             keyid_options=$(gpg --fixed-list-mode --with-colons --fingerprint -K | awk -F: '/^sec/{print $5}')
-            COMPREPLY=( $( compgen -W "$keyid_options" | grep $cur ) )
+            COMPREPLY=( $( compgen -W "$keyid_options" | grep "^${cur:-.}" ) )
             ;;
         *)
             COMPREPLY=( $(
