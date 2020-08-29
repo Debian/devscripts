@@ -41,9 +41,46 @@ if ($@) {
     }
 }
 
+sub usage {
+    my ($exit_code) = @_;
+    my $me = basename($0);
+    $exit_code //= 0;
+    print <<EOF;
+Usage: $me <buildinfo>
+       $me <--help|-h>
+
+Given a buildinfo file from a Debian package, generate instructions for
+attempting to reproduce the binary packages built from the associated source
+and build information.
+
+Options:
+ --help, -h      Show this help and exit
+EOF
+
+    exit($exit_code);
+}
+
+
 my $buildinfo = shift @ARGV;
 if (not defined($buildinfo)) {
-    die "need buildinfo filename";
+    print STDERR "ERROR: Missing mandatory buildinfo filename\n";
+    print STDERR "\n";
+    usage(1);
+}
+if ($buildinfo eq '--help' or $buildinfo eq '-h') {
+    usage(0);
+}
+
+if ($buildinfo =~ m/^-/) {
+    print STDERR "ERROR: Unsupported option $buildinfo\n";
+    print STDERR "\n";
+    usage(1);
+}
+
+if (@ARGV) {
+    print STDERR "ERROR: This program requires exactly argument!\n";
+    print STDERR "\n";
+    usage(1);
 }
 
 # buildinfo support in libdpkg-perl (>= 1.18.11)
