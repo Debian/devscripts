@@ -11,6 +11,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Apply patch from Bastien Roucariès to fix bash-completion failure for
       `debsign -k` if no current key was already specified.  Closes: #966358
 
+  [ Niels Thykier ]
+  * debrebuild:
+    + Pass --no-run-lintian to sbuild. Closes: #955304
+
  -- Holger Levsen <holger@debian.org>  Thu, 09 Jul 2020 18:33:00 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

@@ -524,5 +524,6 @@ if ($build_archall) {
     print " --no-arch-all";
 }
 print " -d $base_dist";
+print " --no-run-lintian";
 print " $dsc_fname\n";
 print "BASE_DIST=$base_dist\n";
