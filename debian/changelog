@@ -21,6 +21,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       imply that debrebuild can rebuild binNMUs (see #961862).
       Closes: #961864
     + Introduce a --help/-h option, which is part of #955049.
+    + Support parsing buildinfo files with an embedded signature by ignoring
+      the signature.  Validation (where relevant) is still left to the user.
+      Closes: #955050
 
  -- Holger Levsen <holger@debian.org>  Thu, 09 Jul 2020 18:33:00 +0200
 

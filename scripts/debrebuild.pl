@@ -55,6 +55,11 @@ and build information.
 
 Options:
  --help, -h      Show this help and exit
+
+Note: $me can parse buildinfo files with and without a GPG signature.  However,
+the signature (if present) is discarded as debrebuild does not support verifying
+it.  If the authenticity or integrity of the buildinfo files are important to
+you, checking these need to be done before invoking $me.
 EOF
 
     exit($exit_code);
@@ -84,10 +89,16 @@ if (@ARGV) {
 }
 
 # buildinfo support in libdpkg-perl (>= 1.18.11)
-my $cdata = Dpkg::Control->new(type => CTRL_FILE_BUILDINFO);
+my $cdata = Dpkg::Control->new(type => CTRL_FILE_BUILDINFO, allow_pgp => 1);
 
 if (not $cdata->load($buildinfo)) {
     die "cannot load $buildinfo";
+}
+
+if ($cdata->get_option('is_pgp_signed')) {
+    print "$buildinfo contained a GPG signature; it has NOT been validated (debrebuild does not support this)!\n";
+} else {
+    print "$buildinfo was unsigned\n";
 }
 
 my @architectures = split /\s+/, $cdata->{"Architecture"};
