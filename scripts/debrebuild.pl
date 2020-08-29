@@ -75,8 +75,22 @@ if (not defined($inst_build_deps)) {
     die "need Installed-Build-Depends field";
 }
 
+sub extract_source {
+    my ($source) = @_;
+    # In some cases such as binNMUs, the source field contains a version in
+    # the form:
+    #     mscgen (0.20)
+    # This function strips the version leaving only the source package.
+    $source =~ s/\s+\(.+\)\s*//;
+    # Add a simple control check to avoid the worst surprises and stop obvious
+    # cases of garbage-in-garbage-out.
+    die("Unexpected source package name: ${source}\n")
+        if $source =~ m{[ \t_/\(\)<>!\n%&\$\#\@]};
+    return $source;
+}
+
 my $srcpkg = Dpkg::Source::Package->new();
-$srcpkg->{fields}{'Source'}  = $cdata->{"Source"};
+$srcpkg->{fields}{'Source'}  = extract_source($cdata->{"Source"});
 $srcpkg->{fields}{'Version'} = $cdata->{"Version"};
 my $dsc_fname
   = (dirname($buildinfo)) . '/' . $srcpkg->get_basename(1) . ".dsc";
@@ -452,6 +466,9 @@ print "\n";
 print "Manual installation and build\n";
 print "-----------------------------\n";
 print "\n";
+if ($cdata->{"Binary-Only-Changes"}) {
+    print "The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
+}
 print "The following sources.list contains all the required repositories:\n";
 print "\n";
 0 == system 'cat', "$tempdir/etc/apt/sources.list"
@@ -482,6 +499,11 @@ print "\n";
 print "Using sbuild\n";
 print "------------\n";
 print "\n";
+
+if ($cdata->{"Binary-Only-Changes"}) {
+    print "The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
+}
+
 print "You can try to build the package with sbuild like this:\n";
 print "\n";
 print "SBUILD_CMDLINE=$environment sbuild";

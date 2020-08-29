@@ -16,6 +16,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Pass --no-run-lintian to sbuild. Closes: #955304
     + Use autodie to check for errors instead of ignoring errors from every
       syscall like open() and close().
+    + Correctly determine the name of the source package from the buildinfo.
+      Previously, it would be wrong for e.g. binNMUs.  Note this does *not*
+      imply that debrebuild can rebuild binNMUs (see #961862).
+      Closes: #961864
 
  -- Holger Levsen <holger@debian.org>  Thu, 09 Jul 2020 18:33:00 +0200
 
