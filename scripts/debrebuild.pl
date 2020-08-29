@@ -65,7 +65,6 @@ EOF
     exit($exit_code);
 }
 
-
 my $buildinfo = shift @ARGV;
 if (not defined($buildinfo)) {
     print STDERR "ERROR: Missing mandatory buildinfo filename\n";
@@ -96,7 +95,8 @@ if (not $cdata->load($buildinfo)) {
 }
 
 if ($cdata->get_option('is_pgp_signed')) {
-    print "$buildinfo contained a GPG signature; it has NOT been validated (debrebuild does not support this)!\n";
+    print
+"$buildinfo contained a GPG signature; it has NOT been validated (debrebuild does not support this)!\n";
 } else {
     print "$buildinfo was unsigned\n";
 }
@@ -133,7 +133,7 @@ sub extract_source {
     # Add a simple control check to avoid the worst surprises and stop obvious
     # cases of garbage-in-garbage-out.
     die("Unexpected source package name: ${source}\n")
-        if $source =~ m{[ \t_/\(\)<>!\n%&\$\#\@]};
+      if $source =~ m{[ \t_/\(\)<>!\n%&\$\#\@]};
     return $source;
 }
 
@@ -515,7 +515,8 @@ print "Manual installation and build\n";
 print "-----------------------------\n";
 print "\n";
 if ($cdata->{"Binary-Only-Changes"}) {
-    print "The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
+    print
+"The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
 }
 print "The following sources.list contains all the required repositories:\n";
 print "\n";
@@ -549,7 +550,8 @@ print "------------\n";
 print "\n";
 
 if ($cdata->{"Binary-Only-Changes"}) {
-    print "The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
+    print
+"The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
 }
 
 print "You can try to build the package with sbuild like this:\n";
