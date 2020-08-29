@@ -14,6 +14,8 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   [ Niels Thykier ]
   * debrebuild:
     + Pass --no-run-lintian to sbuild. Closes: #955304
+    + Use autodie to check for errors instead of ignoring errors from every
+      syscall like open() and close().
 
  -- Holger Levsen <holger@debian.org>  Thu, 09 Jul 2020 18:33:00 +0200
 

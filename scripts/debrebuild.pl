@@ -14,6 +14,7 @@
 
 use strict;
 use warnings;
+use autodie;
 
 use Dpkg::Control;
 use Dpkg::Index;
@@ -214,7 +215,7 @@ open(FH, '>', "$tempdir/var/lib/dpkg/status");
 close FH;    #empty file
 # Create apt.conf
 my $aptconf = "$tempdir/etc/apt/apt.conf";
-open(FH, ">$aptconf");
+open(FH, '>', $aptconf);
 
 # We create an apt.conf and pass it to apt via the APT_CONFIG environment
 # variable instead of passing all options via the command line because
