@@ -524,7 +524,7 @@ HTML tags
 
 =item B<plain>: search pattern in the full page
 
-This is useful if page content is not HTML but in JSON. Example with
+This is useful if page content is not HTML but JSON. Example with
 npmjs.com:
 
   version=4
