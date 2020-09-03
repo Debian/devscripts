@@ -24,6 +24,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Support parsing buildinfo files with an embedded signature by ignoring
       the signature.  Validation (where relevant) is still left to the user.
       Closes: #955050; MR: !202
+    + Attempt to locate packages via more than one snapshot.d.o URL rather
+      than just giving up when the first one does not work.
+      Closes: #969098
 
   [ Andrius Merkys ]
   * uscan:

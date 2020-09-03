@@ -379,6 +379,8 @@ my $index = parse_all_packages_files();
 # the timestamps at which they were first seen each
 my %notfound_timestamps;
 
+my %missing;
+
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
     my $pkg_ver  = $pkg->{version};
@@ -467,6 +469,7 @@ foreach my $pkg (@inst_build_deps) {
     my $date = $package_from_main[0]->{first_seen};
     $pkg->{first_seen} = $date;
     $notfound_timestamps{$date} = 1;
+    $missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"} = 1;
 }
 
 # feed apt with timestamped snapshot.debian.org URLs until apt is able to find
@@ -499,12 +502,23 @@ while (0 < scalar keys %notfound_timestamps) {
         my $first_seen = $pkg->{first_seen};
         my $cdata      = $index->get_by_key("$pkg_name $pkg_ver $pkg_arch");
         if (not defined($cdata->{"Package"})) {
-            die "cannot find $pkg_name/$pkg_ver/$pkg_arch in dumpavail\n";
+            # Not present yet; we hope a later snapshot URL will locate it.
+            next;
         }
+        delete($missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"});
         if (defined $first_seen) {
             delete $notfound_timestamps{$first_seen};
         }
     }
+}
+
+if (%missing) {
+    print STDERR 'Cannot locate the following packages via snapshots'
+        . " or the current repo/mirror\n";
+    for my $key (sort(keys(%missing))) {
+        print STDERR "  ${key}\n";
+    }
+    exit(1);
 }
 
 print "\n";
