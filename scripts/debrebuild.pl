@@ -350,24 +350,30 @@ $ENV{'APT_CONFIG'} = $aptconf;
 
 0 == system 'apt-get', 'update' or die "apt-get update failed\n";
 
-my $key_func = sub {
+sub dpkg_index_key_func {
     return
         $_[0]->{Package} . ' '
       . $_[0]->{Version} . ' '
       . $_[0]->{Architecture};
-};
-my $index = Dpkg::Index->new(get_key_func => $key_func);
-
-open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-    'Created-By: Packages');
-while (my $fname = <$fd>) {
-    chomp $fname;
-    print "parsing $fname...\n";
-    open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
-    $index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
-    close($fd2);
 }
-close($fd);
+
+sub parse_all_packages_files {
+    my $dpkg_index = Dpkg::Index->new(get_key_func => \&dpkg_index_key_func);
+
+    open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
+         'Created-By: Packages');
+    while (my $fname = <$fd>) {
+        chomp $fname;
+        print "parsing $fname...\n";
+        open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
+        $dpkg_index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
+        close($fd2);
+    }
+    close($fd);
+    return $dpkg_index;
+}
+
+my $index = parse_all_packages_files();
 
 # go through all packages in the Installed-Build-Depends field and find out
 # the timestamps at which they were first seen each
@@ -485,17 +491,7 @@ while (0 < scalar keys %notfound_timestamps) {
 
     0 == system 'apt-get', 'update' or die "apt-get update failed";
 
-    my $index = Dpkg::Index->new(get_key_func => $key_func);
-    open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-        'Created-By: Packages');
-    while (my $fname = <$fd>) {
-        chomp $fname;
-        print "parsing $fname...\n";
-        open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
-        $index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
-        close($fd2);
-    }
-    close($fd);
+    my $index = parse_all_packages_files();
     foreach my $pkg (@inst_build_deps) {
         my $pkg_name   = $pkg->{name};
         my $pkg_ver    = $pkg->{version};
