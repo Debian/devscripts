@@ -94,7 +94,15 @@ case $hostarch in
 	*) echo "no kernel image for $hostarch"; exit 1;;
 esac
 
-TMPDIR=$(mktemp --directory)
+TMPDIR=$(mktemp --tmpdir --directory debbisect.XXXXXXXXXX)
+cleantmp() {
+	for f in customize.sh id_rsa id_rsa.pub qemu.log config; do
+		rm -f "$TMPDIR/$f"
+	done
+	rmdir "$TMPDIR"
+}
+
+trap cleantmp EXIT
 # the temporary directory must be world readable (for example in unshare mode)
 chmod a+xr "$TMPDIR"
 
@@ -154,8 +162,8 @@ mmdebstrap --verbose --variant=apt --components="$components" \
 
 # use guestfish to prepare the host system
 #
-#  - create a single 2G partition and unpack the rootfs tarball into it
-#  - unpack the tarball of the container into /srv/container
+#  - create a single 4G partition and unpack the rootfs tarball into it
+#  - unpack the tarball of the container into /
 #  - put a syslinux MBR into the first 440 bytes of the drive
 #  - install extlinux and make partition bootable
 #
@@ -190,7 +198,8 @@ guestfish -N "debian-rootfs.img"=disk:4G -- \
 # redirect tcp connections on port 10022 localhost to the host system port 22
 # redirect all output to a file
 # run in the background
-qemu-system-"$qemuarch" \
+timeout --kill-after=60s 60m \
+	qemu-system-"$qemuarch" \
 	-M accel=kvm:tcg \
 	-no-user-config \
 	-object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 \
@@ -206,7 +215,7 @@ qemu-system-"$qemuarch" \
 QEMUPID=$!
 
 # show the log and kill qemu in case the script exits first
-trap "cat --show-nonprinting "$TMPDIR/qemu.log"; kill $QEMUPID" EXIT
+trap "cleantmp; cat --show-nonprinting "$TMPDIR/qemu.log"; kill $QEMUPID" EXIT
 
 # the default ssh command does not store known hosts and even ignores host keys
 # it identifies itself with the rsa key generated above
@@ -307,6 +316,7 @@ else
 	sh -c "$script" exec "$TMPDIR/config" || ret=$?
 fi
 
+# since we installed systemd-sysv, systemctl is available
 ssh -F "$TMPDIR/config" qemu systemctl poweroff
 
 wait $QEMUPID
@@ -315,10 +325,7 @@ trap - EXIT
 
 cat --show-nonprinting "$TMPDIR/qemu.log"
 
-for f in customize.sh id_rsa id_rsa.pub qemu.log config; do
-	rm "$TMPDIR/$f"
-done
-rmdir "$TMPDIR"
+cleantmp
 
 if [ "$ret" -eq 0 ]; then
 	exit 0

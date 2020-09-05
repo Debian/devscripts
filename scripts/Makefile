@@ -100,6 +100,14 @@ test_pl: $(PL_CHECKS)
 test_py: $(VERSION_FILE)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
+debbisect.1: debbisect
+	help2man \
+		--name="bisect snapshot.debian.org" \
+		--version-string=$(VERSION) \
+		--no-info \
+		--no-discard-stderr \
+		./$< >$@
+
 reproducible-check.1: reproducible-check
 	help2man \
 		--name="Reports on the reproducible status of installed packages" \

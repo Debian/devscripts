@@ -17,6 +17,7 @@
 # Currently, I can ask for a snapshot of *any* date and snapshot.d.o will
 # resolve my date to the next possible. This is neat but I would like to know
 # to which exact snapshot timestamp my request got resolved to.
+# See also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=969605
 #
 # Currently, the API does not allow to list all dates for which a snapshot
 # was made. This would be useful to allow skipping snapshots. Currently we
@@ -24,6 +25,7 @@
 # timestamp resolves to, we cannot mark it as untestable (see feature request
 # above) and without a list of testable timestamps we cannot reliably test
 # a timestamp before and after the one to skip.
+# See also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=969603
 #
 # It would be useful to know when a package version was first seen in a given
 # suite. Without this knowledge we cannot reliably pick the snapshot timestamps
@@ -31,6 +33,16 @@
 # appear in experimental long before it appears in unstable or any other suite
 # that is to be tested. Thus, the first_seen attribute of the snapshot API is
 # not very useful to determine a limited set of timestamps to test.
+# See also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=806329
+
+# wishlist features
+# -----------------
+#
+#  - restrict set of tested snapshot timestamps to those where a given package
+#    set actually changed
+#
+#  - add convenience function which builds a given source package and installs
+#    its build dependencies automatically
 
 # pylint disagrees with the indentation chosen by black
 # pylint: disable=C0330
@@ -60,8 +72,13 @@ import tempfile
 import threading
 import urllib.error
 import urllib.request
+import io
+import lzma
 from datetime import datetime, timedelta, timezone
 from functools import partial
+import debian
+import debian.deb822
+import requests
 
 have_dateutil = True
 try:
@@ -121,6 +138,130 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def srcpkgversions_by_timestamp(srcpkgname, timestamp, suite):
+    versions = set()
+    r = requests.get(
+        "http://snapshot.debian.org/archive/debian/%s/dists/%s/main/source/Sources.xz"
+        % (timestamp.strftime("%Y%m%dT%H%M%SZ"), suite)
+    )
+    data = lzma.decompress(r.content)
+    for src in debian.deb822.Sources.iter_paragraphs(io.BytesIO(data)):
+        if src["Package"] != srcpkgname:
+            continue
+        versions.add(debian.debian_support.Version(src["Version"]))
+    return versions
+
+
+def binpkgversion_by_timestamp(binpkgname, timestamp, suite, architecture):
+    r = requests.get(
+        "http://snapshot.debian.org/archive/debian/%s/dists/%s/main/binary-%s/Packages.xz"
+        % (timestamp.strftime("%Y%m%dT%H%M%SZ"), suite, architecture)
+    )
+    data = lzma.decompress(r.content)
+    for pkg in debian.deb822.Packages.iter_paragraphs(io.BytesIO(data)):
+        if pkg["Package"] == binpkgname:
+            return debian.debian_support.Version(pkg["Version"])
+    return None
+
+
+# This function does something similar to what this wiki page describes
+# https://wiki.debian.org/BisectDebian#Finding_dates_for_specific_packages
+#
+# The problem with the approach on that wiki page as well as the one below in
+# Python is, that it relies on the first_seen entry provided by snapshot.d.o.
+# This means that we do not know when a package first appeared in a given
+# suite. It could've first appeared in experimental or even in Debian Ports.
+#
+# Also see: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=806329
+def first_seen_by_pkg(packages, timestamp_begin, timestamp_end, suite, architecture):
+    timestamps = set()
+    for pkg in packages:
+        logging.info("obtaining versions for %s", pkg)
+        if pkg.startswith("src:"):
+            pkg = pkg[4:]
+            oldest_versions = srcpkgversions_by_timestamp(pkg, timestamp_begin, suite)
+            if len(oldest_versions) == 0:
+                logging.error(
+                    "source package %s cannot be found in good timestamp", pkg
+                )
+                sys.exit(1)
+            elif len(oldest_versions) == 1:
+                oldest_version = oldest_versions.pop()
+            else:
+                oldest_version = min(oldest_versions)
+            newest_versions = srcpkgversions_by_timestamp(pkg, timestamp_end, suite)
+            if len(newest_versions) == 0:
+                logging.error("source package %s cannot be found in bad timestamp", pkg)
+                sys.exit(1)
+            elif len(newest_versions) == 1:
+                newest_version = newest_versions.pop()
+            else:
+                newest_version = max(newest_versions)
+
+            for result in requests.get(
+                "http://snapshot.debian.org/mr/package/%s/" % pkg
+            ).json()["result"]:
+                if debian.debian_support.Version(result["version"]) < oldest_version:
+                    continue
+                if debian.debian_support.Version(result["version"]) > newest_version:
+                    continue
+                r = requests.get(
+                    "http://snapshot.debian.org/mr/package/%s/%s/allfiles?fileinfo=1"
+                    % (pkg, result["version"])
+                )
+                logging.info("retrieving for: %s", result["version"])
+                for fileinfo in [
+                    fileinfo
+                    for fileinfos in r.json()["fileinfo"].values()
+                    for fileinfo in fileinfos
+                ]:
+                    if fileinfo["archive_name"] != "debian":
+                        continue
+                    timestamps.add(
+                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%SZ")
+                    )
+        else:
+            oldest_version = binpkgversion_by_timestamp(
+                pkg, timestamp_begin, suite, architecture
+            )
+            if oldest_version is None:
+                logging.error(
+                    "binary package %s cannot be found in good timestamp", pkg
+                )
+                sys.exit(1)
+            newest_version = binpkgversion_by_timestamp(
+                pkg, timestamp_end, suite, architecture
+            )
+            if newest_version is None:
+                logging.error("binary package %s cannot be found in bad timestamp", pkg)
+                sys.exit(1)
+            r = requests.get("http://snapshot.debian.org/mr/binary/%s/" % pkg)
+            for result in r.json()["result"]:
+                if debian.debian_support.Version(result["version"]) < oldest_version:
+                    continue
+                if debian.debian_support.Version(result["version"]) > newest_version:
+                    continue
+                r = requests.get(
+                    "http://snapshot.debian.org/mr/binary/%s/%s/binfiles?fileinfo=1"
+                    % (pkg, result["version"])
+                )
+                logging.info("retrieving for: %s", result["version"])
+                hashes = [
+                    e["hash"]
+                    for e in r.json()["result"]
+                    if e["architecture"] == architecture
+                ]
+                for fileinfo in [
+                    fileinfo for h in hashes for fileinfo in r.json()["fileinfo"][h]
+                ]:
+                    if fileinfo["archive_name"] != "debian":
+                        continue
+                    timestamps.add(
+                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%SZ")
+                    )
+    return timestamps
+
+
 def get_mirror(port, timestamp):
     if port is not None:
         return "http://%s:%d/archive/debian/%s" % (
@@ -162,8 +303,7 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
             staticargs.components,
         ]
         if toupgrade:
-            badmirror = get_mirror(staticargs.port, badtimestamp)
-            cmd.extend([badmirror, toupgrade])
+            cmd.extend([get_mirror(staticargs.port, badtimestamp), toupgrade])
     else:
         # execute it directly if it's an executable file or if it there are no
         # shell metacharacters
@@ -176,17 +316,19 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
             cmd = ["sh", "-c", staticargs.script]
     output = b""
     try:
-        # we only use the more complex Popen method is live output is required
+        # we only use the more complex Popen method if live output is required
         # for logging levels of INFO or lower
         if logging.root.isEnabledFor(logging.INFO):
             process = subprocess.Popen(
                 cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, env=env
             )
+            buf = io.BytesIO()
             for line in iter(process.stdout.readline, b""):
                 sys.stdout.buffer.write(line)
                 sys.stdout.buffer.flush()
-                output += line
+                buf.write(line)
             ret = process.wait()
+            output = buf.getvalue()
         else:
             output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, env=env)
     except subprocess.CalledProcessError as e:
@@ -433,7 +575,9 @@ EXAMPLES
 Just run "do_something" which runs the test and returns a non-zero exit on
 failure.
 
-    $ {progname} "last week" today "mmdebstrap --customize-hook='chroot """
+    $ {progname} "last week" today "mmdebstrap --customize-hook='chroot """.format(
+            progname=sys.argv[0]
+        )
         + """\\"\\$1\\" do_something' unstable - \\$DEBIAN_BISECT_MIRROR >/dev/null"
     $ diff -u log.good log.bad
 
