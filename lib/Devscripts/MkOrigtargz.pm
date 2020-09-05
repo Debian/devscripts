@@ -29,6 +29,12 @@ has exclude_globs => (
     default => sub { $_[0]->config->exclude_file },
 );
 
+has include_globs => (
+    is      => 'rw',
+    lazy    => 1,
+    default => sub { $_[0]->config->include_file },
+);
+
 has status        => (is => 'rw', default => sub { 0 });
 has destfile_nice => (is => 'rw');
 
@@ -179,7 +185,7 @@ sub make_orig_targz {
               @{ $self->exclude_globs };
         };
         return $self->status(1) if ($@);
-        for my $filename (@files) {
+        for my $filename (sort @files) {
             my $last_match;
             for my $info (@exclude_info) {
                 if (
@@ -189,7 +195,27 @@ sub make_orig_targz {
 				(?:/.*)?$          # Possible trailing / for a directory
 			      @x
                 ) {
-                    $delete{$filename} = 1 if !$last_match;
+                    if (!$last_match) {
+                        # if the current entry is a directory, check if it
+                        # matches any exclude-ignored glob
+                        my $ignore_this_exclude = 0;
+                        for my $ignore_exclude (@{ $self->include_globs }) {
+                            my $ignore_exclude_regex
+                              = glob_to_regex($ignore_exclude);
+
+                            if ($filename =~ $ignore_exclude_regex) {
+                                $ignore_this_exclude = 1;
+                                last;
+                            }
+                            if (   $filename =~ m,/$,
+                                && $ignore_exclude =~ $info->{regex}) {
+                                $ignore_this_exclude = 1;
+                                last;
+                            }
+                        }
+                        next if $ignore_this_exclude;
+                        $delete{$filename} = 1;
+                    }
                     $last_match = $info;
                 }
             }
@@ -545,6 +571,12 @@ sub parse_copyrights {
                     @{ $self->exclude_globs },
                     grep { $_ }
                       split(/\s+/, $data->{ $self->config->excludestanza }));
+            }
+            if ($data->{ $self->config->includestanza }) {
+                push(
+                    @{ $self->include_globs },
+                    grep { $_ }
+                      split(/\s+/, $data->{ $self->config->includestanza }));
             }
         } else {
             if (open my $file, '<', $copyright_file) {

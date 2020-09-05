@@ -46,7 +46,9 @@ B<Files-Excluded->I<component> in F<debian/copyright>. The resulting file is
 placed in F<debian/../..>. (In F<debian/copyright>, the B<Files-Excluded> and
 B<Files-Excluded->I<component> stanzas are a part of the first paragraph and
 there is a blank line before the following paragraphs which contain B<Files>
-and other stanzas.  See B<uscan>(1) "COPYRIGHT FILE EXAMPLE".)
+and other stanzas. The B<Files-Included> stanza may be used to ignore
+parts of subdirectories specified by the B<Files-Excluded> stanza See
+B<uscan>(1) "COPYRIGHT FILE EXAMPLE".)
 
 The archive type for B<zip> is detected by "B<file --dereference --brief
 --mime-type>" command.  So any B<zip> type archives such as B<jar> are treated
@@ -91,7 +93,7 @@ B<Files-Excluded>.
 =item B<--copyright-file> I<filename>
 
 Remove files matching the patterns found in I<filename>, which should have the
-format of a Debian F<copyright> file 
+format of a Debian F<copyright> file
 (B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/>
 to be precise). Errors parsing that file are silently ignored, exactly as is
 the case with F<debian/copyright>.
@@ -174,8 +176,8 @@ were deleted.
 =item B<-c>, B<--component> I<componentname>
 
 Use <componentname> as the component name for the secondary upstream tarball.
-Set I<componentname> as the component name.  This is used only for the 
-secondary upstream tarball of the Debian source package.  
+Set I<componentname> as the component name.  This is used only for the
+secondary upstream tarball of the Debian source package.
 Then I<packagename_version.orig-componentname.tar.gz> is created.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> | B<default> ]
