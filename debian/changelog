@@ -53,6 +53,11 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       include a specific vendored lib while excluding the whole vendor/
       directory.  Closes: #829646; MR: !189
 
+  [ Yuri Konotopov ]
+  * mk-origtargz:
+    + Do not try to "unpack" upstream detached signatures.
+      Closes: #951789; MR: !200
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

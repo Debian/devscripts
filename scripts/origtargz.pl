@@ -342,6 +342,10 @@ sub unpack_tarball (@) {
     my @origtar = @_;
 
     for my $origtar (@origtar) {
+        if ($origtar =~ m/\.asc$/) {
+            next;
+        }
+
         my $tmpdir = File::Temp->newdir(DIR => ".", CLEANUP => 1);
         print "Unpacking $origtar\n";
         my $cmp = ($origtar =~ /orig(?:-([\w\-]+))?\.tar/)[0] || '';
