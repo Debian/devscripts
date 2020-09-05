@@ -125,5 +125,6 @@ killHttpServer () {
         pid=$(< "$TEMP_PKG_DIR/repo/pid")
         kill -9 "$pid"
         rm -rf "$TEMP_PKG_DIR"
+        unset TEMP_PKG_DIR
     fi
 }

@@ -12,6 +12,42 @@ use Moo::Role;
 ##################################
 # search $newversion (http mode)
 ##################################
+
+#returns (\@patterns, \@base_sites, \@base_dirs)
+sub handle_redirection {
+    my ($self, $pattern, @additional_bases) = @_;
+    my @redirections = @{ $self->downloader->user_agent->get_redirections };
+    my (@patterns, @base_sites, @base_dirs);
+
+    uscan_verbose "redirections: @redirections" if @redirections;
+
+    foreach my $_redir (@redirections, @additional_bases) {
+        my $base_dir = $_redir;
+
+        $base_dir =~ s%^\w+://[^/]+/%/%;
+        $base_dir =~ s%/[^/]*(?:[#?].*)?$%/%;
+        if ($_redir =~ m%^(\w+://[^/]+)%) {
+            my $base_site = $1;
+
+            push @patterns,
+              quotemeta($base_site) . quotemeta($base_dir) . "$pattern";
+            push @base_sites, $base_site;
+            push @base_dirs,  $base_dir;
+
+            # remove the filename, if any
+            my $base_dir_orig = $base_dir;
+            $base_dir =~ s%/[^/]*$%/%;
+            if ($base_dir ne $base_dir_orig) {
+                push @patterns,
+                  quotemeta($base_site) . quotemeta($base_dir) . "$pattern";
+                push @base_sites, $base_site;
+                push @base_dirs,  $base_dir;
+            }
+        }
+    }
+    return (\@patterns, \@base_sites, \@base_dirs);
+}
+
 sub http_search {
     my ($self) = @_;
 
@@ -48,37 +84,11 @@ sub http_search {
         return undef;
     }
 
-    my @redirections = @{ $self->downloader->user_agent->get_redirections };
-
-    uscan_verbose "redirections: @redirections" if @redirections;
-
-    foreach my $_redir (@redirections) {
-        my $base_dir = $_redir;
-
-        $base_dir =~ s%^\w+://[^/]+/%/%;
-        if ($_redir =~ m%^(\w+://[^/]+)%) {
-            my $base_site = $1;
-
-            push @{ $self->patterns },
-                "(?:(?:$base_site)?"
-              . quotemeta($base_dir)
-              . ")?$self->{parse_result}->{filepattern}";
-            push @{ $self->sites },    $base_site;
-            push @{ $self->basedirs }, $base_dir;
-
-            # remove the filename, if any
-            my $base_dir_orig = $base_dir;
-            $base_dir =~ s%/[^/]*$%/%;
-            if ($base_dir ne $base_dir_orig) {
-                push @{ $self->patterns },
-                    "(?:(?:$base_site)?"
-                  . quotemeta($base_dir)
-                  . ")?$self->{parse_result}->{filepattern}";
-                push @{ $self->sites },    $base_site;
-                push @{ $self->basedirs }, $base_dir;
-            }
-        }
-    }
+    my ($patterns, $base_sites, $base_dirs)
+      = handle_redirection($self, $self->{parse_result}->{filepattern});
+    push @{ $self->patterns }, @$patterns;
+    push @{ $self->sites },    @$base_sites;
+    push @{ $self->basedirs }, @$base_dirs;
 
     my $content = $response->decoded_content;
     uscan_debug
@@ -86,7 +96,7 @@ sub http_search {
 
     my @hrefs;
     if (!$self->searchmode or $self->searchmode eq 'html') {
-        @hrefs = $self->html_search($content);
+        @hrefs = $self->html_search($content, $self->patterns);
     } elsif ($self->searchmode eq 'plain') {
         @hrefs = $self->plain_search($content);
     } else {
@@ -213,23 +223,26 @@ sub http_upstream_url {
 }
 
 sub http_newdir {
-    my (
-        $https,     $downloader, $site,
-        $dir,       $pattern,    $dirversionmangle,
-        $watchfile, $lineptr,    $download_version
-    ) = @_;
+    my ($https, $line, $site, $dir, $pattern, $dirversionmangle,
+        $watchfile, $lineptr, $download_version)
+      = @_;
 
+    my $downloader = $line->downloader;
     my ($request, $response, $newdir);
     my ($download_version_short1, $download_version_short2,
         $download_version_short3)
       = partial_version($download_version);
     my $base = $site . $dir;
 
+    $pattern .= "/?";
+
     if (defined($https) and !$downloader->ssl) {
         uscan_die
 "$progname: you must have the liblwp-protocol-https-perl package installed\n"
           . "to use https URLs";
     }
+    # At least for now, set base in the line object - other methods need it
+    local $line->parse_result->{base} = $base;
     $request  = HTTP::Request->new('GET', $base);
     $response = $downloader->user_agent->request($request);
     if (!$response->is_success) {
@@ -259,45 +272,32 @@ sub http_newdir {
 
     clean_content(\$content);
 
-    my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
+    my ($dirpatterns, $base_sites, $base_dirs)
+      = handle_redirection($line, $pattern, $base);
+    $downloader->user_agent->clear_redirections;    # we won't be needing that
 
-    uscan_verbose "Matching pattern:\n   $dirpattern";
     my @hrefs;
-    my $match = '';
-    while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
-        my $href = fix_href($2);
-        uscan_verbose "Matching target for dirversionmangle:   $href";
-        if ($href =~ m&^$dirpattern/?$&) {
-            my $mangled_version
-              = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
-            if (
-                mangle(
-                    $watchfile,          $lineptr,
-                    'dirversionmangle:', \@{$dirversionmangle},
-                    \$mangled_version
-                )
-            ) {
-                return 1;
-            }
-            $match = '';
-            if (defined $download_version
-                and $mangled_version eq $download_version) {
-                $match = "matched with the download version";
-            }
-            if (defined $download_version_short3
-                and $mangled_version eq $download_version_short3) {
-                $match = "matched with the download version (partial 3)";
-            }
-            if (defined $download_version_short2
-                and $mangled_version eq $download_version_short2) {
-                $match = "matched with the download version (partial 2)";
-            }
-            if (defined $download_version_short1
-                and $mangled_version eq $download_version_short1) {
-                $match = "matched with the download version (partial 1)";
-            }
-            push @hrefs, [$mangled_version, $href, $match];
+    for my $parsed (
+        html_search($line, $content, $dirpatterns, 'dirversionmangle')) {
+        my ($priority, $mangled_version, $href, $match) = @$parsed;
+        $match = '';
+        if (defined $download_version
+            and $mangled_version eq $download_version) {
+            $match = "matched with the download version";
         }
+        if (defined $download_version_short3
+            and $mangled_version eq $download_version_short3) {
+            $match = "matched with the download version (partial 3)";
+        }
+        if (defined $download_version_short2
+            and $mangled_version eq $download_version_short2) {
+            $match = "matched with the download version (partial 2)";
+        }
+        if (defined $download_version_short1
+            and $mangled_version eq $download_version_short1) {
+            $match = "matched with the download version (partial 1)";
+        }
+        push @hrefs, [$mangled_version, $href, $match];
     }
 
     # extract ones which has $match in the above loop defined
@@ -342,8 +342,36 @@ sub clean_content {
     return $content;
 }
 
+sub url_canonicalize_dots {
+    my ($base, $url) = @_;
+
+    if ($url !~ m{^[^:#?/]+://}) {
+        if ($url =~ m{^//}) {
+            $base =~ m{^[^:#?/]+:}
+              and $url = $& . $url;
+        } elsif ($url =~ m{^/}) {
+            $base =~ m{^[^:#?/]+://[^/#?]*}
+              and $url = $& . $url;
+        } else {
+            uscan_debug "Resolving urls with query part unimplemented"
+              if ($url =~ m/^[#?]/);
+            $base =~ m{^[^:#?/]+://[^/#?]*(?:/(?:[^#?/]*/)*)?} and do {
+                my $base_to_path = $&;
+                $base_to_path .= '/' unless $base_to_path =~ m|/$|;
+                $url = $base_to_path . $url;
+            };
+        }
+    }
+    $url =~ s{^([^:#?/]+://[^/#?]*)(/[^#?]*)}{
+       my ($h, $p) = ($1, $2);
+       $p =~ s{/\.(?:/|$|(?=[#?]))}{/}g;
+       1 while $p =~ s{/(?!\.\./)[^/]*/\.\.(?:/|(?=[#?])|$)}{/}g;
+       $h.$p;}e;
+    $url;
+}
+
 sub html_search {
-    my ($self, $content) = @_;
+    my ($self, $content, $patterns, $mangle) = @_;
 
     # pagenmangle: should not abuse this slow operation
     if (
@@ -371,27 +399,10 @@ sub html_search {
 
     # Is there a base URL given?
     if ($content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i) {
-
-        # Ensure it ends with /
-        $self->parse_result->{urlbase} = "$2/";
-        $self->parse_result->{urlbase} =~ s%//$%/%;
-        if ($self->parse_result->{urlbase} !~ /^https?:/) {
-            if ($self->parse_result->{urlbase} !~ m#^/#) {
-                uscan_warn "Malfored <base> tag, ignoring it";
-                ($self->parse_result->{urlbase} = $self->parse_result->{base})
-                  =~ s%/[^/]*$%/%;
-            } else {
-                uscan_verbose
-                  "base is not absolute ($self->parse_result->{urlbase})";
-                $self->parse_result->{base} =~ m#^(https?://[^/]+)#;
-                my $base = $1;
-                $self->parse_result->{urlbase} =~ s#^/+#$base/#;
-            }
-        }
+        $self->parse_result->{urlbase}
+          = url_canonicalize_dots($self->parse_result->{base}, $2);
     } else {
-        # May have to strip a base filename
-        ($self->parse_result->{urlbase} = $self->parse_result->{base})
-          =~ s%/[^/]*$%/%;
+        $self->parse_result->{urlbase} = $self->parse_result->{base};
     }
     uscan_debug
 "processed content:\n$content\n[End of processed content] by fix bad HTML code";
@@ -405,10 +416,13 @@ sub html_search {
     while ($content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi) {
         my $href = $2;
         $href = fix_href($href);
+        my $href_canonical
+          = url_canonicalize_dots($self->parse_result->{urlbase}, $href);
         if (defined $self->hrefdecode) {
             if ($self->hrefdecode eq 'percent-encoding') {
                 uscan_debug "... Decoding from href: $href";
-                $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
+                $href           =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
+                $href_canonical =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
             } else {
                 uscan_warn "Illegal value for hrefdecode: "
                   . "$self->{hrefdecode}";
@@ -416,9 +430,17 @@ sub html_search {
             }
         }
         uscan_debug "Checking href $href";
-        foreach my $_pattern (@{ $self->patterns }) {
-            if ($href =~ /^$_pattern$/) {
-                push @hrefs, $self->parse_href($href, $_pattern, $1);
+        foreach my $_pattern (@$patterns) {
+            if (my @match = $href =~ /^$_pattern$/) {
+                push @hrefs,
+                  parse_href($self, $href_canonical, $_pattern, \@match,
+                    $mangle);
+            }
+            uscan_debug "Checking href $href_canonical";
+            if (my @match = $href_canonical =~ /^$_pattern$/) {
+                push @hrefs,
+                  parse_href($self, $href_canonical, $_pattern, \@match,
+                    $mangle);
             }
         }
     }
@@ -437,14 +459,19 @@ sub plain_search {
 }
 
 sub parse_href {
-    my ($self, $href, $_pattern, $match) = @_;
+    my ($self, $href, $_pattern, $match, $mangle) = @_;
+    $mangle //= 'uversionmangle';
+
     my $mangled_version;
     if ($self->watch_version == 2) {
 
         # watch_version 2 only recognised one group; the code
         # below will break version 2 watch files with a construction
         # such as file-([\d\.]+(-\d+)?) (bug #327258)
-        $mangled_version = $match;
+        $mangled_version
+          = ref $match eq 'ARRAY'
+          ? $match->[0]
+          : $match;
     } else {
         # need the map { ... } here to handle cases of (...)?
         # which may match but then return undef values
@@ -453,14 +480,15 @@ sub parse_href {
             # exception, otherwise $mangled_version = 1
             $mangled_version = '';
         } else {
-            $mangled_version
-              = join(".", map { $_ if defined($_) } $href =~ m&^$_pattern$&);
+            $mangled_version = join(".",
+                map { $_ if defined($_) }
+                  ref $match eq 'ARRAY' ? @$match : $href =~ m&^$_pattern$&);
         }
 
         if (
             mangle(
-                $self->watchfile,  \$self->line,
-                'uversionmangle:', \@{ $self->uversionmangle },
+                $self->watchfile, \$self->line,
+                "$mangle:",       \@{ $self->$mangle },
                 \$mangled_version
             )
         ) {

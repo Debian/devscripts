@@ -29,6 +29,11 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   * uscan:
     + Fix typo in the manpage.  MR: !201
 
+  [ Jiří Paleček ]
+  * uscan:
+    + Many improvements regarding the handling of relative URLs.
+      Closes: #792025; MR: !192
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

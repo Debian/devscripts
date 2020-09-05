@@ -231,7 +231,7 @@ helperWatch() {
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
     local PREFIX="${4:-}"
-    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)
+    TEMP_PKG_DIR=${TEMP_PKG_DIR:-$(mktemp -d -p "$SHUNIT_TMPDIR" uscan_mangle.XXXXXX)}
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
@@ -496,20 +496,21 @@ siteWebNonNative() {
 END
 }
 
-siteWebNonNative() {
-    siteNonNative
-    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
+siteWebNonNativeRecWithBase() {
+    siteNonNative "$@"
+    for DIR in "$TEMP_PKG_DIR"/$REPOPATH/[0-9].*; do
+    [ -d "$DIR" ] && cat <<END > "$DIR"/index.html
 <html>
 <head>
   <meta charset="utf-8">
+<base href="/${DIR##*/}/foo/ooo/x.html"/>
 </head>
 <body>
-<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="foo-${DIR##*/}.tar.gz">Blah</a> <br/ >
 </body>
 <html>
 END
+    done
 }
 
 siteWebNonNativeR() {
@@ -734,6 +735,30 @@ testWatch4NonNative() {
     WATCHVER=4
     WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative
+}
+
+# test non-native package with uupdate, bare HTTP server with dirversionmangle
+testWatch4NonNativeDMangle() {
+    WATCHVER=4
+    WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch "siteNonNative foo EXTRA"
+
+    rm -rf "$TEMP_PKG_DIR"/foo/debian
+    #and without dirversionmangle, should return version 3
+    WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch ":" 1.0 3.0
+}
+
+# test non-native package with uupdate, bare HTTP server with dirversionmangle and base
+testWatch4NonNativeDMangleB() {
+    WATCHVER=4
+    WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch "siteWebNonNativeRecWithBase foo EXTRA"
+
+    rm -rf "$TEMP_PKG_DIR"/foo/debian
+    #and without dirversionmangle, should return version 3
+    WATCHLINE='@@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch ":" 1.0 3.0
 }
 
 # test 3 parameter watch line

@@ -418,21 +418,22 @@ END
     mkdir -p "$TEMP_PKG_DIR"/repo/foo
     touch "$TEMP_PKG_DIR"/repo/foo/content
 
-    ( cd "$TEMP_PKG_DIR"/repo/foo ;
-      zip -q -r $PKG-1.zip *;
-      zip -q -r $PKG-0.9.zip *;
-      cat > index.html <<END
+    for href in foo-1.zip /foo/foo-1.zip //localhost:$PORT/foo/foo-1.zip ../foo/foo-1.zip x/../../foo/foo-1.zip; do
+        ( cd "$TEMP_PKG_DIR"/repo/foo ;
+          zip -q -r $PKG-1.zip *;
+          zip -q -r $PKG-0.9.zip *;
+          cat > index.html <<END
 <html><body>
 <base href="/foo/" />
-<a href="foo-1.zip">foo-1.zip</a>
+<a href="$href">foo-1.zip</a>
 </body></html>
 END
-      )
+        )
 
-    OUTPUT=$( (cd "$TEMP_PKG_DIR"/$PKG ; $COMMANDDEHS) )
-    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+        (cd "$TEMP_PKG_DIR"/$PKG ; $COMMAND)
+        assertEquals "uscan: exit_code!=0 but exit_code=0 with $href" "$?" "0"
+    done
 
-    TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'unrepacked zipfile present' "[ -f "$TEMP_PKG_DIR"/${PKG}-1.zip ]"
 
 }
