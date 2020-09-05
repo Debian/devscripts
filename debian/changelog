@@ -58,6 +58,12 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Do not try to "unpack" upstream detached signatures.
       Closes: #951789; MR: !200
 
+  [ Simon McVittie ]
+  * debdiff:
+    + Clarify how --exclude works: MR: !190
+      - Improve the reference on the manpage.
+      - Print a warning if --exclude is used in a way that will never match.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium
