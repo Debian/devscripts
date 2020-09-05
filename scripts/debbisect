@@ -299,6 +299,7 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
             staticargs.depends,
             staticargs.script,
             goodmirror,
+            staticargs.architecture,
             staticargs.suite,
             staticargs.components,
         ]
@@ -721,6 +722,13 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
         action="store_true",
     )
     parser.add_argument(
+        "--architecture",
+        help="Chosen architecture when creating the chroot with --depends or "
+        + "--qemu (default: native architecture)",
+        default=subprocess.check_output(["dpkg", "--print-architecture"]),
+        type=str,
+    )
+    parser.add_argument(
         "--suite",
         help="Chosen suite when creating the chroot with --depends or --qemu "
         + "(default: unstable)",
@@ -825,10 +833,11 @@ def main():
         port, teardown = setupcache(args.cache, args.port)
 
     staticargs = collections.namedtuple(
-        "args", ["script", "port", "depends", "suite", "components", "qemu"]
+        "args",
+        ["script", "port", "depends", "architecture", "suite", "components", "qemu"],
     )
     staticargs.port = port
-    for a in ["script", "depends", "suite", "components", "qemu"]:
+    for a in ["script", "depends", "architecture", "suite", "components", "qemu"]:
         setattr(staticargs, a, getattr(args, a))
     res = bisect(args.good, args.bad, staticargs)
     if res is not None:
