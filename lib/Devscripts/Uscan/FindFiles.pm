@@ -207,12 +207,12 @@ sub scan_changelog {
     my $out
       = $die
       ? sub { uscan_die(@_) }
-      : sub { uscan_warn($_[0] . ', skipping') };
+      : sub { uscan_warn($_[0] . ', skipping'); return undef; };
 
     # Figure out package info we need
     my $changelog = eval { changelog_parse(); };
     if ($@) {
-        return $out->("Problems parsing debian/changelog:");
+        return $out->("Problems parsing debian/changelog");
     }
 
     my ($package, $debversion, $uversion);
@@ -239,9 +239,9 @@ sub scan_changelog {
         return $out->("The directory name "
               . basename(cwd())
               . " doesn't match the requirement of\n"
-              . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
+              . "   --check-dirname-level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
               . "   Set --check-dirname-level=0 to disable this sanity check feature."
-        ) unless defined $good_dirname;
+        ) unless $good_dirname;
     }
 
     # Get current upstream version number

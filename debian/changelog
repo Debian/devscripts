@@ -39,6 +39,13 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Split --debug option to add a --extra-debug option that shows remote
       HTTP content.  MR: !191
 
+  [ Matthijs Kooijman ]
+  * uscan:
+    + Fix --check-direname-level/regex handling.  See #905866; MR: !193
+    + Fix error handling in case of invalid changelog fiel.  MR: !193
+    + Clarify manpage about the recursive feature of uscan.  MR: !193
+    + Fix some typos in the manapge and error messages.  MR: !193
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium
