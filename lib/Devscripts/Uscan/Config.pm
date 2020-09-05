@@ -196,11 +196,12 @@ use constant keys => [
     ['signature!',                   undef, 'bool', 1],
     ['skipsignature|skip-signature', undef, sub { $_[0]->signature(-1) }],
     # "verbose" and its aliases
-    ['debug',      undef, sub { $verbose = 2 }],
-    ['no-verbose', undef, sub { $verbose = 0; return 1; }],
+    ['debug',       undef, sub { $verbose = 2 }],
+    ['extra-debug', undef, sub { $verbose = 3 }],
+    ['no-verbose',  undef, sub { $verbose = 0; return 1; }],
     [
-        'verbose|v!', 'USCAN_VERBOSE',
-        sub { $verbose = ($_[1] =~ /^(?:1|yes)$/i ? 1 : 0); return 1; }
+        'verbose|v+', 'USCAN_VERBOSE',
+        sub { $verbose = ($_[1] =~ /^(?:(\d)|yes)$/i ? $1 : 0); return 1; }
     ],
     # Display version
     [
@@ -256,6 +257,7 @@ Options:
     --verbose, -v  Report verbose information.
     --debug, -vv   Report verbose information including the downloaded
                    web pages as processed to STDERR for debugging.
+    --extra-debug, -vvv  Report also remote content during "search" step
     --dehs         Send DEHS style output (XML-type) to STDOUT, while
                    send all other uscan output to STDERR.
     --no-dehs      Use only traditional uscan output format (default)

@@ -7,7 +7,7 @@ use constant accept => qr/^y(?:es)?\s*$/i;
 use constant refuse => qr/^n(?:o)?\s*$/i;
 
 our @EXPORT = (
-    qw(ds_debug ds_verbose ds_warn ds_error
+    qw(ds_debug ds_extra_debug ds_verbose ds_warn ds_error
       ds_die ds_msg who_called $progname $verbose
       ds_prompt accept refuse $ds_yes)
 );
@@ -53,6 +53,11 @@ sub ds_warn ($) {
 sub ds_debug($) {
     my $msg = $_[0];
     printwarn "$progname debug: $msg" if $verbose > 1;
+}
+
+sub ds_extra_debug($) {
+    my $msg = $_[0];
+    printwarn "$progname debug: $msg" if $verbose > 2;
 }
 
 *ds_die = \&ds_error;

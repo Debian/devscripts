@@ -105,6 +105,10 @@ of B<uscan>'s execution.
 =item * B<uscan> with the B<--debug> option produces a human readable report of
 B<uscan>'s execution including internal variable states.
 
+=item * B<uscan> with the B<--extra-debug> option produces a human readable
+report of B<uscan>'s execution including internal variable states and remote
+content during "search" step.
+
 =item * B<uscan> with the B<--dehs> option produces an upstream package status
 report in XML format for other programs such as the Debian External Health
 System.
@@ -1547,6 +1551,10 @@ Don't report verbose information. (default)
 Report verbose information.
 
 =item B<--debug>, B<-vv>
+
+Report verbose information and some internal state values.
+
+=item B<--extra-debug>, B<-vvv>
 
 Report verbose information including the downloaded
 web pages as processed to STDERR for debugging.

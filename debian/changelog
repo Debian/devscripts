@@ -34,6 +34,11 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Many improvements regarding the handling of relative URLs.
       Closes: #792025; MR: !192
 
+  [ Xavier Guimard ]
+  * uscan:
+    + Split --debug option to add a --extra-debug option that shows remote
+      HTTP content.  MR: !191
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

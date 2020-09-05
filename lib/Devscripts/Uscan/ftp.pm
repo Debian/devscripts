@@ -25,7 +25,7 @@ sub ftp_search {
     }
 
     my $content = $response->content;
-    uscan_debug
+    uscan_extra_debug
       "received content:\n$content\n[End of received content] by FTP";
 
     # FTP directory listings either look like:
@@ -160,7 +160,7 @@ sub ftp_newdir {
     }
 
     my $content = $response->content;
-    uscan_debug
+    uscan_extra_debug
       "received content:\n$content\n[End of received content] by FTP";
 
     # FTP directory listings either look like:
