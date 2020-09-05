@@ -13,23 +13,23 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
 
   [ Niels Thykier ]
   * debrebuild:
-    + Pass --no-run-lintian to sbuild. Closes: #955304
+    + Pass --no-run-lintian to sbuild. Closes: #955304; MR: !202
     + Use autodie to check for errors instead of ignoring errors from every
       syscall like open() and close().
     + Correctly determine the name of the source package from the buildinfo.
       Previously, it would be wrong for e.g. binNMUs.  Note this does *not*
       imply that debrebuild can rebuild binNMUs (see #961862).
-      Closes: #961864
+      Closes: #961864; MR: !202
     + Introduce a --help/-h option, which is part of #955049.
     + Support parsing buildinfo files with an embedded signature by ignoring
       the signature.  Validation (where relevant) is still left to the user.
-      Closes: #955050
+      Closes: #955050; MR: !202
 
   [ Andrius Merkys ]
   * uscan:
     + Fix typo in the manpage.  MR: !201
 
- -- Holger Levsen <holger@debian.org>  Thu, 09 Jul 2020 18:33:00 +0200
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium
 
