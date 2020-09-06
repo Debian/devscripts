@@ -39,7 +39,13 @@
 # -----------------
 #
 #  - restrict set of tested snapshot timestamps to those where a given package
-#    set actually changed
+#    set actually changed (needs a resolution to #806329)
+#
+#  - allow marking snapshot timestamps as skippable, for example via script
+#    exit code (needs resolution to #969603)
+#
+#  - make better use of snapshot cache by re-using the cache of a snapshot that
+#    got already downloaded (needs resolution to #969605)
 #
 #  - add convenience function which builds a given source package and installs
 #    its build dependencies automatically
@@ -567,11 +573,12 @@ create a qemu virtual machine of the correct timestamp each time. The script
 will receive the correct ssh config to log into a host named qemu and execute
 arbitrary commands.
 
-""",
+""".format(
+            progname=sys.argv[0]
+        ),
         epilog="""\
 
-EXAMPLES
---------
+*EXAMPLES*
 
 Just run "do_something" which runs the test and returns a non-zero exit on
 failure.
@@ -589,16 +596,16 @@ instead use a script:
     > #!/bin/sh
     > set -exu
     > mmdebstrap \\
-    >     --verbose \\
-    >     --aptopt='Acquire::Check-Valid-Until "false"' \\
-    >     --variant=apt \\
-    >     --include=pkga,pkgb,pkgc \\
-    >     --customize-hook='chroot "$1" dpkg -l' \\
-    >     --customize-hook='chroot "$1" do_something' \\
-    >     unstable \\
-    >     - \\
-    >     $DEBIAN_BISECT_MIRROR \\
-    >     >/dev/null
+    > --verbose \\
+    > --aptopt='Acquire::Check-Valid-Until "false"' \\
+    > --variant=apt \\
+    > --include=pkga,pkgb,pkgc \\
+    > --customize-hook='chroot "$1" dpkg -l' \\
+    > --customize-hook='chroot "$1" do_something' \\
+    > unstable \\
+    > - \\
+    > $DEBIAN_BISECT_MIRROR \\
+    > >/dev/null
     > END
     $ chmod +x script.sh
     $ {progname} --verbose --cache=./cache "two years ago" yesterday ./script.sh
@@ -640,29 +647,27 @@ If you want to run above test under qemu, then you would run:
 In the last two examples we omitted the --cache argument for brevity. But
 please make use of it to reduce the load on snapshot.debian.org.
 
-TIMESTAMPS
-----------
+*TIMESTAMPS*
 
 Valid good and bad timestamp formats are either:
 
- - the format used by snapshot.debian.org
- - ISO 8601 (with or without time, seconds and timezone)
- - RFC 2822 (used in debian/changelog)
- - all formats understood by the Python dateutil module (if installed)
- - all formats understood by the Python parsedatetime module (if installed)
+    > the format used by snapshot.debian.org
+    > ISO 8601 (with or without time, seconds and timezone)
+    > RFC 2822 (used in debian/changelog)
+    > all formats understood by the Python dateutil module (if installed)
+    > all formats understood by the Python parsedatetime module (if installed)
 
 Without specifying the timezone explicitly, the local offset is used.
 
 Examples (corresponding to the items in above list, respectively):
 
- - 20200313T065326Z
- - 2020-03-13T06:53:26+00:00
- - Fri, 29 Nov 2019 14:00:08 +0100
- - 5:50 A.M. on June 13, 1990
- - two weeks ago
+    > 20200313T065326Z
+    > 2020-03-13T06:53:26+00:00
+    > Fri, 29 Nov 2019 14:00:08 +0100
+    > 5:50 A.M. on June 13, 1990
+    > two weeks ago
 
-ENVIRONMENT VARIABLES
----------------------
+*ENVIRONMENT VARIABLES*
 
 The following environment variables are available to the test script:
 
