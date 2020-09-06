@@ -447,6 +447,15 @@ optional B<opts> argument when the I<matching-pattern> is B<HEAD> or
 B<heads/>I<branch> for B<git> mode.  For the exact syntax, see the
 B<strftime> manpage.  The default is B<date=%Y%m%d>.
 
+=item B<gitexport=>I<mode>
+
+Set the git archive export operation I<mode>. The default is
+B<gitexport=default>.  Set this to B<gitexport=all> to include all files in the
+.orig.tar archive, ignoring any I<export-ignore> git attributes defined by the
+upstream.
+
+This option is valid only in git mode.
+
 =item B<gitmode=>I<mode>
 
 Set the git clone operation I<mode>. The default is B<gitmode=shallow>.  For
