@@ -271,7 +271,7 @@ Options:
                   (may overwrite the local file)
     --no-download, --nodownload
                    Don\'t download and report information.
-		   Previously downloaded tarballs may be used.
+                   Previously downloaded tarballs may be used.
                    Change default to --skip-signature.
     --signature    Download signature and verify (default)
     --no-signature Don\'t download signature but verify if already downloaded.
@@ -288,10 +288,10 @@ Options:
                    match in order to be considered, rather than using the
                    release with the highest version
     --download-debversion VERSION
-		   Specify the Debian package version to download the
-		   corresponding upstream release version.  The
-		   dversionmangle and uversionmangle rules are
-		   considered.
+                   Specify the Debian package version to download the
+                   corresponding upstream release version.  The
+                   dversionmangle and uversionmangle rules are
+                   considered.
     --download-current-version
                    Download the currently packaged version
     --check-dirname-level N
