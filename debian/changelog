@@ -67,6 +67,11 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       - Improve the reference on the manpage.
       - Print a warning if --exclude is used in a way that will never match.
 
+  [ Robin Gustafsson ]
+  * uscan:
+    + Add a new option "gitexport" to override any "export-ignore" rule that a
+      git repository might have set.  Closes: #947317; MR: !174
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

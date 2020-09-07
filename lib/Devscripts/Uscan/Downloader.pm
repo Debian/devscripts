@@ -5,6 +5,7 @@ use Cwd qw/cwd abs_path/;
 use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
+use Dpkg::IPC;
 use File::Temp qw/tempdir/;
 use Moo;
 use URI;
@@ -49,6 +50,9 @@ has destdir => (is => 'rw');
 
 # 0: no repo, 1: shallow clone, 2: full clone
 has gitrepo_state => (
+    is      => 'rw',
+    default => sub { 0 });
+has git_export_all => (
     is      => 'rw',
     default => sub { 0 });
 has user_agent => (
@@ -148,10 +152,50 @@ sub download ($$$$$$$$) {
             uscan_exec('tar', '-C', $tempdir, '-cvf',
                 "$abs_dst/$pkg-$ver.tar", "$pkg-$ver");
         } elsif ($self->git_upstream) {
+            my ($infodir, $attr_file, $attr_bkp);
+            if ($self->git_export_all) {
+                # override any export-subst and export-ignore attributes
+                spawn(
+                    exec      => [qw|git rev-parse --git-path info/|],
+                    to_string => \$infodir,
+                );
+                chomp $infodir;
+                mkdir $infodir unless -e $infodir;
+                spawn(
+                    exec => [qw|git rev-parse --git-path info/attributes|],
+                    to_string => \$attr_file,
+                );
+                chomp $attr_file;
+                spawn(
+                    exec =>
+                      [qw|git rev-parse --git-path info/attributes-uscan|],
+                    to_string => \$attr_bkp,
+                );
+                chomp $attr_bkp;
+                rename $attr_file, $attr_bkp if -e $attr_file;
+                my $attr_fh;
+
+                unless (open($attr_fh, '>', $attr_file)) {
+                    rename $attr_bkp, $attr_file if -e $attr_bkp;
+                    uscan_die("could not open $attr_file for writing");
+                }
+                print $attr_fh "* -export-subst\n* -export-ignore\n";
+                close $attr_fh;
+            }
+
             uscan_exec_no_fail('git', 'archive', '--format=tar',
                 "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
                 $gitref) == 0
               or uscan_die("git archive failed");
+
+            if ($self->git_export_all) {
+                # restore attributes
+                if (-e $attr_bkp) {
+                    rename $attr_bkp, $attr_file;
+                } else {
+                    unlink $attr_file;
+                }
+            }
         } else {
             if ($self->gitrepo_state == 0) {
                 if ($optref->gitmode eq 'shallow') {
@@ -166,6 +210,34 @@ sub download ($$$$$$$$) {
                     $self->gitrepo_state(2);
                 }
             }
+            if ($self->git_export_all) {
+                # override any export-subst and export-ignore attributes
+                my ($infodir, $attr_file);
+                spawn(
+                    exec => [
+                        'git', "--git-dir=$destdir/$gitrepo_dir",
+                        'rev-parse', '--git-path', 'info/'
+                    ],
+                    to_string => \$infodir,
+                );
+                chomp $infodir;
+                mkdir $infodir unless -e $infodir;
+                spawn(
+                    exec => [
+                        'git',       "--git-dir=$destdir/$gitrepo_dir",
+                        'rev-parse', '--git-path',
+                        'info/attributes'
+                    ],
+                    to_string => \$attr_file,
+                );
+                chomp $attr_file;
+                my $attr_fh;
+                uscan_die("could not open $attr_file for writing")
+                  unless open($attr_fh, '>', $attr_file);
+                print $attr_fh "* -export-subst\n* -export-ignore\n";
+                close $attr_fh;
+            }
+
             uscan_exec_no_fail(
                 'git',                 "--git-dir=$destdir/$gitrepo_dir",
                 'archive',             '--format=tar',
