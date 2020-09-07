@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# Copyright (C) 2020, Xavier Guimard <yadd@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
+
+set -u
+
+TESTTYPE=base
+test_dir=$(readlink -f "${0%/*}")
+. "$test_dir/lib_test_uscan"
+
+SUFFIX="1"
+if which dpkg-vendor >/dev/null 2>&1; then
+    VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
+    case "$VENDER" in
+        debian) SUFFIX="1" ;;
+        *) SUFFIX="0${VENDER}1" ;;
+    esac
+fi
+
+if test "${1:-}" = --installed; then
+    COMMAND="uscan --no-conf --compression=gz"
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
+    PATH="$top_srcdir/scripts:$PATH"
+    export PATH
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
+    COMMAND="uscan --no-conf --compression=xz"
+fi
+
+COMMANDDEHS="$COMMAND --dehs"
+
+# comment out for debug
+#COMMAND="$COMMAND --debug"
+
+tearDown(){
+    killHttpServer
+    echo
+}
+
+trap tearDown EXIT
+
+containsName(){
+  echo "$1" | fgrep -q "$2"
+  echo $?
+}
+
+makeRepo() {
+    lv="$1"
+    cmpopt1="$2"
+    lv1="$3"
+    cmpopt2="$4"
+    lv2="$5"
+    cmpopt3="$6"
+    lv3="$7"
+    cmpopt4="$8"
+    lv4="$9"
+    prev="${10}"
+    PKG=foo
+    TEMP_PKG_DIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
+
+    mkdir -p "$TEMP_PKG_DIR"/$PKG/debian/source
+    spawnHttpServer
+    PORT=$(cat "$TEMP_PKG_DIR"/repo/port)
+
+    cat <<END > "$TEMP_PKG_DIR"/$PKG/debian/watch
+version=4
+http://localhost:$PORT/ .*$PKG-([\d\.]+).tar.gz $lv
+
+opts="component=bar1$cmpopt1" http://localhost:$PORT/ .*bar1-([\d\.]+).tar.gz $lv1
+opts="component=bar2$cmpopt2" http://localhost:$PORT/ .*bar2-([\d\.]+).tar.gz $lv2
+opts="component=bar3$cmpopt3" http://localhost:$PORT/ .*bar3-([\d\.]+).tar.gz $lv3
+opts="component=bar4$cmpopt4" http://localhost:$PORT/ .*bar4-([\d\.]+).tar.gz $lv4
+END
+
+    cat <<END > "$TEMP_PKG_DIR"/$PKG/debian/changelog
+$PKG ($prev) unstable; urgency=medium
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    echo -n '3.0 (quilt)' > "$TEMP_PKG_DIR"/$PKG/debian/source/format
+    mkdir -p "$TEMP_PKG_DIR"/repo/foo
+    touch "$TEMP_PKG_DIR"/repo/foo/content
+
+    # Upstream repo
+    ( cd "$TEMP_PKG_DIR"/repo ;
+      tar -czf $PKG-1.0.0.tar.gz $PKG/* )
+
+    for i in 1 2 3 4; do
+      # Upstream repo
+      mkdir -p "$TEMP_PKG_DIR"/repo/bar$i
+      touch "$TEMP_PKG_DIR"/repo/bar$i/content
+      ( cd "$TEMP_PKG_DIR"/repo ;
+        tar -czf bar$i-2.0.$i.tar.gz bar$i/* )
+      # Debian dir
+      mkdir $TEMP_PKG_DIR/$PKG/bar$i
+      echo '{"name":"bar'$i'","version":"'1.0.$i'"}' > $TEMP_PKG_DIR/$PKG/bar$i/package.json
+    done
+}
+
+helperDownload() {
+    next="${11}"
+    makeRepo "$@"
+
+    OUTPUT=$( cd "$TEMP_PKG_DIR"/$PKG ; $COMMANDDEHS --dehs )
+    BASETARBALL=${PKG}_$next.orig
+    assertTrue 'pristine tarball foo is not created' "[ -f "$TEMP_PKG_DIR"/$BASETARBALL.tar.gz ]"
+    assertTrue "malformed target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<target>$BASETARBALL.tar.gz</target>")
+    for i in 1 2 3 4; do
+      assertTrue "pristine tarball bar$i is not created" "[ -f "$TEMP_PKG_DIR"/$BASETARBALL-bar$i.tar.gz ]"
+      assertTrue "malformed target in dehs output: $OUTPUT" \
+                 $(containsName "$OUTPUT" "<component-target>$BASETARBALL-bar$i.tar.gz</component-target>")
+    done
+    #cat "$TEMP_PKG_DIR"/$PKG/debian/watch
+}
+
+testCmpIgnore() {
+  helperDownload "debian" "" "ignore" "" "ignore" "" "ignore" "" "ignore" "0.0.1" "1.0.0"
+}
+
+testCmpGroup() {
+  helperDownload "group" "" "group" "" "group" "" "group" "" "group" "0.0.1+~1" "1.0.0+~2.0.1+~2.0.2+~2.0.3+~2.0.4"
+}
+
+testCmpGroupOneCmpChanged() {
+  helperDownload "group" "" "group" "" "group" "" "group" "" "group" "1.0.0+~2.0.1+~2.0.2+~2.0.2+~2.0.4" "1.0.0+~2.0.1+~2.0.2+~2.0.3+~2.0.4"
+}
+
+testCmpPartialGroup() {
+  helperDownload "group" "" "group" "" "group" "" "ignore" "" "ignore" "0.0.1+~1" "1.0.0+~2.0.1+~2.0.2"
+}
+
+testCmpPartialGroup2() {
+  helperDownload "group" "" "group" "" "ignore" "" "group" "" "ignore" "0.0.1+~1" "1.0.0+~2.0.1+~2.0.3"
+}
+
+testCmpChecksum() {
+  helperDownload "group" "" "checksum" "" "checksum" "" "checksum" "" "checksum" "0.0.1+~1" "1.0.0+~cs8.0.10"
+}
+
+testCmpChecksumOneCmpChanged() {
+  helperDownload "group" "" "checksum" "" "checksum" "" "checksum" "" "checksum" "1.0.0+~cs8.0.9" "1.0.0+~cs8.0.10"
+}
+
+testCmpGroupAndChecksum() {
+  helperDownload "group" "" "group" "" "checksum" "" "checksum" "" "checksum" "0.0.1+~1" "1.0.0+~2.0.1+~cs6.0.9"
+}
+
+testCmpGroupIgnoreAndChecksum() {
+  helperDownload "group" "" "group" "" "ignore" "" "checksum" "" "checksum" "0.0.1+~1" "1.0.0+~2.0.1+~cs4.0.7"
+}
+
+helperNoDownload() {
+    next="${10}"
+    makeRepo "$@"
+
+    OUTPUT=$( cd "$TEMP_PKG_DIR"/$PKG ; $COMMANDDEHS --dehs )
+    assertTrue "bad change detected: $OUTPUT" \
+               $(containsName "$OUTPUT" "<status>up to date</status>")
+    BASETARBALL=${PKG}_$next.orig
+    assertTrue 'pristine tarball foo is created' "[ ! -f "$TEMP_PKG_DIR"/$BASETARBALL.tar.gz ]"
+}
+
+testCmpIgnoreND() {
+  helperNoDownload "debian" "" "ignore" "" "ignore" "" "ignore" "" "ignore" "1.0.0"
+}
+
+testCmpGroupND() {
+  helperNoDownload "group" "" "group" "" "group" "" "group" "" "group" "1.0.0+~2.0.1+~2.0.2+~2.0.3+~2.0.4"
+}
+
+testCmpChecksumND() {
+  helperNoDownload "group" "" "checksum" "" "checksum" "" "checksum" "" "checksum" "1.0.0+~cs8.0.10"
+}
+
+# Same test but here Ctype detects change even if previous checksum is wrong
+testCmpChecksumCtype() {
+  helperDownload "group" ",ctype=nodejs" "checksum" ",ctype=nodejs" "checksum" ",ctype=nodejs" "checksum" ",ctype=nodejs" "checksum" "1.0.0+~cs8.0.10" "1.0.0+~cs8.0.10"
+}
+
+testCmpIgnoreCtype() {
+  helperNoDownload "debian" ",ctype=nodejs" "ignore" "" "ignore" "" "ignore" "" "ignore" "1.0.0"
+  assertTrue "Component change is not detected: $OUTPUT" \
+             $(containsName "$OUTPUT" "Newest version of bar1 on remote site is 2.0.1, local version is 1.0.1")
+}
+
+. shunit2
