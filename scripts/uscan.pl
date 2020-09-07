@@ -330,6 +330,17 @@ The available watch options are:
 Set the name of the secondary source tarball as I<<
 <spkg>_<oversion>.orig-<component>.tar.gz >> for a MUT package.
 
+=item B<ctype=>I<component-type>
+
+Set the type of component I<(only "nodejs" and "perl" are available for now)>.
+This will help uscan to find current version if component version is ignored.
+
+When using B<ctype=nodejs>, uscan tries to find a version in C<package.json>,
+when using B<ctype=perl>, uscan tries to find a version in C<META.json>.
+If a version is found, it is used as current version for this component,
+regardless version found in Debian version string. This permits a better
+change detection when using I<ignore> or I<checksum> as Debian version.
+
 =item B<compression=>I<method>
 
 Set the compression I<method> when the tarball is repacked (persistent).

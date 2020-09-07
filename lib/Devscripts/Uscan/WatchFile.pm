@@ -356,12 +356,14 @@ sub process_group {
             or $line->search
             or $line->get_upstream_url
             or $line->get_newfile_base
-            or ($line->type eq 'group' and $line->cmp_versions)) {
+            or ($line->type eq 'group' and $line->cmp_versions)
+            or ($line->ctype and $line->cmp_versions)) {
             $self->{status} += $line->status;
             return $self->{status};
         }
         $download = $line->shared->{download}
-          if $line->shared->{download} > $download;
+          if $line->shared->{download} > $download
+          and ($line->type eq 'group' or $line->ctype);
     }
     foreach my $line (@{ $self->watchlines }) {
         next unless $line->type eq 'checksum';
@@ -374,12 +376,14 @@ sub process_group {
         $line->parse_result->{mangled_lastversion} = $checksum;
         my $tmp = $line->search_result->{newversion};
         $line->search_result->{newversion} = $newChecksum;
-        if ($line->cmp_versions) {
-            $self->{status} += $line->status;
-            return $self->{status};
+        unless ($line->ctype) {
+            if ($line->cmp_versions) {
+                $self->{status} += $line->status;
+                return $self->{status};
+            }
+            $download = $line->shared->{download}
+              if $line->shared->{download} > $download;
         }
-        $download = $line->shared->{download}
-          if $line->shared->{download} > $download;
         $line->search_result->{newversion} = $tmp;
         if ($line->component) {
             pop @{ $dehs_tags->{'component-upstream-version'} };
