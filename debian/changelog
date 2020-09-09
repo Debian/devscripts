@@ -47,9 +47,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   [ Matthijs Kooijman ]
   * uscan:
     + Fix --check-direname-level/regex handling.  See #905866; MR: !193
-    + Fix error handling in case of invalid changelog fiel.  MR: !193
+    + Fix error handling in case of invalid changelog field.  MR: !193
     + Clarify manpage about the recursive feature of uscan.  MR: !193
-    + Fix some typos in the manapge and error messages.  MR: !193
+    + Fix some typos in the manpage and error messages.  MR: !193
 
   [ Reinhard Tartler ]
   * mk-origtargz:
