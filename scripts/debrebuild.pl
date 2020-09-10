@@ -463,6 +463,10 @@ foreach my $pkg (@inst_build_deps) {
             die
 "package $pkg_name was implicitly requested for $pkg_arch but only $pkg->{architecture} was found\n";
         }
+        # Ensure that $pkg_arch is defined from here as we want to look it up
+        # later in a Packages file from snapshot.d.o if it is not in the
+        # current Packages file
+        $pkg_arch = $pkg->{architecture};
     } else {
         # Since the package occurs more than once, we expect it to be of
         # Architecture:any

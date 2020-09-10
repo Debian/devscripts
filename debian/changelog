@@ -31,6 +31,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       the apt option "Acquire::Check-Valid-Until" to "false".
       Closes: #955308
     + Support fetching data via tor via the new --use-tor-proxy option.
+    + Fix a bug that caused debrebuild to fail when attempting to locate a
+      package from snapshot.debian.org.  It sometimes also caused a
+      warning about $pkg_arch being undefined.
+      Closes: #969098
 
   [ Andrius Merkys ]
   * uscan:
