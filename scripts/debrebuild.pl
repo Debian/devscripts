@@ -44,11 +44,13 @@ if ($@) {
     }
 }
 
+my $use_tor = 0;
+my $apt_tor_prefix = '';
 
 my %OPTIONS = (
     'help|h' => \&usage,
+    'use-tor-proxy!' => \$use_tor,
 );
-
 
 sub usage {
     my ($exit_code) = @_;
@@ -63,7 +65,9 @@ attempting to reproduce the binary packages built from the associated source
 and build information.
 
 Options:
- --help, -h      Show this help and exit
+ --help, -h              Show this help and exit
+ --[no-]use-tor-proxy    Fetch resources via tor (socks://127.0.0.1:9050)
+                         Assumes "apt-transport-tor" is installed both in host + chroot
 
 Note: $me can parse buildinfo files with and without a GPG signature.  However,
 the signature (if present) is discarded as debrebuild does not support verifying
@@ -96,6 +100,20 @@ if (@ARGV) {
     print STDERR "ERROR: This program requires exactly argument!\n";
     print STDERR "\n";
     usage(1);
+}
+
+if ($use_tor) {
+    $apt_tor_prefix = 'tor+';
+    eval {
+        $LWP::Simple::ua->proxy([ qw(http https) ] => 'socks://127.0.0.1:9050');
+    };
+    if ($@) {
+        if ($@ =~ m/Can\'t locate LWP/) {
+            die "Unable to use tor: the liblwp-protocol-socks-perl package is not installed\n";
+        } else {
+            die "Unable to use tor: Couldn't load socks proxy support: $@\n";
+        }
+    }
 }
 
 # buildinfo support in libdpkg-perl (>= 1.18.11)
@@ -279,7 +297,7 @@ foreach my $d ((
 
 open(FH, '>', "$tempdir/etc/apt/sources.list");
 print FH <<EOF;
-deb http://deb.debian.org/debian/ $base_dist main
+deb ${apt_tor_prefix}http://deb.debian.org/debian/ $base_dist main
 EOF
 close FH;
 # FIXME - document what's dpkg's status for
@@ -499,7 +517,7 @@ while (0 < scalar keys %notfound_timestamps) {
     my $snapshot_url = "http://snapshot.debian.org/archive/debian/$newest/";
 
     open(FH, '>>', "$tempdir/etc/apt/sources.list");
-    print FH "deb $snapshot_url unstable main\n";
+    print FH "deb ${apt_tor_prefix}${snapshot_url} unstable main\n";
     close FH;
 
     0 == system 'apt-get', 'update' or die "apt-get update failed";

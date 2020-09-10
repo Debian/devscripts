@@ -30,6 +30,7 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + If snapshot.debian.org is needed to resolve the dependencies, set
       the apt option "Acquire::Check-Valid-Until" to "false".
       Closes: #955308
+    + Support fetching data via tor via the new --use-tor-proxy option.
 
   [ Andrius Merkys ]
   * uscan:
