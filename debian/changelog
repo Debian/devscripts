@@ -27,6 +27,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Attempt to locate packages via more than one snapshot.d.o URL rather
       than just giving up when the first one does not work.
       Closes: #969098
+    + If snapshot.debian.org is needed to resolve the dependencies, set
+      the apt option "Acquire::Check-Valid-Until" to "false".
+      Closes: #955308
 
   [ Andrius Merkys ]
   * uscan:

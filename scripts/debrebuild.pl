@@ -379,7 +379,7 @@ my $index = parse_all_packages_files();
 # the timestamps at which they were first seen each
 my %notfound_timestamps;
 
-my %missing;
+my (%missing, $snapshots_needed);
 
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
@@ -505,6 +505,7 @@ while (0 < scalar keys %notfound_timestamps) {
             # Not present yet; we hope a later snapshot URL will locate it.
             next;
         }
+        $snapshots_needed = 1;
         delete($missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"});
         if (defined $first_seen) {
             delete $notfound_timestamps{$first_seen};
@@ -537,6 +538,13 @@ print "\n";
 print "You can manually install the right dependencies like this:\n";
 print "\n";
 print "apt-get install --no-install-recommends";
+
+if ($snapshots_needed) {
+    # Release files from snapshots.d.o have often expired by the time
+    # we fetch them.  Include the option to work around that to assist
+    # the user.
+    print " -oAcquire::Check-Valid-Until=false";
+}
 
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
@@ -575,6 +583,13 @@ while (my $line = <FH>) {
     print " --extra-repository=\"$line\"";
 }
 close FH;
+if ($snapshots_needed) {
+    # Release files from snapshots.d.o have often expired by the time
+    # we fetch them.  Include the option to work around that to assist
+    # the user.
+    print
+      q{--chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild'};
+}
 my @add_depends = ();
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
