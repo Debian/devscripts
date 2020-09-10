@@ -17,6 +17,8 @@ use strict;
 use warnings;
 use autodie;
 
+use Getopt::Long qw(:config gnu_getopt no_bundling no_auto_abbrev);
+
 use Dpkg::Control;
 use Dpkg::Index;
 use Dpkg::Deps;
@@ -42,6 +44,12 @@ if ($@) {
     }
 }
 
+
+my %OPTIONS = (
+    'help|h' => \&usage,
+);
+
+
 sub usage {
     my ($exit_code) = @_;
     my $me = basename($0);
@@ -65,6 +73,8 @@ EOF
 
     exit($exit_code);
 }
+
+GetOptions(%OPTIONS);
 
 my $buildinfo = shift @ARGV;
 if (not defined($buildinfo)) {
