@@ -44,12 +44,14 @@ if ($@) {
     }
 }
 
+my $respect_build_path = 1;
 my $use_tor = 0;
 my $apt_tor_prefix = '';
 
 my %OPTIONS = (
     'help|h' => \&usage,
     'use-tor-proxy!' => \$use_tor,
+    'respect-build-path!' => \$respect_build_path,
 );
 
 sub usage {
@@ -57,7 +59,7 @@ sub usage {
     my $me = basename($0);
     $exit_code //= 0;
     print <<EOF;
-Usage: $me <buildinfo>
+Usage: $me [--no-respect-build-path] <buildinfo>
        $me <--help|-h>
 
 Given a buildinfo file from a Debian package, generate instructions for
@@ -65,9 +67,11 @@ attempting to reproduce the binary packages built from the associated source
 and build information.
 
 Options:
- --help, -h              Show this help and exit
- --[no-]use-tor-proxy    Fetch resources via tor (socks://127.0.0.1:9050)
-                         Assumes "apt-transport-tor" is installed both in host + chroot
+ --help, -h                 Show this help and exit
+ --[no-]use-tor-proxy       Whether to fetch resources via tor (socks://127.0.0.1:9050)
+                            Assumes "apt-transport-tor" is installed both in host + chroot
+ --[no-]respect-build-path  Whether to setup the build to use the Build-Path from the
+                            provided .buildinfo file.
 
 Note: $me can parse buildinfo files with and without a GPG signature.  However,
 the signature (if present) is discarded as debrebuild does not support verifying
@@ -150,6 +154,24 @@ if (not defined($build_arch)) {
 my $inst_build_deps = $cdata->{"Installed-Build-Depends"};
 if (not defined($inst_build_deps)) {
     die "need Installed-Build-Depends field";
+}
+my $custom_build_path = $respect_build_path ? $cdata->{'Build-Path'} : undef;
+
+if (defined($custom_build_path)) {
+    if ($custom_build_path =~ m{['`\$\\"\(\)<>#]|(?:\a|/)[.][.](?:\z|/)}) {
+        warn("Retry build with --no-respect-build-path to ignore the Build-Path field.\n");
+        die("Refusing to use $custom_build_path as Build-Path: Looks too special to be true");
+    }
+
+    if ($custom_build_path eq '' or $custom_build_path !~ m{^/}) {
+        warn("Retry build with --no-respect-build-path to ignore the Build-Path field.\n");
+        die(qq{Build-Path must be a non-empty absolute path (i.e. start with "/").\n});
+    }
+    print "Using defined Build-Path: ${custom_build_path}\n";
+} else {
+    if ($respect_build_path) {
+        print "No Build-Path defined; not setting a defined build path for this build.\n";
+    }
 }
 
 sub extract_source {
@@ -592,8 +614,17 @@ print "\n";
 print "\n";
 print "And then build your package:\n";
 print "\n";
-print "dpkg-source -x $dsc_fname\n";
-print "cd packagedirectory\n";
+if ($custom_build_path) {
+    require Cwd;
+    my $custom_build_parent_dir=dirname($custom_build_path);
+    my $dsc_path = Cwd::realpath($dsc_fname) // die ("Cannot resolve ${dsc_fname}: $!\n");
+    print "mkdir -p \"${custom_build_parent_dir}\"\n";
+    print qq{dpkg-source -x "${dsc_path}" "${custom_build_path}"\n};
+    print "cd \"$custom_build_path\"\n";
+} else {
+    print qq{dpkg-source -x "${dsc_fname}"\n};
+    print "cd packagedirectory\n";
+}
 print "$environment dpkg-buildpackage\n";
 print "\n";
 print "Using sbuild\n";
@@ -656,5 +687,8 @@ if ($build_archall) {
 }
 print " -d $base_dist";
 print " --no-run-lintian";
+if ($custom_build_path) {
+    print " --build-path='${custom_build_path}'";
+}
 print " $dsc_fname\n";
 print "BASE_DIST=$base_dist\n";

@@ -35,6 +35,11 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       package from snapshot.debian.org.  It sometimes also caused a
       warning about $pkg_arch being undefined.
       Closes: #969098
+    + Add --respect-build-path (new default) and its counter part
+      --no-respect-build-path.  These options determine whether the
+      Build-Path provided by the buildinfo should be used as build
+      directory.
+      Closes: #964722
 
   [ Andrius Merkys ]
   * uscan:
