@@ -45,12 +45,12 @@ if ($@) {
 }
 
 my $respect_build_path = 1;
-my $use_tor = 0;
-my $apt_tor_prefix = '';
+my $use_tor            = 0;
+my $apt_tor_prefix     = '';
 
 my %OPTIONS = (
-    'help|h' => sub { usage(0); },
-    'use-tor-proxy!' => \$use_tor,
+    'help|h'              => sub { usage(0); },
+    'use-tor-proxy!'      => \$use_tor,
     'respect-build-path!' => \$respect_build_path,
 );
 
@@ -109,11 +109,12 @@ if (@ARGV) {
 if ($use_tor) {
     $apt_tor_prefix = 'tor+';
     eval {
-        $LWP::Simple::ua->proxy([ qw(http https) ] => 'socks://127.0.0.1:9050');
+        $LWP::Simple::ua->proxy([qw(http https)] => 'socks://127.0.0.1:9050');
     };
     if ($@) {
         if ($@ =~ m/Can\'t locate LWP/) {
-            die "Unable to use tor: the liblwp-protocol-socks-perl package is not installed\n";
+            die
+"Unable to use tor: the liblwp-protocol-socks-perl package is not installed\n";
         } else {
             die "Unable to use tor: Couldn't load socks proxy support: $@\n";
         }
@@ -159,18 +160,27 @@ my $custom_build_path = $respect_build_path ? $cdata->{'Build-Path'} : undef;
 
 if (defined($custom_build_path)) {
     if ($custom_build_path =~ m{['`\$\\"\(\)<>#]|(?:\a|/)[.][.](?:\z|/)}) {
-        warn("Retry build with --no-respect-build-path to ignore the Build-Path field.\n");
-        die("Refusing to use $custom_build_path as Build-Path: Looks too special to be true");
+        warn(
+"Retry build with --no-respect-build-path to ignore the Build-Path field.\n"
+        );
+        die(
+"Refusing to use $custom_build_path as Build-Path: Looks too special to be true"
+        );
     }
 
     if ($custom_build_path eq '' or $custom_build_path !~ m{^/}) {
-        warn("Retry build with --no-respect-build-path to ignore the Build-Path field.\n");
-        die(qq{Build-Path must be a non-empty absolute path (i.e. start with "/").\n});
+        warn(
+"Retry build with --no-respect-build-path to ignore the Build-Path field.\n"
+        );
+        die(
+qq{Build-Path must be a non-empty absolute path (i.e. start with "/").\n}
+        );
     }
     print "Using defined Build-Path: ${custom_build_path}\n";
 } else {
     if ($respect_build_path) {
-        print "No Build-Path defined; not setting a defined build path for this build.\n";
+        print
+"No Build-Path defined; not setting a defined build path for this build.\n";
     }
 }
 
@@ -411,7 +421,7 @@ sub parse_all_packages_files {
     my $dpkg_index = Dpkg::Index->new(get_key_func => \&dpkg_index_key_func);
 
     open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-         'Created-By: Packages');
+        'Created-By: Packages');
     while (my $fname = <$fd>) {
         chomp $fname;
         print "parsing $fname...\n";
@@ -521,8 +531,8 @@ foreach my $pkg (@inst_build_deps) {
         die "no package with the right hash in Debian official\n";
     }
     my $date = $package_from_main[0]->{first_seen};
-    $pkg->{first_seen} = $date;
-    $notfound_timestamps{$date} = 1;
+    $pkg->{first_seen}                             = $date;
+    $notfound_timestamps{$date}                    = 1;
     $missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"} = 1;
 }
 
@@ -569,7 +579,7 @@ while (0 < scalar keys %notfound_timestamps) {
 
 if (%missing) {
     print STDERR 'Cannot locate the following packages via snapshots'
-        . " or the current repo/mirror\n";
+      . " or the current repo/mirror\n";
     for my $key (sort(keys(%missing))) {
         print STDERR "  ${key}\n";
     }
@@ -616,8 +626,9 @@ print "And then build your package:\n";
 print "\n";
 if ($custom_build_path) {
     require Cwd;
-    my $custom_build_parent_dir=dirname($custom_build_path);
-    my $dsc_path = Cwd::realpath($dsc_fname) // die ("Cannot resolve ${dsc_fname}: $!\n");
+    my $custom_build_parent_dir = dirname($custom_build_path);
+    my $dsc_path                = Cwd::realpath($dsc_fname)
+      // die("Cannot resolve ${dsc_fname}: $!\n");
     print "mkdir -p \"${custom_build_parent_dir}\"\n";
     print qq{dpkg-source -x "${dsc_path}" "${custom_build_path}"\n};
     print "cd \"$custom_build_path\"\n";
@@ -651,7 +662,7 @@ if ($snapshots_needed) {
     # we fetch them.  Include the option to work around that to assist
     # the user.
     print
-      q{--chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild'};
+q{--chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild'};
 }
 my @add_depends = ();
 foreach my $pkg (@inst_build_deps) {
