@@ -49,7 +49,7 @@ my $use_tor = 0;
 my $apt_tor_prefix = '';
 
 my %OPTIONS = (
-    'help|h' => \&usage,
+    'help|h' => sub { usage(0); },
     'use-tor-proxy!' => \$use_tor,
     'respect-build-path!' => \$respect_build_path,
 );
