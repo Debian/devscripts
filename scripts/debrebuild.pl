@@ -662,7 +662,7 @@ if ($snapshots_needed) {
     # we fetch them.  Include the option to work around that to assist
     # the user.
     print
-q{--chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild'};
+q{ --chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild.conf'};
 }
 my @add_depends = ();
 foreach my $pkg (@inst_build_deps) {
