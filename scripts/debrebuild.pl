@@ -17,6 +17,8 @@ use strict;
 use warnings;
 use autodie;
 
+use Getopt::Long qw(:config gnu_getopt no_bundling no_auto_abbrev);
+
 use Dpkg::Control;
 use Dpkg::Index;
 use Dpkg::Deps;
@@ -42,12 +44,22 @@ if ($@) {
     }
 }
 
+my $respect_build_path = 1;
+my $use_tor            = 0;
+my $apt_tor_prefix     = '';
+
+my %OPTIONS = (
+    'help|h'              => sub { usage(0); },
+    'use-tor-proxy!'      => \$use_tor,
+    'respect-build-path!' => \$respect_build_path,
+);
+
 sub usage {
     my ($exit_code) = @_;
     my $me = basename($0);
     $exit_code //= 0;
     print <<EOF;
-Usage: $me <buildinfo>
+Usage: $me [--no-respect-build-path] <buildinfo>
        $me <--help|-h>
 
 Given a buildinfo file from a Debian package, generate instructions for
@@ -55,7 +67,11 @@ attempting to reproduce the binary packages built from the associated source
 and build information.
 
 Options:
- --help, -h      Show this help and exit
+ --help, -h                 Show this help and exit
+ --[no-]use-tor-proxy       Whether to fetch resources via tor (socks://127.0.0.1:9050)
+                            Assumes "apt-transport-tor" is installed both in host + chroot
+ --[no-]respect-build-path  Whether to setup the build to use the Build-Path from the
+                            provided .buildinfo file.
 
 Note: $me can parse buildinfo files with and without a GPG signature.  However,
 the signature (if present) is discarded as debrebuild does not support verifying
@@ -65,6 +81,8 @@ EOF
 
     exit($exit_code);
 }
+
+GetOptions(%OPTIONS);
 
 my $buildinfo = shift @ARGV;
 if (not defined($buildinfo)) {
@@ -86,6 +104,21 @@ if (@ARGV) {
     print STDERR "ERROR: This program requires exactly argument!\n";
     print STDERR "\n";
     usage(1);
+}
+
+if ($use_tor) {
+    $apt_tor_prefix = 'tor+';
+    eval {
+        $LWP::Simple::ua->proxy([qw(http https)] => 'socks://127.0.0.1:9050');
+    };
+    if ($@) {
+        if ($@ =~ m/Can\'t locate LWP/) {
+            die
+"Unable to use tor: the liblwp-protocol-socks-perl package is not installed\n";
+        } else {
+            die "Unable to use tor: Couldn't load socks proxy support: $@\n";
+        }
+    }
 }
 
 # buildinfo support in libdpkg-perl (>= 1.18.11)
@@ -122,6 +155,33 @@ if (not defined($build_arch)) {
 my $inst_build_deps = $cdata->{"Installed-Build-Depends"};
 if (not defined($inst_build_deps)) {
     die "need Installed-Build-Depends field";
+}
+my $custom_build_path = $respect_build_path ? $cdata->{'Build-Path'} : undef;
+
+if (defined($custom_build_path)) {
+    if ($custom_build_path =~ m{['`\$\\"\(\)<>#]|(?:\a|/)[.][.](?:\z|/)}) {
+        warn(
+"Retry build with --no-respect-build-path to ignore the Build-Path field.\n"
+        );
+        die(
+"Refusing to use $custom_build_path as Build-Path: Looks too special to be true"
+        );
+    }
+
+    if ($custom_build_path eq '' or $custom_build_path !~ m{^/}) {
+        warn(
+"Retry build with --no-respect-build-path to ignore the Build-Path field.\n"
+        );
+        die(
+qq{Build-Path must be a non-empty absolute path (i.e. start with "/").\n}
+        );
+    }
+    print "Using defined Build-Path: ${custom_build_path}\n";
+} else {
+    if ($respect_build_path) {
+        print
+"No Build-Path defined; not setting a defined build path for this build.\n";
+    }
 }
 
 sub extract_source {
@@ -269,7 +329,7 @@ foreach my $d ((
 
 open(FH, '>', "$tempdir/etc/apt/sources.list");
 print FH <<EOF;
-deb http://deb.debian.org/debian/ $base_dist main
+deb ${apt_tor_prefix}http://deb.debian.org/debian/ $base_dist main
 EOF
 close FH;
 # FIXME - document what's dpkg's status for
@@ -350,28 +410,36 @@ $ENV{'APT_CONFIG'} = $aptconf;
 
 0 == system 'apt-get', 'update' or die "apt-get update failed\n";
 
-my $key_func = sub {
+sub dpkg_index_key_func {
     return
         $_[0]->{Package} . ' '
       . $_[0]->{Version} . ' '
       . $_[0]->{Architecture};
-};
-my $index = Dpkg::Index->new(get_key_func => $key_func);
-
-open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-    'Created-By: Packages');
-while (my $fname = <$fd>) {
-    chomp $fname;
-    print "parsing $fname...\n";
-    open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
-    $index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
-    close($fd2);
 }
-close($fd);
+
+sub parse_all_packages_files {
+    my $dpkg_index = Dpkg::Index->new(get_key_func => \&dpkg_index_key_func);
+
+    open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
+        'Created-By: Packages');
+    while (my $fname = <$fd>) {
+        chomp $fname;
+        print "parsing $fname...\n";
+        open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
+        $dpkg_index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
+        close($fd2);
+    }
+    close($fd);
+    return $dpkg_index;
+}
+
+my $index = parse_all_packages_files();
 
 # go through all packages in the Installed-Build-Depends field and find out
 # the timestamps at which they were first seen each
 my %notfound_timestamps;
+
+my (%missing, $snapshots_needed);
 
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
@@ -427,6 +495,10 @@ foreach my $pkg (@inst_build_deps) {
             die
 "package $pkg_name was implicitly requested for $pkg_arch but only $pkg->{architecture} was found\n";
         }
+        # Ensure that $pkg_arch is defined from here as we want to look it up
+        # later in a Packages file from snapshot.d.o if it is not in the
+        # current Packages file
+        $pkg_arch = $pkg->{architecture};
     } else {
         # Since the package occurs more than once, we expect it to be of
         # Architecture:any
@@ -459,8 +531,9 @@ foreach my $pkg (@inst_build_deps) {
         die "no package with the right hash in Debian official\n";
     }
     my $date = $package_from_main[0]->{first_seen};
-    $pkg->{first_seen} = $date;
-    $notfound_timestamps{$date} = 1;
+    $pkg->{first_seen}                             = $date;
+    $notfound_timestamps{$date}                    = 1;
+    $missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"} = 1;
 }
 
 # feed apt with timestamped snapshot.debian.org URLs until apt is able to find
@@ -480,22 +553,12 @@ while (0 < scalar keys %notfound_timestamps) {
     my $snapshot_url = "http://snapshot.debian.org/archive/debian/$newest/";
 
     open(FH, '>>', "$tempdir/etc/apt/sources.list");
-    print FH "deb $snapshot_url unstable main\n";
+    print FH "deb ${apt_tor_prefix}${snapshot_url} unstable main\n";
     close FH;
 
     0 == system 'apt-get', 'update' or die "apt-get update failed";
 
-    my $index = Dpkg::Index->new(get_key_func => $key_func);
-    open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-        'Created-By: Packages');
-    while (my $fname = <$fd>) {
-        chomp $fname;
-        print "parsing $fname...\n";
-        open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
-        $index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
-        close($fd2);
-    }
-    close($fd);
+    my $index = parse_all_packages_files();
     foreach my $pkg (@inst_build_deps) {
         my $pkg_name   = $pkg->{name};
         my $pkg_ver    = $pkg->{version};
@@ -503,12 +566,24 @@ while (0 < scalar keys %notfound_timestamps) {
         my $first_seen = $pkg->{first_seen};
         my $cdata      = $index->get_by_key("$pkg_name $pkg_ver $pkg_arch");
         if (not defined($cdata->{"Package"})) {
-            die "cannot find $pkg_name/$pkg_ver/$pkg_arch in dumpavail\n";
+            # Not present yet; we hope a later snapshot URL will locate it.
+            next;
         }
+        $snapshots_needed = 1;
+        delete($missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"});
         if (defined $first_seen) {
             delete $notfound_timestamps{$first_seen};
         }
     }
+}
+
+if (%missing) {
+    print STDERR 'Cannot locate the following packages via snapshots'
+      . " or the current repo/mirror\n";
+    for my $key (sort(keys(%missing))) {
+        print STDERR "  ${key}\n";
+    }
+    exit(1);
 }
 
 print "\n";
@@ -528,6 +603,13 @@ print "You can manually install the right dependencies like this:\n";
 print "\n";
 print "apt-get install --no-install-recommends";
 
+if ($snapshots_needed) {
+    # Release files from snapshots.d.o have often expired by the time
+    # we fetch them.  Include the option to work around that to assist
+    # the user.
+    print " -oAcquire::Check-Valid-Until=false";
+}
+
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
     my $pkg_ver  = $pkg->{version};
@@ -542,8 +624,18 @@ print "\n";
 print "\n";
 print "And then build your package:\n";
 print "\n";
-print "dpkg-source -x $dsc_fname\n";
-print "cd packagedirectory\n";
+if ($custom_build_path) {
+    require Cwd;
+    my $custom_build_parent_dir = dirname($custom_build_path);
+    my $dsc_path                = Cwd::realpath($dsc_fname)
+      // die("Cannot resolve ${dsc_fname}: $!\n");
+    print "mkdir -p \"${custom_build_parent_dir}\"\n";
+    print qq{dpkg-source -x "${dsc_path}" "${custom_build_path}"\n};
+    print "cd \"$custom_build_path\"\n";
+} else {
+    print qq{dpkg-source -x "${dsc_fname}"\n};
+    print "cd packagedirectory\n";
+}
 print "$environment dpkg-buildpackage\n";
 print "\n";
 print "Using sbuild\n";
@@ -565,6 +657,13 @@ while (my $line = <FH>) {
     print " --extra-repository=\"$line\"";
 }
 close FH;
+if ($snapshots_needed) {
+    # Release files from snapshots.d.o have often expired by the time
+    # we fetch them.  Include the option to work around that to assist
+    # the user.
+    print
+q{ --chroot-setup-commands='echo "Acquire::Check-Valid-Until \"false\";" | tee /etc/apt/apt.conf.d/23-debrebuild.conf'};
+}
 my @add_depends = ();
 foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
@@ -599,5 +698,8 @@ if ($build_archall) {
 }
 print " -d $base_dist";
 print " --no-run-lintian";
+if ($custom_build_path) {
+    print " --build-path='${custom_build_path}'";
+}
 print " $dsc_fname\n";
 print "BASE_DIST=$base_dist\n";
