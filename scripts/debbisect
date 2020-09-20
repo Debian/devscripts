@@ -338,6 +338,8 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
             staticargs.suite,
             staticargs.components,
         ]
+        if staticargs.qemu:
+            cmd.extend([staticargs.qemu["memsize"], staticargs.qemu["disksize"]])
         if toupgrade:
             cmd.extend([get_mirror(staticargs.port, badtimestamp), toupgrade])
     else:
@@ -512,6 +514,29 @@ def datetimestr(val):
     raise argparse.ArgumentTypeError("not a valid datetime: %s" % val)
 
 
+def qemuarg(val):
+    defaultmem = "1G"
+    defaultdisk = "4G"
+    ret = {"memsize": defaultmem, "disksize": defaultdisk}
+    for keyval in val.split(","):
+        # we use startswith() so that "defaults" can also be abbreviated (even
+        # down to the empty string)
+        if "defaults".startswith(keyval):
+            ret["memsize"] = defaultmem
+            ret["disksize"] = defaultdisk
+            continue
+        try:
+            key, val = keyval.split("=", maxsplit=1)
+        except ValueError:
+            raise argparse.ArgumentTypeError("no key=val pair: %s" % keyval)
+        if key not in ["memsize", "disksize"]:
+            raise argparse.ArgumentTypeError("unknown key: %s" % key)
+        if not re.fullmatch(r"\d+((k|K|M|G|T|P|E|Z|Y)(iB|B)?)?", val):
+            raise argparse.ArgumentTypeError("cannot parse size value: %s" % val)
+        ret[key] = val
+    return ret
+
+
 def read_pkglist(infile):
     result = dict()
     with open(infile) as f:
@@ -668,7 +693,7 @@ for Debian bug #912935:
 
 If you want to run above test under qemu, then you would run:
 
-    $ {progname} --depends=botch --qemu "2018-11-17" """.format(
+    $ {progname} --depends=botch --qemu=defaults "2018-11-17" """.format(
             progname=sys.argv[0]
         )
         + """"2018-11-22" 'ssh -F "$1" qemu botch-dose2html --packages=/dev/null --help'
@@ -752,8 +777,13 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
     parser.add_argument(
         "--qemu",
         help="Create qemu virtual machine and pass a ssh config file to the "
-        + "test script",
-        action="store_true",
+        + "test script. This argument takes a comma-separated series of "
+        + "key=value pairs to specify the virtual machine memory size (via "
+        + "memsize) and the virtual machine disksize (via disksize). Sizes "
+        + "are measured in bytes or with common unit suffixes like M or G. "
+        + "To pick the default values (disksize=4G,memsize=1G) the shorthand "
+        + "'defaults' can be passed.",
+        type=qemuarg,
     )
     parser.add_argument(
         "--architecture",

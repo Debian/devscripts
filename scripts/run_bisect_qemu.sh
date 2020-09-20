@@ -21,8 +21,10 @@
 #    4. architecture
 #    5. suite
 #    6. components
-#    7. (optional) second mirror URL
-#    8. (optional) package to upgrade
+#    7. memsize
+#    8. disksize
+#    9. (optional) second mirror URL
+#   10. (optional) package to upgrade
 #
 # It will create an ephemeral qemu virtual machine using mmdebstrap and
 # guestfish using (3.) as mirror, (4.) as architecture, (5.) as suite and
@@ -32,13 +34,13 @@
 # containing the output of "dpkg-query -W" inside the chroot.
 #
 # If not only six but eight arguments are given, then the second mirror URL
-# (7.) will be added to the apt sources and the single package (8.) will be
-# upgraded to its version from (7.).
+# (9.) will be added to the apt sources and the single package (10.) will be
+# upgraded to its version from (9.).
 
 set -exu
 
-if [ $# -ne 6 ] && [ $# -ne 8 ]; then
-	echo "usage: $0 depends script mirror1 architecture suite components [mirror2 toupgrade]"
+if [ $# -ne 8 ] && [ $# -ne 10 ]; then
+	echo "usage: $0 depends script mirror1 architecture suite components memsize disksize [mirror2 toupgrade]"
 	exit 1
 fi
 
@@ -48,10 +50,12 @@ mirror1=$3
 architecture=$4
 suite=$5
 components=$6
+memsize=$7
+disksize=$8
 
-if [ $# -eq 8 ]; then
-	mirror2=$7
-	toupgrade=$8
+if [ $# -eq 10 ]; then
+	mirror2=$8
+	toupgrade=${10}
 fi
 
 case $architecture in
@@ -173,7 +177,7 @@ mmdebstrap --architecture=$architecture --verbose --variant=apt --components="$c
 #   LIBGUESTFS_BACKEND_SETTINGS=force_tcg
 #   libguestfs-test-tool || true
 #   export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
-guestfish -N "debian-rootfs.img"=disk:4G -- \
+guestfish -N "debian-rootfs.img"=disk:$disksize -- \
 	part-disk /dev/sda mbr : \
 	mkfs ext4 /dev/sda1 : \
 	mount /dev/sda1 / : \
@@ -205,7 +209,7 @@ timeout --kill-after=60s 60m \
 	-M accel=kvm:tcg \
 	-no-user-config \
 	-object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 \
-	-m 1G \
+	-m $memsize \
 	-net nic,model=virtio \
 	-nographic \
 	-serial mon:stdio \
@@ -271,17 +275,17 @@ fi
 find /etc/apt/sources.list.d -type f -name '*.list' -print0 \
 	| xargs --null --no-run-if-empty sed -i 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/'
 SCRIPT
-mirror2=$(echo "$mirror2" | sed 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/')
 
 # we install dependencies now and not with mmdebstrap --include in case some
 # dependencies require a full system present
 ssh -F "$TMPDIR/config" qemu apt-get update
 ssh -F "$TMPDIR/config" qemu env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install $(echo $depends | tr ',' ' ')
 
-# in its seven-argument form, a single package has to be upgraded to its
+# in its ten-argument form, a single package has to be upgraded to its
 # version from the first bad timestamp
-if [ $# -eq 7 ]; then
+if [ $# -eq 10 ]; then
 	# replace content of sources.list with first bad timestamp
+	mirror2=$(echo "$mirror2" | sed 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/')
 	echo "deb $mirror2 $suite $(echo "$components" | tr ',' ' ')" | ssh -F "$TMPDIR/config" qemu "cat > /etc/apt/sources.list"
 	ssh -F "$TMPDIR/config" qemu apt-get update
 	# upgrade a single package (and whatever else apt deems necessary)
