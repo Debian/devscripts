@@ -96,7 +96,7 @@ case $architecture in
 	*) echo "no kernel image for $architecture"; exit 1;;
 esac
 
-TMPDIR=$(mktemp --tmpdir --directory debbisect.XXXXXXXXXX)
+TMPDIR=$(mktemp --tmpdir --directory debbisect_qemu.XXXXXXXXXX)
 cleantmp() {
 	for f in customize.sh id_rsa id_rsa.pub qemu.log config; do
 		rm -f "$TMPDIR/$f"
@@ -175,7 +175,7 @@ mmdebstrap --architecture=$architecture --verbose --variant=apt --components="$c
 #   export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
 guestfish -N "debian-rootfs.img"=disk:4G -- \
 	part-disk /dev/sda mbr : \
-	mkfs ext2 /dev/sda1 : \
+	mkfs ext4 /dev/sda1 : \
 	mount /dev/sda1 / : \
 	tar-in "debian-rootfs.tar" / : \
 	upload /usr/lib/SYSLINUX/mbr.bin /mbr.bin : \
@@ -216,8 +216,13 @@ timeout --kill-after=60s 60m \
 # store the pid
 QEMUPID=$!
 
+# use a function here, so that we can properly quote the path to qemu.log
+showqemulog() {
+	cat --show-nonprinting "$TMPDIR/qemu.log"
+}
+
 # show the log and kill qemu in case the script exits first
-trap "cleantmp; cat --show-nonprinting "$TMPDIR/qemu.log"; kill $QEMUPID" EXIT
+trap "showqemulog; cleantmp; kill $QEMUPID" EXIT
 
 # the default ssh command does not store known hosts and even ignores host keys
 # it identifies itself with the rsa key generated above
@@ -263,10 +268,8 @@ set -eu
 if [ -e /etc/apt/sources.list ]; then
 	sed -i 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/' /etc/apt/sources.list
 fi
-{
-	find /etc/apt/sources.list.d -type f -name '*.list' -print0;
-	find /etc/apt/sources.list.d -type f -name '*.list' -print0;
-} | xargs --null --no-run-if-empty sed -i 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/'
+find /etc/apt/sources.list.d -type f -name '*.list' -print0 \
+	| xargs --null --no-run-if-empty sed -i 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/'
 SCRIPT
 mirror2=$(echo "$mirror2" | sed 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/')
 
@@ -325,8 +328,7 @@ wait $QEMUPID
 
 trap - EXIT
 
-cat --show-nonprinting "$TMPDIR/qemu.log"
-
+showqemulog
 cleantmp
 
 if [ "$ret" -eq 0 ]; then

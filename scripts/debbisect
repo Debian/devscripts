@@ -82,6 +82,7 @@ import io
 import lzma
 from datetime import datetime, timedelta, timezone
 from functools import partial
+import time
 import debian
 import debian.deb822
 import requests
@@ -101,6 +102,14 @@ except ImportError:
 DINSTALLRATE = 21600
 
 
+# we use a http proxy for two reasons
+#  1. it allows us to cache package data locally which is useful even for
+#     single runs because temporally close snapshot timestamps share packages
+#     and thus we reduce the load on snapshot.d.o which is also useful because
+#  2. snapshot.d.o requires manual bandwidth throttling or else it will cut
+#     our TCP connection. Instead of using Acquire::http::Dl-Limit as an apt
+#     option we use a proxy to only throttle on the initial download and then
+#     serve the data with full speed once we have it locally
 class Proxy(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # check validity and extract the timestamp
@@ -128,16 +137,36 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
                     # save file in local cache
                     head, _ = os.path.split(path)
                     os.makedirs(head, exist_ok=True)
+                    self.send_response(HTTPStatus.OK)
+                    self.send_header("Content-type", f.headers["Content-type"])
+                    self.send_header("Content-Length", f.headers["Content-Length"])
+                    self.send_header("Last-Modified", f.headers["Last-Modified"])
+                    self.end_headers()
                     with open(path, "wb") as out:
-                        shutil.copyfileobj(f, out)
+                        while True:
+                            buf = f.read(800 * 1024)  # 800 kB/s
+                            time.sleep(1)  # snapshot.d.o needs heavy throttling
+                            if not buf:
+                                break
+                            out.write(buf)
+                            self.wfile.write(buf)
             except urllib.error.HTTPError as e:
+                if os.path.exists(path):
+                    os.unlink(path)
                 self.send_error(e.code)
                 return
-        f = self.send_head()
-        if f:
-            try:
-                self.copyfile(f, self.wfile)
-            finally:
+            except urllib.error.URLError:
+                if os.path.exists(path):
+                    os.unlink(path)
+                self.send_error(500, "URLError")
+                return
+        else:
+            f = self.send_head()
+            if f:
+                try:
+                    self.copyfile(f, self.wfile)
+                except ConnectionResetError:
+                    pass
                 f.close()
 
     def log_message(self, fmt, *args):
@@ -364,11 +393,11 @@ def bisect(good, bad, staticargs):
     print("approximately %d steps left to test" % steps)
     # verify that the good timestamp is really good and the bad timestamp is really bad
     # we try the bad timestamp first to make sure that the problem exists
-    print("#%d: trying known bad %s..." % (stepnum, bad))
-    ret, output = runtest(bad, staticargs)
-    finish_log_pkglist("bad", output, staticargs.depends)
-    if ret == 0:
-        print("bad timestamp was actually good -- see log.bad for details")
+    print("#%d: trying known good %s..." % (stepnum, good))
+    ret, output = runtest(good, staticargs)
+    finish_log_pkglist("good", output, staticargs.depends)
+    if ret != 0:
+        print("good timestamp was actually bad -- see log.good for details")
         return None
     stepnum += 1
     steps = math.ceil(
@@ -377,11 +406,11 @@ def bisect(good, bad, staticargs):
     timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
     print("computation time left: %s" % timeleft)
     print("approximately %d steps left to test" % steps)
-    print("#%d: trying known good %s..." % (stepnum, good))
-    ret, output = runtest(good, staticargs)
-    finish_log_pkglist("good", output, staticargs.depends)
-    if ret != 0:
-        print("good timestamp was actually bad -- see log.good for details")
+    print("#%d: trying known bad %s..." % (stepnum, bad))
+    ret, output = runtest(bad, staticargs)
+    finish_log_pkglist("bad", output, staticargs.depends)
+    if ret == 0:
+        print("bad timestamp was actually good -- see log.bad for details")
         return None
     stepnum += 1
 
@@ -705,7 +734,7 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
     parser.add_argument(
         "--cache", help="cache directory -- by default $TMPDIR is used", type=str
     )
-    parser.add_argument("--nocache", help="disable cache")
+    parser.add_argument("--nocache", help="disable cache", action="store_true")
     parser.add_argument(
         "--port",
         help="manually choose port number for the apt cache instead of "
@@ -730,7 +759,7 @@ Written by Johannes 'josch' Schauer <josch@debian.org>
         "--architecture",
         help="Chosen architecture when creating the chroot with --depends or "
         + "--qemu (default: native architecture)",
-        default=subprocess.check_output(["dpkg", "--print-architecture"]),
+        default=subprocess.check_output(["dpkg", "--print-architecture"]).rstrip(),
         type=str,
     )
     parser.add_argument(
@@ -784,7 +813,7 @@ def setupcache(cache, port):
         cachedir = cache
     else:
         cachedir = tempfile.mkdtemp(prefix="debbisect")
-    logging.debug("using cache directory: %s", cachedir)
+    logging.info("using cache directory: %s", cachedir)
     os.makedirs(cachedir + "/pool", exist_ok=True)
     httpd = socketserver.TCPServer(
         # the default address family for socketserver is AF_INET so we
