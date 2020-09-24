@@ -47,14 +47,15 @@ spawnSvnRepo(){
     touch trunk/changelog trunk/file.c
     chronic_sh svn add trunk tags
     chronic_sh svn commit -m 'Init'
+    export TZ=UTC
     for version in 1.0 2.0; do
         echo "# Version $version" >> trunk/file.c
         cat >> trunk/changelog <<END
 Version $version
 
 END
-        chronic_sh svn commit -m "Releasing $version"
-        chronic_sh svn copy ^/trunk "^/tags/v$version" -m "Version $version"
+        chronic_sh faketime -f '2000-01-01 12:34:56' svn commit -m "Releasing $version"
+        chronic_sh faketime -f '2000-01-01 12:34:56' svn copy ^/trunk "^/tags/v$version" -m "Version $version"
     done)
 }
 
@@ -134,9 +135,11 @@ helperLaunchFail() {
 testSvn() {
     helperLaunch "pgpmode=none"
     TARBALL="${PKG}_2.0.orig.tar.xz"
+    CHECKSUM=$(sha1sum "$TEMP_PKG_DIR/${PKG}-2.0.tar.xz" | cut -d ' ' -f 1)
     assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
+    assertTrue 'checksums do not match' "[ '${CHECKSUM}' = 'bd4a60786013848e402bcf20db211fd465afeda5' ]"
     cleanup
 }
 
