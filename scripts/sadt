@@ -282,7 +282,7 @@ class Test(TestCommand):
         self.testname = testname
         self.original_mode = None
         self.cwd = None
-        super(Test, self).__init__(group, testname)
+        super().__init__(group, testname)
 
     @property
     def path(self):
@@ -306,7 +306,7 @@ class Test(TestCommand):
                 except OSError as exc:
                     progress.skip(self.testname, '{path} could not be made executable: {exc}'
                                   .format(path=self.path, exc=exc))
-                    raise Skip
+                    raise Skip from exc
 
     def cleanup(self):
         if self.original_mode is not None:
