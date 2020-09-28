@@ -5,11 +5,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + provide parsable output. Closes: #964733.
 
   [ Mattia Rizzolo ]
-  * reproducible-check:
-    + Fix new pylint warning: W1404: implicit-str-concat.  Closes: #971134
-  * sadt:
-    + Fix new pylint warnings:
-      W0707: raise-missing-from, R1725: super-with-arguments.
+  * reproducible-check, sadt:
+    + Fix new pylint warnings:  Closes: #971134
+      W1404: implicit-str-concat, W0707: raise-missing-from,
+      R1725: super-with-arguments.
   * debsign:
     + Apply patch from Bastien Roucariès to fix bash-completion failure for
       `debsign -k` if no current key was already specified.  Closes: #966358
