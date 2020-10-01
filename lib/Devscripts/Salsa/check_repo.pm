@@ -48,7 +48,8 @@ sub _check_repo {
         # check issues/MR authorizations
         foreach (qw(issues_enabled merge_requests_enabled ci_config_path)) {
             push @err, "$_ should be $prms{$_}"
-              if (defined $prms{$_} and $project->{$_} ne $prms{$_});
+              if (defined $prms{$_}
+                and (!defined($project->{$_}) or $project->{$_} ne $prms{$_}));
         }
         # only public projects are accepted
         push @err, "private" unless ($project->{visibility} eq "public");
