@@ -312,7 +312,7 @@ if [ -z ${DEBIAN_BISECT_MIRROR+x} ]; then
 	true
 else
 	# replace the localhost IP by the IP of the host as seen by qemu
-	DEBIAN_BISECT_MIRROR=$(echo "DEBIAN_BISECT_MIRROR" | sed 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/')
+	DEBIAN_BISECT_MIRROR=$(echo "$DEBIAN_BISECT_MIRROR" | sed 's/http:\/\/127.0.0.1:/http:\/\/10.0.2.2:/')
 	export DEBIAN_BISECT_MIRROR=$DEBIAN_BISECT_MIRROR
 fi
 
