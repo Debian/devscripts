@@ -50,9 +50,6 @@
 #  - add convenience function which builds a given source package and installs
 #    its build dependencies automatically
 
-# pylint disagrees with the indentation chosen by black
-# pylint: disable=C0330
-#
 # complains about log_message cannot be fixed because the original function
 # names one of its arguments "format" which is also forbidden...
 # pylint: disable=W0221
@@ -527,8 +524,8 @@ def qemuarg(val):
             continue
         try:
             key, val = keyval.split("=", maxsplit=1)
-        except ValueError:
-            raise argparse.ArgumentTypeError("no key=val pair: %s" % keyval)
+        except ValueError as e:
+            raise argparse.ArgumentTypeError("no key=val pair: %s" % keyval) from e
         if key not in ["memsize", "disksize"]:
             raise argparse.ArgumentTypeError("unknown key: %s" % key)
         if not re.fullmatch(r"\d+((k|K|M|G|T|P|E|Z|Y)(iB|B)?)?", val):
@@ -883,6 +880,58 @@ def setupcache(cache, port):
     return port, teardown
 
 
+def find_exact_package(good, bad, staticargs, depends, no_find_exact_package):
+    if not os.path.exists("./pkglist.good"):
+        logging.error("./pkglist.good doesn't exist")
+        sys.exit(1)
+    if not os.path.exists("./pkglist.bad"):
+        logging.error("./pkglist.bad doesn't exist")
+        sys.exit(1)
+
+    # Create a set of packages for which either the version in the last good
+    # and first bad run differs or which only exist in the first bad run.
+    goodpkgs = read_pkglist("./pkglist.good")
+    badpkgs = read_pkglist("./pkglist.bad")
+    upgraded = set()
+    for pkg, version in goodpkgs.items():
+        if pkg in badpkgs and version != badpkgs[pkg]:
+            upgraded.add(pkg)
+    for pkg, version in badpkgs.items():
+        if pkg not in goodpkgs or version != goodpkgs[pkg]:
+            upgraded.add(pkg)
+    upgraded = list(sorted(upgraded))
+    if not upgraded:
+        logging.error("no difference -- this should never happen")
+        sys.exit(1)
+    elif len(upgraded) == 1:
+        print(
+            "only one package differs: %s %s -> %s"
+            % (
+                upgraded[0],
+                goodpkgs.get(upgraded[0], "(n.a.)"),
+                badpkgs[upgraded[0]],
+            )
+        )
+    else:
+        print(
+            "the following packages differ between the last good and "
+            + "first bad timestamp:"
+        )
+        for toupgrade in upgraded:
+            print(
+                "  %s %s -> %s"
+                % (toupgrade, goodpkgs.get(toupgrade, "(n.a.)"), badpkgs[toupgrade])
+            )
+
+        # if debbisect was tasked with handling dependencies itself, try to
+        # figure out the exact package that introduce the break
+        if depends and not no_find_exact_package:
+            for toupgrade in upgraded:
+                upgrade_single_package(
+                    toupgrade, goodpkgs, badpkgs, good, bad, staticargs
+                )
+
+
 def main():
     args = parseargs()
 
@@ -918,55 +967,9 @@ def main():
         print("  last good timestamp: %s" % good)
         print("  first bad timestamp: %s" % bad)
 
-        if not os.path.exists("./pkglist.good"):
-            logging.error("./pkglist.good doesn't exist")
-            sys.exit(1)
-        if not os.path.exists("./pkglist.bad"):
-            logging.error("./pkglist.bad doesn't exist")
-            sys.exit(1)
-
-        # Create a set of packages for which either the version in the last good
-        # and first bad run differs or which only exist in the first bad run.
-        goodpkgs = read_pkglist("./pkglist.good")
-        badpkgs = read_pkglist("./pkglist.bad")
-        upgraded = set()
-        for pkg, version in goodpkgs.items():
-            if pkg in badpkgs and version != badpkgs[pkg]:
-                upgraded.add(pkg)
-        for pkg, version in badpkgs.items():
-            if pkg not in goodpkgs or version != goodpkgs[pkg]:
-                upgraded.add(pkg)
-        upgraded = list(sorted(upgraded))
-        if not upgraded:
-            logging.error("no difference -- this should never happen")
-            sys.exit(1)
-        elif len(upgraded) == 1:
-            print(
-                "only one package differs: %s %s -> %s"
-                % (
-                    upgraded[0],
-                    goodpkgs.get(upgraded[0], "(n.a.)"),
-                    badpkgs[upgraded[0]],
-                )
-            )
-        else:
-            print(
-                "the following packages differ between the last good and "
-                + "first bad timestamp:"
-            )
-            for toupgrade in upgraded:
-                print(
-                    "  %s %s -> %s"
-                    % (toupgrade, goodpkgs.get(toupgrade, "(n.a.)"), badpkgs[toupgrade])
-                )
-
-            # if debbisect was tasked with handling dependencies itself, try to
-            # figure out the exact package that introduce the break
-            if args.depends and not args.no_find_exact_package:
-                for toupgrade in upgraded:
-                    upgrade_single_package(
-                        toupgrade, goodpkgs, badpkgs, good, bad, staticargs
-                    )
+        find_exact_package(
+            good, bad, staticargs, args.depends, args.no_find_exact_package
+        )
 
     if not args.nocache:
         teardown()
