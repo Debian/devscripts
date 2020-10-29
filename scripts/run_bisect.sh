@@ -14,7 +14,7 @@
 
 # this script is part of debbisect and usually called by debbisect itself
 #
-# it accepts five or seven arguments:
+# it accepts six or eight arguments:
 #    1. dependencies
 #    2. script name or shell snippet
 #    3. mirror URL

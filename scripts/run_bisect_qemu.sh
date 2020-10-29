@@ -14,7 +14,7 @@
 
 # this script is part of debbisect and usually called by debbisect itself
 #
-# it accepts five or seven arguments:
+# it accepts eight or ten arguments:
 #    1. dependencies
 #    2. script name or shell snippet
 #    3. mirror URL
@@ -54,7 +54,7 @@ memsize=$7
 disksize=$8
 
 if [ $# -eq 10 ]; then
-	mirror2=$8
+	mirror2=$9
 	toupgrade=${10}
 fi
 
