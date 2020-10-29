@@ -903,6 +903,14 @@ def main():
     staticargs.port = port
     for a in ["script", "depends", "architecture", "suite", "components", "qemu"]:
         setattr(staticargs, a, getattr(args, a))
+    if args.good == args.bad:
+        # test only single timestamp
+        ret, output = runtest(args.good, staticargs)
+        with open("log", "wb") as f:
+            f.write(output)
+        if not args.nocache:
+            teardown()
+        sys.exit(ret)
     res = bisect(args.good, args.bad, staticargs)
     if res is not None:
         good, bad = res
