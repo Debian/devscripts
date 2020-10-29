@@ -279,7 +279,7 @@ SCRIPT
 # we install dependencies now and not with mmdebstrap --include in case some
 # dependencies require a full system present
 ssh -F "$TMPDIR/config" qemu apt-get update
-ssh -F "$TMPDIR/config" qemu env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install $(echo $depends | tr ',' ' ')
+ssh -F "$TMPDIR/config" qemu env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install --no-install-recommends $(echo $depends | tr ',' ' ')
 
 # in its ten-argument form, a single package has to be upgraded to its
 # version from the first bad timestamp
@@ -290,7 +290,7 @@ if [ $# -eq 10 ]; then
 	ssh -F "$TMPDIR/config" qemu apt-get update
 	# upgrade a single package (and whatever else apt deems necessary)
 	before=$(ssh -F "$TMPDIR/config" qemu dpkg-query -W)
-	ssh -F "$TMPDIR/config" qemu env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install "$toupgrade"
+	ssh -F "$TMPDIR/config" qemu env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install --no-install-recommends "$toupgrade"
 	after=$(ssh -F "$TMPDIR/config" qemu dpkg-query -W)
 	# make sure that something was upgraded
 	if [ "$before" = "$after" ]; then
