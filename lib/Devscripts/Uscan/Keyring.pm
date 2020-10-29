@@ -131,7 +131,7 @@ sub verifyv {
 sub verify_git {
     my ($self, $gitdir, $tag, $git_upstream) = @_;
     my $commit;
-    my @dir = $git_upstream ? () : ('--git-dir', "../$gitdir");
+    my @dir = $git_upstream ? () : ('--git-dir', $gitdir);
     spawn(
         exec      => ['git', @dir, 'show-ref', $tag],
         to_string => \$commit

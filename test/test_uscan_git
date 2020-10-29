@@ -120,6 +120,7 @@ END
 helperLaunch() {
     WATCHARGS=$1
     ARG="${2:-}"
+    CMD_ARG="${3:-}"
     if test "$ARG" = "upstream"; then
         makeDebianDirWithUpstream "$WATCHARGS"
     elif test "$ARG" = "HEAD"; then
@@ -127,7 +128,7 @@ helperLaunch() {
     else
         makeDebianDir "$WATCHARGS"
     fi
-    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND --watchfile=debian/watch )
+    ( cd "$TEMP_PKG_DIR/$PKG" || exit 1 ; $COMMAND $CMD_ARG --watchfile=debian/watch )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 }
 
@@ -188,6 +189,17 @@ testGitUpstreamIgnoreExclusions() {
     helperLaunch "gitexport=all" upstream
     assertTrue 'downloaded tarfile is incomplete' \
         "tar tf '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' '${PKG}-2.0/extra.c'"
+    cleanup
+}
+
+testGitSignedTagWithDestDir() {
+    DESTDIR=$TEMP_PKG_DIR/destdir
+    mkdir -p $DESTDIR
+    helperLaunch "pgpmode=gittag" "" "--destdir $TEMP_PKG_DIR/destdir"
+    TARBALL=${PKG}_2.0.orig.tar.xz
+    assertTrue 'downloaded tarfile not present' "[ -f '$DESTDIR/${PKG}-2.0.tar.xz' ]"
+    assertTrue 'pristine tarball is not created' "[ -f '$DESTDIR/$TARBALL' ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L '$DESTDIR/$TARBALL' ]"
     cleanup
 }
 
