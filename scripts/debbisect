@@ -127,32 +127,59 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
             os.symlink("../../../pool", linkname)
         path = os.path.abspath(self.translate_path(self.path))
         if not os.path.exists(path):
-            try:
-                with urllib.request.urlopen(
-                    "http://snapshot.debian.org/" + self.path
-                ) as f:
-                    # save file in local cache
-                    head, _ = os.path.split(path)
-                    os.makedirs(head, exist_ok=True)
-                    self.send_response(HTTPStatus.OK)
-                    self.send_header("Content-type", f.headers["Content-type"])
-                    self.send_header("Content-Length", f.headers["Content-Length"])
-                    self.send_header("Last-Modified", f.headers["Last-Modified"])
-                    self.end_headers()
-                    with open(path, "wb") as out:
-                        while True:
-                            buf = f.read(800 * 1024)  # 800 kB/s
+            logging.warning("downloading: %s", self.path)
+            # save file in local cache
+            maxtries = 3
+            head, _ = os.path.split(path)
+            os.makedirs(head, exist_ok=True)
+            self.send_response(HTTPStatus.OK)
+            totalsize = -1
+            downloaded = 0
+            for trynum in range(maxtries):
+                try:
+                    headers = {}
+                    if downloaded > 0:
+                        # if file was partly downloaded, only request the rest
+                        headers["Range"] = "bytes=%d-" % downloaded
+                        logging.warning("%s bytes=%d-" % (path, downloaded))
+                    req = urllib.request.Request(
+                        "http://snapshot.debian.org/" + self.path, headers=headers
+                    )
+                    with urllib.request.urlopen(req) as f, open(path, "ab") as out:
+                        if trynum == 0:
+                            self.send_header("Content-type", f.headers["Content-type"])
+                            self.send_header(
+                                "Content-Length", f.headers["Content-Length"]
+                            )
+                            self.send_header(
+                                "Last-Modified", f.headers["Last-Modified"]
+                            )
+                            self.end_headers()
+                            totalsize = int(f.headers["Content-Length"])
+                        while downloaded < totalsize:
+                            chunksize = 800 * 1024
+                            if totalsize - downloaded < chunksize:
+                                chunksize = totalsize - downloaded
+                            buf = f.read(chunksize)  # 800 kB/s
+                            assert len(buf) == chunksize, (
+                                len(buf),
+                                chunksize,
+                                totalsize,
+                                downloaded,
+                            )
                             time.sleep(1)  # snapshot.d.o needs heavy throttling
-                            if not buf:
-                                break
                             out.write(buf)
                             self.wfile.write(buf)
-            except urllib.error.HTTPError as e:
-                if os.path.exists(path):
-                    os.unlink(path)
-                self.send_error(e.code)
-                return
-            except urllib.error.URLError:
+                            downloaded += chunksize
+                except urllib.error.HTTPError as e:
+                    logging.warning(
+                        "got urllib.error.HTTPError: %s %s", repr(e), self.path
+                    )
+                except urllib.error.URLError as e:
+                    logging.warning("got urllib.error.URLError: %s", repr(e))
+                if downloaded == totalsize:
+                    break
+            if totalsize != downloaded:
                 if os.path.exists(path):
                     os.unlink(path)
                 self.send_error(500, "URLError")
