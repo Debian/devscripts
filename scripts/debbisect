@@ -285,7 +285,7 @@ def first_seen_by_pkg(packages, timestamp_begin, timestamp_end, suite, architect
                     if fileinfo["archive_name"] != "debian":
                         continue
                     timestamps.add(
-                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%SZ")
+                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%S%z")
                     )
         else:
             oldest_version = binpkgversion_by_timestamp(
@@ -324,7 +324,7 @@ def first_seen_by_pkg(packages, timestamp_begin, timestamp_end, suite, architect
                     if fileinfo["archive_name"] != "debian":
                         continue
                     timestamps.add(
-                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%SZ")
+                        datetime.strptime(fileinfo["first_seen"], "%Y%m%dT%H%M%S%z")
                     )
     return timestamps
 
