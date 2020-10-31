@@ -14,11 +14,6 @@
 
 # snapshot.d.o API feature requests:
 #
-# Currently, I can ask for a snapshot of *any* date and snapshot.d.o will
-# resolve my date to the next possible. This is neat but I would like to know
-# to which exact snapshot timestamp my request got resolved to.
-# See also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=969605
-#
 # Currently, the API does not allow to list all dates for which a snapshot
 # was made. This would be useful to allow skipping snapshots. Currently we
 # blindly bisect but without knowing which date on snapshot.d.o a given
@@ -44,9 +39,6 @@
 #  - allow marking snapshot timestamps as skippable, for example via script
 #    exit code (needs resolution to #969603)
 #
-#  - make better use of snapshot cache by re-using the cache of a snapshot that
-#    got already downloaded (needs resolution to #969605)
-#
 #  - add convenience function which builds a given source package and installs
 #    its build dependencies automatically
 
@@ -62,6 +54,7 @@ import argparse
 import collections
 import email.utils
 import http.server
+import http.client
 from http import HTTPStatus
 import logging
 import math
@@ -97,6 +90,26 @@ except ImportError:
     have_parsedatetime = False
 
 DINSTALLRATE = 21600
+
+
+# We utilize the fact that the HTTP interface of snapshot.d.o responds with a
+# HTTP 301 redirect to the corresponding timestamp.
+# It would be better if there as an officially documented API function:
+# http://bugs.debian.org/969605
+def sanitize_timestamp(timestamp):
+    conn = http.client.HTTPConnection("snapshot.debian.org")
+    conn.request(
+        "HEAD", "/archive/debian/" + timestamp.strftime("%Y%m%dT%H%M%SZ") + "/"
+    )
+    res = conn.getresponse()
+    if res.status == 200:
+        return timestamp
+    assert res.status == 301
+    prefix = "http://snapshot.debian.org/archive/debian/"
+    location = res.headers["Location"]
+    assert location.startswith(prefix)
+    location = location[len(prefix) :]
+    return datetime.strptime(location, "%Y%m%dT%H%M%S%z/")
 
 
 # we use a http proxy for two reasons
@@ -442,15 +455,6 @@ def bisect(good, bad, staticargs):
 
     while True:
         diff = bad - good
-        if diff.total_seconds() < DINSTALLRATE:
-            break
-        print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
-        steps = math.ceil(
-            (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
-        )
-        timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
-        print("computation time left: %s" % timeleft)
-        print("approximately %d steps left to test" % steps)
         # One may be tempted to try and optimize this step by finding all the
         # packages that differ between the two timestamps and then finding
         # all the snapshot timestamps where the involved packages changed
@@ -459,7 +463,16 @@ def bisect(good, bad, staticargs):
         # less packages, the only reliable method is really to strictly bisect
         # by taking the timestamp exactly between the two and not involve
         # other guessing magic.
-        newts = good + diff / 2
+        newts = sanitize_timestamp(good + diff / 2)
+        if newts in [good, bad]:
+            break
+        print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
+        steps = math.ceil(
+            (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
+        )
+        timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
+        print("computation time left: %s" % timeleft)
+        print("approximately %d steps left to test" % steps)
         print("#%d: trying %s..." % (stepnum, newts))
         ret, output = runtest(newts, staticargs)
         if ret == 0:
@@ -964,7 +977,20 @@ def main():
 
     logging.basicConfig(level=args.loglevel)
 
-    if args.good > args.bad:
+    good = sanitize_timestamp(args.good)
+    if good != args.good:
+        print(
+            "good timestamp %s was remapped to snapshot.d.o timestamp %s"
+            % (args.good, good)
+        )
+    bad = sanitize_timestamp(args.bad)
+    if bad != args.bad:
+        print(
+            "bad timestamp %s was remapped to snapshot.d.o timestamp %s"
+            % (args.bad, bad)
+        )
+
+    if good > bad:
         print("good is later than bad")
         sys.exit(1)
 
@@ -979,15 +1005,15 @@ def main():
     staticargs.port = port
     for a in ["script", "depends", "architecture", "suite", "components", "qemu"]:
         setattr(staticargs, a, getattr(args, a))
-    if args.good == args.bad:
+    if good == bad:
         # test only single timestamp
-        ret, output = runtest(args.good, staticargs)
+        ret, output = runtest(good, staticargs)
         with open("log", "wb") as f:
             f.write(output)
         if not args.nocache:
             teardown()
         sys.exit(ret)
-    res = bisect(args.good, args.bad, staticargs)
+    res = bisect(good, bad, staticargs)
     if res is not None:
         good, bad = res
         print("bisection finished successfully")
