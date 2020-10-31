@@ -73,6 +73,7 @@ import lzma
 from datetime import datetime, timedelta, timezone
 from functools import partial
 import time
+import atexit
 import debian
 import debian.deb822
 import requests
@@ -894,6 +895,7 @@ def setupcache(cache, port):
     httpd.server_activate()
     # run server in a new thread
     server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.daemon = True
     # start thread
     server_thread.start()
     # retrieve port (in case it was generated automatically)
@@ -992,6 +994,7 @@ def main():
     port = None
     if not args.nocache:
         port, teardown = setupcache(args.cache, args.port)
+        atexit.register(teardown)
 
     staticargs = collections.namedtuple(
         "args",
@@ -1005,8 +1008,6 @@ def main():
         ret, output = runtest(good, staticargs)
         with open("log", "wb") as f:
             f.write(output)
-        if not args.nocache:
-            teardown()
         sys.exit(ret)
     res = bisect(good, bad, staticargs)
     if res is not None:
@@ -1018,9 +1019,6 @@ def main():
         find_exact_package(
             good, bad, staticargs, args.depends, args.no_find_exact_package
         )
-
-    if not args.nocache:
-        teardown()
 
 
 if __name__ == "__main__":
