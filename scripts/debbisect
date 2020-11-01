@@ -413,11 +413,25 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
     return (ret, output)
 
 
-def finish_log_pkglist(goodbad, output, depends):
-    with open("log.%s" % goodbad, "wb") as f:
+def write_log_symlink(goodbad, output, timestamp, toupgrade=None):
+    if toupgrade is None:
+        fname = "debbisect.%s.log.%s" % (timestamp.strftime("%Y%m%dT%H%M%SZ"), goodbad)
+    else:
+        fname = "debbisect.%s.%s.log.%s" % (
+            timestamp.strftime("%Y%m%dT%H%M%SZ"),
+            toupgrade,
+            goodbad,
+        )
+    with open(fname, "wb") as f:
         f.write(output)
-    if depends and os.path.exists("./pkglist"):
-        os.rename("./pkglist", "./pkglist.%s" % goodbad)
+    if goodbad == "good":
+        if os.path.exists("debbisect.log.good"):
+            os.unlink("debbisect.log.good")
+        os.symlink(fname, "debbisect.log.good")
+    elif goodbad == "bad":
+        if os.path.exists("debbisect.log.bad"):
+            os.unlink("debbisect.log.bad")
+        os.symlink(fname, "debbisect.log.bad")
 
 
 def bisect(good, bad, staticargs):
@@ -435,9 +449,9 @@ def bisect(good, bad, staticargs):
     # we try the bad timestamp first to make sure that the problem exists
     print("#%d: trying known good %s..." % (stepnum, good))
     ret, output = runtest(good, staticargs)
-    finish_log_pkglist("good", output, staticargs.depends)
+    write_log_symlink("good", output, good)
     if ret != 0:
-        print("good timestamp was actually bad -- see log.good for details")
+        print("good timestamp was actually bad -- see debbisect.log.good for details")
         return None
     stepnum += 1
     steps = round(
@@ -448,9 +462,9 @@ def bisect(good, bad, staticargs):
     print("approximately %d steps left to test" % steps)
     print("#%d: trying known bad %s..." % (stepnum, bad))
     ret, output = runtest(bad, staticargs)
-    finish_log_pkglist("bad", output, staticargs.depends)
+    write_log_symlink("bad", output, bad)
     if ret == 0:
-        print("bad timestamp was actually good -- see log.bad for details")
+        print("bad timestamp was actually good -- see debbisect.log.bad for details")
         return None
     stepnum += 1
 
@@ -466,7 +480,13 @@ def bisect(good, bad, staticargs):
         # other guessing magic.
         newts = sanitize_timestamp(good + diff / 2)
         if newts in [good, bad]:
-            break
+            # If the middle timestamp mapped onto good or bad, then the
+            # timestamps are very close to each other. Test if there is maybe
+            # not another one between them by sanitizing the timestamp one
+            # second before the bad one
+            newts = sanitize_timestamp(bad - timedelta(seconds=1))
+            if newts == good:
+                break
         print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
         steps = round(
             (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 0
@@ -478,11 +498,11 @@ def bisect(good, bad, staticargs):
         ret, output = runtest(newts, staticargs)
         if ret == 0:
             print("test script output: good")
-            finish_log_pkglist("good", output, staticargs.depends)
+            write_log_symlink("good", output, newts)
             good = newts
         else:
             print("test script output: bad")
-            finish_log_pkglist("bad", output, staticargs.depends)
+            write_log_symlink("bad", output, newts)
             bad = newts
         stepnum += 1
     return good, bad
@@ -593,7 +613,7 @@ def upgrade_single_package(toupgrade, goodpkgs, badpkgs, good, bad, staticargs):
     else:
         print("test installing %s %s..." % (toupgrade, badpkgs[toupgrade]))
     ret, output = runtest(good, staticargs, toupgrade, bad)
-    finish_log_pkglist("intermediate", output, staticargs.depends)
+    write_log_symlink("intermediate", output, good, toupgrade)
     if ret == 0:
         if toupgrade in goodpkgs:
             print("  upgrading %s does not cause the problem" % toupgrade)
@@ -603,7 +623,9 @@ def upgrade_single_package(toupgrade, goodpkgs, badpkgs, good, bad, staticargs):
     print("  upgrading %s triggered the problem" % toupgrade)
     # this package introduced the regression check if more than
     # just the package in question got upgraded
-    newbadpkgs = read_pkglist("./pkglist.intermediate")
+    newbadpkgs = read_pkglist(
+        "./debbisect.%s.%s.pkglist" % (good.strftime("%Y%m%dT%H%M%SZ"), toupgrade)
+    )
     # find all packages that are completely new or of a
     # different version than those in the last good test
     newupgraded = list()
@@ -641,18 +663,18 @@ Execute a script or a shell snippet for a known good timestamp and a known bad
 timestamp and then bisect the timestamps until a timestamp from
 snapshot.debian.org is found where the script first fails. Environment
 variables are used to tell the script which timestamp to test. See ENVIRONMENT
-VARIABLES below. At the end of the execution, the files log.good and log.bad
-are the log files of the last good and last bad run, respectively. By default,
-a temporary caching mirror is executed to reduce bandwidth usage on
-snapshot.debian.org.  If you plan to run debbisect multiple times on a similar
-range of timestamps, consider setting a non-temporary cache directory with the
---cache option.
+VARIABLES below. At the end of the execution, the files debbisect.log.good and
+debbisect.log.bad are the log files of the last good and last bad run,
+respectively. By default, a temporary caching mirror is executed to reduce
+bandwidth usage on snapshot.debian.org.  If you plan to run debbisect multiple
+times on a similar range of timestamps, consider setting a non-temporary cache
+directory with the --cache option.
 
 The program has three basic modes of operation. In the first, the given script
 is responsible to set up everything as needed:
 
     $ {progname} "last week" today script.sh
-    $ diff -u log.good log.bad
+    $ diff -u debbisect.log.good debbisect.log.bad
 
 If also the --depends option is given, then a chroot of the correct timestamp
 will be created each time and the script will receive as first argument the
@@ -679,7 +701,7 @@ failure.
             progname=sys.argv[0]
         )
         + """\\"\\$1\\" do_something' unstable - \\$DEBIAN_BISECT_MIRROR >/dev/null"
-    $ diff -u log.good log.bad
+    $ diff -u debbisect.log.good debbisect.log.bad
 
 Since the command can easily become very long and quoting very involved, lets
 instead use a script:
@@ -701,7 +723,7 @@ instead use a script:
     > END
     $ chmod +x script.sh
     $ {progname} --verbose --cache=./cache "two years ago" yesterday ./script.sh
-    $ diff -u log.good log.bad
+    $ diff -u debbisect.log.good debbisect.log.bad
     $ rm -r ./cache
 
 This example sets Acquire::Check-Valid-Until to not fail on snapshot timestamps
@@ -923,17 +945,19 @@ def setupcache(cache, port):
 
 
 def find_exact_package(good, bad, staticargs, depends, no_find_exact_package):
-    if not os.path.exists("./pkglist.good"):
-        logging.error("./pkglist.good doesn't exist")
+    goodpkglist = "./debbisect.%s.pkglist" % good.strftime("%Y%m%dT%H%M%SZ")
+    if not os.path.exists(goodpkglist):
+        logging.error("%s doesn't exist", goodpkglist)
         sys.exit(1)
-    if not os.path.exists("./pkglist.bad"):
-        logging.error("./pkglist.bad doesn't exist")
+    badpkglist = "./debbisect.%s.pkglist" % bad.strftime("%Y%m%dT%H%M%SZ")
+    if not os.path.exists(badpkglist):
+        logging.error("%s doesn't exist", badpkglist)
         sys.exit(1)
 
     # Create a set of packages for which either the version in the last good
     # and first bad run differs or which only exist in the first bad run.
-    goodpkgs = read_pkglist("./pkglist.good")
-    badpkgs = read_pkglist("./pkglist.bad")
+    goodpkgs = read_pkglist(goodpkglist)
+    badpkgs = read_pkglist(badpkglist)
     upgraded = set()
     for pkg, version in goodpkgs.items():
         if pkg in badpkgs and version != badpkgs[pkg]:

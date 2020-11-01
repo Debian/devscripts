@@ -57,7 +57,7 @@ if [ $# -eq 6 ]; then
 		--include="$depends" \
 		--architecture="$architecture" \
 		--customize-hook='chroot "$1" sh -c "dpkg-query -W > /pkglist"' \
-		--customize-hook='download /pkglist ./pkglist' \
+		--customize-hook='download /pkglist ./debbisect.'"$DEBIAN_BISECT_TIMESTAMP"'.pkglist' \
 		--customize-hook='rm "$1"/pkglist' \
 		--customize-hook='chroot "$1" dpkg -l' \
 		--customize-hook="$script" \
@@ -79,7 +79,7 @@ elif [ $# -eq 8 ]; then
 		--customize-hook='chroot "$1" apt-get update' \
 		--customize-hook='chroot "$1" env DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get --yes install --no-install-recommends '"$toupgrade" \
 		--customize-hook='chroot "$1" sh -c "dpkg-query -W > /pkglist"' \
-		--customize-hook='download /pkglist ./pkglist' \
+		--customize-hook='download /pkglist ./debbisect.'"$DEBIAN_BISECT_TIMESTAMP.$toupgrade"'.pkglist' \
 		--customize-hook='rm "$1"/pkglist' \
 		--customize-hook='chroot "$1" dpkg -l' \
 		--customize-hook="$script" \

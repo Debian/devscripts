@@ -297,9 +297,11 @@ if [ $# -eq 10 ]; then
 		echo "nothing got upgraded -- this should never happen" >&2
 		exit 1
 	fi
+	ssh -F "$TMPDIR/config" qemu dpkg-query -W > "./debbisect.$DEBIAN_BISECT_TIMESTAMP.$toupgrade.pkglist"
+else
+	ssh -F "$TMPDIR/config" qemu dpkg-query -W > "./debbisect.$DEBIAN_BISECT_TIMESTAMP.pkglist"
 fi
 
-ssh -F "$TMPDIR/config" qemu dpkg-query -W > ./pkglist
 ssh -F "$TMPDIR/config" qemu dpkg -l
 
 # explicitly export all necessary variables
