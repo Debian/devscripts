@@ -49,6 +49,9 @@
 # pylint complains about too many branches but the code would not become more
 # readable by spreading it out across more functions
 # pylint: disable=R0912
+#
+# allow more than 1000 lines in this file
+# pylint: disable=C0302
 
 import argparse
 import collections
@@ -109,7 +112,9 @@ def sanitize_timestamp(timestamp):
     prefix = "http://snapshot.debian.org/archive/debian/"
     location = res.headers["Location"]
     assert location.startswith(prefix)
-    location = location[len(prefix) :]
+    # flake8 wrongly insists that there must be no whitespace before colon
+    # See https://github.com/PyCQA/pycodestyle/issues/373
+    location = location[len(prefix) :]  # noqa: E203
     return datetime.strptime(location, "%Y%m%dT%H%M%S%z/")
 
 
