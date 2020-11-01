@@ -413,15 +413,18 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
     return (ret, output)
 
 
-def write_log_symlink(goodbad, output, timestamp, toupgrade=None):
+def get_log_fname(timestamp, goodbad, toupgrade=None):
     if toupgrade is None:
-        fname = "debbisect.%s.log.%s" % (timestamp.strftime("%Y%m%dT%H%M%SZ"), goodbad)
-    else:
-        fname = "debbisect.%s.%s.log.%s" % (
-            timestamp.strftime("%Y%m%dT%H%M%SZ"),
-            toupgrade,
-            goodbad,
-        )
+        return "debbisect.%s.log.%s" % (timestamp.strftime("%Y%m%dT%H%M%SZ"), goodbad)
+    return "debbisect.%s.%s.log.%s" % (
+        timestamp.strftime("%Y%m%dT%H%M%SZ"),
+        toupgrade,
+        goodbad,
+    )
+
+
+def write_log_symlink(goodbad, output, timestamp, toupgrade=None):
+    fname = get_log_fname(timestamp, goodbad, toupgrade)
     with open(fname, "wb") as f:
         f.write(output)
     if goodbad == "good":
@@ -435,6 +438,9 @@ def write_log_symlink(goodbad, output, timestamp, toupgrade=None):
 
 
 def bisect(good, bad, staticargs):
+    # no idea how to split this function into parts without making it
+    # unreadable
+    # pylint: disable=too-many-statements
     diff = bad - good
     print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
 
@@ -447,12 +453,20 @@ def bisect(good, bad, staticargs):
     print("approximately %d steps left to test" % steps)
     # verify that the good timestamp is really good and the bad timestamp is really bad
     # we try the bad timestamp first to make sure that the problem exists
-    print("#%d: trying known good %s..." % (stepnum, good))
-    ret, output = runtest(good, staticargs)
-    write_log_symlink("good", output, good)
-    if ret != 0:
-        print("good timestamp was actually bad -- see debbisect.log.good for details")
-        return None
+    if os.path.exists(get_log_fname(good, "good")):
+        print(
+            "#%d: using cached results from %s" % (stepnum, get_log_fname(good, "good"))
+        )
+    else:
+        print("#%d: trying known good %s..." % (stepnum, good))
+        ret, output = runtest(good, staticargs)
+        if ret != 0:
+            write_log_symlink("bad", output, good)
+            print(
+                "good timestamp was actually bad -- see debbisect.log.bad for details"
+            )
+            return None
+        write_log_symlink("good", output, good)
     stepnum += 1
     steps = round(
         (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
@@ -460,12 +474,20 @@ def bisect(good, bad, staticargs):
     timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
     print("computation time left: %s" % timeleft)
     print("approximately %d steps left to test" % steps)
-    print("#%d: trying known bad %s..." % (stepnum, bad))
-    ret, output = runtest(bad, staticargs)
-    write_log_symlink("bad", output, bad)
-    if ret == 0:
-        print("bad timestamp was actually good -- see debbisect.log.bad for details")
-        return None
+    if os.path.exists(get_log_fname(bad, "bad")):
+        print(
+            "#%d: using cached results from %s" % (stepnum, get_log_fname(bad, "bad"))
+        )
+    else:
+        print("#%d: trying known bad %s..." % (stepnum, bad))
+        ret, output = runtest(bad, staticargs)
+        if ret == 0:
+            write_log_symlink("good", output, bad)
+            print(
+                "bad timestamp was actually good -- see debbisect.log.good for details"
+            )
+            return None
+        write_log_symlink("bad", output, bad)
     stepnum += 1
 
     while True:
@@ -494,16 +516,29 @@ def bisect(good, bad, staticargs):
         timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
         print("computation time left: %s" % timeleft)
         print("approximately %d steps left to test" % steps)
-        print("#%d: trying %s..." % (stepnum, newts))
-        ret, output = runtest(newts, staticargs)
-        if ret == 0:
-            print("test script output: good")
-            write_log_symlink("good", output, newts)
+        if os.path.exists(get_log_fname(newts, "good")):
+            print(
+                "#%d: using cached result (was good) from %s"
+                % (stepnum, get_log_fname(newts, "good"))
+            )
             good = newts
-        else:
-            print("test script output: bad")
-            write_log_symlink("bad", output, newts)
+        elif os.path.exists(get_log_fname(newts, "bad")):
+            print(
+                "#%d: using cached result (was bad) from %s"
+                % (stepnum, get_log_fname(newts, "bad"))
+            )
             bad = newts
+        else:
+            print("#%d: trying %s..." % (stepnum, newts))
+            ret, output = runtest(newts, staticargs)
+            if ret == 0:
+                print("test script output: good")
+                write_log_symlink("good", output, newts)
+                good = newts
+            else:
+                print("test script output: bad")
+                write_log_symlink("bad", output, newts)
+                bad = newts
         stepnum += 1
     return good, bad
 
@@ -612,20 +647,44 @@ def upgrade_single_package(toupgrade, goodpkgs, badpkgs, good, bad, staticargs):
         )
     else:
         print("test installing %s %s..." % (toupgrade, badpkgs[toupgrade]))
-    ret, output = runtest(good, staticargs, toupgrade, bad)
-    write_log_symlink("intermediate", output, good, toupgrade)
-    if ret == 0:
+    newbadpkgpath = "./debbisect.%s.%s.pkglist" % (
+        good.strftime("%Y%m%dT%H%M%SZ"),
+        toupgrade,
+    )
+    if os.path.exists(newbadpkgpath) and os.path.exists(
+        get_log_fname(good, "good", toupgrade)
+    ):
+        print(
+            "using cached result (was good) from %s"
+            % get_log_fname(good, "good", toupgrade)
+        )
         if toupgrade in goodpkgs:
             print("  upgrading %s does not cause the problem" % toupgrade)
         else:
             print("  installing %s does not cause the problem" % toupgrade)
         return
-    print("  upgrading %s triggered the problem" % toupgrade)
+    if os.path.exists(newbadpkgpath) and os.path.exists(
+        get_log_fname(good, "bad", toupgrade)
+    ):
+        print(
+            "using cached result (was bad) from %s"
+            % get_log_fname(good, "bad", toupgrade)
+        )
+        print("  upgrading %s triggered the problem" % toupgrade)
+    else:
+        ret, output = runtest(good, staticargs, toupgrade, bad)
+        if ret == 0:
+            write_log_symlink("good", output, good, toupgrade)
+            if toupgrade in goodpkgs:
+                print("  upgrading %s does not cause the problem" % toupgrade)
+            else:
+                print("  installing %s does not cause the problem" % toupgrade)
+            return
+        write_log_symlink("bad", output, good, toupgrade)
+        print("  upgrading %s triggered the problem" % toupgrade)
     # this package introduced the regression check if more than
     # just the package in question got upgraded
-    newbadpkgs = read_pkglist(
-        "./debbisect.%s.%s.pkglist" % (good.strftime("%Y%m%dT%H%M%SZ"), toupgrade)
-    )
+    newbadpkgs = read_pkglist(newbadpkgpath)
     # find all packages that are completely new or of a
     # different version than those in the last good test
     newupgraded = list()
@@ -1034,9 +1093,23 @@ def main():
         setattr(staticargs, a, getattr(args, a))
     if good == bad:
         # test only single timestamp
-        ret, output = runtest(good, staticargs)
-        with open("log", "wb") as f:
-            f.write(output)
+        print("testing single timestamp")
+        if os.path.exists(get_log_fname(good, "good")):
+            print(
+                "using cached result (was good) from %s" % get_log_fname(good, "good")
+            )
+            ret = 0
+        elif os.path.exists(get_log_fname(good, "bad")):
+            print("using cached result (was bad) from %s" % get_log_fname(good, "bad"))
+            ret = 1
+        else:
+            ret, output = runtest(good, staticargs)
+            if ret == 0:
+                print("test script output: good")
+                write_log_symlink("good", output, good)
+            else:
+                print("test script output: bad")
+                write_log_symlink("bad", output, good)
         sys.exit(ret)
     res = bisect(good, bad, staticargs)
     if res is not None:
