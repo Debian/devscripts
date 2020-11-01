@@ -427,8 +427,8 @@ def bisect(good, bad, staticargs):
     stepnum = 1
     starttime = datetime.now(timezone.utc)
 
-    steps = math.ceil(
-        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 3
+    steps = round(
+        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 2
     )
     print("approximately %d steps left to test" % steps)
     # verify that the good timestamp is really good and the bad timestamp is really bad
@@ -440,8 +440,8 @@ def bisect(good, bad, staticargs):
         print("good timestamp was actually bad -- see log.good for details")
         return None
     stepnum += 1
-    steps = math.ceil(
-        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 2
+    steps = round(
+        (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
     )
     timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
     print("computation time left: %s" % timeleft)
@@ -468,8 +468,8 @@ def bisect(good, bad, staticargs):
         if newts in [good, bad]:
             break
         print("snapshot timestamp difference: %f days" % (diff / timedelta(days=1)))
-        steps = math.ceil(
-            (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 1
+        steps = round(
+            (math.log(diff.total_seconds()) - math.log(DINSTALLRATE)) / math.log(2) + 0
         )
         timeleft = steps * (datetime.now(timezone.utc) - starttime) / (stepnum - 1)
         print("computation time left: %s" % timeleft)
