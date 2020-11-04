@@ -2047,7 +2047,8 @@ this manpage and to start from scratch.
 =item Version 2
 
 B<devscripts> version 2.6.90: The first incarnation of the current style of
-F<watch> files.
+F<watch> files. This version is also deprecated and will be rejected after
+the Debian 11 release.
 
 =item Version 3
 
