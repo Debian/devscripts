@@ -250,12 +250,14 @@ sub BUILD {
 
             # version=1 is deprecated
             else {
-                uscan_warn
-                  "$args->{watchfile} is an obsolete version 1 watch file;\n"
-                  . "   please upgrade to a higher version\n"
-                  . "   (see uscan(1) for details).";
                 $watch_version = 1;
             }
+        }
+        if ($watch_version < 3) {
+            uscan_warn
+"$args->{watchfile} is an obsolete version $watch_version watch file;\n"
+              . "   please upgrade to a higher version\n"
+              . "   (see uscan(1) for details).";
         }
 
         # "version" is fixed, parsing lines now
