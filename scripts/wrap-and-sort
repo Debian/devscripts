@@ -286,7 +286,7 @@ def main():
                              "(default: %(default)i)")
     parser.add_argument("-N", "--dry-run", dest="dry_run", action="store_true",
                         default=False,
-                        help="do not modify any file, instead only"
+                        help="do not modify any file, instead only "
                              "print the files that would be modified")
 
     args = parser.parse_args()
