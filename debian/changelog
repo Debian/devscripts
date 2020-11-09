@@ -56,6 +56,8 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       values are accepted for now.  MR: !178
     + Add tests for "group" features.  MR: !180
     + Mark version 2 as deprecated.  MR: !206
+    + Respect --destdir value when checking git tag signatures.
+      Closes: #973374; MR: !205
   * Update French translation
 
   [ Matthijs Kooijman ]
