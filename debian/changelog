@@ -12,6 +12,8 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   * debsign:
     + Apply patch from Bastien Roucariès to fix bash-completion failure for
       `debsign -k` if no current key was already specified.  Closes: #966358
+  * debchange:
+    + Bump the LTS release to 9/stretch.  Closes: #974164
 
   [ Niels Thykier ]
   * debrebuild (MR: !202; MR: !203):
