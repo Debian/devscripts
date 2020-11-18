@@ -84,7 +84,6 @@ Depends:
  ${shlibs:Depends},
 Recommends:
  apt (>= 1.3~pre3),
- at,
  dctrl-tools,
  dput | dupload,
  libdistro-info-perl,
@@ -114,6 +113,7 @@ Recommends:
  ${vendor:Recommends},
 Suggests:
  adequate,
+ at,
  autopkgtest,
  bls-standalone,
  bsd-mailx | mailx,
