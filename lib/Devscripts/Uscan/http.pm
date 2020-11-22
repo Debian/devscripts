@@ -76,6 +76,7 @@ sub http_search {
         }
     }
     $request->header('Accept-Encoding' => 'gzip');
+    $request->header('Accept'          => '*/*');
     my $response = $self->downloader->user_agent->request($request);
     if (!$response->is_success) {
         uscan_warn
