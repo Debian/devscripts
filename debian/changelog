@@ -62,6 +62,7 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Mark version 2 as deprecated.  MR: !206
     + Respect --destdir value when checking git tag signatures.
       Closes: #973374; MR: !205
+    + Add missing "Accept" header in http requests.  Closes: #971086; MR: !209
   * Update French translation
 
   [ Matthijs Kooijman ]
