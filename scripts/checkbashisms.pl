@@ -30,7 +30,7 @@ sub init_hashes;
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
-Usage: $progname [-n] [-f] [-x] script ...
+Usage: $progname [-n] [-f] [-x] [-e] script ...
    or: $progname --help
    or: $progname --version
 This script performs basic checks for the presence of bashisms
@@ -47,7 +47,7 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
-my ($opt_echo, $opt_force, $opt_extra, $opt_posix);
+my ($opt_echo, $opt_force, $opt_extra, $opt_posix, $opt_early_fail);
 my ($opt_help, $opt_version);
 my @filenames;
 
@@ -62,12 +62,13 @@ if (scalar(@ARGV) == 0 && (-p STDIN or -f STDIN)) {
 $opt_help = 1 if int(@ARGV) == 0;
 
 GetOptions(
-    "help|h"    => \$opt_help,
-    "version|v" => \$opt_version,
-    "newline|n" => \$opt_echo,
-    "force|f"   => \$opt_force,
-    "extra|x"   => \$opt_extra,
-    "posix|p"   => \$opt_posix,
+    "help|h"       => \$opt_help,
+    "version|v"    => \$opt_version,
+    "newline|n"    => \$opt_echo,
+    "force|f"      => \$opt_force,
+    "extra|x"      => \$opt_extra,
+    "posix|p"      => \$opt_posix,
+    "early-fail|e" => \$opt_early_fail,
   )
   or die
 "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
@@ -543,6 +544,9 @@ sub output_explanation {
         $issues = 1;
     } else {
         warn "possible bashism in $filename line $. ($explanation):\n$line\n";
+        if ($opt_early_fail) {
+            exit 1;
+        }
         $status |= 1;
     }
 }

@@ -96,6 +96,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Add a new option "gitexport" to override any "export-ignore" rule that a
       git repository might have set.  Closes: #947317; MR: !174
 
+  [ Martin Liška ]
+  * checkbashisms:
+    + Add a new --early-fail option, to quit at the first error found.  MR: !208
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium

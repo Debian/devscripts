@@ -10,7 +10,7 @@ _checkbashisms()
     _init_completion || return
 
     if [[ "$cur" == -* ]]; then
-        COMPREPLY=( $( compgen -W '--newline --posix --force --extra' -- "$cur" ) )
+        COMPREPLY=( $( compgen -W '--newline --posix --force --extra --early-fail' -- "$cur" ) )
     else
         COMPREPLY=( $( compgen -o filenames -f -- "$cur" ) )
     fi
