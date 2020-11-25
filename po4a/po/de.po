@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2020-09-07 14:54+0200\n"
+"POT-Creation-Date: 2020-11-25 11:23+0100\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -340,7 +340,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4346
-#: ../scripts/checkbashisms.1:63 ../scripts/cowpoke.1:379
+#: ../scripts/checkbashisms.1:66 ../scripts/cowpoke.1:379
 #: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:107 ../scripts/debc.1:125 ../scripts/debchange.1:482
@@ -360,7 +360,7 @@ msgstr ""
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:399 ../scripts/sadt.pod:69 ../scripts/salsa.pl:838
-#: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:2100
+#: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:2101
 #: ../scripts/uupdate.1:189 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:167 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:26 ../doc/devscripts.conf.5:54
@@ -392,7 +392,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54
-#: ../scripts/build-rdeps.pl:547 ../scripts/checkbashisms.1:65
+#: ../scripts/build-rdeps.pl:547 ../scripts/checkbashisms.1:68
 #: ../scripts/cowpoke.1:385 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67
 #: ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58
 #: ../scripts/dcmd.1:110 ../scripts/dd-list.1:107 ../scripts/debc.1:129
@@ -415,7 +415,7 @@ msgstr ""
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:403 ../scripts/salsa.pl:842
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
-#: ../scripts/uscan.pl:2104 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
+#: ../scripts/uscan.pl:2105 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36
 #: ../doc/devscripts.conf.5:58
@@ -3944,7 +3944,19 @@ msgstr ""
 "ist."
 
 #. type: TP
-#: ../scripts/checkbashisms.1:46 ../scripts/debdiff.1:171
+#: ../scripts/checkbashisms.1:46
+#, fuzzy, no-wrap
+#| msgid "B<--edit>, B<-e>"
+msgid "B<--early-fail>, B<-e>"
+msgstr "B<--edit>, B<-e>"
+
+#. type: Plain text
+#: ../scripts/checkbashisms.1:49
+msgid "Exit right after a first error is seen."
+msgstr ""
+
+#. type: TP
+#: ../scripts/checkbashisms.1:49 ../scripts/debdiff.1:171
 #: ../scripts/rc-alert.1:24 ../scripts/whodepends.1:14
 #: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:20
 #, no-wrap
@@ -3952,7 +3964,7 @@ msgid "B<--version>, B<-v>"
 msgstr "B<--version>, B<-v>"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:49 ../scripts/debdiff.1:174
+#: ../scripts/checkbashisms.1:52 ../scripts/debdiff.1:174
 #: ../scripts/getbuildlog.1:31 ../scripts/grep-excuses.1:29
 #: ../scripts/manpage-alert.1:19 ../scripts/mk-build-deps.pl:117
 #: ../scripts/rc-alert.1:27 ../scripts/whodepends.1:17
@@ -3961,13 +3973,13 @@ msgid "Show version and copyright information."
 msgstr "zeigt die Version und Copyright-Informationen."
 
 #. type: SH
-#: ../scripts/checkbashisms.1:49 ../scripts/debdiff.1:234
+#: ../scripts/checkbashisms.1:52 ../scripts/debdiff.1:234
 #, no-wrap
 msgid "EXIT VALUES"
 msgstr "RÜCKGABEWERTE"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:53
+#: ../scripts/checkbashisms.1:56
 msgid ""
 "The exit value will be 0 if no possible bashisms or other problems were "
 "detected.  Otherwise it will be the sum of the following error values:"
@@ -3977,25 +3989,25 @@ msgstr ""
 "folgenden Fehlerwerte sein:"
 
 #. type: TP
-#: ../scripts/checkbashisms.1:53 ../scripts/dscextract.1:24
+#: ../scripts/checkbashisms.1:56 ../scripts/dscextract.1:24
 #: ../scripts/wnpp-check.1:32
 #, no-wrap
 msgid "1"
 msgstr "1"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:56
+#: ../scripts/checkbashisms.1:59
 msgid "A possible bashism was detected."
 msgstr "Eine potenzielle Bash-Besonderheit wurde entdeckt."
 
 #. type: TP
-#: ../scripts/checkbashisms.1:56 ../scripts/dscextract.1:27
+#: ../scripts/checkbashisms.1:59 ../scripts/dscextract.1:27
 #, no-wrap
 msgid "2"
 msgstr "2"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:60
+#: ../scripts/checkbashisms.1:63
 msgid ""
 "A file was skipped for some reason, for example, because it was unreadable "
 "or not found.  The warning message will give details."
@@ -4005,23 +4017,23 @@ msgstr ""
 "preisgeben."
 
 #. type: TP
-#: ../scripts/checkbashisms.1:60
+#: ../scripts/checkbashisms.1:63
 #, no-wrap
 msgid "4"
 msgstr "4"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:63
+#: ../scripts/checkbashisms.1:66
 msgid "No bashisms were detected in a bash script."
 msgstr "Es wurden keine Bash-Besonderheiten in einem Bash-Script entdeckt."
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:65
+#: ../scripts/checkbashisms.1:68
 msgid "B<lintian>(1)"
 msgstr "B<lintian>(1)"
 
 #. type: Plain text
-#: ../scripts/checkbashisms.1:68
+#: ../scripts/checkbashisms.1:71
 msgid ""
 "B<checkbashisms> was originally written as a shell script by Yann Dirson "
 "E<lt>I<dirson@debian.org>E<gt> and rewritten in Perl with many more features "
@@ -27921,20 +27933,25 @@ msgstr "Version 2"
 
 #. type: textblock
 #: ../scripts/uscan.pl:2049
+#, fuzzy
+#| msgid ""
+#| "B<devscripts> version 2.6.90: The first incarnation of the current style "
+#| "of F<watch> files."
 msgid ""
 "B<devscripts> version 2.6.90: The first incarnation of the current style of "
-"F<watch> files."
+"F<watch> files. This version is also deprecated and will be rejected after "
+"the Debian 11 release."
 msgstr ""
 "B<devscripts>-Version 2.6.90: die erste Verkörperung des aktuellen F<watch>-"
 "Dateistils"
 
 #. type: =item
-#: ../scripts/uscan.pl:2052
+#: ../scripts/uscan.pl:2053
 msgid "Version 3"
 msgstr "Version 3"
 
 #. type: textblock
-#: ../scripts/uscan.pl:2054
+#: ../scripts/uscan.pl:2055
 msgid ""
 "B<devscripts> version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -27948,7 +27965,7 @@ msgstr ""
 "eingeführt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:2059
+#: ../scripts/uscan.pl:2060
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -27964,7 +27981,7 @@ msgstr ""
 "einfachen B<(> I< … > B<)>-Gruppen sind."
 
 #. type: =item
-#: ../scripts/uscan.pl:2067
+#: ../scripts/uscan.pl:2068
 msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
@@ -27973,7 +27990,7 @@ msgstr ""
 "version> I<Version> B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar.gz>« auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:2070
+#: ../scripts/uscan.pl:2071
 msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--no-symlink --"
 "upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
@@ -27983,12 +28000,12 @@ msgstr ""
 "gz> auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:2075
+#: ../scripts/uscan.pl:2076
 msgid "Version 4"
 msgstr "Version 4"
 
 #. type: textblock
-#: ../scripts/uscan.pl:2077
+#: ../scripts/uscan.pl:2078
 msgid ""
 "B<devscripts> version 2.15.10: The first incarnation of F<watch> files "
 "supporting multiple upstream tarballs."
@@ -27997,7 +28014,7 @@ msgstr ""
 "die mehrere Tarbälle der Ursprungsautoren unterstützt."
 
 #. type: textblock
-#: ../scripts/uscan.pl:2080
+#: ../scripts/uscan.pl:2081
 msgid ""
 "The syntax of the watch file is relaxed to allow more spaces for readability."
 msgstr ""
@@ -28005,7 +28022,7 @@ msgstr ""
 "mehr Leerräumen zu erlauben."
 
 #. type: textblock
-#: ../scripts/uscan.pl:2082
+#: ../scripts/uscan.pl:2083
 msgid ""
 "If you have a custom script in place of B<uupdate>, you may also encounter "
 "problems updating from Version 3."
@@ -28015,7 +28032,7 @@ msgstr ""
 "Probleme."
 
 #. type: =item
-#: ../scripts/uscan.pl:2087
+#: ../scripts/uscan.pl:2088
 msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version>\"."
@@ -28024,7 +28041,7 @@ msgstr ""
 "version> I<Version>« auf."
 
 #. type: =item
-#: ../scripts/uscan.pl:2090
+#: ../scripts/uscan.pl:2091
 msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--find> B<--"
 "upstream-version> I<version>\"."
@@ -28033,7 +28050,7 @@ msgstr ""
 "upstream-version> I<Version>« auf."
 
 #. type: textblock
-#: ../scripts/uscan.pl:2095
+#: ../scripts/uscan.pl:2096
 msgid ""
 "Restriction for B<--dehs> is lifted by redirecting other output to STDERR "
 "when it is activated."
@@ -28042,12 +28059,12 @@ msgstr ""
 "die Standardfehlerausgabe umgeleitet werden, wenn sie aktiviert ist."
 
 #. type: textblock
-#: ../scripts/uscan.pl:2102
+#: ../scripts/uscan.pl:2103
 msgid "dpkg(1), mk-origtargz(1), perlre(1), uupdate(1), devscripts.conf(5)"
 msgstr "dpkg(1), mk-origtargz(1), perlre(1), uupdate(1), devscripts.conf(5)"
 
 #. type: textblock
-#: ../scripts/uscan.pl:2106
+#: ../scripts/uscan.pl:2107
 msgid ""
 "The original version of uscan was written by Christoph Lameter "
 "<clameter@debian.org>. Significant improvements, changes and bugfixes were "
