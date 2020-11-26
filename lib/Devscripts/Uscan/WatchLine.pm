@@ -1148,7 +1148,7 @@ sub cmp_versions {
 
             # There's a newer upstream version available, which may already
             # be on our system or may not be
-            uscan_msg " => Newer package available from\n"
+            uscan_msg " => Newer package available from:\n"
               . "        => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "newer package available";
             $main::found++;
@@ -1161,7 +1161,7 @@ sub cmp_versions {
                 ? ""
                 : " (mangled local version is $mangled_lastversion)\n"
               );
-            uscan_verbose " => Package is up to date from\n"
+            uscan_verbose " => Package is up to date from:\n"
               . "             => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "up to date";
             if ($self->shared->{download} > 1) {
@@ -1182,7 +1182,7 @@ sub cmp_versions {
                 ? ""
                 : " (mangled local version is $mangled_lastversion)\n"
               );
-            uscan_verbose " => Only older package available from\n"
+            uscan_verbose " => Only older package available from:\n"
               . "             => $self->{upstream_url}";
             $dehs_tags->{'status'} //= "only older package available";
             if ($self->shared->{download} > 1) {
@@ -1411,7 +1411,7 @@ sub download_file_and_sig {
         }
         $sigfile = "$sigfile_base.$suffix_sig";
         if ($self->shared->{signature} == 1) {
-            uscan_verbose "Downloading OpenPGP signature from\n"
+            uscan_verbose "Downloading OpenPGP signature from:\n"
               . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
@@ -1421,7 +1421,7 @@ sub download_file_and_sig {
                     $self->mode
                 ));
         } else {    # -1, 0
-            uscan_verbose "Not downloading OpenPGP signature from\n"
+            uscan_verbose "Not downloading OpenPGP signature from:\n"
               . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile";
             $self->signature_available(
                 (-e "$self->{config}->{destdir}/$sigfile") ? 1 : 0);
@@ -1430,7 +1430,7 @@ sub download_file_and_sig {
         $pgpsig_url = $self->upstream_url;
         $sigfile    = $self->newfile_base;
         if ($self->shared->{signature} == 1) {
-            uscan_verbose "Downloading OpenPGP signature from\n"
+            uscan_verbose "Downloading OpenPGP signature from:\n"
               . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
@@ -1440,7 +1440,7 @@ sub download_file_and_sig {
                     $self->mode
                 ));
         } else {    # -1, 0
-            uscan_verbose "Not downloading OpenPGP signature from\n"
+            uscan_verbose "Not downloading OpenPGP signature from:\n"
               . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile";
             $self->signature_available(
                 (-e "$self->{config}->{destdir}/$sigfile") ? 1 : 0);

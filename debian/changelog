@@ -14,6 +14,8 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       `debsign -k` if no current key was already specified.  Closes: #966358
   * debchange:
     + Bump the LTS release to 9/stretch.  Closes: #974164
+  * uscan:
+    + Apply patch from Unit 193 to beatify a bit the output.
   * d/control:
     + Demote `at` from Recommends to Suggests.  Closes: #975047
 
