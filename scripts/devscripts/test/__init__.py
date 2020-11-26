@@ -18,6 +18,7 @@ import sys
 import unittest
 
 SCRIPTS = [
+    "debbisect",
     "debdiff-apply",
     "reproducible-check",
     "sadt",

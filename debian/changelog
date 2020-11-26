@@ -102,6 +102,10 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   * checkbashisms:
     + Add a new --early-fail option, to quit at the first error found.  MR: !208
 
+  [ Johannes Schauer ]
+  * Add a new script, "debbisect", that help to bisect snapshot.debian.org
+    to find which change in the archive introduced a certain problem.  MR: !177
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 05 Sep 2020 03:45:53 +0200
 
 devscripts (2.20.4) unstable; urgency=medium
