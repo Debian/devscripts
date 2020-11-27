@@ -18,6 +18,7 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
     + Apply patch from Unit 193 to beatify a bit the output.
   * d/control:
     + Demote `at` from Recommends to Suggests.  Closes: #975047
+  * Update copyright file.
 
   [ Niels Thykier ]
   * debrebuild (MR: !202; MR: !203):
@@ -47,6 +48,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
   [ Andrius Merkys ]
   * uscan:
     + Fix typo in the manpage.  MR: !201
+    + Make the tarballs exported in svn mode reproducible.
+      This adds new dependencies on libfile-dirlist-perl and libfile-touch-perl.
+      Closes: #968230; MR: 204
 
   [ Jiří Paleček ]
   * uscan:

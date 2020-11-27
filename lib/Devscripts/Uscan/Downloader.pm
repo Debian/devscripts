@@ -6,7 +6,10 @@ use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
+use File::DirList;
+use File::Find;
 use File::Temp qw/tempdir/;
+use File::Touch;
 use Moo;
 use URI;
 
@@ -149,8 +152,28 @@ sub download ($$$$$$$$) {
         if ($mode eq 'svn') {
             my $tempdir = tempdir(CLEANUP => 1);
             uscan_exec('svn', 'export', $url, "$tempdir/$pkg-$ver");
-            uscan_exec('tar', '-C', $tempdir, '-cvf',
-                "$abs_dst/$pkg-$ver.tar", "$pkg-$ver");
+            find({
+                    wanted => sub {
+                        return if !-d $File::Find::name;
+                        my ($newest) = grep { $_ ne '.' && $_ ne '..' }
+                          map { $_->[13] } @{ File::DirList::list($_, 'M') };
+                        return if !$newest;
+                        my $touch
+                          = File::Touch->new(reference => $_ . '/' . $newest);
+                        $touch->touch($_);
+                    },
+                    bydepth  => 1,
+                    no_chdir => 1,
+                },
+                "$tempdir/$pkg-$ver"
+            );
+            uscan_exec(
+                'tar',          '-C',
+                $tempdir,       '--sort=name',
+                '--owner=root', '--group=root',
+                '-cvf',         "$abs_dst/$pkg-$ver.tar",
+                "$pkg-$ver"
+            );
         } elsif ($self->git_upstream) {
             my ($infodir, $attr_file, $attr_bkp);
             if ($self->git_export_all) {
