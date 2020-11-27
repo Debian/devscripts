@@ -13,6 +13,7 @@ sub list_repos {
         order_by => 'name',
         sort     => 'asc',
         simple   => 1,
+        archived => $self->config->archived,
         ($match ? (search => $match) : ()),
     };
     if ($self->group_id) {

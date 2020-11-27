@@ -66,6 +66,9 @@ devscripts (2.20.5) UNRELEASED; urgency=medium
       Closes: #973374; MR: !205
     + Apply patch from Neutron Soutmun, to add an "Accept" header in
       http requests.  Closes: #971086; MR: !209
+  * salsa:
+    + Add --archived option to list_repos and search_projects commands.
+      Closes: #966013; MR: !210
   * Update French translation
 
   [ Matthijs Kooijman ]
