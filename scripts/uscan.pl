@@ -1257,7 +1257,7 @@ upstream tarball from into the standard F<< <project>-<version>.tar.gz >> using
 B<filenamemangle>:
 
   version=4
-  opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%<project>-$1.tar.gz%" \
+  opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%@PACKAGE@-$1.tar.gz%" \
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
 
@@ -1348,7 +1348,7 @@ are "1.2.4", "2.0.1" and "10.0", with the main tarball having version "2.0.6":
   Comp2:         2 .     0 .     1
   Comp3:        10 .     0
   ================================
-  Result  : 1+2.10 . 2+0+0 .   4+1
+  Result  : 1+2+10 . 2+0+0 .   4+1
   Checksum:     13 .     2 .     5
   ================================
   Final Version:   2.0.6+~cs13.2.5
