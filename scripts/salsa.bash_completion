@@ -21,7 +21,7 @@ _salsa_completion () {
     opts+=" --kgb --no-kgb --kgb-options --irc-channel --path --tagpending"
     opts+=" --irker --no-irker --disable-irker --no-disable-irker"
     opts+=" --no-tagpending --no-fail --rename-head --token --token-file"
-    opts+=" --user --user-id --verbose"
+    opts+=" --user --user-id --verbose --archived"
     local commands=" add_user check_repo checkout co create_repo del_repo"
     commands+=" del_user group list_groups list_repos ls join push"
     commands+=" fork forks merge_request merge_requests mr mrs"

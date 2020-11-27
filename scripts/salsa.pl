@@ -560,6 +560,20 @@ C<.devscripts> value: B<SALSA_YES> (yes/no)
 
 =back
 
+=head2 List/search repo options
+
+=over
+
+=item B<--archived> B<--no-archived>
+
+Instead of looking to active projects, list or search in archived projects.
+Note that you can't have both archived and unarchived projects in the same
+request. Default: no I<(ie --no-archived)>.
+
+C<.devscripts> value: B<SALSA_ARCHIVED> (yes/no)
+
+=back
+
 =head2 Update/create repo options
 
 =over

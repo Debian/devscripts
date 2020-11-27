@@ -16,7 +16,7 @@ foreach (qw(
     mr_desc mr_dst_branch mr_dst_project mr_remove_source_branch mr_src_branch
     mr_src_project mr_title no_fail path private_token skip source_branch
     group group_id user user_id tagpending tagpending_server_url email
-    email_recipient disable_email ci_config_path
+    email_recipient disable_email ci_config_path archived
     )
 ) {
     has $_ => (is => 'rw');
@@ -248,6 +248,9 @@ use constant keys => [
         qr'^https?://',
         'https://webhook.salsa.debian.org/tagpending/'
     ],
+
+    # List/search options
+    ['archived!', 'SALSA_ARCHIVED', 'bool', 0],
 ];
 
 # Consistency rules

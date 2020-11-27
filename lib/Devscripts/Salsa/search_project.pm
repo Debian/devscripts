@@ -15,9 +15,13 @@ sub search_project {
     if ($projects) {
         $projects = [$projects];
     } else {
-        $projects
-          = $self->api->paginator('projects',
-            { search => $project, order_by => 'name' })->all();
+        $projects = $self->api->paginator(
+            'projects',
+            {
+                search   => $project,
+                order_by => 'name',
+                archived => $self->config->archived
+            })->all();
     }
     unless ($projects and @$projects) {
         ds_warn "No projects found";
