@@ -25,6 +25,9 @@ OUR_TESTS= \
 DESTRUCTIVE_TESTS = \
 	debi \
 
+# unset some variables that might affect tests
+undefine DEB_CHECK_COMMAND
+
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)
 
 destructive-test: $(foreach i,$(DESTRUCTIVE_TESTS),test_$(i).test)
