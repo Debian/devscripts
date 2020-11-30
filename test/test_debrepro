@@ -17,11 +17,11 @@
 
 set -u
 
-ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
-if [ "$ARCHITECTURE" = "hurd-i386" ] || [ "$ARCHITECTURE" = "kfreebsd-amd64" ] || [ "$ARCHITECTURE" = "kfreebsd-i386" ]; then
+DEB_HOST_OS="$(dpkg-architecture -qDEB_HOST_OS)"
+if [ "$DEB_HOST_OS" = "hurd-i386" ] || [ "$DEB_HOST_OS" = "kfreebsd" ]; then
     # hurd-i386 lacks sem_open() which is required by something in here.
     # kbsd also has a non-working semaphore.
-    echo "This test is not supported on $ARCHITECTURE, skipping"
+    echo "This test is not supported on $(dpkg-architecture -qDEB_HOST_ARCH), skipping"
     exit 0
 fi
 
