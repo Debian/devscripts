@@ -22,8 +22,9 @@ TESTTYPE=FTP
 . ./lib_test_uscan
 
 ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
-if [ "$ARCHITECTURE" = "hurd-i386" ]; then
-    # hurd-i386 lacks sem_open() which is required by the python ftp server
+if [ "$ARCHITECTURE" = "hurd-i386" ] || [ "$ARCHITECTURE" = "kfreebsd-amd64" ] || [ "$ARCHITECTURE" = "kfreebsd-i386" ]; then
+    # hurd-i386 lacks sem_open() which is required by the python ftp server.
+    # kbsd also has a non-working semaphore.
     echo "This test is not supported on $ARCHITECTURE, skipping"
     exit 0
 fi
