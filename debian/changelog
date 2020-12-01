@@ -1,9 +1,14 @@
 devscripts (2.20.5+nmu1) UNRELEASED; urgency=medium
 
+  [ Mattia Rizzolo ]
   * tests:
     + Undefine some variables that might affect the tests.
     + test_debrepro, test_uscan_ftp, test_uscan_svn: skip the tests on
       kfreebsd and hurd, as support for the required sem_open() is lacking.
+
+  [ Xavier Guimard ]
+  * salsa:
+    + Fix bash completion
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
 
