@@ -742,11 +742,13 @@ testWatch4NonNativeDMangle() {
     WATCHVER=4
     WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch "siteNonNative foo EXTRA"
+}
 
-    rm -rf "$TEMP_PKG_DIR"/foo/debian
-    #and without dirversionmangle, should return version 3
+# ... and without dirversionmangle, should return version 3
+testWatch4NonNativeDMangleWithoutD() {
+    WATCHVER=4
     WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
-    helperWatch ":" 1.0 3.0
+    helperWatch "siteNonNative foo EXTRA" 1.0 3.0
 }
 
 # test non-native package with uupdate, bare HTTP server with dirversionmangle and base
@@ -754,11 +756,13 @@ testWatch4NonNativeDMangleB() {
     WATCHVER=4
     WATCHLINE='opts="dirversionmangle=s/^\d*[13579]\./0~$&/, uversionmangle=s/^\d*[13579]\./0~$&/" @@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch "siteWebNonNativeRecWithBase foo EXTRA"
+}
 
-    rm -rf "$TEMP_PKG_DIR"/foo/debian
-    #and without dirversionmangle, should return version 3
+# ... and without dirversionmangle, should return version 3
+testWatch4NonNativeDMangleBWithoutD() {
+    WATCHVER=4
     WATCHLINE='@@@url@@@([\.\d]+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
-    helperWatch ":" 1.0 3.0
+    helperWatch "siteWebNonNativeRecWithBase foo EXTRA" 1.0 3.0
 }
 
 # test 3 parameter watch line

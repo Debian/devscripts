@@ -5,6 +5,8 @@ devscripts (2.20.5+nmu1) UNRELEASED; urgency=medium
     + Undefine some variables that might affect the tests.
     + test_debrepro, test_uscan_ftp, test_uscan_svn: skip the tests on
       kfreebsd and hurd, as support for the required sem_open() is lacking.
+    + test_uscan_mangle: do not call helperWatch multiple times in a test, to
+      prevent leftover background processes.
 
   [ Xavier Guimard ]
   * salsa:
