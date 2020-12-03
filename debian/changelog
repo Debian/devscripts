@@ -7,6 +7,8 @@ devscripts (2.20.5+nmu1) UNRELEASED; urgency=medium
       kfreebsd and hurd, as support for the required sem_open() is lacking.
     + test_uscan_mangle: do not call helperWatch multiple times in a test, to
       prevent leftover background processes.
+    + test_debchange: skip Ubuntu tests when there is no known development
+      release, like right after an Ubuntu release.  Closes: #958912
 
   [ Xavier Guimard ]
   * salsa:

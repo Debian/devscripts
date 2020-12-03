@@ -60,6 +60,16 @@ success() {
     runCommand2 "-c \"$CHANGELOG\" $1" "" "" 0
 }
 
+checkUbuntuDevelAvailable() {
+    if ubuntu-distro-info --devel 2>/dev/null >&2; then
+        # distro-info-data knows of the current devel release
+        true
+    else
+        # distro-info-data doesn't know of the current devel release
+        false
+    fi
+}
+
 checkVersion() {
     local start_param="$1"
     local param="$2"
@@ -114,6 +124,10 @@ testDebianIncrement() {
 }
 
 testUbuntuIncrement() {
+    if ! checkUbuntuDevelAvailable; then
+        echo "No known Ubuntu devel release known, skipping related tests"
+        startSkipping
+    fi
     checkUbuntuVersion "-i" "12" "12ubuntu1"
     checkUbuntuVersion "-i" "3.4" "3.4ubuntu1"
     checkUbuntuVersion "-i" "3.4.5" "3.4.5ubuntu1"
@@ -127,6 +141,10 @@ testUbuntuIncrement() {
 }
 
 testUbuntuRebuild() {
+    if ! checkUbuntuDevelAvailable; then
+        echo "No known Ubuntu devel release known, skipping related tests"
+        startSkipping
+    fi
     checkUbuntuVersion "-R" "3.4" "3.4build1"
     checkUbuntuVersion "-R" "2.0-4" "2.0-4build1"
     checkUbuntuVersion "-R" "1.42-4ubuntu5" "1.42-4ubuntu6"
