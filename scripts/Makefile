@@ -44,6 +44,7 @@ PKGNAMES := \
 GEN_MAN1S += \
 	deb-why-removed.1 \
 	debbisect.1 \
+	debrebuild.1 \
 	debrepro.1 \
 	ltnu.1 \
 	mk-origtargz.1 \
@@ -103,6 +104,14 @@ test_py: $(VERSION_FILE)
 debbisect.1: debbisect
 	help2man \
 		--name="bisect snapshot.debian.org" \
+		--version-string=$(VERSION) \
+		--no-info \
+		--no-discard-stderr \
+		./$< >$@
+
+debrebuild.1: debrebuild
+	help2man \
+		--name="use a buildinfo file and snapshot.d.o to recreate binary packages" \
 		--version-string=$(VERSION) \
 		--no-info \
 		--no-discard-stderr \

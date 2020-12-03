@@ -19,6 +19,29 @@ devscripts (2.20.6) UNRELEASED; urgency=medium
   * uscan:
     + Dicrease checksum message from warning to verbose.
 
+  [ Johannes Schauer Marin Rodrigues ]
+  * debrebuild:
+    + Add the --builder option to select the rebuilder backend. The default is
+      "none" which just prints instructions. Possible values are sbuild, dpkg,
+      mmdebstrap, sbuild+unshare and pbuilder.
+    + Add the --output option where the build results will be stored.
+    + Compare the checksums from the input buildinfo with the build artifacts.
+    + Unconditionally set Acquire::http::Dl-Limit "1000" and Acquire::Retries
+      "5" to hopefully not get blocked by snapshot.d.o.
+    + The sbuild+unshare as well as the mmdebstrap builders allow debrebuild
+      to operate without any setup.  Closes: #958750
+    + All builders (except the "none" builder) do download the source package
+      automatically.  Closes: #961861
+    + The "none" builder retains the former behavior of debrebuild. By using
+      the other builders, debrebuild will actually perform the build itself
+      and check if the produced build artifacts match.  Closes: #955123
+    + All builders now support binNMUs.  Closes: #961862
+    + Downgrades are avoided by using the last stable release.  Closes: #955307
+    + There is now proper --help output and a man page.  Closes: #955049
+    + Using the --timestamp option one can either manually provide the
+      necessary timestamps separated by commas or use metasnap.d.n by supplying
+      the value "metasnap"
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
 
 devscripts (2.20.5) unstable; urgency=medium
