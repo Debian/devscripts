@@ -482,7 +482,7 @@ sub process_group {
         if ($dehs) {
             $dehs_tags->{'decoded-checksum'} = $v;
         } else {
-            uscan_warn 'Checksum ref: ' . join('+~', @ck_versions) . "\n";
+            uscan_verbose 'Checksum ref: ' . join('+~', @ck_versions) . "\n";
         }
     }
     return 0;
