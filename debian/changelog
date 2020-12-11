@@ -1,4 +1,4 @@
-devscripts (2.20.5+nmu1) UNRELEASED; urgency=medium
+devscripts (2.20.6) UNRELEASED; urgency=medium
 
   [ Mattia Rizzolo ]
   * tests:
@@ -9,12 +9,15 @@ devscripts (2.20.5+nmu1) UNRELEASED; urgency=medium
       prevent leftover background processes.
     + test_debchange: skip Ubuntu tests when there is no known development
       release, like right after an Ubuntu release.  Closes: #958912
+  * d/control:
+    + Remove Pierre-Elliott Bécue from Uploaders;
+      thank you for all your past contributions!
 
   [ Xavier Guimard ]
   * salsa:
-    + Fix bash completion
+    + Fix bash completion.
   * uscan:
-    + Dicrease checksum message from warning to verbose
+    + Dicrease checksum message from warning to verbose.
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
 
