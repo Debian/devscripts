@@ -173,7 +173,13 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
                 req = urllib.request.Request(
                     "http://snapshot.debian.org/" + self.path, headers=headers
                 )
-                with urllib.request.urlopen(req) as f, open(path, "ab") as out:
+                # we use os.fdopen(os.open(...)) because we don't want to
+                # truncate the file and seek to the right position but also
+                # create it if it doesn't exist yet
+                with urllib.request.urlopen(req) as f, os.fdopen(
+                    os.open(path, os.O_RDWR | os.O_CREAT), "rb+"
+                ) as out:
+                    out.seek(downloaded)
                     if trynum == 0:
                         self.send_header("Content-type", f.headers["Content-type"])
                         self.send_header("Content-Length", f.headers["Content-Length"])
@@ -185,12 +191,18 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
                         if totalsize - downloaded < chunksize:
                             chunksize = totalsize - downloaded
                         buf = f.read(chunksize)  # 800 kB/s
-                        assert len(buf) == chunksize, (
-                            len(buf),
-                            chunksize,
-                            totalsize,
-                            downloaded,
-                        )
+                        if len(buf) != chunksize:
+                            # something went wrong
+                            logging.warning(
+                                "%s: wanted %d but got %d bytes (try %d of %d)",
+                                path,
+                                chunksize,
+                                len(buf),
+                                trynum + 1,
+                                maxtries,
+                            )
+                            time.sleep(10)
+                            break
                         time.sleep(1)  # snapshot.d.o needs heavy throttling
                         out.write(buf)
                         self.wfile.write(buf)
@@ -353,6 +365,7 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
     env = {
         "DEBIAN_BISECT_EPOCH": "%d" % int(timestamp.timestamp()),
         "DEBIAN_BISECT_TIMESTAMP": timestamp.strftime("%Y%m%dT%H%M%SZ"),
+        "PATH": os.environ.get("PATH", "/usr/sbin:/usr/bin:/sbin:/bin"),
     }
     if staticargs.port is not None:
         env["DEBIAN_BISECT_MIRROR"] = goodmirror
@@ -428,11 +441,11 @@ def write_log_symlink(goodbad, output, timestamp, toupgrade=None):
     with open(fname, "wb") as f:
         f.write(output)
     if goodbad == "good":
-        if os.path.exists("debbisect.log.good"):
+        if os.path.lexists("debbisect.log.good"):
             os.unlink("debbisect.log.good")
         os.symlink(fname, "debbisect.log.good")
     elif goodbad == "bad":
-        if os.path.exists("debbisect.log.bad"):
+        if os.path.lexists("debbisect.log.bad"):
             os.unlink("debbisect.log.bad")
         os.symlink(fname, "debbisect.log.bad")
 
