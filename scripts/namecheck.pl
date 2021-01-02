@@ -223,11 +223,9 @@ __DATA__
 # file ~/.namecheckrc with your own contents in the same format.
 #
 http://%s.tuxfamily.org/             | Not Found
-http://alioth.debian.org/projects/%s | Software Map
 http://freshmeat.net/projects/%s     | We encounted an error
 http://launchpad.net/%s              | no page with this address
 http://savannah.gnu.org/projects/%s  | Invalid Group
 http://sourceforge.net/projects/%s   | Invalid Project
-http://www.ohloh.net/projects/%s     | Sorry, the page you are trying to view is not here
-https://gna.org/projects/%s          | Invalid Group
+http://www.openhub.net/projects/%s     | Something seems wrong with your URL
 http://projects.apache.org/projects/%s.html | Not Found
