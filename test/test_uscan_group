@@ -56,7 +56,7 @@ tearDown(){
 trap tearDown EXIT
 
 containsName(){
-  echo "$1" | fgrep -q "$2"
+  echo "$1" | grep -qF "$2"
   echo $?
 }
 

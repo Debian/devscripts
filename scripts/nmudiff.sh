@@ -100,7 +100,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^(NMUDIFF|BTS|DEVSCRIPTS)_')
+	set | grep -E '^(NMUDIFF|BTS|DEVSCRIPTS)_')
 
     # check sanity
     case "$BTS_SENDMAIL_COMMAND" in

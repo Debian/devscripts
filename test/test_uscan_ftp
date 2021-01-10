@@ -83,7 +83,7 @@ spawnFtpServer(){
 trap cleanup 1 2 3 13 15
 
 containsName(){
-  echo "$1" | fgrep -q "$2"
+  echo "$1" | grep -qF "$2"
   echo $?
 }
 

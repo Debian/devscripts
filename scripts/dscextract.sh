@@ -52,7 +52,7 @@ DSCDIR=$(dirname "$DSC")
 WORKDIR=$(mktemp -d --tmpdir dscextract.XXXXXX)
 trap 'rm -rf "$WORKDIR"' EXIT
 
-if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DSC") ; then
+if DIFFGZ=$(grep -E '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	DIFFGZ=$(echo "$DIFFGZ" | cut -d ' ' -f 4 | head -n 1)
 	test -e "$DSCDIR/$DIFFGZ" || die "$DSCDIR/$DIFFGZ: not found"
 	filterdiff -p1 -i "$FILE" -z "$DSCDIR/$DIFFGZ" > "$WORKDIR/patch"
@@ -60,7 +60,7 @@ if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DS
 		# case 1: file found in .diff.gz
 		if ! grep -q '^@@ -0,0 ' "$WORKDIR/patch" ; then
 			# case 1a: patch requires original file
-			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.* found in $DSC"
+			ORIGTGZ=$(grep -E '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.* found in $DSC"
 			ORIGTGZ=$(echo "$ORIGTGZ" | cut -d ' ' -f 4 | head -n 1)
 			setzip $ORIGTGZ
 			test -e "$DSCDIR/$ORIGTGZ" || die "$DSCDIR/$ORIGTGZ not found"
@@ -77,7 +77,7 @@ if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DS
 	fi
 fi
 
-if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
+if DEBIANTARGZ=$(grep -E '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	case $FILE in
 		debian/*)
 			DEBIANTARGZ=$(echo "$DEBIANTARGZ" | cut -d ' ' -f 4 | head -n 1)
@@ -91,7 +91,7 @@ if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|xz|lzma
 			# for 3.0 format, no need to look in other places here
 			;;
 		*)
-			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.gz found in $DSC"
+			ORIGTGZ=$(grep -E '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.gz found in $DSC"
 			ORIGTGZ=$(echo "$ORIGTGZ" | cut -d ' ' -f 4 | head -n 1)
 			test -e "$DSCDIR/$ORIGTGZ" || die "$DSCDIR/$ORIGTGZ not found"
 			setzip $ORIGTGZ
@@ -105,7 +105,7 @@ if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|xz|lzma
 	esac
 fi
 
-if TARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
+if TARGZ=$(grep -E '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	TARGZ=$(echo "$TARGZ" | cut -d ' ' -f 4 | head -n 1)
 	test -e "$DSCDIR/$TARGZ" || die "$DSCDIR/$TARGZ not found"
 	setzip $TARGZ

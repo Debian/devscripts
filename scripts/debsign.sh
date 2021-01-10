@@ -289,7 +289,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^(DEBSIGN|DEBRELEASE|DEVSCRIPTS)_')
+	set | grep -E '^(DEBSIGN|DEBRELEASE|DEVSCRIPTS)_')
 
     # We do not replace this with a default directory to avoid accidentally
     # signing a broken package
@@ -625,7 +625,7 @@ dosigning() {
 	    fi
 	fi
 
-	if [ -n "$changes" ] && echo "$changes" | egrep -q '[][*?]'
+	if [ -n "$changes" ] && echo "$changes" | grep -qE '[][*?]'
 	then
 	    for changes in $changes
 	    do

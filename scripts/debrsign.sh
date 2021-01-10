@@ -97,7 +97,7 @@ eval $(
       [ -r $file ] && . $file
     done
 
-    set | egrep '^DEBRSIGN_')
+    set | grep '^DEBRSIGN_')
 
 signargs=
 while [ $# != 0 ]

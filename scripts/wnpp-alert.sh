@@ -47,11 +47,11 @@ wnppdiff () {
     if [ ! -f "$CACHEDDIFF" ]; then
         # First use
         comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
-          xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP | \
+          xargs -i grep -E '^[A-Z]+ [0-9]+ {} ' $WNPP | \
           tee $CACHEDDIFF
     else
         comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
-          xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP > $WNPP_DIFF
+          xargs -i grep -E '^[A-Z]+ [0-9]+ {} ' $WNPP > $WNPP_DIFF
         sort -o $CACHEDDIFF $CACHEDDIFF
         sort -o $WNPP_DIFF $WNPP_DIFF
         comm -3 $CACHEDDIFF $WNPP_DIFF | \
@@ -136,4 +136,4 @@ if [ -f "$WNPP_DIFF" ]; then
 fi
 
 comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
-xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP
+xargs -i grep -E '^[A-Z]+ [0-9]+ {} ' $WNPP

@@ -109,7 +109,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep "^(DEBRELEASE|DEVSCRIPTS)_")
+	set | grep -E "^(DEBRELEASE|DEVSCRIPTS)_")
 
     # check sanity
     case "$DEBRELEASE_UPLOADER" in

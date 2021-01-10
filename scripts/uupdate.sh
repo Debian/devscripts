@@ -171,7 +171,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^(UUPDATE|DEVSCRIPTS)_')
+	set | grep -E '^(UUPDATE|DEVSCRIPTS)_')
 
     # check sanity
     case "$UUPDATE_PRISTINE" in
