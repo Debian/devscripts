@@ -28,6 +28,14 @@ devscripts (2.20.6) UNRELEASED; urgency=medium
   * debchange:
     + Warn when DEBEMAIL and EMAIL are not set.  Closes: #977809
 
+  [ Johannes Schauer ]
+  * debbisect (MR: !214):
+    + Fix installation path of the internal scripts.
+    + Use os.path.lexist instead of os.path.exist when checking symlinks.
+    + Set the PATH environment variable to a sensible default if it's not set.
+    + Automatically retry a download aborted by snapshot.d.o after 10 seconds.
+    + Instead of appending, seek to the correct position in the output file.
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
 
 devscripts (2.20.5) unstable; urgency=medium
