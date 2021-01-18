@@ -24,6 +24,10 @@ devscripts (2.20.6) UNRELEASED; urgency=medium
   * namechck:
     + Remove some dead URLs.  MR: !215
 
+  [ Michel Le Bihan ]
+  * debchange:
+    + Warn when DEBEMAIL and EMAIL are not set.  Closes: #977809
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
 
 devscripts (2.20.5) unstable; urgency=medium
