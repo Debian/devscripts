@@ -66,7 +66,7 @@ if [ "$VERBOSE" -gt 0 ]; then
 	fi
 fi
 
-if fgrep -q quilt debian/source/format 2>/dev/null; then
+if grep -qF quilt debian/source/format 2>/dev/null; then
 	echo "quilt"
 	exit 0
 fi
@@ -75,31 +75,31 @@ fi
 # tools that rely on the exisitng output.  If changes in reporting is needed,
 # please check the "VERBOSE" flag (see below for examples).  Feel free
 # to add new patchsystem detection and reporting.
-for filename in $(echo "debian/rules"; grep ^include debian/rules | fgrep -v '$(' | awk '{print $2}')
+for filename in $(echo "debian/rules"; grep ^include debian/rules | grep -vF '$(' | awk '{print $2}')
 do
-	fgrep patchsys.mk "$filename" | grep -q -v "^#" && {
+	grep -F patchsys.mk "$filename" | grep -q -v "^#" && {
 		if [ "$VERBOSE" -eq 0 ]; then
 			echo "cdbs"; exit 0;
 		else
 			echo "cdbs (patchsys.mk: see 'cdbs-edit-patch')"; exit 0;
 		fi
 	}
-	fgrep quilt "$filename" | grep -q -v "^#" && { echo "quilt"; exit 0; }
-	fgrep dbs-build.mk "$filename" | grep -q -v "^#" && {
+	grep -F quilt "$filename" | grep -q -v "^#" && { echo "quilt"; exit 0; }
+	grep -F dbs-build.mk "$filename" | grep -q -v "^#" && {
 		if [ "$VERBOSE" -eq 0 ]; then
 			echo "dbs"; exit 0;
 		else
 			echo "dbs (see 'dbs-edit-patch')"; exit 0;
 		fi
 	}
-	fgrep dpatch "$filename" | grep -q -v "^#" && {
+	grep -F dpatch "$filename" | grep -q -v "^#" && {
 		if [ "$VERBOSE" -eq 0 ]; then
 			echo "dpatch"; exit 0;
 		else
 			echo "dpatch (see 'patch-edit-patch')"; exit 0;
 		fi
 	}
-	fgrep '*.diff' "$filename" | grep -q -v "^#" && {
+	grep -F '*.diff' "$filename" | grep -q -v "^#" && {
 		if [ "$VERBOSE" -eq 0 ]; then
 			echo "diff splash"; exit 0;
 		else

@@ -81,7 +81,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^(DEBCLEAN|DEVSCRIPTS)_')
+	set | grep -E '^(DEBCLEAN|DEVSCRIPTS)_')
 
     # check sanity
     case "$DEBCLEAN_CLEANDEBS" in
@@ -163,7 +163,7 @@ fi
 
 OPWD="`pwd`"
 
-TESTDIR=$(echo $OPWD | egrep -o '.*/debian/?' | sed 's/\/debian\/\?$//')
+TESTDIR=$(echo $OPWD | grep -Eo '.*/debian/?' | sed 's/\/debian\/\?$//')
 
 if [ -f debian/changelog ]; then
     directories=$OPWD

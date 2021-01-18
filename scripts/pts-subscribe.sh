@@ -77,7 +77,7 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^PTS_')
+	set | grep '^PTS_')
 
     # check sanity - nothing to do here (at will complain if it's illegal)
 

@@ -42,7 +42,7 @@ fi
 
 MAINT="${DEBEMAIL}"
 if [ -n "${1}" ]; then
-    if echo "${1}" | fgrep -q @; then
+    if echo "${1}" | grep -qF @; then
         MAINT="${1}"
     elif [ "${1}" = "pkg-gnustep" ]; then
         MAINT="pkg-gnustep-maintainers@lists.alioth.debian.org"

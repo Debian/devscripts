@@ -46,9 +46,9 @@ get_list() {
 
 	for dir in $(
 		if [ "$RECURSE" ]; then
-			find "$path" -type d | egrep -v "$vcs_dirs"
+			find "$path" -type d | grep -vE "$vcs_dirs"
 		else
-			find "$path" -maxdepth 1 -type d | egrep -v "$vcs_dirs"
+			find "$path" -maxdepth 1 -type d | grep -vE "$vcs_dirs"
 		fi
 	); do
 		changelog="$dir/debian/changelog"

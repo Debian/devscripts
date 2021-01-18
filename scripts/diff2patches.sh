@@ -79,7 +79,7 @@ fi
 
 echo "Patches will be extracted under $DEB_PATCHES/"
 
-FILES=$(zcat "$diffgz" | lsdiff --strip 1 | egrep -v ^debian/) || \
+FILES=$(zcat "$diffgz" | lsdiff --strip 1 | grep -v ^debian/) || \
 	echo "$(basename "$diffgz") doesn't contain any patch outside debian/"
 
 for file in $FILES; do
