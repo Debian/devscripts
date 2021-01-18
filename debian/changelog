@@ -1,6 +1,8 @@
 devscripts (2.20.6) UNRELEASED; urgency=medium
 
   [ Mattia Rizzolo ]
+  * setup.py:
+    + Produce a __init__.py at build time, containing the Devscripts version.
   * tests:
     + Undefine some variables that might affect the tests.
     + Run again all tests on hurd, glibc 2.31-6 fixed sem_open().

@@ -4,6 +4,7 @@ import os
 import re
 
 from setuptools import setup
+from distutils.command.clean import clean as BaseCleanCommand
 
 from devscripts.test import SCRIPTS
 
@@ -15,8 +16,19 @@ def get_version():
         head = open(changelog, encoding="utf8").readline()
         match = re.compile(r".*\((.*)\).*").match(head)
         if match:
-            return match.group(1)
+            version = match.group(1)
+        with open(os.path.join("devscripts", "__init__.py"), "w") as f:
+            f.write("version = '{}'\n".format(version))
+        return version
     raise Exception("Failed to determine version from debian/changelog")
+
+
+class MyCleanCommand(BaseCleanCommand):
+    def run(self):
+        super().run()
+        version_file_py = os.path.join("devscripts", "__init__.py")
+        if os.path.exists(version_file_py):
+            os.unlink(version_file_py)
 
 
 if __name__ == '__main__':
@@ -26,4 +38,5 @@ if __name__ == '__main__':
         scripts=SCRIPTS,
         packages=['devscripts', 'devscripts/test'],
         test_suite='devscripts.test',
+        cmdclass={'clean': MyCleanCommand},
     )
