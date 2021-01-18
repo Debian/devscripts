@@ -842,17 +842,20 @@ if (!$opt_m and !$opt_M) {
     } elsif (exists $env{'EMAIL'}) {
         $EMAIL = $env{'EMAIL'};
     } else {
-        warn "$progname warning: neither DEBEMAIL nor EMAIL environment variable is set\n";
+        warn
+"$progname warning: neither DEBEMAIL nor EMAIL environment variable is set\n";
         $warnings++;
         my $addr;
         if (open MAILNAME, '/etc/mailname') {
-            warn "$progname warning: building email address from username and mailname\n";
+            warn
+"$progname warning: building email address from username and mailname\n";
             $warnings++;
             chomp($addr = <MAILNAME>);
             close MAILNAME;
         }
         if (!$addr) {
-            warn "$progname warning: building email address from username and FQDN\n";
+            warn
+"$progname warning: building email address from username and FQDN\n";
             $warnings++;
             chomp($addr = `hostname --fqdn 2>/dev/null`);
             $addr = undef if $?;

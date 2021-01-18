@@ -150,7 +150,7 @@ sub download ($$$$$$$$) {
         my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 
         if ($mode eq 'svn') {
-            my $tempdir = tempdir(CLEANUP => 1);
+            my $tempdir   = tempdir(CLEANUP => 1);
             my $old_umask = umask(oct('022'));
             uscan_exec('svn', 'export', $url, "$tempdir/$pkg-$ver");
             umask($old_umask);
