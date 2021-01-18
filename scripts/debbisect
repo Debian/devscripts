@@ -366,7 +366,7 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
             os.path.dirname(os.path.realpath(__file__)), scriptname + ".sh"
         )
         if not os.path.exists(run_bisect):
-            run_bisect = os.path.join("/usr/share/devscripts/", scriptname)
+            run_bisect = os.path.join("/usr/share/devscripts/scripts/", scriptname)
         cmd = [
             run_bisect,
             staticargs.depends,
