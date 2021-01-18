@@ -2,9 +2,9 @@
 
 import os
 import re
+from distutils.command.clean import clean as BaseCleanCommand
 
 from setuptools import setup
-from distutils.command.clean import clean as BaseCleanCommand
 
 from devscripts.test import SCRIPTS
 
