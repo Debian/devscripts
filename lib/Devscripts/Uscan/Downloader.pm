@@ -151,7 +151,9 @@ sub download ($$$$$$$$) {
 
         if ($mode eq 'svn') {
             my $tempdir = tempdir(CLEANUP => 1);
+            my $old_umask = umask(oct('022'));
             uscan_exec('svn', 'export', $url, "$tempdir/$pkg-$ver");
+            umask($old_umask);
             find({
                     wanted => sub {
                         return if !-d $File::Find::name;

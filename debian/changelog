@@ -3,6 +3,9 @@ devscripts (2.20.6) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * setup.py:
     + Produce a __init__.py at build time, containing the Devscripts version.
+  * uscan:
+    + Set the umask while running `svn export`, so as to produce a
+      reproducible tarball with mode=svn.
   * tests:
     + Undefine some variables that might affect the tests.
     + Run again all tests on hurd, glibc 2.31-6 fixed sem_open().
