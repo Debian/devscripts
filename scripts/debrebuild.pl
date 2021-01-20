@@ -29,22 +29,44 @@ use File::HomeDir;
 use JSON::PP;
 use Time::Piece;
 use File::Basename;
+use List::Util qw(any none);
 
-eval {
-    require LWP::Simple;
-    require LWP::UserAgent;
-    require URI::Escape;    # libwww-perl depends on liburi-perl
-    no warnings;
-    $LWP::Simple::ua
-      = LWP::UserAgent->new(agent => 'LWP::UserAgent/debrebuild');
-    $LWP::Simple::ua->env_proxy();
-};
-if ($@) {
-    if ($@ =~ m/Can\'t locate LWP/) {
-        die "Unable to run: the libwww-perl package is not installed\n";
-    } else {
-        die "Unable to run: Couldn't load LWP::Simple: $@\n";
+my $progname;
+
+BEGIN {
+    $progname = basename($0);
+    eval { require String::ShellQuote; };
+    if ($@) {
+        if ($@ =~ /^Can\'t locate String\/ShellQuote\.pm/) {
+            die
+"$progname: you must have the libstring-shellquote-perl package installed\n"
+              . "to use this script";
+        } else {
+            die
+"$progname: problem loading the String::ShellQuote module:\n  $@\n"
+              . "Have you installed the libstring-shellquote-perl package?";
+        }
     }
+
+    eval {
+        require LWP::Simple;
+        require LWP::UserAgent;
+        require URI::Escape;    # libwww-perl depends on liburi-perl
+        no warnings;
+        $LWP::Simple::ua
+          = LWP::UserAgent->new(agent => 'LWP::UserAgent/debrebuild');
+        $LWP::Simple::ua->env_proxy();
+    };
+    if ($@) {
+        if ($@ =~ m/Can\'t locate LWP/) {
+            die "$progname: you must have the libwww-perl package installed\n"
+              . "to use this script";
+        } else {
+            die "$progname: problem loading the LWP and URI modules:\n  $@\n"
+              . "Have you installed the libwww-perl package?";
+        }
+    }
+
 }
 
 my $respect_build_path = 1;
@@ -57,18 +79,17 @@ my %OPTIONS = (
     'help|h'              => sub { usage(0); },
     'use-tor-proxy!'      => \$use_tor,
     'respect-build-path!' => \$respect_build_path,
-    'output|O=s'          => \$outdir,
+    'buildresult=s'       => \$outdir,
     'builder=s'           => \$builder,
     'timestamp|t=s'       => \$timestamp,
 );
 
 sub usage {
     my ($exit_code) = @_;
-    my $me = basename($0);
     $exit_code //= 0;
     print <<EOF;
-Usage: $me [options] <buildinfo>
-       $me <--help|-h>
+Usage: $progname [options] <buildinfo>
+       $progname <--help|-h>
 
 Given a buildinfo file from a Debian package, generate instructions for
 attempting to reproduce the binary packages built from the associated source
@@ -80,21 +101,23 @@ Options:
                             Assumes "apt-transport-tor" is installed both in host + chroot
  --[no-]respect-build-path  Whether to setup the build to use the Build-Path from the
                             provided .buildinfo file.
- --output, -O               Directory for the build artifacts (default: ./)
- --builder=BUILDER          Which building software should be used. See section BUILDER
+ --buildresults             Directory for the build artifacts (default: ./)
+ --builder=BUILDER          Which building software should be used. Possible values are
+                            none, sbuild, mmdebstrap, dpkg and sbuild+unshare. The default
+                            is none. See section BUILDER for details.
  --timestamp, -t            The required unstable main timestamps from snapshot.d.o if you
                             already know them, separated by commas, or one of the values
                             "first_seen" or "metasnap". See section TIMESTAMPS.
 
-Note: $me can parse buildinfo files with and without a GPG signature.  However,
+Note: $progname can parse buildinfo files with and without a GPG signature.  However,
 the signature (if present) is discarded as debrebuild does not support verifying
 it.  If the authenticity or integrity of the buildinfo files are important to
-you, checking these need to be done before invoking $me, for example by using
+you, checking these need to be done before invoking $progname, for example by using
 dscverify.
 
 EXAMPLES
 
-    \$ $me --output=./artifacts --builder=mmdebstrap hello_2.10-2_amd64.buildinfo
+    \$ $progname --buildresults=./artifacts --builder=mmdebstrap hello_2.10-2_amd64.buildinfo
 
 BUILDERS
 
@@ -109,20 +132,9 @@ The desired backend is chosen using the --builder option. The default is
                     setup and no superuser privileges.
     dpkg            Directly run apt-get and dpkg-buildpackage on the current
                     system without chroot. This requires root privileges.
-    pbuilder        Use pbuilder to build the package. This requires pbuilder
-                    to be setup with chroots of Debian stable distributions.
     sbuild+unshare  Use sbuild with the unshare backend. This will create the
                     chroot and perform the build without superuser privileges
                     and without any setup.
-
-UNSHARE
-
-The sbuild+unshare builder requires and the mmdebstrap builder benefits from
-having unprivileged user namespaces activated. On Ubuntu they are enabled by
-default but on Debian they are disabled for security reasons. Refer to Debian
-bug #898446 for details. To enable user namespaces, run:
-
-    \$ sudo sysctl -w kernel.unprivileged_userns_clone=1
 
 TIMESTAMPS
 
@@ -136,6 +148,18 @@ out the right set of timestamps. This mode can be selected by using
 --timestamp=metasnap. In contrast to the "first_seen" mode, the metasnap.d.n
 service will always return a minimal set of timestamps if the package versions
 were at some point part of Debian unstable main.
+
+UNSHARE
+
+Before kernel 5.10.1 or before Debian 11 (Bullseye), unprivileged user
+namespaces were disabled in Debian for security reasons. Refer to Debian bug
+#898446 for details. To enable user namespaces, run:
+
+    \$ sudo sysctl -w kernel.unprivileged_userns_clone=1
+
+The sbuild+unshare builder requires and the mmdebstrap builder benefits from
+having unprivileged user namespaces activated. On Ubuntu they are enabled by
+default.
 
 LIMITATIONS
 
@@ -414,6 +438,7 @@ if (!$@) {
         "10" => "buster",
         "11" => "bullseye",
         "12" => "bookworm",
+        "13" => "trixie",
     );
 }
 
@@ -853,7 +878,7 @@ foreach my $f (
     '/etc/apt/trusted.gpg.d/debian-archive-removed-keys.gpg',
     '/etc/apt/trusted.gpg.d/debian-archive-keyring.gpg'
 ) {
-    unlink "$tempdir/$f" or die "cannot unlink $f: $!\n";
+    unlink "$tempdir/$f" or die "cannot unlink $tempdir/$f: $!\n";
 }
 
 foreach my $d (
@@ -872,27 +897,46 @@ foreach my $d (
 
 !-e $tempdir or die "failed to remove $tempdir\n";
 
-# avoid dependency on String::ShellQuote by implementing the mechanism
-# from python's shlex.quote function
-sub shellescape ($) {
-    my $string = shift;
-    if (length $string == 0) {
-        return "''";
-    }
-    # search for occurrences of characters that are not safe
-    # the 'a' regex modifier makes sure that \w only matches ASCII
-    if ($string !~ m/[^\w@\%+=:,.\/-]/a) {
-        return $string;
-    }
-    # wrap the string in single quotes and handle existing single quotes by
-    # putting them outside of the single-quoted string
-    $string =~ s/'/'"'"'/g;
-    return "'$string'";
-}
-
 if ($builder ne "none") {
     if (!-e $outdir) {
         make_path($outdir);
+    }
+}
+
+my $build       = '';
+my $changesarch = '';
+if ($build_archany and $build_archall) {
+    $build       = "binary";
+    $changesarch = $host_arch;
+} elsif ($build_archany and !$build_archall) {
+    $build       = "any";
+    $changesarch = $host_arch;
+} elsif (!$build_archany and $build_archall) {
+    $build       = "all";
+    $changesarch = 'all';
+} else {
+    die "nothing to build\n";
+}
+
+my @install = ();
+foreach my $pkg (@inst_build_deps) {
+    my $pkg_name = $pkg->{name};
+    my $pkg_ver  = $pkg->{version};
+    my $pkg_arch = $pkg->{architecture};
+    if (any { $_ eq $builder } ('mmdebstrap', 'none', 'dpkg')) {
+        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
+            push @install, "$pkg_name=$pkg_ver";
+        } else {
+            push @install, "$pkg_name:$pkg_arch=$pkg_ver";
+        }
+    } elsif (any { $_ eq $builder } ('sbuild', 'sbuild+unshare')) {
+        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
+            push @install, "$pkg_name (= $pkg_ver)";
+        } else {
+            push @install, "$pkg_name:$pkg_arch (= $pkg_ver)";
+        }
+    } else {
+        die "unsupported builder: $builder\n";
     }
 }
 
@@ -901,10 +945,6 @@ if ($builder eq "none") {
     print "Manual installation and build\n";
     print "-----------------------------\n";
     print "\n";
-    if ($cdata->{"Binary-Only-Changes"}) {
-        print
-"The buildinfo appears to be for a binNMU; this is not fully supported yet.\n\n";
-    }
     print
       "The following sources.list contains all the required repositories:\n";
     print "\n";
@@ -918,16 +958,8 @@ if ($builder eq "none") {
     # we fetch them.  Include the option to work around that to assist
     # the user.
     print " -oAcquire::Check-Valid-Until=false";
-
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            print " $pkg_name=$pkg_ver";
-        } else {
-            print " $pkg_name:$pkg_arch=$pkg_ver";
-        }
+    foreach my $pkg (@install) {
+        print " $pkg";
     }
     print "\n";
     print "\n";
@@ -945,7 +977,15 @@ if ($builder eq "none") {
         print qq{dpkg-source -x "${dsc_fname}"\n};
         print "cd packagedirectory\n";
     }
-    print "$environment dpkg-buildpackage\n";
+    print "\n";
+    if ($cdata->{"Binary-Only-Changes"}) {
+        print(  "Since this is a binNMU, you must put the following "
+              . "lines at the top of debian/changelog:\n\n");
+        print($cdata->{"Binary-Only-Changes"});
+    }
+    print "\n";
+    print(  "$environment dpkg-buildpackage -uc "
+          . "--host-arch=$host_arch --build=$build\n");
 } elsif ($builder eq "dpkg") {
     if ("$build_arch\n" ne `dpkg --print-architecture`) {
         die "must be run on $build_arch\n";
@@ -979,17 +1019,8 @@ if ($builder eq "none") {
 
     0 == system 'apt-get', 'update' or die "apt-get update failed\n";
 
-    my @cmd = ('apt-get', 'install', '--no-install-recommends', '--yes');
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            push @cmd, "$pkg_name=$pkg_ver";
-        } else {
-            push @cmd, "$pkg_name:$pkg_arch=$pkg_ver";
-        }
-    }
+    my @cmd
+      = ('apt-get', 'install', '--no-install-recommends', '--yes', @install);
     0 == system @cmd or die "apt-get install failed\n";
 
     0 == system 'apt-get', 'source', '--only-source', '--download-only',
@@ -1018,20 +1049,6 @@ if ($builder eq "none") {
         print $outfh "\n\n";
         print $outfh $changelogcontent;
         close $outfh;
-    }
-    my $build       = '';
-    my $changesarch = '';
-    if ($build_archany and $build_archall) {
-        $build       = "binary";
-        $changesarch = $host_arch;
-    } elsif ($build_archany and !$build_archall) {
-        $build       = "any";
-        $changesarch = $host_arch;
-    } elsif (!$build_archany and $build_archall) {
-        $build       = "all";
-        $changesarch = 'all';
-    } else {
-        die "nothing to build\n";
     }
     0 == system 'env', "--chdir=$custom_build_path", @environment,
       'dpkg-buildpackage', '-uc', "--host-arch=$host_arch", "--build=$build"
@@ -1068,21 +1085,10 @@ if ($builder eq "none") {
     # the user.
     push @cmd,
         '--chroot-setup-commands=echo '
-      . (shellescape(join '\n', @common_aptopts))
+      . (String::ShellQuote::shell_quote(join '\n', @common_aptopts))
       . ' | tee /etc/apt/apt.conf.d/23-debrebuild.conf';
 
-    my @add_depends = ();
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            push @add_depends, "$pkg_name (= $pkg_ver)";
-        } else {
-            push @add_depends, "$pkg_name:$pkg_arch (= $pkg_ver)";
-        }
-    }
-    push @cmd, "--add-depends=" . (join ",", @add_depends);
+    push @cmd, "--add-depends=" . (join ",", @install);
     push @cmd, "--build=$build_arch";
     push @cmd, "--host=$host_arch";
 
@@ -1121,18 +1127,6 @@ if ($builder eq "none") {
     0 == system @cmd or die "sbuild failed\n";
 } elsif ($builder eq "mmdebstrap") {
 
-    my @install = ();
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            push @install, "$pkg_name=$pkg_ver";
-        } else {
-            push @install, "$pkg_name:$pkg_arch=$pkg_ver";
-        }
-    }
-
     my @binnmucmds = ();
     if ($cdata->{"Binary-Only-Changes"}) {
         my $logentry = $cdata->{"Binary-Only-Changes"};
@@ -1144,20 +1138,9 @@ if ($builder eq "none") {
         $logentry .= "\n\n";
         push @binnmucmds,
             '{ printf "%s" '
-          . (shellescape $logentry)
+          . (String::ShellQuote::shell_quote $logentry)
           . "; cat debian/changelog; } > debian/changelog.debrebuild",
           "mv debian/changelog.debrebuild debian/changelog";
-    }
-
-    my $build = '';
-    if ($build_archany and $build_archall) {
-        $build = "binary";
-    } elsif ($build_archany and !$build_archall) {
-        $build = "any";
-    } elsif (!$build_archany and $build_archall) {
-        $build = "all";
-    } else {
-        die "nothing to build\n";
     }
 
     my @cmd = (
@@ -1173,7 +1156,10 @@ if ($builder eq "none") {
             join ' && ',
             'rm /etc/apt/sources.list',
             'echo '
-              . (shellescape((join "\n", get_sources_list) . "\n"))
+              . (
+                String::ShellQuote::shell_quote(
+                    (join "\n", get_sources_list) . "\n"
+                ))
               . ' >> /etc/apt/sources.list',
             'apt-get update'
           )
@@ -1182,15 +1168,16 @@ if ($builder eq "none") {
           . (
             join ' && ',
             "apt-get source --only-source -d $srcpkgname=$srcpkgver",
-            "mkdir -p " . (shellescape(dirname $custom_build_path)),
+            "mkdir -p "
+              . (String::ShellQuote::shell_quote(dirname $custom_build_path)),
             "dpkg-source --no-check -x /"
               . $srcpkg->get_basename(1) . '.dsc '
-              . (shellescape $custom_build_path),
-            'cd ' . (shellescape $custom_build_path),
+              . (String::ShellQuote::shell_quote $custom_build_path),
+            'cd ' . (String::ShellQuote::shell_quote $custom_build_path),
             @binnmucmds,
 "env $environment dpkg-buildpackage -uc -a $host_arch --build=$build",
             'cd /',
-            'rm -r ' . (shellescape $custom_build_path))
+            'rm -r ' . (String::ShellQuote::shell_quote $custom_build_path))
           . '"',
         '--customize-hook=sync-out '
           . (dirname $custom_build_path)
