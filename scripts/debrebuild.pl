@@ -1032,6 +1032,7 @@ if ($builder eq "none") {
     0 == system 'dpkg-source', '--no-check', '--extract',
       $srcpkg->get_basename(1) . '.dsc', $custom_build_path
       or die "dpkg-source failed\n";
+
     if ($cdata->{"Binary-Only-Changes"}) {
         open my $infh, '<', "$custom_build_path/debian/changelog"
           or die "cannot open debian/changelog for reading: $!\n";
@@ -1088,6 +1089,18 @@ if ($builder eq "none") {
       . (String::ShellQuote::shell_quote(join '\n', @common_aptopts))
       . ' | tee /etc/apt/apt.conf.d/23-debrebuild.conf';
 
+    # sbuild chroots have build-essential already installed. This might
+    # interfere with the packages that we need to install. Example:
+    # libc6-dev : Breaks: libgcc-8-dev (< 8.4.0-2~) but 8.3.0-6 is to be inst..
+    # Thus, we remove them beforehand -- the right versions will get installed
+    # later anyways.
+    # We have to list the packages manually instead of relying on autoremove
+    # because debootstrap marks them all as manually installed.
+    push @cmd,
+      (     '--chroot-setup-commands=apt-get --yes remove build-essential'
+          . ' libc6-dev gcc g++ make dpkg-dev');
+    push @cmd, '--chroot-setup-commands=apt-get --yes autoremove';
+
     push @cmd, "--add-depends=" . (join ",", @install);
     push @cmd, "--build=$build_arch";
     push @cmd, "--host=$host_arch";
@@ -1119,6 +1132,14 @@ if ($builder eq "none") {
     push @cmd, "--no-run-autopkgtest";
     push @cmd, "--no-apt-upgrade";
     push @cmd, "--no-apt-distupgrade";
+    # disable the explainer
+    push @cmd, "--bd-uninstallable-explainer=";
+    # We need the aspcud resolver to install packages that are older than the
+    # ones in the latest snapshot. Apt by default will only use the latest
+    # package versions as candidates and sbuild uses a dummy package instead
+    # of crafting an apt command line with the exact version requirements.
+    push @cmd, "--build-dep-resolver=aspcud";
+
     if ($custom_build_path) {
         push @cmd, "--build-path=$custom_build_path";
     }
