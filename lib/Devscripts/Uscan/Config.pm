@@ -200,8 +200,12 @@ use constant keys => [
     ['extra-debug', undef, sub { $verbose = 3 }],
     ['no-verbose',  undef, sub { $verbose = 0; return 1; }],
     [
-        'verbose|v+', 'USCAN_VERBOSE',
-        sub { $verbose = ($_[1] =~ /^(?:(\d)|yes)$/i ? $1 : 0); return 1; }
+        'verbose|v+',
+        'USCAN_VERBOSE',
+        sub {
+            $verbose = ($_[1] =~ /^(\d|yes)$/i ? ($1 ? 1 : 0) : 0);
+            return 1;
+        }
     ],
     # Display version
     [
