@@ -203,7 +203,7 @@ use constant keys => [
         'verbose|v+',
         'USCAN_VERBOSE',
         sub {
-            $verbose = ($_[1] =~ /^(\d|yes)$/i ? ($1 ? 1 : 0) : 0);
+            $verbose = ($_[1] =~ /^yes$/i ? 1 : $_[1] =~ /^(\d)$/ ? $1 : 0);
             return 1;
         }
     ],
