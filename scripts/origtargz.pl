@@ -58,6 +58,10 @@ B<pristine-tar> is tried.
 
 =item *
 
+B<pristine-lfs> is tried.
+
+=item *
+
 B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
 
 =item *
@@ -253,6 +257,20 @@ sub download_origtar () {
       `pristine-tar list 2>&1`;
     if (@files) {
         system "pristine-tar checkout ../$_" for @files;
+    }
+
+    if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
+        return @f;
+    }
+
+    # try pristine-lfs
+
+    @files
+      = grep { /^\Q${package}_$fileversion.orig\E(?:-[\w\-]+)?\.tar\./ }
+      map { chomp; $_; }    # remove newlines
+      `pristine-lfs list 2>&1`;
+    if (@files) {
+        system "pristine-lfs checkout -o .. $_" for @files;
     }
 
     if (my @f = glob "../${package}_$fileversion.orig*.tar.*") {
