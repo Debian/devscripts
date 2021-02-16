@@ -4,6 +4,7 @@ devscripts: description-possibly-contains-homepage https://snapshot.debian.org
 # Needs to hardcode /var/lib/status to be able to create an empty file;
 # blocked on the dpkg bug https://bugs.debian.org/914515
 devscripts: uses-dpkg-database-directly usr/bin/chdist
+devscripts: uses-dpkg-database-directly usr/bin/debrebuild
 # Keep the explicit status path as a fallback for too old version of dpkg;
 # the fallback can be dropped once we require dpkg >= 1.19.1
 devscripts: uses-dpkg-database-directly usr/share/perl5/Devscripts/PackageDeps.pm
@@ -11,4 +12,4 @@ devscripts: uses-dpkg-database-directly usr/share/perl5/Devscripts/PackageDeps.p
 # Yes, this is perfectly fine.
 # It's a suggestion to all the people interested in Debian development to
 # install debhelper in their host system...
-devscripts: binary-package-depends-on-toolchain-package suggests: debhelper
+devscripts: binary-package-depends-on-toolchain-package Suggests: debhelper
