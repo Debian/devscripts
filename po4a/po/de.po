@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2020-11-28 06:44+0100\n"
+"POT-Creation-Date: 2021-02-16 17:47+0100\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -217,7 +217,7 @@ msgstr ""
 #: ../scripts/ltnu.pod:27 ../scripts/manpage-alert.1:12
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
 #: ../scripts/mk-origtargz.pl:64 ../scripts/nmudiff.1:24
-#: ../scripts/origtargz.pl:96 ../scripts/plotchangelog.1:43
+#: ../scripts/origtargz.pl:100 ../scripts/plotchangelog.1:43
 #: ../scripts/pts-subscribe.1:18 ../scripts/rc-alert.1:17
 #: ../scripts/rmadison.pl:278 ../scripts/sadt.pod:42 ../scripts/salsa.pl:409
 #: ../doc/suspicious-source.1:34 ../scripts/tagpending.pl:94
@@ -357,7 +357,7 @@ msgstr ""
 #: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:676
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
 #: ../scripts/mk-origtargz.pl:209 ../scripts/nmudiff.1:121
-#: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
+#: ../scripts/origtargz.pl:162 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:399 ../scripts/sadt.pod:69 ../scripts/salsa.pl:852
 #: ../scripts/tagpending.pl:149 ../scripts/uscan.pl:2101
@@ -411,7 +411,7 @@ msgstr ""
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:566
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:141
 #: ../scripts/mk-origtargz.pl:213 ../scripts/namecheck.pl:24
-#: ../scripts/nmudiff.1:125 ../scripts/origtargz.pl:162
+#: ../scripts/nmudiff.1:125 ../scripts/origtargz.pl:166
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:403 ../scripts/salsa.pl:856
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
@@ -5030,7 +5030,7 @@ msgstr ""
 "Aktualisierens (oder Erstellens) des Bauwurzelverzeichnisses."
 
 #. type: =head1
-#: ../scripts/cowpoke.1:369 ../scripts/origtargz.pl:81
+#: ../scripts/cowpoke.1:369 ../scripts/origtargz.pl:85
 #: ../scripts/rmadison.pl:391
 #, no-wrap
 msgid "NOTES"
@@ -13981,7 +13981,8 @@ msgstr "I<debuild>(1)"
 #: ../doc/devscripts.1:79
 msgid ""
 "A script that provided a .buildinfo file reports the instructions on how to "
-"try to reproduce the reported build."
+"try to reproduce the reported build. [sbuild | mmdebstrap, libdistro-info-"
+"perl]"
 msgstr ""
 
 #. type: IP
@@ -14900,7 +14901,7 @@ msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "unterdrückt Ausgaben von B<wget>/B<curl>, die keine Fehler betreffen."
 
 #. type: =item
-#: ../scripts/dget.pl:636 ../scripts/origtargz.pl:130
+#: ../scripts/dget.pl:636 ../scripts/origtargz.pl:134
 msgid "B<-d>, B<--download-only>"
 msgstr "B<-d>, B<--download-only>"
 
@@ -18844,7 +18845,7 @@ msgstr "Es werden verschiedene Speicherorte zum Herunterladen ausprobiert:"
 #. type: =item
 #: ../scripts/origtargz.pl:47 ../scripts/origtargz.pl:51
 #: ../scripts/origtargz.pl:55 ../scripts/origtargz.pl:59
-#: ../scripts/origtargz.pl:63
+#: ../scripts/origtargz.pl:63 ../scripts/origtargz.pl:67
 msgid "*"
 msgstr "*"
 
@@ -18865,6 +18866,13 @@ msgstr "B<pristine-tar> wird probiert."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:61
+#, fuzzy
+#| msgid "B<pristine-tar> is tried."
+msgid "B<pristine-lfs> is tried."
+msgstr "B<pristine-tar> wird probiert."
+
+#. type: textblock
+#: ../scripts/origtargz.pl:65
 msgid ""
 "B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
 "version."
@@ -18873,13 +18881,13 @@ msgstr ""
 "source> probiert."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:65
+#: ../scripts/origtargz.pl:69
 msgid "Finally, B<uscan --download --download-current-version> is tried."
 msgstr "Am Ende wird B<uscan --download --download-current-version> versucht."
 
 # FIXME s/preserved/are preserved/
 #. type: textblock
-#: ../scripts/origtargz.pl:69
+#: ../scripts/origtargz.pl:73
 msgid ""
 "When asked to unpack the orig tarball, B<origtargz> will remove all files "
 "and directories from the current directory, except the debian directory, and "
@@ -18901,7 +18909,7 @@ msgstr ""
 "hgignore>), falls sie im VCS gespeichert sind."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:78
+#: ../scripts/origtargz.pl:82
 msgid ""
 "The default behavior is to unpack the orig tarball if the current directory "
 "is empty except for a F<debian> directory and the VCS files mentioned above."
@@ -18911,7 +18919,7 @@ msgstr ""
 "oben erwähnten VCS-Dateien leer ist."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:83
+#: ../scripts/origtargz.pl:87
 msgid ""
 "Despite B<origtargz> being called \"targz\", it will work with any "
 "compression scheme used for the tarball."
@@ -18920,7 +18928,7 @@ msgstr ""
 "benutzten Komprimierungsverfahren."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:86
+#: ../scripts/origtargz.pl:90
 msgid ""
 "A similar tool to unpack orig tarballs is B<uupdate>(1). B<uupdate> creates "
 "a new working directory, unpacks the tarball, and applies the Debian F<.diff."
@@ -18933,7 +18941,7 @@ msgstr ""
 "B<origtargz> das aktuelle Verzeichnis und behält die VCS-Metadaten bei."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:91
+#: ../scripts/origtargz.pl:95
 msgid ""
 "For Debian package repositories that keep the full upstream source, other "
 "tools should be used to upgrade the repository from the new tarball. See "
@@ -18947,12 +18955,12 @@ msgstr ""
 "Tarballs nützlich."
 
 #. type: =item
-#: ../scripts/origtargz.pl:100
+#: ../scripts/origtargz.pl:104
 msgid "B<-p>, B<--path> I<directory>"
 msgstr "B<-p>, B<--path> I<Verzeichnis>"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:102
+#: ../scripts/origtargz.pl:106
 msgid ""
 "Add I<directory> to the list of locations to search for an existing "
 "tarball.  When found, a hardlink is created if possible, otherwise a symlink."
@@ -18962,12 +18970,12 @@ msgstr ""
 "Möglichkeit ein harter, andernfalls ein symbolischer Verweis erzeugt."
 
 #. type: =item
-#: ../scripts/origtargz.pl:105
+#: ../scripts/origtargz.pl:109
 msgid "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
 msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:107
+#: ../scripts/origtargz.pl:111
 msgid ""
 "Unpack the downloaded orig tarball to the current directory, replacing "
 "everything except the debian directory. Existing files are removed, except "
@@ -18982,22 +18990,22 @@ msgstr ""
 "hgignore>, F<_darcs> und F<.svn>."
 
 #. type: =item
-#: ../scripts/origtargz.pl:115
+#: ../scripts/origtargz.pl:119
 msgid "B<no>"
 msgstr "B<no>"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:117
+#: ../scripts/origtargz.pl:121
 msgid "Do not unpack the orig tarball."
 msgstr "entpackt nicht den Original-Tarball."
 
 #. type: =item
-#: ../scripts/origtargz.pl:119
+#: ../scripts/origtargz.pl:123
 msgid "B<once> (default when B<--unpack> is not used)"
 msgstr "B<once> (Vorgabe, wenn nicht B<--unpack> benutzt wird)"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:121
+#: ../scripts/origtargz.pl:125
 msgid ""
 "If the current directory contains only a F<debian> directory (and possibly "
 "some dotfiles), unpack the orig tarball. This is the default behavior."
@@ -19007,27 +19015,27 @@ msgstr ""
 "der Original-Tarball entpackt. Dies ist das Standardverhalten."
 
 #. type: =item
-#: ../scripts/origtargz.pl:124
+#: ../scripts/origtargz.pl:128
 msgid "B<yes> (default for B<--unpack> without argument)"
 msgstr "B<yes> (Vorgabe für B<--unpack> ohne Argument)"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:126
+#: ../scripts/origtargz.pl:130
 msgid "Always unpack the orig tarball."
 msgstr "entpackt immer den Original-Tarball."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:132
+#: ../scripts/origtargz.pl:136
 msgid "Alias for B<--unpack=no>."
 msgstr "Alias für B<--unpack=no>"
 
 #. type: =item
-#: ../scripts/origtargz.pl:134
+#: ../scripts/origtargz.pl:138
 msgid "B<-t>, B<--tar-only>"
 msgstr "B<-t>, B<--tar-only>"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:136
+#: ../scripts/origtargz.pl:140
 msgid ""
 "When using B<apt-get source>, pass B<--tar-only> to it. The default is to "
 "download the full source package including F<.dsc> and F<.diff.gz> or F<."
@@ -19042,12 +19050,12 @@ msgstr ""
 "Datei heruntergeladen."
 
 #. type: =item
-#: ../scripts/origtargz.pl:141
+#: ../scripts/origtargz.pl:145
 msgid "B<--clean>"
 msgstr "B<--clean>"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:143
+#: ../scripts/origtargz.pl:147
 msgid ""
 "Remove existing files as with B<--unpack>. Note that like B<--unpack>, this "
 "will remove upstream files even if they are stored in VCS."
@@ -19057,7 +19065,7 @@ msgstr ""
 "gespeichert sind."
 
 #. type: textblock
-#: ../scripts/origtargz.pl:160
+#: ../scripts/origtargz.pl:164
 msgid ""
 "B<debcheckout>(1), B<gbp-import-orig>(1), B<pristine-tar>(1), B<svn-"
 "upgrade>(1), B<uupdate>(1)"
@@ -19066,7 +19074,7 @@ msgstr ""
 "upgrade>(1), B<uupdate>(1)"
 
 #. type: textblock
-#: ../scripts/origtargz.pl:164
+#: ../scripts/origtargz.pl:168
 msgid ""
 "B<origtargz> and this manpage have been written by Christoph Berg "
 "<I<myon@debian.org>>."
