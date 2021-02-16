@@ -25,7 +25,7 @@ Files: doc/edit-patch.1 scripts/edit-patch.sh
 Copyright: 2009-2011, Canonical Ltd.
 License: GPL-3
 
-Files: doc/what-patch.1 scripts/what-patch.sh test/test_uscan
+Files: doc/what-patch.1 scripts/what-patch.sh
 Copyright: 2009,      Jonathan Patrick Davies <jpds@ubuntu.com>
            2006-2008, Kees Cook <kees@ubuntu.com>
            2007-2008, Siegfried-Angel Gevatter Pujals <rainct@ubuntu.com>
@@ -36,8 +36,6 @@ License: GPL-3+
 Files: doc/suspicious-source.1
        doc/wrap-and-sort.1
        scripts/devscripts/*
-       scripts/devscripts/test/*
-       scripts/sadt*
        scripts/setup.py
        scripts/suspicious-source
        scripts/wrap-and-sort
@@ -323,10 +321,6 @@ Files: scripts/debbisect
        scripts/run_bisect_qemu.sh
 Copyright: 2014-2020, Johannes Schauer <j.schauer@email.de>
 License: Expat
-
-Files: scripts/suspicious-source
-Copyright: 2010-2018, Benjamin Drung <bdrung@debian.org>
-License: GPL-2+
 
 Files: scripts/tagpending.pl scripts/transition-check.pl
 Copyright: 2008, Adam D. Barratt
