@@ -1,4 +1,4 @@
-devscripts (2.20.6) UNRELEASED; urgency=medium
+devscripts (2.21.1) unstable; urgency=medium
 
   [ Mattia Rizzolo ]
   * setup.py:
@@ -65,9 +65,10 @@ devscripts (2.20.6) UNRELEASED; urgency=medium
       - All builders now support binNMUs.  Closes: #961862
 
   [ Andrej Shadura ]
-  * origtargz: Add pristine-lfs support.
+  * origtargz:
+    + Add pristine-lfs support.
 
- -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Nov 2020 18:58:06 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 16 Feb 2021 17:45:53 +0100
 
 devscripts (2.20.5) unstable; urgency=medium
 
