@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2021-02-16 17:47+0100\n"
-"PO-Revision-Date: 2020-11-28 06:46+0100\n"
+"PO-Revision-Date: 2021-02-19 08:41+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -13983,17 +13983,14 @@ msgstr "I<debrebuild>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:79
-#, fuzzy
-#| msgid ""
-#| "A script that provided a .buildinfo file reports the instructions on how "
-#| "to try to reproduce the reported build."
 msgid ""
 "A script that provided a .buildinfo file reports the instructions on how to "
 "try to reproduce the reported build. [sbuild | mmdebstrap, libdistro-info-"
 "perl]"
 msgstr ""
 "Un script qui fournit un fichier .buildinfo expose les instructions pour "
-"reproduire la construction à l'identique."
+"reproduire la construction à l'identique. [sbuild | mmdebstrap, libdistro-"
+"info-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:79
@@ -18854,10 +18851,8 @@ msgstr "B<pristine-tar> est essayé ."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:61
-#, fuzzy
-#| msgid "B<pristine-tar> is tried."
 msgid "B<pristine-lfs> is tried."
-msgstr "B<pristine-tar> est essayé ."
+msgstr "B<pristine-tar> est essayé."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:65
