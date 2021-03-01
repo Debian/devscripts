@@ -1,47 +1,41 @@
 include ../Makefile.common
-GEN_TR_MAN1S := $(patsubst %.1,fr/%.fr.1,$(GEN_MAN1S))
-GEN_TR_MAN1S += $(patsubst %.1,de/%.de.1,$(GEN_MAN1S))
+
+LANGS = de fr
+
+DESC_de/ = Debian-Hilfswerkzeuge
+DESC_fr/ = Utilitaires Debian
+
+GEN_TR_MAN1S := $(sort $(foreach lang,$(LANGS),$(patsubst %.1,$(lang)/%.$(lang).1,$(GEN_MAN1S))))
 
 all: translate
 # GEN_TR_MAN1S needs translate finished, serialize the calls
-	@$(MAKE) -C . transform
+	@$(MAKE) transform
 transform: $(GEN_TR_MAN1S)
 
 translate: ../doc/devscripts.1
 	po4a --previous --no-backups --keep=0 devscripts-po4a.conf
-	touch translate
+	touch $@
 
 clean: ../doc/devscripts.1
 	po4a --previous --rm-translations --no-backups devscripts-po4a.conf
 	rm -f $(GEN_TR_MAN1S) translate
-	rm -rf de fr
+	rm -rf $(LANGS)
 
 ../doc/devscripts.1:
 	# po4a translate and clean need ../doc/devscripts.1, rebuild it
 	$(MAKE) -C ../doc devscripts.1
 
-de/%.de.1: de/%.de.pl translate
+%.1:: %.pl translate
 	podchecker $<
-	pod2man --utf8 --center=" " --release="Debian-Hilfswerkzeuge" $< > $@
-de/%.de.1: de/%.de.pod translate
+	pod2man --utf8 --center=" " --release="$(DESC_$(dir $@))" $< > $@
+%.1:: %.pod translate
 	podchecker $<
-	pod2man --utf8 --center=" " --release="Debian-Hilfswerkzeuge" $< > $@
-de/%.de.1: de/%.de.dbk translate
-	xsltproc --nonet -o $@ \
+	pod2man --utf8 --center=" " --release="$(DESC_$(dir $@))" $< > $@
+%.1:: %.dbk translate
+	xsltproc --nonet \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
-# xsltproc writes out to foo.1 even if you tell it to do otherwise, so we have
-# to rename the file after it's generated
-	mv de/$*.1 $@
-
-fr/%.fr.1: fr/%.fr.pl translate
-	podchecker $<
-	pod2man --utf8 --center=" " --release="Utilitaires Debian" $< > $@
-fr/%.fr.1: fr/%.fr.pod translate
-	podchecker $<
-	pod2man --utf8 --center=" " --release="Utilitaires Debian" $< > $@
-fr/%.fr.1: fr/%.fr.dbk translate
-	xsltproc --nonet -o $@ \
-	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
-# xsltproc writes out to foo.1 even if you tell it to do otherwise, so we have
-# to rename the file after it's generated
-	mv fr/$*.1 $@
+	# /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/other.xsl
+	# (which is imported by the above stylesheet) insists in writing the output
+	# to where it wants to.  we can only move the file ourselves.
+	# ($* → de/deb-reversion.de)
+	mv $(notdir $(basename $*)).1 $@
