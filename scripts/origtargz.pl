@@ -265,8 +265,7 @@ sub download_origtar () {
 
     # try pristine-lfs
 
-    @files
-      = grep { /^\Q${package}_$fileversion.orig\E(?:-[\w\-]+)?\.tar\./ }
+    @files = grep { /^\Q${package}_$fileversion.orig\E(?:-[\w\-]+)?\.tar\./ }
       map { chomp; $_; }    # remove newlines
       `pristine-lfs list 2>&1`;
     if (@files) {
