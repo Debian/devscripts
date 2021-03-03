@@ -77,7 +77,7 @@ It is capable of downloading several packages at once.
                    Do not extract downloaded source
    -x, --extract   Unpack downloaded source (default)
    -u, --allow-unauthenticated
-                   Do no attempt to verify source package signature
+                   Do not attempt to verify source package signature
    --build         Build package with dpkg-buildpackage after download
    --path DIR      Check these directories in addition to the apt archive;
                    if DIR='' then clear current list (may be used multiple
