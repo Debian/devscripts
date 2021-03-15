@@ -1,9 +1,10 @@
 include ../Makefile.common
 
-LANGS = de fr
+LANGS = de fr pt
 
 DESC_de/ = Debian-Hilfswerkzeuge
 DESC_fr/ = Utilitaires Debian
+DESC_pt/ = Utilitários Debian
 
 GEN_TR_MAN1S := $(sort $(foreach lang,$(LANGS),$(patsubst %.1,$(lang)/%.$(lang).1,$(GEN_MAN1S))))
 
