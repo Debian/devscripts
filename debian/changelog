@@ -5,6 +5,8 @@ devscripts (2.21.2) UNRELEASED; urgency=medium
     + Generalize makefile to more easily support more languages.
     + New Portuguese translation of the manpages.  Closes: #983271
       Thanks to Américo Monteiro <a_monteiro@gmx.com>.
+  * tests:
+    + test_uscan_svn: save the produced tarball in case of autopkgtest failure.
 
   [ Logan Rosen ]
   * dget:

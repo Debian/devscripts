@@ -146,6 +146,14 @@ testSvn() {
     assertTrue 'downloaded tarfile not present' "[ -f '$TEMP_PKG_DIR/${PKG}-2.0.tar.xz' ]"
     assertTrue 'pristine tarball is not created' "[ -f '$TEMP_PKG_DIR/$TARBALL' ]"
     assertTrue 'pristine tarball is a symlink' "[ -L '$TEMP_PKG_DIR/$TARBALL' ]"
+    if [ "$CHECKSUM" != 'bd4a60786013848e402bcf20db211fd465afeda5' ]; then
+        set -x
+        echo "Copying the faulty tarball to the artefact directory, if available..."
+        if [ -n "${AUTOPKGTEST_ARTIFACTS:-}" ] && [ -d "$AUTOPKGTEST_ARTIFACTS" ]; then
+            cp -v "$TEMP_PKG_DIR/${PKG}-2.0.tar.xz" "$AUTOPKGTEST_ARTIFACTS"/
+        fi
+        set +x
+    fi
     assertTrue 'checksums do not match' "[ '${CHECKSUM}' = 'bd4a60786013848e402bcf20db211fd465afeda5' ]"
     cleanup
 }
