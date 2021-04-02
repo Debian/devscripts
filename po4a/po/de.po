@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2021-02-16 17:47+0100\n"
+"POT-Creation-Date: 2021-04-02 17:09+0200\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -353,7 +353,7 @@ msgstr ""
 #: ../scripts/debuild.1:447 ../scripts/dep3changelog.1:28
 #: ../scripts/dget.pl:739 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
-#: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:79
+#: ../scripts/dscverify.1:78 ../scripts/git-deborig.pl:79
 #: ../scripts/grep-excuses.1:58 ../scripts/hardening-check.pl:676
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
 #: ../scripts/mk-origtargz.pl:209 ../scripts/nmudiff.1:121
@@ -405,7 +405,7 @@ msgstr ""
 #: ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26
 #: ../scripts/dget.pl:731 ../scripts/diff2patches.1:48
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
-#: ../scripts/dscverify.1:81 ../scripts/getbuildlog.1:41
+#: ../scripts/dscverify.1:83 ../scripts/getbuildlog.1:41
 #: ../scripts/git-deborig.pl:83 ../scripts/grep-excuses.1:60
 #: ../scripts/hardening-check.pl:664 ../scripts/list-unreleased.1:21
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:566
@@ -16173,12 +16173,19 @@ msgid "- /usr/share/keyrings/debian-maintainers.gpg"
 msgstr "- /usr/share/keyrings/debian-maintainers.gpg"
 
 #. type: Plain text
-#: ../scripts/dscverify.1:80
+#: ../scripts/dscverify.1:78
+#, fuzzy
+#| msgid "- /usr/share/keyrings/debian-keyring.gpg"
+msgid "- /usr/share/keyrings/debian-nonupload.gpg"
+msgstr "- /usr/share/keyrings/debian-keyring.gpg"
+
+#. type: Plain text
+#: ../scripts/dscverify.1:82
 msgid "B<gpg>(1), B<gpg2>(1), B<devscripts.conf>(5)"
 msgstr "B<gpg>(1), B<gpg2>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/dscverify.1:84
+#: ../scripts/dscverify.1:86
 msgid ""
 "B<dscverify> was written by Roderick Schertler E<lt>roderick@argon.orgE<gt> "
 "and posted on the debian-devel@lists.debian.org mailing list, with several "
