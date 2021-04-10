@@ -153,7 +153,8 @@ sub merge_request {
       if (
         ds_prompt(
 "You're going to push an MR to $dst_project:$dst_branch. Continue (Y/n)"
-        ));
+        ) =~ refuse
+      );
     my $res = $self->api->create_merge_request(
         $src->{id},
         {
