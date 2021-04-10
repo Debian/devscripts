@@ -30,14 +30,14 @@ sub readGbpConf {
     } else {
         my @tmp
           = Dpkg::Source::Format->new(filename => 'debian/source/format')->get;
-        $self->{debian_tag} = $tmp[2] eq 'native' ? '.*' : 'debian/.*';
+        $self->{debian_tag} = $tmp[2] eq 'native' ? '.*' : '^debian/.*$';
     }
     if ($self->{upstream_tag}) {
-        $self->{upstream_tag} =~ s/%(version)s/.*/g;
+        $self->{upstream_tag} =~ s/%\(version\)s/.*/g;
         $self->{upstream_tag} =~ s/^/^/;
         $self->{upstream_tag} =~ s/$/\$/;
     } else {
-        $self->{upstream_tag} = 'upstream/.*';
+        $self->{upstream_tag} = '^upstream/.*$';
     }
     $self->{debian_branch}   ||= 'master';
     $self->{upstream_branch} ||= 'upstream';
