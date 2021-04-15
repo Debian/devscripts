@@ -32,6 +32,7 @@ use Moo;
 
 # Command aliases
 use constant cmd_aliases => {
+    ci          => 'last_ci_status',
     co          => 'checkout',
     ls          => 'list_repos',
     search      => 'search_project',
