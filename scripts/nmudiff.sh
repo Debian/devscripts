@@ -369,7 +369,7 @@ Control: tags $b + pending"
     fi
 fi
 
-TMPNAM="$(tempfile)"
+TMPNAM="$(mktemp -t "$(basename "$1").XXXXXXXXX")"
 
 if [ "$NMUDIFF_DELAY" = "XX" ] && [ "$NMUDIFF_TEMPLATE" = "" ]; then
     DELAY_HEADER="
