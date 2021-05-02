@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.21.1\n"
-"POT-Creation-Date: 2021-04-02 17:09+0200\n"
+"POT-Creation-Date: 2021-05-02 20:51+0200\n"
 "PO-Revision-Date: 2021-03-01 21:40+0000\n"
 "Last-Translator: Américo Monteiro <a_monteiro@gmx.com>\n"
 "Language-Team: Portuguese <>\n"
@@ -262,7 +262,7 @@ msgstr "B<-h>, B<--help>"
 #: ../scripts/debsign.1:102 ../scripts/dep3changelog.1:19
 #: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:89
 #: ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:104
-#: ../scripts/who-uploads.1:47
+#: ../scripts/who-uploads.1:48
 msgid "Display a help message and exit successfully."
 msgstr "Mostra uma mensagem de ajuda e termina com sucesso."
 
@@ -416,7 +416,7 @@ msgstr ""
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:403 ../scripts/salsa.pl:856
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
 #: ../scripts/uscan.pl:2105 ../scripts/uupdate.1:196 ../scripts/whodepends.1:19
-#: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:162
+#: ../scripts/who-uploads.1:73 ../scripts/who-permits-upload.pl:162
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:36
 #: ../doc/devscripts.conf.5:58
 #, no-wrap
@@ -1252,7 +1252,7 @@ msgstr ""
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
 #: ../scripts/grep-excuses.1:15 ../scripts/mass-bug.pl:121
 #: ../scripts/nmudiff.1:72 ../scripts/rmadison.pl:341 ../scripts/salsa.pl:454
-#: ../scripts/uscan.pl:1566 ../scripts/uupdate.1:56 ../scripts/who-uploads.1:40
+#: ../scripts/uscan.pl:1566 ../scripts/uupdate.1:56 ../scripts/who-uploads.1:41
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -1264,7 +1264,7 @@ msgstr "B<--no-conf>, B<--noconf>"
 #: ../scripts/debuild.1:262 ../scripts/dpkg-depcheck.1:96
 #: ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:19
 #: ../scripts/mass-bug.pl:123 ../scripts/nmudiff.1:76 ../scripts/uupdate.1:60
-#: ../scripts/who-uploads.1:44
+#: ../scripts/who-uploads.1:45
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -2855,7 +2855,7 @@ msgstr ""
 #: ../scripts/grep-excuses.1:43 ../scripts/mass-bug.pl:141
 #: ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:350
-#: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
+#: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:51
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIÁVEIS DE CONFIGURAÇÃO"
@@ -3416,7 +3416,7 @@ msgstr "Mostra informação de utilização."
 #: ../scripts/mass-bug.pl:130 ../scripts/nmudiff.1:89
 #: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
 #: ../scripts/rmadison.pl:337 ../scripts/uscan.pl:1783 ../scripts/uupdate.1:104
-#: ../scripts/who-uploads.1:47
+#: ../scripts/who-uploads.1:48
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
@@ -3794,7 +3794,7 @@ msgstr ""
 #: ../scripts/dep3changelog.1:16 ../scripts/dscverify.1:37
 #: ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21
 #: ../scripts/uupdate.1:101 ../scripts/whodepends.1:11
-#: ../scripts/who-uploads.1:44 ../scripts/who-permits-upload.pl:71
+#: ../scripts/who-uploads.1:45 ../scripts/who-permits-upload.pl:71
 #: ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--help>, B<-h>"
@@ -6364,7 +6364,7 @@ msgstr ""
 #: ../scripts/debi.1:115 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
 #: ../scripts/debsign.1:111 ../scripts/nmudiff.1:98
 #: ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:113
-#: ../scripts/who-uploads.1:56
+#: ../scripts/who-uploads.1:57
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -7504,7 +7504,7 @@ msgstr ""
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:105
 #: ../scripts/dep3changelog.1:22 ../scripts/dscverify.1:43
 #: ../scripts/nmudiff.1:92 ../scripts/pts-subscribe.1:34
-#: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
+#: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:51
 msgid "Display version and copyright information and exit successfully."
 msgstr "Mostra informação de versão e copyright e termina com sucesso."
 
@@ -28604,13 +28604,21 @@ msgstr ""
 "de quem fez o envio."
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:33
+#: ../scripts/who-uploads.1:34
+#, fuzzy
+#| msgid ""
+#| "By default, B<who-uploads> uses the two Debian keyrings I</usr/share/"
+#| "keyrings/debian-keyring.gpg> and I</usr/share/keyrings/debian-maintainers."
+#| "gpg> (although this default can be changed in the configuration file, see "
+#| "below).  Specifying this option means that the default keyrings will not "
+#| "be examined.  The B<--keyring> option overrides this one."
 msgid ""
-"By default, B<who-uploads> uses the two Debian keyrings I</usr/share/"
-"keyrings/debian-keyring.gpg> and I</usr/share/keyrings/debian-maintainers."
-"gpg> (although this default can be changed in the configuration file, see "
-"below).  Specifying this option means that the default keyrings will not be "
-"examined.  The B<--keyring> option overrides this one."
+"By default, B<who-uploads> uses the three Debian keyrings I</usr/share/"
+"keyrings/debian-keyring.gpg>, I</usr/share/keyrings/debian-nonupload.gpg>, "
+"and I</usr/share/keyrings/debian-maintainers.gpg> (although this default can "
+"be changed in the configuration file, see below).  Specifying this option "
+"means that the default keyrings will not be examined.  The B<--keyring> "
+"option overrides this one."
 msgstr ""
 "Por predefinição, B<who-uploads> usa os dois chaveiros Debian I</usr/share/"
 "keyrings/debian-keyring.gpg> e I</usr/share/keyrings/debian-maintainers.gpg> "
@@ -28619,24 +28627,24 @@ msgstr ""
 "predefinidos não serão examinados. A opção B<--keyring> sobrepõe isto."
 
 #. type: TP
-#: ../scripts/who-uploads.1:33
+#: ../scripts/who-uploads.1:34
 #, no-wrap
 msgid "B<--date>"
 msgstr "B<--date>"
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:36
+#: ../scripts/who-uploads.1:37
 msgid "Show the date of the upload alongside the uploader's details"
 msgstr "Mostra a data do envio junto dos detalhes de quem enviou."
 
 #. type: TP
-#: ../scripts/who-uploads.1:36
+#: ../scripts/who-uploads.1:37
 #, no-wrap
 msgid "B<--nodate>, B<--no-date>"
 msgstr "B<--nodate>, B<--no-date>"
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:40
+#: ../scripts/who-uploads.1:41
 msgid ""
 "Do not show the date of the upload alongside the uploader's details.  This "
 "is the default behaviour."
@@ -28645,13 +28653,13 @@ msgstr ""
 "comportamento predefinido."
 
 #. type: TP
-#: ../scripts/who-uploads.1:56
+#: ../scripts/who-uploads.1:57
 #, no-wrap
 msgid "B<WHOUPLOADS_DATE>"
 msgstr "B<WHOUPLOADS_DATE>"
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:60
+#: ../scripts/who-uploads.1:61
 msgid ""
 "Show the date of the upload alongside the uploader's details.  By default, "
 "this is \"no\"."
@@ -28660,13 +28668,13 @@ msgstr ""
 "isto é \"no\"."
 
 #. type: TP
-#: ../scripts/who-uploads.1:60
+#: ../scripts/who-uploads.1:61
 #, no-wrap
 msgid "B<WHOUPLOADS_MAXUPLOADS>"
 msgstr "B<WHOUPLOADS_MAXUPLOADS>"
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:64
+#: ../scripts/who-uploads.1:65
 msgid ""
 "The maximum number of uploads to display for each package.  By default, this "
 "is 3."
@@ -28675,24 +28683,30 @@ msgstr ""
 "valor é 3."
 
 #. type: TP
-#: ../scripts/who-uploads.1:64
+#: ../scripts/who-uploads.1:65
 #, no-wrap
 msgid "B<WHOUPLOADS_KEYRINGS>"
 msgstr "B<WHOUPLOADS_KEYRINGS>"
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:71
+#: ../scripts/who-uploads.1:73
+#, fuzzy
+#| msgid ""
+#| "This is a colon-separated list of the default keyrings to be used.  By "
+#| "default, it is the two Debian keyrings I</usr/share/keyrings/debian-"
+#| "keyring.gpg> and I</usr/share/keyrings/debian-maintainers.gpg>."
 msgid ""
 "This is a colon-separated list of the default keyrings to be used.  By "
-"default, it is the two Debian keyrings I</usr/share/keyrings/debian-keyring."
-"gpg> and I</usr/share/keyrings/debian-maintainers.gpg>."
+"default, it is the three Debian keyrings I</usr/share/keyrings/debian-"
+"keyring.gpg>, I</usr/share/keyrings/debian-nonupload.gpg>, and I</usr/share/"
+"keyrings/debian-maintainers.gpg>."
 msgstr ""
 "Isto é uma lista de chaveiros predefinidos separados por dois-pontos a serem "
 "usados. Por predefinição, são os dois chaveiros Debian I</usr/share/keyrings/"
 "debian-keyring.gpg> e I</usr/share/keyrings/debian-maintainers.gpg>."
 
 #. type: Plain text
-#: ../scripts/who-uploads.1:74
+#: ../scripts/who-uploads.1:76
 msgid ""
 "The original version of B<who-uploads> was written by Adeodato Sim\\['o] "
 "E<lt>dato@net.com.org.esE<gt>.  The current version is by Julian Gilbey "
