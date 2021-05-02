@@ -148,6 +148,13 @@ sub download ($$$$$$$$) {
         my $gitrepo_dir
           = "$pkg-temporary.$$.git";    # same as outside of downloader
         my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
+        my $clean = sub {
+            uscan_exec_no_fail('rm', '-fr', $gitrepo_dir);
+        };
+        my $clean_and_die = sub {
+            $clean->();
+            uscan_die @_;
+        };
 
         if ($mode eq 'svn') {
             my $tempdir   = tempdir(CLEANUP => 1);
@@ -211,7 +218,7 @@ sub download ($$$$$$$$) {
             uscan_exec_no_fail('git', 'archive', '--format=tar',
                 "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
                 $gitref) == 0
-              or uscan_die("git archive failed");
+              or $clean_and_die->("git archive failed");
 
             if ($self->git_export_all) {
                 # restore attributes
@@ -257,7 +264,7 @@ sub download ($$$$$$$$) {
                 );
                 chomp $attr_file;
                 my $attr_fh;
-                uscan_die("could not open $attr_file for writing")
+                $clean_and_die->("could not open $attr_file for writing")
                   unless open($attr_fh, '>', $attr_file);
                 print $attr_fh "* -export-subst\n* -export-ignore\n";
                 close $attr_fh;
@@ -269,10 +276,10 @@ sub download ($$$$$$$$) {
                 "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
                 $gitref
               ) == 0
-              or uscan_die("git archive failed");
+              or $clean_and_die->("git archive failed");
         }
 
-        chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!");
+        chdir "$abs_dst" or $clean_and_die->("Unable to chdir($abs_dst): $!");
         if ($suffix eq 'gz') {
             uscan_exec("gzip", "-n", "-9", "$pkg-$ver.tar");
         } elsif ($suffix eq 'xz') {
@@ -282,9 +289,10 @@ sub download ($$$$$$$$) {
         } elsif ($suffix eq 'lzma') {
             uscan_exec("lzma", "$pkg-$ver.tar");
         } else {
-            uscan_die "Unknown suffix file to repack: $suffix";
+            $clean_and_die->("Unknown suffix file to repack: $suffix");
         }
-        chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!");
+        chdir "$curdir" or $clean_and_die->("Unable to chdir($curdir): $!");
+        $clean->();
     }
     return 1;
 }
