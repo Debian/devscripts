@@ -161,7 +161,6 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
         maxtries = 3
         head, _ = os.path.split(path)
         os.makedirs(head, exist_ok=True)
-        self.send_response(HTTPStatus.OK)
         totalsize = -1
         downloaded = 0
         for trynum in range(maxtries):
@@ -181,6 +180,7 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
                 ) as out:
                     out.seek(downloaded)
                     if trynum == 0:
+                        self.send_response(HTTPStatus.OK)
                         self.send_header("Content-type", f.headers["Content-type"])
                         self.send_header("Content-Length", f.headers["Content-Length"])
                         self.send_header("Last-Modified", f.headers["Last-Modified"])
