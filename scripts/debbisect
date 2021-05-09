@@ -208,6 +208,9 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
                         self.wfile.write(buf)
                         downloaded += chunksize
             except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    self.send_error(404, "URLError")
+                    return
                 logging.warning("got urllib.error.HTTPError: %s %s", repr(e), self.path)
             except urllib.error.URLError as e:
                 logging.warning("got urllib.error.URLError: %s", repr(e))
