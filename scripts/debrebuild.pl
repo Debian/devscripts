@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Copyright © 2014-2020 Johannes Schauer <j.schauer@email.de>
+# Copyright © 2014-2020 Johannes Schauer Marin Rodrigues <josch@debian.org>
 # Copyright © 2020      Niels Thykier <niels@thykier.net>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -2,7 +2,7 @@
 # -*- tab-width: 4; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 # vim: set ai shiftwidth=4 tabstop=4 expandtab:
 #   Copyright (C) Patrick Schoenfeld
-#                 2015 Johannes Schauer <josch@debian.org>
+#                 2015 Johannes Schauer Marin Rodrigues <josch@debian.org>
 #                 2017 James McCoy <jamessan@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
