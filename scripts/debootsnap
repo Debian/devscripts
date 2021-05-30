@@ -1,0 +1,658 @@
+#!/usr/bin/env python3
+#
+# Copyright 2021 Johannes Schauer Marin Rodrigues <josch@debian.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# This tool is similar to debootstrap but is able to recreate a chroot
+# containing precisely the given package and version selection. The package
+# list is expected on standard input and may be of the format produced by:
+#
+#     dpkg-query --showformat '${binary:Package}=${Version}\n' --show
+
+# The name was suggested by Adrian Bunk as a portmanteau of debootstrap and
+# snapshot.debian.org.
+
+import argparse
+import sys
+import re
+from collections import defaultdict
+from operator import itemgetter
+import tempfile
+import os
+import subprocess
+import shutil
+import http.server
+import socketserver
+from functools import partial
+import threading
+import time
+from http import HTTPStatus
+from contextlib import contextmanager
+import pycurl
+import requests
+from debian.deb822 import BuildInfo
+
+
+class MyHTTPException(Exception):
+    pass
+
+
+class MyHTTP404Exception(Exception):
+    pass
+
+
+class MyHTTPTimeoutException(Exception):
+    pass
+
+
+# pylint: disable=c-extension-no-member
+class Proxy(http.server.SimpleHTTPRequestHandler):
+    last_request = None
+    maxretries = 10
+
+    def do_GET(self):  # pylint: disable=too-many-branches,too-many-statements
+        # check validity and extract the timestamp
+        url = "http://snapshot.debian.org/" + self.path
+        start = None
+        state = ""
+        written = 0
+        for retrynum in range(self.maxretries):
+            try:
+                c = pycurl.Curl()
+                c.setopt(
+                    c.URL,
+                    url,
+                )
+                # even 100 kB/s is too much sometimes
+                c.setopt(c.MAX_RECV_SPEED_LARGE, 1000 * 1024)  # bytes per second
+                c.setopt(c.CONNECTTIMEOUT, 30)  # the default is 300
+                # sometimes, curl stalls forever and even ctrl+c doesn't work
+                start = time.time()
+
+                def progress(*_):
+                    # a download must not last more than 10 minutes
+                    # with 100 kB/s this means files cannot be larger than 62MB
+                    if time.time() - start > 10 * 60:
+                        print("transfer took too long")
+                        # the code will not see this exception but instead get a
+                        # pycurl.error
+                        raise MyHTTPTimeoutException(url)
+
+                c.setopt(pycurl.NOPROGRESS, 0)
+                c.setopt(pycurl.XFERINFOFUNCTION, progress)
+                # $ host snapshot.debian.org
+                # snapshot.debian.org has address 185.17.185.185
+                # snapshot.debian.org has address 193.62.202.27
+                # c.setopt(c.RESOLVE, ["snapshot.debian.org:80:185.17.185.185"])
+                if written > 0:
+                    c.setopt(pycurl.RESUME_FROM, written)
+
+                def writer_cb(data):
+                    assert state == "headers sent", state
+                    nonlocal written
+                    written += len(data)
+                    return self.wfile.write(data)
+
+                c.setopt(c.WRITEFUNCTION, writer_cb)
+
+                # using a header callback allows us to send headers of our own
+                # with the correct content-length value out without having to
+                # wait for perform() to finish
+                def header_cb(line):
+                    nonlocal state
+                    # if this is a retry, then the headers have already been
+                    # sent and there is nothing to do
+                    if state == "headers sent":
+                        return
+                    # HTTP standard specifies that headers are encoded in iso-8859-1
+                    line = line.decode("iso-8859-1").rstrip()
+                    # the first try must be a http 200
+                    if line == "HTTP/1.1 200 OK":
+                        assert state == ""
+                        self.send_response(HTTPStatus.OK)
+                        state = "http200 sent"
+                        return
+                    # the header is done
+                    if line == "":
+                        assert state == "length sent"
+                        self.end_headers()
+                        state = "headers sent"
+                        return
+                    field, value = line.split(":", 1)
+                    field = field.strip().lower()
+                    value = value.strip()
+                    # we are only interested in content-length
+                    if field != "content-length":
+                        return
+                    assert state == "http200 sent"
+                    self.send_header("Content-Length", value)
+                    state = "length sent"
+
+                c.setopt(c.HEADERFUNCTION, header_cb)
+                c.perform()
+                if c.getinfo(c.RESPONSE_CODE) == 404:
+                    raise MyHTTP404Exception("got HTTP 404 for %s" % url)
+                if c.getinfo(c.RESPONSE_CODE) not in [200, 206]:
+                    raise MyHTTPException(
+                        "got HTTP %d for %s" % (c.getinfo(c.RESPONSE_CODE), url)
+                    )
+                c.close()
+                # if the requests finished too quickly, sleep the remaining time
+                # s/r  r/h
+                # 3    1020
+                # 2.5  1384
+                # 2.4  1408
+                # 2    1466
+                # 1.5  2267
+                seconds_per_request = 1.5
+                if self.last_request is not None:
+                    sleep_time = seconds_per_request - (time.time() - self.last_request)
+                    if sleep_time > 0:
+                        time.sleep(sleep_time)
+                self.last_request = time.time()
+                break
+            except pycurl.error as e:
+                code, _ = e.args
+                if code in [
+                    pycurl.E_PARTIAL_FILE,
+                    pycurl.E_COULDNT_CONNECT,
+                    pycurl.E_ABORTED_BY_CALLBACK,
+                ]:
+                    if retrynum == self.maxretries - 1:
+                        break
+                    if code == pycurl.E_ABORTED_BY_CALLBACK:
+                        # callback was aborted due to timeout
+                        pass
+                    sleep_time = 4 ** (retrynum + 1)
+                    print("retrying after %f s..." % sleep_time)
+                    time.sleep(sleep_time)
+                    continue
+                raise
+            except MyHTTPException as e:
+                print("got HTTP error:", repr(e))
+                if retrynum == self.maxretries - 1:
+                    break
+                sleep_time = 4 ** (retrynum + 1)
+                print("retrying after %f s..." % sleep_time)
+                time.sleep(sleep_time)
+                # restart from the beginning or otherwise, the result might
+                # include a varnish cache error message
+        else:
+            raise Exception("failed too often...")
+
+
+def parse_buildinfo(val):
+    with open(val) as f:
+        buildinfo = BuildInfo(f)
+    pkgs = list()
+    for dep in buildinfo.relations["installed-build-depends"]:
+        assert len(dep) == 1
+        dep = dep[0]
+        assert dep["arch"] is None
+        assert dep["restrictions"] is None
+        assert len(dep["version"]) == 2
+        rel, version = dep["version"]
+        assert rel == "="
+        pkgs.append((dep["name"], dep["archqual"], version))
+    return pkgs, buildinfo.get("Build-Architecture")
+
+
+def parse_pkgs(val):
+    if val == "-":
+        val = sys.stdin.read()
+    pkgs = list()
+    pattern = re.compile(
+        r"""
+            ^[^a-z0-9]*                    # garbage at the beginning
+            ([a-z0-9][a-z0-9+.-]+)         # package name
+            (?:[^a-z0-9+.-]+([a-z0-9-]+))? # optional version
+            [^A-Za-z0-9.+~:-]+             # optional garbage
+            ([A-Za-z0-9.+~:-]+)            # version
+            [^A-Za-z0-9.+~:-]*$            # garbage at the end
+            """,
+        re.VERBOSE,
+    )
+    for line in re.split(r"[,\r\n]+", val):
+        if not line:
+            continue
+        match = pattern.fullmatch(line)
+        if match is None:
+            print("cannot parse: %s" % line, file=sys.stderr)
+            sys.exit(1)
+        pkgs.append(match.groups())
+    return [pkgs]
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="""\
+
+Combines debootstrap and snapshot.debian.org to create a chroot with exact
+package versions from the past either to reproduce bugs or to test source
+package reproducibility.
+
+To obtain a list of packages run the following command on one machine:
+
+    $ dpkg-query --showformat '${binary:Package}=${Version}\\n' --show
+
+And pass the output to debootsnap with the --packages argument. The result
+will be a chroot tarball with precisely the package versions as they were
+found on the system that ran dpkg-query.
+""",
+        epilog="""\
+
+*EXAMPLES*
+
+On one system run:
+
+    $ dpkg-query --showformat '${binary:Package}=${Version}\\n' --show > pkglist
+
+Then copy over "pkglist" and on another system run:
+
+    $ debootsnap --pkgs=./pkglist chroot.tar
+
+Or use a buildinfo file as input:
+
+    $ debootsnap --buildinfo=./package.buildinfo chroot.tar
+
+""",
+    )
+    parser.add_argument(
+        "--architecture",
+        "--nativearch",
+        help="native architecture of the chroot. Ignored if --buildinfo is"
+        " used. Foreign architectures are inferred from the package list."
+        " Not required if packages are architecture qualified.",
+    )
+    parser.add_argument(
+        "--ignore-notfound",
+        action="store_true",
+        help="only warn about packages that cannot be found on "
+        "snapshot.debian.org instead of exiting",
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--buildinfo",
+        type=parse_buildinfo,
+        help="use packages from a buildinfo file. Read buildinfo file from "
+        'standard input if value is "-".',
+    )
+    group.add_argument(
+        "--packages",
+        "--pkgs",
+        action="extend",
+        type=parse_pkgs,
+        help="list of packages, optional architecture and version, separated "
+        "by comma or linebreak. Read list from standard input if value is "
+        '"-". The option can be specified multiple times. Package name, '
+        "version and architecture are separated by one or more characters "
+        "that are not legal in the respective adjacent field. Leading and "
+        "trailing illegal characters are allowed. Example: "
+        "pkg1:arch=ver1,pkg2:arch=ver2",
+    )
+    parser.add_argument(
+        "--sources-list-only",
+        action="store_true",
+        help="only query metasnap.debian.net and print the sources.list "
+        "needed to create chroot and exit",
+    )
+    parser.add_argument(
+        "output", nargs="?", default="-", help="path to output chroot tarball"
+    )
+    return parser.parse_args()
+
+
+def query_metasnap(pkgsleft, archive, nativearch):
+    handled_pkgs = set(pkgsleft)
+    r = requests.post(
+        "http://metasnap.debian.net/cgi-bin/api",
+        files={
+            "archive": archive,
+            "arch": nativearch,
+            "pkgs": ",".join([n + ":" + a + "=" + v for n, a, v in handled_pkgs]),
+        },
+    )
+    if r.status_code == 404:
+        for line in r.text.splitlines():
+            n, a, v = line.split()
+            handled_pkgs.remove((n, a, v))
+        r = requests.post(
+            "http://metasnap.debian.net/cgi-bin/api",
+            files={
+                "archive": archive,
+                "arch": nativearch,
+                "pkgs": ",".join([n + ":" + a + "=" + v for n, a, v in handled_pkgs]),
+            },
+        )
+    assert r.status_code == 200, r.text
+
+    suite2pkgs = defaultdict(set)
+    pkg2range = dict()
+    for line in r.text.splitlines():
+        n, a, v, s, c, b, e = line.split()
+        assert (n, a, v) in handled_pkgs
+        suite2pkgs[s].add((n, a, v))
+        # this will only keep one range of packages with multiple
+        # ranges but we don't care because we only need one
+        pkg2range[((n, a, v), s)] = (c, b, e)
+
+    return handled_pkgs, suite2pkgs, pkg2range
+
+
+def comp_ts(ranges):
+    last = "19700101T000000Z"  # impossibly early date
+    res = list()
+    for c, b, e in ranges:
+        if last >= b:
+            # add the component the current timestamp needs
+            res[-1][1].add(c)
+            continue
+        # add new timestamp with initial component
+        last = e
+        res.append((last, set([c])))
+    return res
+
+
+def compute_sources(pkgs, nativearch, ignore_notfound):
+    sources = []
+    pkgsleft = set(pkgs)
+    for archive in [
+        "debian",
+        "debian-debug",
+        "debian-security",
+        "debian-ports",
+        "debian-volatile",
+        "debian-backports",
+    ]:
+        if len(pkgsleft) == 0:
+            break
+
+        handled_pkgs, suite2pkgs, pkg2range = query_metasnap(
+            pkgsleft, archive, nativearch
+        )
+
+        # greedy algorithm:
+        # pick the suite covering most packages first
+        while len(handled_pkgs) > 0:
+            bestsuite = sorted(suite2pkgs.items(), key=lambda v: len(v[1]))[-1][0]
+            ranges = [pkg2range[nav, bestsuite] for nav in suite2pkgs[bestsuite]]
+            # sort by end-time
+            ranges.sort(key=itemgetter(2))
+
+            for ts, comps in comp_ts(ranges):
+                sources.append((archive, ts, bestsuite, " ".join(comps)))
+
+            for nav in suite2pkgs[bestsuite]:
+                handled_pkgs.remove(nav)
+                pkgsleft.remove(nav)
+                for suite in suite2pkgs:
+                    if suite == bestsuite:
+                        continue
+                    if nav in suite2pkgs[suite]:
+                        suite2pkgs[suite].remove(nav)
+            del suite2pkgs[bestsuite]
+    if pkgsleft:
+        print("cannot find:", file=sys.stderr)
+        print("\n".join(["%s:%s=%s" % pkg for pkg in pkgsleft]), file=sys.stderr)
+        if not ignore_notfound:
+            sys.exit(1)
+
+    return sources
+
+
+def create_repo(tmpdirname, pkgs):
+    with open(tmpdirname + "/control", "w") as f:
+
+        def pkg2name(n, a, v):
+            if a is None:
+                return "%s (= %s)" % (n, v)
+            return "%s:%s (= %s)" % (n, a, v)
+
+        f.write("Package: debootsnap-dummy\n")
+        f.write("Depends: %s\n" % (", ".join([pkg2name(*pkg) for pkg in pkgs])))
+    subprocess.check_call(
+        ["equivs-build", tmpdirname + "/control"], cwd=tmpdirname + "/cache"
+    )
+
+    packages_content = subprocess.check_output(
+        ["apt-ftparchive", "packages", "."], cwd=tmpdirname + "/cache"
+    )
+    with open(tmpdirname + "/cache/Packages", "wb") as f:
+        f.write(packages_content)
+    release_content = subprocess.check_output(
+        [
+            "apt-ftparchive",
+            "release",
+            "-oAPT::FTPArchive::Release::Suite=dummysuite",
+            ".",
+        ],
+        cwd=tmpdirname + "/cache",
+    )
+    with open(tmpdirname + "/cache/Release", "wb") as f:
+        f.write(release_content)
+
+
+@contextmanager
+def serve_repo(tmpdirname):
+    httpd = http.server.HTTPServer(
+        ("localhost", 0),
+        partial(http.server.SimpleHTTPRequestHandler, directory=tmpdirname + "/cache"),
+    )
+    # run server in a new thread
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.daemon = True
+    # start thread
+    server_thread.start()
+    # retrieve port (in case it was generated automatically)
+    _, port = httpd.server_address
+    try:
+        yield port
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+        server_thread.join()
+
+
+def run_mmdebstrap(tmpdirname, sources, nativearch, foreignarches, output):
+    with open(tmpdirname + "/sources.list", "w") as f:
+        for source in sources:
+            f.write(
+                "deb [check-valid-until=no] http://snapshot.debian.org/"
+                + "archive/%s/%s/ %s %s\n" % source
+            )
+    # we serve the directory via http instead of using a copy:// mirror
+    # because the temporary directory is not accessible to the unshared
+    # user
+    with serve_repo(tmpdirname) as port:
+        subprocess.check_call(
+            [
+                "mmdebstrap",
+                "--architectures=%s" % (",".join([nativearch] + list(foreignarches))),
+                "--variant=essential",
+                "--include=debootsnap-dummy",
+                '--aptopt=Apt::Key::gpgvcommand "/usr/libexec/mmdebstrap/gpgvnoexpkeysig"',
+                '--customize-hook=chroot "$1" dpkg -r debootsnap-dummy',
+                '--customize-hook=chroot "$1" dpkg-query --showformat '
+                "'${binary:Package}=${Version}\\n' --show > \"$1/pkglist\"",
+                "--customize-hook=download /pkglist ./pkglist",
+                '--customize-hook=rm "$1/pkglist"',
+                "--customize-hook=upload sources.list /etc/apt/sources.list",
+                "dummysuite",
+                output,
+                "deb [trusted=yes] http://localhost:%d/ ./" % port,
+            ],
+            cwd=tmpdirname,
+        )
+
+    newpkgs = set()
+    with open(tmpdirname + "/pkglist") as f:
+        for line in f:
+            line = line.rstrip()
+            n, v = line.split("=")
+            a = nativearch
+            if ":" in n:
+                n, a = n.split(":")
+            newpkgs.add((n, a, v))
+
+    return newpkgs
+
+
+@contextmanager
+def proxy_snapshot(tmpdirname):
+    httpd = socketserver.TCPServer(
+        # the default address family for socketserver is AF_INET so we
+        # explicitly bind to ipv4 localhost
+        ("localhost", 0),
+        partial(Proxy, directory=tmpdirname + "/cache"),
+    )
+    # run server in a new thread
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.daemon = True
+    # start thread
+    server_thread.start()
+    # retrieve port (in case it was generated automatically)
+    _, port = httpd.server_address
+    try:
+        yield port
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+        server_thread.join()
+
+
+def download_packages(tmpdirname, sources, pkgs, nativearch, foreignarches):
+    for d in [
+        "/etc/apt/apt.conf.d",
+        "/etc/apt/sources.list.d",
+        "/etc/apt/preferences.d",
+        "/var/cache/apt",
+        "/var/lib/apt/lists/partial",
+        "/var/lib/dpkg",
+    ]:
+        os.makedirs(tmpdirname + "/" + d)
+    # apt-get update requires /var/lib/dpkg/status
+    with open(tmpdirname + "/var/lib/dpkg/status", "w") as f:
+        pass
+    with open(tmpdirname + "/apt.conf", "w") as f:
+        f.write('Apt::Architecture "%s";\n' % nativearch)
+        f.write('Apt::Architectures { "%s"; ' % nativearch)
+        for a in foreignarches:
+            f.write('"%s"; ' % a)
+        f.write("};\n")
+        f.write('Dir "' + tmpdirname + '";\n')
+        f.write('Dir::Etc::Trusted "/etc/apt/trusted.gpg";\n')
+        f.write('Dir::Etc::TrustedParts "/usr/share/keyrings/";\n')
+        f.write('Acquire::Languages "none";\n')
+        # f.write("Acquire::http::Dl-Limit \"1000\";\n")
+        # f.write("Acquire::https::Dl-Limit \"1000\";\n")
+        f.write('Acquire::Retries "5";\n')
+        # ignore expired signatures
+        f.write('Apt::Key::gpgvcommand "/usr/libexec/mmdebstrap/gpgvnoexpkeysig";\n')
+
+    os.makedirs(tmpdirname + "/cache")
+
+    with proxy_snapshot(tmpdirname) as port:
+        with open(tmpdirname + "/etc/apt/sources.list", "w") as f:
+            for source in sources:
+                f.write(
+                    "deb [check-valid-until=no] http://localhost:%d/" % port
+                    + "archive/%s/%s/ %s %s\n" % source
+                )
+        subprocess.check_call(
+            ["apt-get", "update", "--error-on=any"],
+            env={"APT_CONFIG": tmpdirname + "/apt.conf"},
+        )
+        for i, nav in enumerate(pkgs):
+            print("%d of %d" % (i + 1, len(pkgs)))
+            with tempfile.TemporaryDirectory() as tmpdir2:
+                subprocess.check_call(
+                    ["apt-get", "download", "--yes", "%s:%s=%s" % nav],
+                    cwd=tmpdir2,
+                    env={"APT_CONFIG": tmpdirname + "/apt.conf"},
+                )
+                debs = os.listdir(tmpdir2)
+                assert len(debs) == 1
+                # Normalize the package name to how it appears in the archive.
+                # Mainly this removes the epoch from the filename, see
+                # https://bugs.debian.org/645895
+                # This avoids apt bugs connected with a percent sign in the
+                # filename as they occasionally appear, for example as
+                # introduced in apt 2.1.15 and later fixed by DonKult:
+                # https://salsa.debian.org/apt-team/apt/-/merge_requests/175
+                subprocess.check_call(["dpkg-name", tmpdir2 + "/" + debs[0]])
+                debs = os.listdir(tmpdir2)
+                assert len(debs) == 1
+                shutil.move(tmpdir2 + "/" + debs[0], tmpdirname + "/cache")
+
+
+def main():
+    args = parse_args()
+    if args.packages:
+        pkgs = [v for sublist in args.packages for v in sublist]
+        if args.architecture is None:
+            arches = {a for _, a, _ in pkgs if a is not None}
+            if len(arches) == 0:
+                print("packages are not architecture qualified", file=sys.stderr)
+                print(
+                    "use --architecture to set the native architecture", file=sys.stderr
+                )
+                sys.exit(1)
+            elif len(arches) > 1:
+                print("more than one architecture in the package list", file=sys.stderr)
+                print(
+                    "use --architecture to set the native architecture", file=sys.stderr
+                )
+                sys.exit(1)
+            nativearch = arches.pop()
+            assert arches == set()
+        else:
+            nativearch = args.architecture
+    else:
+        pkgs, nativearch = args.buildinfo
+    # unknown architectures are the native architecture
+    pkgs = [(n, a if a is not None else nativearch, v) for n, a, v in pkgs]
+    # make package list unique
+    pkgs = list(set(pkgs))
+    # compute foreign architectures
+    foreignarches = set()
+    for _, a, _ in pkgs:
+        if a != nativearch:
+            foreignarches.add(a)
+
+    sources = compute_sources(pkgs, nativearch, args.ignore_notfound)
+
+    if args.sources_list_only:
+        for source in sources:
+            print(
+                "deb [check-valid-until=no] http://snapshot.debian.org/"
+                + "archive/%s/%s/ %s %s" % source
+            )
+        sys.exit(0)
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+
+        download_packages(tmpdirname, sources, pkgs, nativearch, foreignarches)
+
+        create_repo(tmpdirname, pkgs)
+
+        newpkgs = run_mmdebstrap(
+            tmpdirname, sources, nativearch, foreignarches, args.output
+        )
+
+    # make sure that the installed packages match the requested package
+    # list
+    assert set(newpkgs) == set(pkgs)
+
+
+if __name__ == "__main__":
+    main()

@@ -44,6 +44,7 @@ PKGNAMES := \
 GEN_MAN1S += \
 	deb-why-removed.1 \
 	debbisect.1 \
+	debootsnap.1 \
 	debrebuild.1 \
 	debrepro.1 \
 	ltnu.1 \
@@ -104,6 +105,14 @@ test_py: $(VERSION_FILE)
 debbisect.1: debbisect
 	help2man \
 		--name="bisect snapshot.debian.org" \
+		--version-string=$(VERSION) \
+		--no-info \
+		--no-discard-stderr \
+		./$< >$@
+
+debootsnap.1: debootsnap
+	help2man \
+		--name="create debian chroot using snapshot.debian.org" \
 		--version-string=$(VERSION) \
 		--no-info \
 		--no-discard-stderr \
