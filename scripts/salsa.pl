@@ -24,6 +24,7 @@ salsa - tool to manipulate salsa repositories and group members
   salsa add_user developer foobar --group-id 2665
   salsa update_user maintainer foobar --group js-team
   salsa del_user foobar --group js-team
+  salsa last_ci_status js-team/nodejs
 
 =head1 DESCRIPTION
 
@@ -240,6 +241,22 @@ argument exists, search only matching projects
 
   salsa --group js-team list_repos
   salsa --user yadd list_repos foo*
+
+=item B<last_ci_status> or B<ci>
+
+Displays last continuous integratin result. Use B<--verbose> to see
+URL of pipeline when result isn't B<success>. Unless B<--no-fail> is set,
+B<salsa last_ci_status> will stop on first "failed" status.
+
+  salsa --group js-team last_ci_status --all --no-fail
+  salsa --user yadd last_ci_status foo
+  salsa last_ci_status js-team/nodejs
+
+This commands returns the number of "failed" status found. "success" entries
+are displayed using STDOUT while other are displayed I<(with details)> using
+STDERR. Then you can easily see only failures using:
+
+  salsa --group js-team last_ci_status --all --no-fail >/dev/null
 
 =item B<merge_request>, B<mr>
 

@@ -5,6 +5,10 @@ devscripts (2.21.4) UNRELEASED; urgency=medium
     + Handle emtpy symble table by returning an unknown result for the
       stack-protector check.  MR: !223
 
+  [ Yadd ]
+  * salsa:
+    + Add a new last_ci_status subcommand.  MR: !226
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 30 Jun 2021 15:31:19 +0200
 
 devscripts (2.21.3) unstable; urgency=medium

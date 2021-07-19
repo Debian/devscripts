@@ -28,6 +28,7 @@ _salsa_completion () {
     commands+=" protect_branch protected_branches purge_cache push_repo"
     commands+=" search search_group search_project search_user"
     commands+=" update_repo update_safe update_user whoami"
+    commands+=" last_ci_status ci"
     case "${prev}" in
       --api-url) ;&
       --desc-pattern) ;&
