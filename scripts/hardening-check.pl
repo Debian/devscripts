@@ -331,8 +331,12 @@ foreach my $file (@ARGV) {
         || (!$elf && defined($functions->{'__stack_chk_fail_local'}))) {
         good($name, "yes");
     } else {
-        bad("no-stackprotector", $file, $name, "no, not found!",
-            $skip_stackprotector);
+        if (%{$functions} eq 0) {
+            unknown($name, "unknown, no symbols found");
+        } else {
+            bad("no-stackprotector", $file, $name, "no, not found!",
+                $skip_stackprotector);
+        }
     }
 
     # Fortified Source

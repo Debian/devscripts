@@ -1,6 +1,9 @@
 devscripts (2.21.4) UNRELEASED; urgency=medium
 
-  * WIP.
+  [ Fabrice Fontaine ]
+  * hardening-check:
+    + Handle emtpy symble table by returning an unknown result for the
+      stack-protector check.  MR: !223
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 30 Jun 2021 15:31:19 +0200
 
