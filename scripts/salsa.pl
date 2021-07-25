@@ -244,7 +244,7 @@ argument exists, search only matching projects
 
 =item B<last_ci_status> or B<ci>
 
-Displays last continuous integratin result. Use B<--verbose> to see
+Displays last continuous integration result. Use B<--verbose> to see
 URL of pipeline when result isn't B<success>. Unless B<--no-fail> is set,
 B<salsa last_ci_status> will stop on first "failed" status.
 
