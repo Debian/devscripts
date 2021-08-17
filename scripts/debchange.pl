@@ -668,8 +668,10 @@ my $MAINTAINER   = 'MAINTAINER';
 my $EMAIL        = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 # when updating the lines below also update the help text, the manpage and the testcases.
-my %dists
-  = (8, 'jessie', 9, 'stretch', 10, 'buster', 11, 'bullseye', 12, 'bookworm', 13, 'trixie');
+my %dists = (
+    8,  'jessie',   9,  'stretch',  10, 'buster',
+    11, 'bullseye', 12, 'bookworm', 13, 'trixie'
+);
 my $lts_dist    = '9';
 my $latest_dist = '11';
 # dist guessed from backports, SRU, security uploads...
