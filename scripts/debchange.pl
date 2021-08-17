@@ -163,7 +163,7 @@ Options:
          distribution name
   --bpo
          Increment the Debian release number for a backports upload
-         to "buster-backports"
+         to "bullseye-backports"
   --stable
          Increment the Debian release number for a stable upload.
   -l, --local <suffix>
@@ -669,9 +669,9 @@ my $EMAIL        = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 # when updating the lines below also update the help text, the manpage and the testcases.
 my %dists
-  = (70, 'wheezy', 7, 'wheezy', 8, 'jessie', 9, 'stretch', 10, 'buster');
+  = (8, 'jessie', 9, 'stretch', 10, 'buster', 11, 'bullseye', 12, 'bookworm');
 my $lts_dist    = '9';
-my $latest_dist = '10';
+my $latest_dist = '11';
 # dist guessed from backports, SRU, security uploads...
 my $guessed_dist = '';
 my $CHANGES      = '';
