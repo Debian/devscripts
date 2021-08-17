@@ -236,10 +236,10 @@ verifyGuessedDistribution() {
 testGuessedDistribution() {
     verifyGuessedDistribution unstable -i unstable
     verifyGuessedDistribution experimental -i experimental
-    verifyGuessedDistribution stretch-backports -i stretch-backports
+    verifyGuessedDistribution buster-backports -i buster-backports
     verifyGuessedDistribution stretch -i stretch
-    verifyGuessedDistribution unstable --bpo buster-backports
-    verifyGuessedDistribution unstable --stable buster
+    verifyGuessedDistribution unstable --bpo bullseye-backports
+    verifyGuessedDistribution unstable --stable bullseye
 }
 
 testSpecialCharacterMaintainer() {
