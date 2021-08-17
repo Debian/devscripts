@@ -11,18 +11,6 @@ before_script:
     - make test
     - make destructive-test
 
-unstable:
+bullseye:
   <<: *test
-  image: debian:unstable
-
-testing:
-  <<: *test
-  image: debian:testing
-
-stable-bpo:
-  <<: *test
-  image: debian:stable-backports
-
-ubuntu-devel:
-  <<: *test
-  image: ubuntu:devel
+  image: debian:bullseye
