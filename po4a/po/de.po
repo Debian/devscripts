@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2021-07-25 10:52+0200\n"
+"POT-Creation-Date: 2021-08-18 16:57+0200\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -3945,10 +3945,8 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/checkbashisms.1:46
-#, fuzzy, no-wrap
-#| msgid "B<--edit>, B<-e>"
 msgid "B<--early-fail>, B<-e>"
-msgstr "B<--edit>, B<-e>"
+msgstr "B<--early-fail>, B<-e>"
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:49
@@ -7222,10 +7220,10 @@ msgstr "B<--bpo>"
 #. type: Plain text
 #: ../scripts/debchange.1:265
 msgid ""
-"Increment the Debian release number for an upload to buster-backports, and "
+"Increment the Debian release number for an upload to bullseye-backports, and "
 "add a backport upload changelog comment."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach buster-"
+"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach bullseye-"
 "backports und fügt einen Changelog-Kommentar »backport upload« hinzu."
 
 #. type: TP
@@ -10583,10 +10581,8 @@ msgstr "Erforderliche Programme fehlen."
 
 #. type: textblock
 #: ../scripts/debrepro.pod:154
-#, fuzzy
-#| msgid "diffoscope (1), disorderfs (1),"
 msgid "diffoscope (1), disorderfs (1), timeout(1)"
-msgstr "diffoscope (1), disorderfs (1),"
+msgstr "diffoscope (1), disorderfs (1), timeout(1)"
 
 #. type: textblock
 #: ../scripts/debrepro.pod:158
