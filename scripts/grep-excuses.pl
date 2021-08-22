@@ -172,21 +172,17 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 while (@ARGV and $ARGV[0] =~ /^-/) {
     if ($ARGV[0] eq '--wipnity' or $ARGV[0] eq '-w') {
-        if (@ARGV) {
-            shift;
-            $string = shift;
-        }
-        if (!$string or $string eq '') {
+        shift;
+        @ARGV = grep { $_ ne '' } @ARGV;
+        unless (@ARGV) {
             die
 "$progname: no package specified!\nTry $progname --help for help.\n";
         }
-        if (@ARGV) {
-            die
-"$progname: too many arguments!  Try $progname --help for help.\n";
-        } else {
+        while (my ($i, $string) = each(@ARGV)) {
             wipnity($string);
-            exit 0;
+            print "\n\n" unless $i == $#ARGV;
         }
+        exit 0;
     }
     if ($ARGV[0] eq '--debug') {
         open DEBUG, ">&STDERR" or die $!;
