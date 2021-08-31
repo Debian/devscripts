@@ -499,7 +499,7 @@ for my $arg (@ARGV) {
                 print @output unless $opt->{'quiet'};
                 exit $rc >> 8 if $rc >> 8 != 0;
                 foreach (@output) {
-                    if (/^dpkg-source: (?:info: )?extracting .* in (.*)/) {
+                    if (/^.*dpkg-source:.* (?:.*info.*: )?extracting .* in (.*)/) {
                         chdir $1;
                         exec 'dpkg-buildpackage', '-b', '-uc';
                         die "Unable to run dpkg-buildpackage: $!";
