@@ -175,6 +175,7 @@ our (@gTags, @valid_tags, %valid_tags);
 	   "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
 	   "stretch", "stretch-ignore", "buster", "buster-ignore",
 	   "bullseye", "bullseye-ignore","bookworm","bookworm-ignore",
+	   "trixie","trixie-ignore",
          );
 #>>>
 
