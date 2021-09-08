@@ -391,7 +391,7 @@ if ($do_autopkgtests) {
             my $arches = $autopkgtests->{$k};
             foreach my $arch (sort keys %$arches) {
                 my $info = $arches->{$arch};
-                next if $info->[0] eq 'PASS';
+                next if $info->[0] eq 'PASS' or $info->[0] eq 'RUNNING';
                 printf "\nautopkgtest regression\n";
                 printf "    in %s (%s) on %s\n", $testpkg, $testvsn, $arch;
                 printf "    due to %s\n", migration_headline($source);
