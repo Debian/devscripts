@@ -1228,6 +1228,7 @@ sub download_file_and_sig {
 
     # 6.1 download tarball
     my $download_available = 0;
+    my $upstream_base      = basename($self->upstream_url);
     $self->signature_available(0);
     my $sigfile;
     my $sigfile_base = $self->newfile_base;
@@ -1252,7 +1253,7 @@ sub download_file_and_sig {
                   "Successfully downloaded package: $self->{newfile_base}\n";
             } else {
                 dehs_verbose
-"Failed to download upstream package: $self->{newfile_base}\n";
+                  "Failed to download upstream package: $upstream_base\n";
             }
         } elsif (-e "$self->{config}->{destdir}/$self->{newfile_base}") {
             $download_available = 1;
@@ -1260,8 +1261,7 @@ sub download_file_and_sig {
               "Not downloading, using existing file: $self->{newfile_base}\n";
             $skip_git_vrfy = 1;
         } elsif ($self->shared->{download} > 0) {
-            uscan_verbose
-              "Downloading upstream package: $self->{newfile_base}";
+            uscan_verbose "Downloading upstream package: $upstream_base";
             $download_available = $self->downloader->download(
                 $self->upstream_url,
                 "$self->{config}->{destdir}/$self->{newfile_base}",
@@ -1273,15 +1273,18 @@ sub download_file_and_sig {
             );
             if ($download_available) {
                 dehs_verbose
-                  "Successfully downloaded package: $self->{newfile_base}\n";
+                  "Successfully downloaded upstream package: $upstream_base\n";
+                if (@{ $self->filenamemangle }) {
+                    dehs_verbose
+                      "Renamed upstream package to: $self->{newfile_base}\n";
+                }
             } else {
                 dehs_verbose
-"Failed to download upstream package: $self->{newfile_base}\n";
+                  "Failed to download upstream package: $upstream_base\n";
             }
         } else {    # $download = 0,
             $download_available = 0;
-            dehs_verbose
-              "Not downloading upstream package: $self->{newfile_base}\n";
+            dehs_verbose "Not downloading upstream package: $upstream_base\n";
         }
     }
     if ($self->pgpmode eq 'self') {
