@@ -10,6 +10,10 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
   * dpkg-depcheck:
     + Replace tempfile with mktemp.  Closes: #995583
 
+  [ Nicholas D Steeves ]
+  * control:
+    + Migrate from devscripts-el (dummy transitional) to elpa-devscripts.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
