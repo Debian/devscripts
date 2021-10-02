@@ -372,7 +372,7 @@ sub getusedfiles (@) {
         $file = $opts{"strace-input"};
     } else {
         my $old_locale = $ENV{'LC_ALL'} || undef;
-        $file = $opts{"strace-output"} || `tempfile -p depcheck`;
+        $file = $opts{"strace-output"} || `mktemp`;
         chomp $file;
         $file =~ s%^(\s)%./$1%;
         my @strace_cmd = (
