@@ -10,6 +10,12 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
   * dpkg-depcheck:
     + Replace tempfile with mktemp.  Closes: #995583
 
+  [ Hugh McMaster ]
+  * uscan:
+    + Assign $newfile_base a filename, not a URL, when filenamemangling.
+      Closes: #993585; MR: !235
+    + Use upstream package filename in verbose output where appropriate.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
