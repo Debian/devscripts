@@ -16,6 +16,11 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       Closes: #993585; MR: !235
     + Use upstream package filename in verbose output where appropriate.
 
+  [ Mattia Rizzolo ]
+  * nmudiff:
+    + Apply patch from Raúl Benencia <rul@kalgan.cc> to fix typo in
+      documentation.  Closes: #996392
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
