@@ -19,6 +19,7 @@ sub _xtp_newfile_base {
         if ($self->versionless) {
             $newfile_base = $self->upstream_url;
         }
+        my $cmp = $newfile_base;
         uscan_verbose "Matching target for filenamemangle: $newfile_base";
         if (
             mangle(
@@ -29,6 +30,9 @@ sub _xtp_newfile_base {
         ) {
             $self->status(1);
             return undef;
+        }
+        if ($cmp eq $newfile_base) {
+            uscan_die "filenamemangle failed for $cmp";
         }
         unless ($self->search_result->{newversion}) {
 
