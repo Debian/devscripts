@@ -371,7 +371,7 @@ fi
 
 TMPNAM="$(mktemp -t "$(basename "$1").XXXXXXXXX")"
 
-if [ "$NMUDIFF_DELAY" = "XX" ] && [ "$NMUDIFF_TEMPLATE" = "" ]; then
+if [ "$NMUDIFF_DELAY" = "XX" ] && [ "$NMUDIFF_TEMPLATE" = "" ] && [ "$NMUDIFF_NONDD" != "yes" ]; then
     DELAY_HEADER="
 [Replace XX with correct value]"
 fi
