@@ -18,11 +18,12 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
 
   [ Mattia Rizzolo ]
   * nmudiff:
-    + Apply patch from Raúl Benencia <rul@kalgan.cc> to fix typo in
-      documentation.  Closes: #996392
+    + Apply patches from Raúl Benencia <rul@kalgan.cc> to:
+      - fix typo in documentation.  Closes: #996392
+      - fix misleading delay header on non-dd use case.  Closes: #996565
 
   [ Yadd ]
-  * Update fr translation
+  * Update fr translation.
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
