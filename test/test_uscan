@@ -127,6 +127,8 @@ testRepackBZ2_GZ() { helperTestRepack "tar.bz2" "gz" "gzip compressed data" ; }
 testRepackGZ_GZ() { helperTestRepack "tar.gz" "gz" "gzip compressed data" ; }
 testRepackXZ_XZ() { helperTestRepack "tar.xz" "xz" "XZ compressed data" ; }
 testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
+testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
+testRepackLZ_XZ() { helperTestRepack "tar.lzma" "xz" "XZ compressed data" ; }
 
 # The following function tests the --repack feature, with a zip file
 testRepackZip_XZ() {
