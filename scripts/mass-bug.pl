@@ -403,19 +403,19 @@ my $nowrap = "";
 
 if (
     !GetOptions(
-        "display" => sub { $mode = "display" },
-        "send"    => sub { $mode = "send" },
-        "subject=s"  => \$subject,
-        "severity=s" => \$severity,
-        "tags=s"     => \$tags,
-        "user=s"     => \$user,
-        "usertags=s" => \$usertags,
-        "control=s"  => \@control,
-        "source"     => sub { $type = "Source"; },
-        "sendmail=s" => \$opt_sendmail,
-        "help"       => sub { usage(); exit 0; },
-        "version"    => sub { version(); exit 0; },
-        "no-wrap"    => sub { $nowrap = 1; },
+        "display"        => sub { $mode = "display" },
+        "send"           => sub { $mode = "send" },
+        "subject=s"      => \$subject,
+        "severity=s"     => \$severity,
+        "tags=s"         => \$tags,
+        "user=s"         => \$user,
+        "usertags=s"     => \$usertags,
+        "control=s"      => \@control,
+        "source"         => sub { $type = "Source"; },
+        "sendmail=s"     => \$opt_sendmail,
+        "help"           => sub { usage();   exit 0; },
+        "version"        => sub { version(); exit 0; },
+        "no-wrap"        => sub { $nowrap = 1; },
         'noconf|no-conf' =>
           sub { die '--noconf must come first on the command line' },
     )

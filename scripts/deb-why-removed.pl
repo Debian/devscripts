@@ -130,7 +130,7 @@ my $opts;
 GetOptions(
     'url|u=s'    => \$opts->{'url'},
     'no-refresh' => \$opts->{'no-refresh'},
-    'help|h|?'   => sub { usage(); exit 0 },
+    'help|h|?'   => sub { usage();   exit 0 },
     'version'    => sub { version(); exit 0 },
   )
   or die "\nUsage: $PROGNAME [<option>...] <package>...\n"

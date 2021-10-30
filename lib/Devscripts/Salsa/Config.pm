@@ -104,7 +104,7 @@ use constant keys => [
         'skip-file=s',
         'SALSA_SKIP_FILE',
         sub {
-            return 1 unless $_[1];
+            return 1                           unless $_[1];
             return (0, "Unable to read $_[1]") unless (-r $_[1]);
             open my $fh, $_[1];
             push @{ $_[0]->skip }, (map { chomp $_; ($_ ? $_ : ()) } <$fh>);
@@ -114,7 +114,7 @@ use constant keys => [
     ['no-skip', undef, sub { $_[0]->skip([]); $_[0]->skip_file(undef); }],
     ['ci-config-path=s', 'SALSA_CI_CONFIG_PATH', qr/\./],
     ['desc!',            'SALSA_DESC',           'bool'],
-    ['desc-pattern=s', 'SALSA_DESC_PATTERN', qr/\w/, 'Debian package %p'],
+    ['desc-pattern=s',   'SALSA_DESC_PATTERN',   qr/\w/, 'Debian package %p'],
     [
         'enable-issues!',
         undef,
@@ -191,8 +191,8 @@ use constant keys => [
           . 'enable_ssl_verification'
     ],
 
-    ['no-fail',      'SALSA_NO_FAIL',     'bool'],
-    ['rename-head!', 'SALSA_RENAME_HEAD', 'bool'],
+    ['no-fail',         'SALSA_NO_FAIL',       'bool'],
+    ['rename-head!',    'SALSA_RENAME_HEAD',   'bool'],
     ['source-branch=s', 'SALSA_SOURCE_BRANCH', undef, 'master'],
     ['dest-branch=s',   'SALSA_DEST_BRANCH',   undef, 'debian/master'],
     [

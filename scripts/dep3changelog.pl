@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
 # USA
 
-use 5.008;    # We're using PerlIO layers
+use 5.008;           # We're using PerlIO layers
 use strict;
 use warnings;
 use open ':utf8';    # patch headers are required to be UTF-8
@@ -164,8 +164,8 @@ for my $patch (@patches) {
     }
     if ($debbug || $lpbug) {
         $changelog .= '  Closes';
-        $changelog .= ": #$debbug" if ($debbug);
-        $changelog .= "," if ($debbug && $lpbug);
+        $changelog .= ": #$debbug"   if ($debbug);
+        $changelog .= ","            if ($debbug && $lpbug);
         $changelog .= " LP: #$lpbug" if ($lpbug);
         $changelog .= '.';
     }

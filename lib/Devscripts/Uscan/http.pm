@@ -378,7 +378,7 @@ sub html_search {
     if (
         mangle(
             $self->watchfile, \$self->line,
-            'pagemangle:\n', [@{ $self->pagemangle }],
+            'pagemangle:\n',  [@{ $self->pagemangle }],
             \$content
         )
     ) {

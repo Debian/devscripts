@@ -309,7 +309,7 @@ sub init_agent {
 }
 
 sub recurs_mkdir {
-    my ($dir) = @_;
+    my ($dir)     = @_;
     my @temp      = split /\//, $dir;
     my $createdir = "";
     foreach my $piece (@temp) {
@@ -1109,12 +1109,12 @@ sub main() {
     my $print_mode   = 0;   # print only mode
     my $details_mode = 0;   # details only mode
     my $use_package  = '';  # use this package instead of guessing from the URL
-    my $repo_type = "git";  # default repo typo, overridden by '-t'
-    my $repo_url  = "";     # repository URL
-    my $anon_repo_url;      # repository URL (before auth mangling)
-    my $user       = "";    # login name (authenticated mode only)
-    my $browse_url = "";    # online browsable repository URL
-    my $git_track  = "";    # list of remote GIT branches to --track
+    my $repo_type    = "git";    # default repo typo, overridden by '-t'
+    my $repo_url     = "";       # repository URL
+    my $anon_repo_url;           # repository URL (before auth mangling)
+    my $user       = "";         # login name (authenticated mode only)
+    my $browse_url = "";         # online browsable repository URL
+    my $git_track  = "";         # list of remote GIT branches to --track
     my $unpack_source
       = $config_vars{DEBCHECKOUT_SOURCE};    # retrieve and unpack orig.tar.gz
     GetOptions(
@@ -1161,10 +1161,10 @@ sub main() {
             $pkg = $use_package;
             # else guess package from url
         } elsif ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!)
-        {                          # svn with {trunk,tags,branches}/$pkg
+        {    # svn with {trunk,tags,branches}/$pkg
             $pkg = $1;
         } elsif ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!)
-        {                          # svn with $pkg/{trunk,tags,branches}
+        {    # svn with $pkg/{trunk,tags,branches}
             $pkg = $1;
         } elsif ($repo_url =~ /([a-z0-9.+-]+)\.git(\s+-b\s+.*)?$/) {    # git
             $pkg = $1;

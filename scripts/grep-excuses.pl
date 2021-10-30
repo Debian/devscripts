@@ -192,8 +192,8 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
     if ($ARGV[0] eq '--no-autoremovals') { $do_autoremovals = 0; shift; next; }
     if ($ARGV[0] eq '--autopkgtests')    { $do_autopkgtests = 1; shift; next; }
     if ($ARGV[0] eq '--no-autopkgtests') { $do_autopkgtests = 0; shift; next; }
-    if ($ARGV[0] eq '--help')    { usage();        exit 0; }
-    if ($ARGV[0] eq '--version') { print $version; exit 0; }
+    if ($ARGV[0] eq '--help')            { usage();        exit 0; }
+    if ($ARGV[0] eq '--version')         { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
         die
 "$progname: $ARGV[0] is only acceptable as the first command-line option!\n";

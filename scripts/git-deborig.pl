@@ -195,8 +195,8 @@ die "$orig already exists: not overwriting without --force\n"
   if (-e $orig && !$overwrite && !$just_print);
 
 if ($user_ref) {    # User told us the tag/branch to archive
-        # We leave it to git-archive(1) to determine whether or not this
-        # ref exists; this keeps us forward-compatible
+     # We leave it to git-archive(1) to determine whether or not this
+     # ref exists; this keeps us forward-compatible
     archive_ref_or_just_print($user_ref);
 } else {    # User didn't specify a tag/branch to archive
             # Get available git tags
@@ -230,9 +230,9 @@ sub archive_ref_or_just_print {
     my $ref = shift;
 
     my $cmd = [
-        'git', '-c', "tar.tar.${compression}.command=${compressor}",
+        'git',     '-c', "tar.tar.${compression}.command=${compressor}",
         'archive', "--prefix=${source}-${upstream_version}/",
-        '-o', $orig, $ref
+        '-o',      $orig, $ref
     ];
     if ($just_print) {
         print "$ref\n";

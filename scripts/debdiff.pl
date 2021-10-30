@@ -194,12 +194,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $debsdir         = $config_vars{'DEBRELEASE_DEBS_DIR'};
-    $ignore_dirs     = $config_vars{'DEBDIFF_DIRS'} eq 'yes' ? 0 : 1;
+    $ignore_dirs     = $config_vars{'DEBDIFF_DIRS'} eq 'yes'   ? 0 : 1;
     $compare_control = $config_vars{'DEBDIFF_CONTROL'} eq 'no' ? 0 : 1;
     $controlfiles    = $config_vars{'DEBDIFF_CONTROLFILES'};
-    $show_moved      = $config_vars{'DEBDIFF_SHOW_MOVED'} eq 'yes' ? 1 : 0;
-    $wdiff_opt = $config_vars{'DEBDIFF_WDIFF_OPT'} =~ /^-([plt])$/ ? $1 : '';
-    $show_diffstat = $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} eq 'yes' ? 1 : 0;
+    $show_moved = $config_vars{'DEBDIFF_SHOW_MOVED'} eq 'yes'       ? 1  : 0;
+    $wdiff_opt  = $config_vars{'DEBDIFF_WDIFF_OPT'} =~ /^-([plt])$/ ? $1 : '';
+    $show_diffstat = $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} eq 'yes' ? 1  : 0;
     $wdiff_source_control
       = $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'} eq 'yes' ? 1 : 0;
     $auto_ver_sort = $config_vars{'DEBDIFF_AUTO_VER_SORT'} eq 'yes' ? 1 : 0;

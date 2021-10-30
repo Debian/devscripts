@@ -193,7 +193,7 @@ use constant keys => [
         'symlink'
     ],
     # "signature" and its aliases
-    ['signature!',                   undef, 'bool', 1],
+    ['signature!', undef, 'bool', 1],
     ['skipsignature|skip-signature', undef, sub { $_[0]->signature(-1) }],
     # "verbose" and its aliases
     ['debug',       undef, sub { $verbose = 2 }],

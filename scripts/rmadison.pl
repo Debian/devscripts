@@ -218,7 +218,7 @@ my $status = 0;
 s/:.*// for (@ARGV);
 
 foreach my $url (@url) {
-    print "$url:\n" if @url > 1;
+    print "$url:\n"       if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
     my @cmd;
     my @ssl_errors;
@@ -229,8 +229,8 @@ foreach my $url (@url) {
         push @ssl_errors, (60, 77);
     } else {
         @cmd = qw/wget -q -O -/;
-        push @cmd, "--ca-certificate=$ssl_ca_file" if $ssl_ca_file;
-        push @cmd, "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
+        push @cmd,        "--ca-certificate=$ssl_ca_file" if $ssl_ca_file;
+        push @cmd,        "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
         push @ssl_errors, 5;
     }
     system @cmd,

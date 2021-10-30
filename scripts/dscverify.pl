@@ -418,8 +418,8 @@ sub main {
     }
 
     GetOptions(
-        'help'    => sub { usage;          exit 0; },
-        'version' => sub { print $version; exit 0; },
+        'help'                => sub { usage;          exit 0; },
+        'version'             => sub { print $version; exit 0; },
         'sigcheck|sig-check!' => \$verify_sigs,
         'u'                   => sub { $verify_sigs = 0 },
         'noconf|no-conf'      => sub {
@@ -429,8 +429,8 @@ sub main {
         'default-keyrings!' => \$use_default_keyrings,
         'keyring=s@'        => sub {
             my $ring = $_[1];
-            if   (-r $ring) { push @rings, $ring; }
-            else            { die "Keyring $ring unreadable\n" }
+            if (-r $ring) { push @rings, $ring; }
+            else          { die "Keyring $ring unreadable\n" }
         },
         'verbose' => \$verbose,
       )

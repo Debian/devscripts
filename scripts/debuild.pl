@@ -404,7 +404,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # at this stage are: -r and those which affect the checkbuilddep setting
 
 foreach (@dpkg_extra_opts) {
-    /^-r(.*)$/ and $root_command = $1, next;
+    /^-r(.*)$/ and $root_command  = $1, next;
     $_ eq '-d' and $checkbuilddep = 0, next;
     $_ eq '-D' and $checkbuilddep = 1, next;
 }
@@ -801,16 +801,16 @@ foreach (@dpkg_extra_opts) {
     $_ eq '--no-sign'            and $nosign        = 1, next;
     $_ eq '--force-sign'         and $forcesign     = 1, next;
     $_ eq '-ap'                  and $usepause      = 1, next;
-    /^-a(.*)/ and $targetarch = $1, push(@dpkg_opts, $_), next;
+    /^-a(.*)/   and $targetarch = $1, push(@dpkg_opts, $_), next;
     $_ eq '-tc' and push(@dpkg_opts, $_), next;
-    /^-t(.*)/ and $targetgnusystem = $1, push(@dpkg_opts, $_), next;    # Ditto
-    $_ eq '-b' and $binaryonly = $_, $binarytarget = 'binary',
+    /^-t(.*)/   and $targetgnusystem = $1, push(@dpkg_opts, $_), next;  # Ditto
+    $_ eq '-b'  and $binaryonly      = $_, $binarytarget = 'binary',
       push(@dpkg_opts, $_), next;
     $_ eq '-B' and $binaryonly = $_, $binarytarget = 'binary-arch',
       push(@dpkg_opts, $_), next;
     $_ eq '-A' and $binaryonly = $_, $binarytarget = 'binary-indep',
       push(@dpkg_opts, $_), next;
-    $_ eq '-S' and $sourceonly = $_, push(@dpkg_opts, $_), next;
+    $_ eq '-S' and $sourceonly   = $_, push(@dpkg_opts, $_), next;
     $_ eq '-F' and $binarytarget = 'binary',       push(@dpkg_opts, $_), next;
     $_ eq '-G' and $binarytarget = 'binary-arch',  push(@dpkg_opts, $_), next;
     $_ eq '-g' and $binarytarget = 'binary-indep', push(@dpkg_opts, $_), next;
@@ -844,7 +844,7 @@ foreach (@dpkg_extra_opts) {
 
 while ($_ = shift) {
     $_ eq '-h' and usage(), exit 0;
-    /^-r(.*)/ and $root_command = $1, next;
+    /^-r(.*)/  and $root_command = $1, next;
     /^-p/ and push(@debsign_opts, $_), next;    # Key selection options
     /^-k/ and push(@debsign_opts, $_), next;    # Ditto
     $_ eq '-us'                  and $signsource    = 0, next;
@@ -856,16 +856,16 @@ while ($_ = shift) {
     $_ eq '--no-sign'            and $nosign        = 1, next;
     $_ eq '--force-sign'         and $forcesign     = 1, next;
     $_ eq '-ap'                  and $usepause      = 1, next;
-    /^-a(.*)/ and $targetarch = $1, push(@dpkg_opts, $_), next;
+    /^-a(.*)/   and $targetarch = $1, push(@dpkg_opts, $_), next;
     $_ eq '-tc' and push(@dpkg_opts, $_), next;
-    /^-t(.*)/  and $targetgnusystem = $1, next;
-    $_ eq '-b' and $binaryonly      = $_, $binarytarget = 'binary',
+    /^-t(.*)/   and $targetgnusystem = $1, next;
+    $_ eq '-b'  and $binaryonly      = $_, $binarytarget = 'binary',
       push(@dpkg_opts, $_), next;
     $_ eq '-B' and $binaryonly = $_, $binarytarget = 'binary-arch',
       push(@dpkg_opts, $_), next;
     $_ eq '-A' and $binaryonly = $_, $binarytarget = 'binary-indep',
       push(@dpkg_opts, $_), next;
-    $_ eq '-S' and $sourceonly = $_, push(@dpkg_opts, $_), next;
+    $_ eq '-S' and $sourceonly   = $_, push(@dpkg_opts, $_), next;
     $_ eq '-F' and $binarytarget = 'binary',       push(@dpkg_opts, $_), next;
     $_ eq '-G' and $binarytarget = 'binary-arch',  push(@dpkg_opts, $_), next;
     $_ eq '-g' and $binarytarget = 'binary-indep', push(@dpkg_opts, $_), next;

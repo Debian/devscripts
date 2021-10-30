@@ -182,8 +182,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Command line options next
 my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
-my ($opt_level, $opt_regex, $opt_noconf);
-my ($opt_tool, $opt_with_depends);
+my ($opt_level,        $opt_regex, $opt_noconf);
+my ($opt_tool,         $opt_with_depends);
 my ($opt_list_changes, $opt_list_debs);
 GetOptions(
     "help"                  => \$opt_help,

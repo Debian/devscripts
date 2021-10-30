@@ -29,7 +29,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use 5.008;    # We're using PerlIO layers
+use 5.008;                # We're using PerlIO layers
 use strict;
 use warnings;
 use open ':utf8';         # changelogs are written with UTF-8 encoding

@@ -230,7 +230,7 @@ if ($cdata->get_option('is_pgp_signed')) {
 
 my @architectures = split /\s+/, $cdata->{"Architecture"};
 my $build_source  = (scalar(grep /^source$/, @architectures)) == 1;
-my $build_archall = (scalar(grep /^all$/, @architectures)) == 1;
+my $build_archall = (scalar(grep /^all$/,    @architectures)) == 1;
 @architectures = grep { !/^source$/ && !/^all$/ } @architectures;
 if (scalar @architectures > 1) {
     die "more than one architecture in Architecture field\n";

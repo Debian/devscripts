@@ -240,7 +240,7 @@ sub download_origtar () {
                 print "Using $f\n";
                 my $basename = $f;
                 $basename =~ s!.*/!!;
-                link $f,         "../$basename"
+                link $f, "../$basename"
                   or symlink $f, "../$basename"
                   or die "symlink: $!";
                 push @res, "../$basename";
@@ -253,7 +253,7 @@ sub download_origtar () {
 
     my @files
       = grep { /^\Q${package}_$fileversion.orig\E(?:-[\w\-]+)?\.tar\./ }
-      map { chomp; $_; }    # remove newlines
+      map    { chomp; $_; }    # remove newlines
       `pristine-tar list 2>&1`;
     if (@files) {
         system "pristine-tar checkout ../$_" for @files;

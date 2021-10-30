@@ -641,7 +641,7 @@ sub init_hashes {
         qr'\[\s+[^\]]+\s+==\s'                   => q<should be 'b = a'>,
         qr'\s\|\&'                               => q<pipelining is not POSIX>,
         qr'[^\\\$]\{([^\s\\\}]*?,)+[^\\\}\s]*\}' => q<brace expansion>,
-        qr'\{\d+\.\.\d+(?:\.\.\d+)?\}' =>
+        qr'\{\d+\.\.\d+(?:\.\.\d+)?\}'           =>
           q<brace expansion, {a..b[..c]}should be $(seq a [c] b)>,
         qr'(?i)\{[a-z]\.\.[a-z](?:\.\.\d+)?\}' => q<brace expansion>,
         qr'(?:^|\s+)\w+\[\d+\]='               => q<bash arrays, H[0]>,
@@ -717,7 +717,7 @@ qr'(?:^|\s)(?<func>function\s)?\s*(?:[^<>\(\)\[\]\{\};|\s]*[^<>\(\)\[\]\{\};|\s\
         $LEADIN
           . qr'(?:exit|return)\s+--' =>
           q<'exit --' should be 'exit' (idem for return)>,
-        $LEADIN . qr'hash(\s|\Z)' => q<hash>,
+        $LEADIN . qr'hash(\s|\Z)'                    => q<hash>,
         qr'(?:[:=\s])~(?:[+-]|[+-]?\d+)(?:[/\s]|\Z)' =>
           q<non-standard tilde expansion>,
     );
@@ -726,13 +726,13 @@ qr'(?:^|\s)(?<func>function\s)?\s*(?:[^<>\(\)\[\]\{\};|\s]*[^<>\(\)\[\]\{\};|\s\
         qr'\$\[[^][]+\]' => q<'$[' should be '$(('>,
         qr'\$\{(?:\w+|@|\*)\:(?:\d+|\$\{?\w+\}?)+(?::(?:\d+|\$\{?\w+\}?)+)?\}'
           => q<${foo:3[:1]}>,
-        qr'\$\{!\w+[\@*]\}' => q<${!prefix[*|@]>,
-        qr'\$\{!\w+\}'      => q<${!name}>,
+        qr'\$\{!\w+[\@*]\}'                  => q<${!prefix[*|@]>,
+        qr'\$\{!\w+\}'                       => q<${!name}>,
         qr'\$\{(?:\w+|@|\*)([,^]{1,2}.*?)\}' =>
           q<${parm,[,][pat]} or ${parm^[^][pat]}>,
         qr'\$\{[@*]([#%]{1,2}.*?)\}' => q<${[@|*]#[#]pat} or ${[@|*]%[%]pat}>,
         qr'\$\{#[@*]\}'              => q<${#@} or ${#*}>,
-        qr'\$\{(?:\w+|@|\*)(/.+?){1,2}\}' => q<${parm/?/pat[/str]}>,
+        qr'\$\{(?:\w+|@|\*)(/.+?){1,2}\}'      => q<${parm/?/pat[/str]}>,
         qr'\$\{\#?\w+\[.+\](?:[/,:#%^].+?)?\}' =>
           q<bash arrays, ${name[0|*|@]}>,
         qr'\$\{?RANDOM\}?\b'          => q<$RANDOM>,

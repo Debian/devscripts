@@ -175,13 +175,13 @@ $opts{"allpkgs"} = 0;
 
 Getopt::Long::Configure('bundling', 'require_order');
 GetOptions(
-    "h|help"    => sub { usage();   exit; },
-    "v|version" => sub { version(); exit; },
-    "a|all"             => sub { $opts{"allpkgs"} = 1; },
-    "b|build-depends"   => sub { $opts{"pkgs"}    = 'build'; },
-    "d|ignore-dev-deps" => sub { $opts{"pkgs"}    = 'dev'; },
-    "m|min-deps"        => sub { $opts{"pkgs"}    = 'min'; },
-    "C|C-locale"        => \$opts{"C"},
+    "h|help"                     => sub { usage();   exit; },
+    "v|version"                  => sub { version(); exit; },
+    "a|all"                      => sub { $opts{"allpkgs"} = 1; },
+    "b|build-depends"            => sub { $opts{"pkgs"}    = 'build'; },
+    "d|ignore-dev-deps"          => sub { $opts{"pkgs"}    = 'dev'; },
+    "m|min-deps"                 => sub { $opts{"pkgs"}    = 'min'; },
+    "C|C-locale"                 => \$opts{"C"},
     "no-C-locale|noC-locale"     => sub { $opts{"C"} = 0; },
     "l|list-files"               => \$opts{"l"},
     "no-list-files|nolist-files" => sub { $opts{"l"} = 0; },
@@ -211,8 +211,8 @@ if ($opts{"pkgs"} eq 'all') {
 
 @ARGV > 0
   or $opts{"strace-input"}
-  or
-  die "You need to specify a command!  Run $progname --help for more info\n";
+  or die
+  "You need to specify a command!  Run $progname --help for more info\n";
 
 # Run the command and trace it to see what's going on
 my @usedfiles = getusedfiles(@ARGV);
@@ -378,7 +378,7 @@ sub getusedfiles (@) {
         $file =~ s%^(\s)%./$1%;
         my @strace_cmd = (
             'strace', '-e', 'trace=open,openat,execve', '-f',
-            '-q', '-o', $file, @_
+            '-q',     '-o', $file,                      @_
         );
         $ENV{'LC_ALL'} = "C" if $opts{"C"};
         system(@strace_cmd);

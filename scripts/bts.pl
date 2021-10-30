@@ -580,11 +580,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
-    $offlinemode     = $config_vars{'BTS_OFFLINE'} eq 'yes'          ? 1 : 0;
-    $caching         = $config_vars{'BTS_CACHE'} eq 'no'             ? 0 : 1;
+    $offlinemode     = $config_vars{'BTS_OFFLINE'} eq 'yes' ? 1 : 0;
+    $caching         = $config_vars{'BTS_CACHE'} eq 'no'    ? 0 : 1;
     $cachemode       = $config_vars{'BTS_CACHE_MODE'};
-    $refreshmode     = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes'    ? 1 : 0;
-    $updatemode      = $config_vars{'BTS_ONLY_NEW'} eq 'yes'         ? 1 : 0;
+    $refreshmode     = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
+    $updatemode      = $config_vars{'BTS_ONLY_NEW'} eq 'yes'      ? 1 : 0;
     $mailreader      = $config_vars{'BTS_MAIL_READER'};
     $sendmailcmd     = $config_vars{'BTS_SENDMAIL_COMMAND'};
     $smtphost        = $config_vars{'BTS_SMTP_HOST'};
@@ -1295,7 +1295,7 @@ Reopen a I<bug>, with optional I<submitter>.
 =cut
 
 sub bts_reopen {
-    my $bug = checkbug(shift) or die "bts reopen: reopen what bug?\n";
+    my $bug       = checkbug(shift) or die "bts reopen: reopen what bug?\n";
     my $submitter = shift || '';    # optional
     opts_done(@_);
     mailbts("reopening $bug", "reopen $bug $submitter");
@@ -1455,7 +1455,7 @@ affecting the I<bug>'s open/closed status.
 =cut
 
 sub bts_fixed {
-    my $bug = checkbug(shift) or die "bts fixed: what bug?\n";
+    my $bug     = checkbug(shift) or die "bts fixed: what bug?\n";
     my $version = shift or die "bts fixed: \#$bug fixed in which version?\n";
     opts_done(@_);
     mailbts("fixed $bug in $version", "fixed $bug $version");
@@ -2267,7 +2267,7 @@ sub bts_cache {
         }
     }
     # This may be a no-op, we don't mind
-    ($quiet, $sub_quiet) = ($sub_quiet, $quiet);
+    ($quiet,           $sub_quiet) = ($sub_quiet, $quiet);
     ($includeresolved, $sub_includeresolved)
       = ($sub_includeresolved, $includeresolved);
 
@@ -2593,7 +2593,7 @@ sub checkemail {
 # Validate a bug number. Strips out extraneous leading junk, allowing
 # for things like "#74041" and "Bug#94921"
 sub checkbug {
-    my $bug = $_[0] or return "";
+    my $bug   = $_[0] or return "";
     my $quiet = $_[1] || 0;    # used when we don't want warnings from checkbug
 
     if ($bug eq 'it') {
@@ -3224,7 +3224,7 @@ sub download {
               = download_attachments($thing, $livepage, $timestamp);
         }
 
-        my $data = $livepage;    # work on a copy, not the original
+        my $data      = $livepage;    # work on a copy, not the original
         my $cachefile = cachefile($thing, $thgopts);
         open(OUT_CACHE, ">$cachefile")
           or die "$progname: open $cachefile: $!\n";
@@ -3370,8 +3370,8 @@ m%<a(?: class=\".*?\")? href="(?:/cgi(?:-bin)?/)?((bugreport\.cgi[^\"]+)"(?: .*?
 # Download the mailbox for a given bug, return mbox ($fh, filename) on success,
 # die on failure
 sub download_mbox {
-    my $thing = shift;
-    my $temp  = shift;    # do we wish to store it in cache or in a temp file?
+    my $thing    = shift;
+    my $temp     = shift;  # do we wish to store it in cache or in a temp file?
     my $mboxfile = mboxfile($thing);
 
     die "$progname: trying to download mbox for illegal bug number $thing.\n"

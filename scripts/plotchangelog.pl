@@ -186,7 +186,7 @@ if (!@ARGV) {
 }
 
 my %data;
-my ($package, $version, $maintainer, $date, $urgency) = undef;
+my ($package,      $version, $maintainer, $date, $urgency) = undef;
 my ($data_tmpfile, $script_tmpfile);
 my ($data_fh,      $script_fh);
 
@@ -377,8 +377,8 @@ foreach $package (keys %data) {
 
 # Add a title.
 my $title .= "set title '";
-$title .=
-  $#ARGV > 1
+$title
+  .= $#ARGV > 1
   ? "Graphing Debian changelogs"
   : "Graphing Debian changelog";
 $title .= "'\n";
