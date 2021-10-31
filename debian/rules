@@ -10,7 +10,7 @@ endif
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	dh $@ --with python3
+	dh $@
 
 override_dh_gencontrol:
 	dh_gencontrol -- $(SUBSTVARS) \
