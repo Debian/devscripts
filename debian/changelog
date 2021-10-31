@@ -50,6 +50,11 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       Current features include scheduling a package run and retrieving a diff
       of a specific run.
 
+  [ Kylie McClain ]
+  * checkbashisms:
+    + Add a new option -l/--lint to make checkbashisms format its output in a
+      machine-parsable way normally used by editors.  MR: !228
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium

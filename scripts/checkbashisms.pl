@@ -30,7 +30,7 @@ sub init_hashes;
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
-Usage: $progname [-n] [-f] [-x] [-e] script ...
+Usage: $progname [-n] [-f] [-x] [-e] [-l] script ...
    or: $progname --help
    or: $progname --version
 This script performs basic checks for the presence of bashisms
@@ -47,7 +47,7 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
-my ($opt_echo, $opt_force, $opt_extra, $opt_posix, $opt_early_fail);
+my ($opt_echo, $opt_force, $opt_extra, $opt_posix, $opt_early_fail, $opt_lint);
 my ($opt_help, $opt_version);
 my @filenames;
 
@@ -65,6 +65,7 @@ GetOptions(
     "help|h"       => \$opt_help,
     "version|v"    => \$opt_version,
     "newline|n"    => \$opt_echo,
+    "lint|l"       => \$opt_lint,
     "force|f"      => \$opt_force,
     "extra|x"      => \$opt_extra,
     "posix|p"      => \$opt_posix,
@@ -543,7 +544,12 @@ sub output_explanation {
         # bashisms present
         $issues = 1;
     } else {
-        warn "possible bashism in $filename line $. ($explanation):\n$line\n";
+        if ($opt_lint) {
+            print "$filename:$.:1: warning: possible bashism; $explanation\n";
+        } else {
+            warn
+              "possible bashism in $filename line $. ($explanation):\n$line\n";
+        }
         if ($opt_early_fail) {
             exit 1;
         }
