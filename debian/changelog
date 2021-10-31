@@ -31,6 +31,8 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + In the examples, also drop all needless usage of the "debian" version,
       which is the default: it is my opion that such examples only lead to
       blind cargo-culting.
+  * Declaratively build-depend on dh-sequence-python3 and drop --with python3.
+  * Bump debhelper compat level to 13.
 
   [ Yadd ]
   * Update fr translation.
