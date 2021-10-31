@@ -55,6 +55,12 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + Add a new option -l/--lint to make checkbashisms format its output in a
       machine-parsable way normally used by editors.  MR: !228
 
+  [ Ian Jackson ]
+  * grep-excuses:
+    + When run with --autopkgtests (which shows test failures of the given
+      packages when triggered by other packages) ignore the RUNNING and
+      OLD_PASS states.  MR: !234
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
