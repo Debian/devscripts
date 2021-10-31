@@ -21,6 +21,7 @@ _debdiff () {
         --diffstat --no-diffstat
         --auto-ver-sort --no-auto-ver-sort
         --unpack-tarballs --no-unpack-tarballs
+        --apply-patches --no-apply-patches
         --control --nocontrol --controlfiles
         --wdiff-source-control --no-wdiff-source-control --wp --wl --wt
         --show-moved --noshow-moved --renamed
