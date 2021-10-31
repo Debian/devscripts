@@ -952,11 +952,11 @@ Here is an example for the basic single upstream tarball.
 
   version=4
   http://example.com/~user/release/@PACKAGE@.html \
-      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
 
 Or without using the substitution strings (not recommended):
   http://example.com/~user/release/foo.html \
-      files/foo-([\d\.]+)\.tar\.gz debian
+      files/foo-([\d\.]+)\.tar\.gz
 
   version=4
 
@@ -970,7 +970,7 @@ signature file in the same file path.
 
   version=4
   opts="pgpsigurlmangle=s%$%.asc%" http://example.com/release/@PACKAGE@.html \
-      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
 file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
@@ -983,7 +983,7 @@ signature file on decompressed tarball in the same file path.
   version=4
   opts="pgpsigurlmangle=s%@ARCHIVE_EXT@$%.asc%,decompress" \
       http://example.com/release/@PACKAGE@.html \
-      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
 file B<foo-2.0.tar.asc>, this watch file downloads these files, verifies the
@@ -1051,7 +1051,7 @@ after their version.
   version=4
   opts="pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/" \
       http://tmrc.mit.edu/mirror/twisted/Twisted/@ANY_VERSION@/ \
-      Twisted-@ANY_VERSION@@ARCHIVE_EXT@ debian
+      Twisted-@ANY_VERSION@@ARCHIVE_EXT@
 
 Here, the web site should be accessible at the following URL:
 
@@ -1068,16 +1068,14 @@ watch file:
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
       http://www.cpan.org/modules/by-module/Text/ \
-      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
-      debian
+      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@
 
 can be rewritten in an alternative shorthand form only with a single string
 covering URL and filename:
 
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
-      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
-      debian
+      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@
 
 In version=4, initial white spaces are dropped.  Thus, this alternative
 shorthand form can also be written as:
@@ -1085,8 +1083,7 @@ shorthand form can also be written as:
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
       http://www.cpan.org/modules/by-module/Text/\
-      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
-      debian
+      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@
 
 Please note the subtle difference of a space before the tailing B<\>
 between the first and the last examples.
@@ -1097,8 +1094,7 @@ For a site which has funny version numbers, the parenthesized groups will be
 joined with B<.> (period) to make a sanitized version number.
 
   version=4
-  http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)@ARCHIVE_EXT@ \
-  debian
+  http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)@ARCHIVE_EXT@
 
 =head2 HTTP site (DFSG)
 
@@ -1107,7 +1103,7 @@ source package was repackaged to clean up non-DFSG files:
 
   version=4
   opts="dversionmangle=s/\+dfsg\d*$//,repacksuffix=+dfsg1" \
-  http://some.site.org/some/path/foobar-@ANY_VERSION@@ARCHIVE_EXT@ debian
+  http://some.site.org/some/path/foobar-@ANY_VERSION@@ARCHIVE_EXT@
 
 See L<COPYRIGHT FILE EXAMPLES>.
 
@@ -1122,25 +1118,21 @@ as:
 
   version=4
   opts=filenamemangle=s/.*=(.*)/$1/ \
-  http://foo.bar.org/dl/\?path=&dl=foo-@ANY_VERSION@@ARCHIVE_EXT@ \
-  debian
+  http://foo.bar.org/dl/\?path=&dl=foo-@ANY_VERSION@@ARCHIVE_EXT@
 
 F<< <A href="http://foo.bar.org/dl/?path=&dl_version=0.1.1"> >>
 could be handled as:
 
   version=4
   opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
-  http://foo.bar.org/dl/\?path=&dl_version=@ANY_VERSION@ \
-  debian
+  http://foo.bar.org/dl/\?path=&dl_version=@ANY_VERSION@
 
 If the href string has no version using <I>matching-pattern>, the version can
 be obtained from the full URL using B<filenamemangle>.
 
   version=4
   opts=filenamemangle=s&.*/dl/(.*)/foo\.tar\.gz&foo-$1\.tar\.gz& \
-  http://foo.bar.org/dl/@ANY_VERSION@/ foo.tar.gz \
-  debian
-
+  http://foo.bar.org/dl/@ANY_VERSION@/ foo.tar.gz
 
 =head2 HTTP site (downloadurlmangle)
 
@@ -1152,8 +1144,7 @@ some way into one which will work automatically, for example:
   version=4
   opts=downloadurlmangle=s/prdownload/download/ \
   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
-  http://prdownload.berlios.de/softdevice/vdr-softdevice-@ANY_VERSION@@ARCHIVE_EXT@ \
-  debian
+  http://prdownload.berlios.de/softdevice/vdr-softdevice-@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 HTTP site (oversionmangle, MUT)
 
@@ -1182,7 +1173,7 @@ standard page format with:
   version=4
   opts=pagemangle="s/<a\s+bogus=/<a href=/g" \
   http://example.com/release/foo.html \
-  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
 
 Please note the use of B<g> here to replace all occurrences.
 
@@ -1192,19 +1183,18 @@ converted to the standard page format with:
   version=4
   opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" \
   http://example.com/release/foo.html \
-  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 FTP site (basic):
 
   version=4
-  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-@ANY_VERSION@@ARCHIVE_EXT@ \
-  debian
+  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 FTP site (regex special characters):
 
   version=4
   ftp://ftp.worldforge.org/pub/worldforge/libs/\
-  Atlas-C++/transitional/Atlas-C\+\+-@ANY_VERSION@@ARCHIVE_EXT@ debian
+  Atlas-C++/transitional/Atlas-C\+\+-@ANY_VERSION@@ARCHIVE_EXT@
 
 Please note that this URL is connected to be I< ... >B<libs/Atlas-C++/>I< ... >
 . For B<++>, the first one in the directory path is verbatim while the one in
@@ -1221,7 +1211,7 @@ version numbers.)
   version=4
   opts="uversionmangle=s/^/0.0./" \
   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/\
-  development/Wine-@ANY_VERSION@@ARCHIVE_EXT@ debian
+  development/Wine-@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 sf.net
 
@@ -1230,12 +1220,12 @@ simpler form of URL. The format below will automatically be rewritten to use
 the redirector with the watch file:
 
   version=4
-  https://sf.net/<project>/ <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@ debian
+  https://sf.net/<project>/ <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@
 
 For B<audacity>, set the watch file as:
 
   version=4
-  https://sf.net/audacity/ audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@ debian
+  https://sf.net/audacity/ audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1245,7 +1235,7 @@ watch file for this site without using the redirector.
 	filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
                          audacity-$1.tar.xz%" \
 	http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/ \
-	(?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download debian
+	(?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download
 
 Here, B<%> is used as the separator instead of the standard B</>.
 
@@ -1259,7 +1249,7 @@ B<filenamemangle>:
   version=4
   opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%@PACKAGE@-$1.tar.gz%" \
       https://github.com/<user>/<project>/tags \
-      (?:.*?/)?@ANY_VERSION@@ARCHIVE_EXT@ debian
+      (?:.*?/)?@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 PyPI
 
@@ -1269,13 +1259,13 @@ the redirector with the watch file:
 
   version=4
   https://pypi.python.org/packages/source/<initial>/<project>/ \
-      <tar-name>-@@ANY_VERSION@@ARCHIVE_EXT@ debian
+      <tar-name>-@@ANY_VERSION@@ARCHIVE_EXT@
 
 For B<cfn-sphere>, set the watch file as:
 
   version=4
   https://pypi.python.org/packages/source/c/cfn-sphere/ \
-      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@ debian
+      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1284,7 +1274,7 @@ watch file for this site without using the redirector.
   opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
       https://pypi.python.org/packages/.*/.*/.*/\
-      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@#.* debian
+      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@#.*
 
 =head2 code.google.com
 
@@ -1371,7 +1361,7 @@ tags of the git repository to track and package the new upstream release.
   version=4
   opts="mode=git, gitmode=full, pgpmode=none" \
   http://git.ao2.it/tweeper.git \
-  refs/tags/v@ANY_VERSION@ debian
+  refs/tags/v@ANY_VERSION@
 
 Please note "B<git ls-remote>" is used to obtain references for tags.
 
@@ -1391,7 +1381,7 @@ upstream release with an automatically generated version string.
   version=4
   opts="mode=git, pgpmode=none" \
   https://github.com/Debian/dh-make-golang \
-  HEAD debian
+  HEAD
 
 Please note that a local shallow copy of the git repository is made with "B<git
 clone --bare --depth=1> ..." normally in the target directory.  B<uscan>
@@ -1412,7 +1402,7 @@ release.
   version=4
   opts="mode=svn, pgpmode=none" \
   svn://svn.code.sf.net/p/jmol/code/tags/ \
-  @ANY_VERSION@\/ debian
+  @ANY_VERSION@\/
 
 =head2 direct access to the Subversion repository (HEAD)
 
@@ -1424,7 +1414,7 @@ automatically generated version string.
   version=4
   opts="mode=svn, pgpmode=none" \
   svn://svn.code.sf.net/p/jmol/code/trunk/ \
-  HEAD debian
+  HEAD
 
 By default, B<uscan> generates the new upstream version by appending the
 revision number to "0.0~svn". This can later be changed using B<uversionmangle>.

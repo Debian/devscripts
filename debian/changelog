@@ -28,6 +28,9 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       opinion that nowadays very few people should actually be calling
       uupdate, as `gbp import-orig` or similar tools already cover that;
       mixing gbp and uupdate leads to what people would not normally expect.
+    + In the examples, also drop all needless usage of the "debian" version,
+      which is the default: it is my opion that such examples only lead to
+      blind cargo-culting.
 
   [ Yadd ]
   * Update fr translation.
