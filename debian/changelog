@@ -34,9 +34,11 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
 
   [ Yadd ]
   * Update fr translation.
-  * Reformat perl scripts with the new perltidy 20210717
+  * Reformat perl scripts with the new perltidy 20210717.
   * uscan:
-    + Add repack test for lzma
+    + Add repack tests for lzma.
+    + Die if filenamemangle failed.  MR: !238
+    + Die in case of filename conflict within the same uscan process.  MR: !238
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 

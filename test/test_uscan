@@ -494,7 +494,7 @@ testSimpleHeader() {
 version=4
 http://localhost:$PORT/$PKG-(\d).zip debian
 
-opts="searchmode=plain,component=baz" \
+opts="searchmode=plain,component=baz,filenamemangle=s/.*-(@ANY_VERSION@@ARCHIVE_EXT@)/baz-\$1/" \
 http://localhost:$PORT/src.json http://localhost:$PORT/foo-(\d).zip
 END
 

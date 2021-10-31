@@ -1212,6 +1212,8 @@ Download file and, if available and needed, signature files.
 
 =cut
 
+my %already_downloaded;
+
 sub download_file_and_sig {
     my ($self) = @_;
     uscan_debug "line: download_file_and_sig()";
@@ -1232,6 +1234,11 @@ sub download_file_and_sig {
     $self->signature_available(0);
     my $sigfile;
     my $sigfile_base = $self->newfile_base;
+    uscan_die
+"Already downloaded a file named $self->{newfile_base}: use filenamemangle to avoid this"
+      if ($already_downloaded{ $self->{newfile_base} });
+    $already_downloaded{ $self->{newfile_base} } = 1;
+
     if ($self->pgpmode ne 'previous') {
 
         # try download package
