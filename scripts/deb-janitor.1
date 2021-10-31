@@ -1,0 +1,75 @@
+.\" Copyright (c) 2020 Jelmer Vernooĳ <jelmer@debian.org>
+.\"
+.\" This program is free software; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License
+.\" as published by the Free Software Foundation; either version 3
+.\" of the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" See file /usr/share/common-licenses/GPL-3 for more details.
+.\"
+.TH "DEB\-JANITOR" 1 "Debian Utilities" "DEBIAN"
+
+.SH NAME
+deb-janitor \- interact with the Debian Janitor service
+
+.SH SYNOPSIS
+.B deb-janitor diff SOURCE SUITE
+.TP
+.B deb-janitor schedule SOURCE SUITE
+
+.SH DESCRIPTION
+.B deb-janitor
+is a command-line client for the Debian Janitor service, interacting
+with the API. It currently allows retrieving the diff for
+specific packages or scheduling new runs.
+.PP
+\fBSOURCE\fR is the name of a source package.
+.PP
+\fBSUITE\fR is the name of one of the suites supported by the janitor. Common values
+include \fIlintian-fixes\fR and \fImultiarch-fixes\fR. See the homepage for a
+full list.
+
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Output more information
+.TP
+\fB\-\-api-url\fR
+Override the API endpoint to communicate with, rather than using the
+main Debian Janitor instance. E.g. --api-url=https://janitor.kali.org/api/.
+
+.SH EXAMPLES
+.EX
+# Schedule a new run fixing lintian issues in the "dulwich" package:
+$ deb-janitor schedule dulwich lintian-fixes
+Scheduled. Estimated duration: 236.32s, queue position: 1 (wait time: 0.00)
+
+# Retrieve the diff for fontmake
+$ deb-janitor diff fontmake lintian-fixes
+=== added file 'debian/upstream/metadata'
+--- a/debian/upstream/metadata	1970-01-01 00:00:00 +0000
++++ b/debian/upstream/metadata	2020-11-28 11:58:34 +0000
+@@ -0,0 +1,5 @@
++---
++Bug-Database: https://github.com/googlei18n/fontmake/issues
++Bug-Submit: https://github.com/googlei18n/fontmake/issues/new
++Repository: https://github.com/googlei18n/fontmake.git
++Repository-Browse: https://github.com/googlei18n/fontmake
+.EE
+
+.SH AUTHORS
+\fBdeb-janitor\fR and this manual page were written by Jelmer Vernooĳ
+<jelmer@debian.org>
+.PP
+Both are released under the GNU General Public License, version 3 or later.
+
+.SH SEE ALSO
+.BR lintian-brush (1)

@@ -20,6 +20,7 @@ import unittest
 SCRIPTS = [
     "debbisect",
     "debdiff-apply",
+    "deb-janitor",
     "reproducible-check",
     "sadt",
     "suspicious-source",

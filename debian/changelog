@@ -44,6 +44,12 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
   * d/control:
     + Suggest elpa-devscripts instead of the now dummy devscripts-el.  MR: !236
 
+  [ Jelmer Vernooĳ ]
+  * New script!
+    + deb-janitor: a command-line client for the Debian janitor API.  MR: !211
+      Current features include scheduling a package run and retrieving a diff
+      of a specific run.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
