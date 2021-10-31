@@ -22,8 +22,12 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       - fix typo in documentation.  Closes: #996392
       - fix misleading delay header on non-dd use case.  Closes: #996565
   * uscan:
-    + In the example, use @ANY_VERSION@ and @ARCHIVE_EXT@ wherever possible.
+    + In the examples, use @ANY_VERSION@ and @ARCHIVE_EXT@ wherever possible.
       Thanks to Bastien Roucariès for the suggestion.
+    + In the examples, drop all usages of `uupdate` as "script": it is my
+      opinion that nowadays very few people should actually be calling
+      uupdate, as `gbp import-orig` or similar tools already cover that;
+      mixing gbp and uupdate leads to what people would not normally expect.
 
   [ Yadd ]
   * Update fr translation.
