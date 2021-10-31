@@ -757,11 +757,11 @@ For example, this B<http://>I<URL> may be specified as:
 
 =over
 
-=item * B<http://www.example.org/([\d\.]+)/>
+=item * B<http://www.example.org/@ANY_VERSION@/>
 
 =back
 
-Please note the trailing B</> in the above to make B<([\d\.]+)> as the
+Please note the trailing B</> in the above to make B<@ANY_VERSION@> as the
 directory.
 
 If the B<pagemangle> rule exists, the whole downloaded web page as a string is
@@ -951,14 +951,14 @@ accept such common sense abbreviations but don't push the limit.
 Here is an example for the basic single upstream tarball.
 
   version=4
+  http://example.com/~user/release/@PACKAGE@.html \
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
+
+Or without using the substitution strings (not recommended):
   http://example.com/~user/release/foo.html \
       files/foo-([\d\.]+)\.tar\.gz debian uupdate
 
-Or using the special strings:
-
   version=4
-  http://example.com/~user/release/@PACKAGE@.html \
-      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 For the upstream source package B<foo-2.0.tar.gz>, this watch file downloads
 and creates the Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
@@ -1027,13 +1027,13 @@ Here is an example for the basic multiple upstream tarballs.
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
       http://example.com/release/foo.html \
-      files/foo-([\d\.]+)\.tar\.gz debian
+      files/foo-@ANY_VERSION@@ARCHIVE_EXT@ debian
   opts="pgpsigurlmangle=s%$%.sig%, component=bar" \
       http://example.com/release/foo.html \
-      files/foobar-([\d\.]+)\.tar\.gz same
+      files/foobar-@ANY_VERSION@@ARCHIVE_EXT@ same
   opts="pgpsigurlmangle=s%$%.sig%, component=baz" \
       http://example.com/release/foo.html \
-      files/foobaz-([\d\.]+)\.tar\.gz same uupdate
+      files/foobaz-@ANY_VERSION@@ARCHIVE_EXT@ same uupdate
 
 For the main upstream source package B<foo-2.0.tar.gz> and the secondary
 upstream source packages B<foobar-2.0.tar.gz> and B<foobaz-2.0.tar.gz> which
@@ -1050,8 +1050,8 @@ after their version.
 
   version=4
   opts="pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/" \
-      http://tmrc.mit.edu/mirror/twisted/Twisted/([\d+\.]+)/ \
-      Twisted-([\d\.]+)\.tar\.xz debian uupdate
+      http://tmrc.mit.edu/mirror/twisted/Twisted/@ANY_VERSION@/ \
+      Twisted-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Here, the web site should be accessible at the following URL:
 
@@ -1068,7 +1068,7 @@ watch file:
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
       http://www.cpan.org/modules/by-module/Text/ \
-      Text-CSV_XS-(.+)\.tar\.gz \
+      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
       debian uupdate
 
 can be rewritten in an alternative shorthand form only with a single string
@@ -1076,7 +1076,7 @@ covering URL and filename:
 
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
-      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\.tar\.gz \
+      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
       debian uupdate
 
 In version=4, initial white spaces are dropped.  Thus, this alternative
@@ -1085,7 +1085,7 @@ shorthand form can also be written as:
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
       http://www.cpan.org/modules/by-module/Text/\
-      Text-CSV_XS-(.+)\.tar\.gz \
+      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@ \
       debian uupdate
 
 Please note the subtle difference of a space before the tailing B<\>
@@ -1097,7 +1097,7 @@ For a site which has funny version numbers, the parenthesized groups will be
 joined with B<.> (period) to make a sanitized version number.
 
   version=4
-  http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)\.tar\.gz \
+  http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)@ARCHIVE_EXT@ \
   debian uupdate
 
 =head2 HTTP site (DFSG)
@@ -1107,7 +1107,7 @@ source package was repackaged to clean up non-DFSG files:
 
   version=4
   opts="dversionmangle=s/\+dfsg\d*$//,repacksuffix=+dfsg1" \
-  http://some.site.org/some/path/foobar-(.+)\.tar\.gz debian uupdate
+  http://some.site.org/some/path/foobar-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 See L<COPYRIGHT FILE EXAMPLES>.
 
@@ -1122,7 +1122,7 @@ as:
 
   version=4
   opts=filenamemangle=s/.*=(.*)/$1/ \
-  http://foo.bar.org/dl/\?path=&dl=foo-(.+)\.tar\.gz \
+  http://foo.bar.org/dl/\?path=&dl=foo-@ANY_VERSION@@ARCHIVE_EXT@ \
   debian uupdate
 
 F<< <A href="http://foo.bar.org/dl/?path=&dl_version=0.1.1"> >>
@@ -1130,7 +1130,7 @@ could be handled as:
 
   version=4
   opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
-  http://foo.bar.org/dl/\?path=&dl_version=(.+) \
+  http://foo.bar.org/dl/\?path=&dl_version=@ANY_VERSION@ \
   debian uupdate
 
 If the href string has no version using <I>matching-pattern>, the version can
@@ -1138,7 +1138,7 @@ be obtained from the full URL using B<filenamemangle>.
 
   version=4
   opts=filenamemangle=s&.*/dl/(.*)/foo\.tar\.gz&foo-$1\.tar\.gz& \
-  http://foo.bar.org/dl/([\.\d]+)/ foo.tar.gz \
+  http://foo.bar.org/dl/@ANY_VERSION@/ foo.tar.gz \
   debian uupdate
 
 
@@ -1152,7 +1152,7 @@ some way into one which will work automatically, for example:
   version=4
   opts=downloadurlmangle=s/prdownload/download/ \
   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
-  http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz \
+  http://prdownload.berlios.de/softdevice/vdr-softdevice-@ANY_VERSION@@ARCHIVE_EXT@ \
   debian uupdate
 
 =head2 HTTP site (oversionmangle, MUT)
@@ -1164,10 +1164,10 @@ be added to the upstream version as:
   version=4
   opts=oversionmangle=s/(.*)/$1+dfsg1/ \
   http://example.com/~user/release/foo.html \
-  files/foo-([\d\.]*).tar.gz debian
+  files/foo-@ANY_VERSION@@ARCHIVE_EXT@ debian
   opts="component=bar" \
   http://example.com/~user/release/foo.html \
-  files/bar-([\d\.]*).tar.gz same uupdate
+  files/bar-@ANY_VERSION@@ARCHIVE_EXT@ same uupdate
 
 See L<COPYRIGHT FILE EXAMPLES>.
 
@@ -1197,14 +1197,14 @@ converted to the standard page format with:
 =head2 FTP site (basic):
 
   version=4
-  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.+)\.tar\.gz \
+  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-@ANY_VERSION@@ARCHIVE_EXT@ \
   debian uupdate
 
 =head2 FTP site (regex special characters):
 
   version=4
   ftp://ftp.worldforge.org/pub/worldforge/libs/\
-  Atlas-C++/transitional/Atlas-C\+\+-(.+)\.tar\.gz debian uupdate
+  Atlas-C++/transitional/Atlas-C\+\+-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Please note that this URL is connected to be I< ... >B<libs/Atlas-C++/>I< ... >
 . For B<++>, the first one in the directory path is verbatim while the one in
@@ -1221,7 +1221,7 @@ version numbers.)
   version=4
   opts="uversionmangle=s/^/0.0./" \
   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/\
-  development/Wine-(.+)\.tar\.gz debian uupdate
+  development/Wine-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 =head2 sf.net
 
@@ -1230,12 +1230,12 @@ simpler form of URL. The format below will automatically be rewritten to use
 the redirector with the watch file:
 
   version=4
-  https://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
+  https://sf.net/<project>/ <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 For B<audacity>, set the watch file as:
 
   version=4
-  https://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
+  https://sf.net/audacity/ audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1244,8 +1244,8 @@ watch file for this site without using the redirector.
   opts="uversionmangle=s/-pre/~pre/, \
 	filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
                          audacity-$1.tar.xz%" \
-	http://sourceforge.net/projects/audacity/files/audacity/(\d[\d\.]+)/ \
-	(?:.*)audacity-minsrc-([\d\.]+)\.tar\.xz/download debian uupdate
+	http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/ \
+	(?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download debian uupdate
 
 Here, B<%> is used as the separator instead of the standard B</>.
 
@@ -1259,7 +1259,7 @@ B<filenamemangle>:
   version=4
   opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%@PACKAGE@-$1.tar.gz%" \
       https://github.com/<user>/<project>/tags \
-      (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
+      (?:.*?/)?@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 =head2 PyPI
 
@@ -1269,13 +1269,13 @@ the redirector with the watch file:
 
   version=4
   https://pypi.python.org/packages/source/<initial>/<project>/ \
-      <tar-name>-(.+)\.tar\.gz debian uupdate
+      <tar-name>-@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 For B<cfn-sphere>, set the watch file as:
 
   version=4
   https://pypi.python.org/packages/source/c/cfn-sphere/ \
-      cfn-sphere-([\d\.]+).tar.gz debian uupdate
+      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1284,7 +1284,7 @@ watch file for this site without using the redirector.
   opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
       https://pypi.python.org/packages/.*/.*/.*/\
-      cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
+      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@#.* debian uupdate
 
 =head2 code.google.com
 
@@ -1298,7 +1298,7 @@ npmjs.org modules are published in JSON files. Here is a way to read them:
   version=4
   opts="searchmode=plain" \
    https://registry.npmjs.org/aes-js \
-   https://registry.npmjs.org/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
+   https://registry.npmjs.org/aes-js/-/aes-js-@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 grouped package
 
@@ -1308,16 +1308,16 @@ a way to group them:
   version=4
   opts="searchmode=plain,pgpmode=none" \
     https://registry.npmjs.org/mongodb \
-    https://registry.npmjs.org/mongodb/-/mongodb-(\d[\d\.]*)@ARCHIVE_EXT@ group
+    https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@ group
   opts="searchmode=plain,pgpmode=none,component=bson" \
     https://registry.npmjs.org/bson \
-    https://registry.npmjs.org/bson/-/bson-(\d[\d\.]*)@ARCHIVE_EXT@ group
+    https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@ group
   opts="searchmode=plain,pgpmode=none,component=mongodb-core" \
     https://registry.npmjs.org/mongodb-core \
-    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\d[\d\.]*)@ARCHIVE_EXT@ group
+    https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@ group
   opts="searchmode=plain,pgpmode=none,component=requireoptional" \
     https://registry.npmjs.org/require_optional \
-    https://registry.npmjs.org/require_optional/-/require_optional-(\d[\d\.]*)@ARCHIVE_EXT@ group
+    https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@ group
 
 Package version is then the concatenation of upstream versions separated by
 "+~".
@@ -1328,16 +1328,16 @@ In this case, the main source has to be declared as "group":
   version=4
   opts="searchmode=plain,pgpmode=none" \
     https://registry.npmjs.org/mongodb \
-    https://registry.npmjs.org/mongodb/-/mongodb-(\d[\d\.]*)@ARCHIVE_EXT@ group
+    https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@ group
   opts="searchmode=plain,pgpmode=none,component=bson" \
     https://registry.npmjs.org/bson \
-    https://registry.npmjs.org/bson/-/bson-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+    https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@ checksum
   opts="searchmode=plain,pgpmode=none,component=mongodb-core" \
     https://registry.npmjs.org/mongodb-core \
-    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+    https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@ checksum
   opts="searchmode=plain,pgpmode=none,component=requireoptional" \
     https://registry.npmjs.org/require_optional \
-    https://registry.npmjs.org/require_optional/-/require_optional-(\d[\d\.]*)@ARCHIVE_EXT@ checksum
+    https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@ checksum
 
 The "checksum" is made up of the separate sum of each number composing the
 component versions.  Following is an example with 3 components whose versions
@@ -1371,7 +1371,7 @@ tags of the git repository to track and package the new upstream release.
   version=4
   opts="mode=git, gitmode=full, pgpmode=none" \
   http://git.ao2.it/tweeper.git \
-  refs/tags/v([\d\.]+) debian uupdate
+  refs/tags/v@ANY_VERSION@ debian uupdate
 
 Please note "B<git ls-remote>" is used to obtain references for tags.
 
@@ -1412,7 +1412,7 @@ release.
   version=4
   opts="mode=svn, pgpmode=none" \
   svn://svn.code.sf.net/p/jmol/code/tags/ \
-  ([\d.]+)\/ debian uupdate
+  @ANY_VERSION@\/ debian uupdate
 
 =head2 direct access to the Subversion repository (HEAD)
 

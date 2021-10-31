@@ -21,6 +21,9 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + Apply patches from Raúl Benencia <rul@kalgan.cc> to:
       - fix typo in documentation.  Closes: #996392
       - fix misleading delay header on non-dd use case.  Closes: #996565
+  * uscan:
+    + In the example, use @ANY_VERSION@ and @ARCHIVE_EXT@ wherever possible.
+      Thanks to Bastien Roucariès for the suggestion.
 
   [ Yadd ]
   * Update fr translation.
