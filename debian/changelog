@@ -40,6 +40,10 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + Die if filenamemangle failed.  MR: !238
     + Die in case of filename conflict within the same uscan process.  MR: !238
 
+  [ Nicholas D Steeves ]
+  * d/control:
+    + Suggest elpa-devscripts instead of the now dummy devscripts-el.  MR: !236
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
