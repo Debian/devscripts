@@ -1232,10 +1232,10 @@ watch file for this site without using the redirector.
 
   version=4
   opts="uversionmangle=s/-pre/~pre/, \
-	filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
+    filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
                          audacity-$1.tar.xz%" \
-	http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/ \
-	(?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download
+    http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/ \
+    (?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download
 
 Here, B<%> is used as the separator instead of the standard B</>.
 
