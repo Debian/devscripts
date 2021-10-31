@@ -33,6 +33,21 @@ def _insert_after(paragraph, item_before, new_item, new_value):
     """Insert new_item into directly after item_before
 
        New items added to a dictionary are appended."""
+    try:
+        paragraph.order_after
+    except AttributeError:
+        pass
+    else:
+        # Use order_after from python-debian (>= 0.1.42~), which is O(1) performance
+        paragraph[new_item] = new_value
+        try:
+            paragraph.order_after(new_item, item_before)
+        except KeyError:
+            # Happens if `item_before` is not present.  We ignore this error because we
+            # are fine with `new_item` ending the "end" of the paragraph in that case.
+            pass
+        return
+    # Old method - O(n) performance
     item_found = False
     for item in paragraph:
         if item_found:

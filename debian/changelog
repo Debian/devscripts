@@ -61,6 +61,11 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       packages when triggered by other packages) ignore the RUNNING and
       OLD_PASS states.  MR: !234
 
+  [ Niels Thykier ]
+  * wrap-and-sort:
+    + Make use of the new `order_after` method from python-debian if
+      available, for improved performance.  MR: !240
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 02 Oct 2021 19:00:55 +0200
 
 devscripts (2.21.4) unstable; urgency=medium
