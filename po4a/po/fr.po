@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2021-10-31 16:09+0100\n"
-"PO-Revision-Date: 2021-10-15 14:44+0200\n"
+"PO-Revision-Date: 2021-11-01 11:03+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -3928,10 +3928,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/checkbashisms.1:39
-#, fuzzy, no-wrap
-#| msgid "B<--lintian>, B<-l>"
+#, no-wrap
 msgid "B<--lint>, B<-l>"
-msgstr "B<--lintian>, B<-l>"
+msgstr "B<--lint>, B<-l>"
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:43
@@ -3939,11 +3938,13 @@ msgid ""
 "Act like a linter, for integration into a text editor. Possible bashisms "
 "will be printed in stdout, like so:"
 msgstr ""
+"Agit comme un linter, pour intégration dans un éditeur de texte. Les "
+"\"bashismes\" possibles seront affichés dans stdout, comme ceci : "
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:45
 msgid "I<{filename}:{lineno}:1: warning: possible bashism; {explanation}>"
-msgstr ""
+msgstr "I<{filename}:{lineno}:1: warning: possible bashism; {explanation}>"
 
 #. type: TP
 #: ../scripts/checkbashisms.1:45
@@ -9496,10 +9497,9 @@ msgstr "Ne pas ouvrir les archives tar se trouvant dans les paquets source."
 
 #. type: TP
 #: ../scripts/debdiff.1:158
-#, fuzzy, no-wrap
-#| msgid "B<--path>"
+#, no-wrap
 msgid "B<--apply-patches>"
-msgstr "B<--path>"
+msgstr "B<--apply-patches>"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:162
@@ -9507,13 +9507,14 @@ msgid ""
 "If the old and/or new package is in 3.0 (quilt) format, apply the quilt "
 "patches (and remove B<.pc/>) before comparison."
 msgstr ""
+"Si l'ancien et/ou le nouveau paquet est au format 3.0 (quilt), applique les "
+"patchs quilt (et supprime B<.pc/>) avant la comparaison."
 
 #. type: TP
 #: ../scripts/debdiff.1:162
-#, fuzzy, no-wrap
-#| msgid "B<--cache>, B<--no-cache>"
+#, no-wrap
 msgid "B<--no-apply-patches, --noapply-patches>"
-msgstr "B<--cache>, B<--no-cache>"
+msgstr "B<--no-apply-patches, --noapply-patches>"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:166
@@ -9521,6 +9522,8 @@ msgid ""
 "If the old and/or new package is in 3.0 (quilt) format, do not apply the "
 "quilt patches before comparison. This is the default behaviour."
 msgstr ""
+"Si l'ancien et/ou le nouveau paquet est au format 3.0 (quilt), n'applique "
+"les patchs quilt avant la comparaison. C'est le comportement par défaut."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:176
@@ -9708,23 +9711,18 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debdiff.1:232
-#, fuzzy, no-wrap
-#| msgid "B<DEB_PATCHES>"
+#, no-wrap
 msgid "B<DEBDIFF_APPLY_PATCHES>"
-msgstr "B<DEB_PATCHES>"
+msgstr "B<DEBDIFF_APPLY_PATCHES>"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:237
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then it is the same as the B<--sign-tags> "
-#| "command line parameter being used. The default is I<no>."
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--apply-patches> "
 "command line parameter being used.  The default is I<no>."
 msgstr ""
-"Lui attribuer la valeur I<yes> équivaut à utiliser l'option B<--sign-tags>. "
-"La valeur par défaut est I<no>."
+"Lui attribuer la valeur I<yes> équivaut à utiliser le paramètre B<--apply-"
+"patches> de la ligne de commande. La valeur par défaut est I<no>."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:247
@@ -14168,15 +14166,14 @@ msgstr ""
 
 #. type: IP
 #: ../doc/devscripts.1:89
-#, fuzzy, no-wrap
-#| msgid "I<debi>(1)"
+#, no-wrap
 msgid "I<deb-janitor>(1)"
-msgstr "B<debi>(1)"
+msgstr "I<deb-janitor>(1)"
 
 #. type: Plain text
 #: ../doc/devscripts.1:91
 msgid "command-line client for interacting with the Debian Janitor."
-msgstr ""
+msgstr "Client lige de commande pour interagir avec Debian-Janitor."
 
 #. type: IP
 #: ../doc/devscripts.1:91
@@ -25099,23 +25096,17 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:760
-#, fuzzy
-#| msgid "* B<http://www.example.org/([\\d\\.]+)/>"
 msgid "* B<http://www.example.org/@ANY_VERSION@/>"
-msgstr "– B<http://www.example.org/([\\d\\.]+)/>"
+msgstr "* B<http://www.example.org/@ANY_VERSION@/>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:764
-#, fuzzy
-#| msgid ""
-#| "Please note the trailing B</> in the above to make B<([\\d\\.]+)> as the "
-#| "directory."
 msgid ""
 "Please note the trailing B</> in the above to make B<@ANY_VERSION@> as the "
 "directory."
 msgstr ""
-"Veuillez noter le B</> final dans l'adresse ci-dessus pour faire de B<([\\d"
-"\\.]+)> le répertoire."
+"Veuillez noter le B</> final dans l'adresse ci-dessus pour faire de "
+"B<@ANY_VERSION@> le répertoire."
 
 #. type: textblock
 #: ../scripts/uscan.pl:767
@@ -25567,12 +25558,7 @@ msgstr "Voici un exemple d'archive amont simple basique."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:953
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  http://example.com/~user/release/@PACKAGE@.html \\\n"
-#| "      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  http://example.com/~user/release/@PACKAGE@.html \\\n"
@@ -25581,36 +25567,32 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  http://example.com/~user/release/@PACKAGE@.html \\\n"
-"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
+"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:957
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  http://example.com/~user/release/foo.html \\\n"
-#| "      files/foo-([\\d\\.]+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "Or without using the substitution strings (not recommended):\n"
 "  http://example.com/~user/release/foo.html \\\n"
 "      files/foo-([\\d\\.]+)\\.tar\\.gz\n"
 "\n"
 msgstr ""
-"  version=4\n"
-"  http://example.com/~user/release/toto.html \\\n"
-"      files/toto-([\\d\\.]+)\\.tar\\.gz debian uupdate\n"
+"Ou sans utiliser les chaînes de substitution (non recommandé):\n"
+"  http://example.com/~user/release/foo.html \\\n"
+"      files/foo-([\\d\\.]+)\\.tar\\.gz\n"
 "\n"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:961
-#, fuzzy, no-wrap
-#| msgid "B<version=4>"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "\n"
-msgstr "B<version=4>"
+msgstr ""
+"  version=4\n"
+"\n"
 
 #. type: textblock
 #: ../scripts/uscan.pl:963
@@ -25637,12 +25619,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:971
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.asc%\" http://example.com/release/@PACKAGE@.html \\\n"
-#| "      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.asc%\" http://example.com/release/@PACKAGE@.html \\\n"
@@ -25651,7 +25628,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.asc%\" http://example.com/release/@PACKAGE@.html \\\n"
-"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
+"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -25679,13 +25656,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:983
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%@ARCHIVE_EXT@$%.asc%,decompress\" \\\n"
-#| "      http://example.com/release/@PACKAGE@.html \\\n"
-#| "      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%@ARCHIVE_EXT@$%.asc%,decompress\" \\\n"
@@ -25696,7 +25667,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%@ARCHIVE_EXT@$%.asc%,decompress\" \\\n"
 "      http://example.com/release/@PACKAGE@.html \\\n"
-"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
+"      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -25728,14 +25699,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:998
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpmode=next\" http://example.com/release/@PACKAGE@.html \\\n"
-#| "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
-#| "  opts=\"pgpmode=previous\" http://example.com/release/@PACKAGE@.html \\\n"
-#| "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ previous uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpmode=next\" http://example.com/release/@PACKAGE@.html \\\n"
@@ -25748,7 +25712,7 @@ msgstr ""
 "  opts=\"pgpmode=next\" http://example.com/release/@PACKAGE@.html \\\n"
 "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
 "  opts=\"pgpmode=previous\" http://example.com/release/@PACKAGE@.html \\\n"
-"      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ previous uupdate\n"
+"      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ previous\n"
 "\n"
 
 #. type: textblock
@@ -25789,15 +25753,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1016
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpmode=next\" http://example.com/DL/ \\\n"
-#| "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
-#| "  opts=\"pgpmode=previous\" http://example.com/DL/ \\\n"
-#| "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ \\\n"
-#| "      previous uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpmode=next\" http://example.com/DL/ \\\n"
@@ -25810,9 +25766,9 @@ msgstr ""
 "  version=4\n"
 "  opts=\"pgpmode=next\" http://example.com/DL/ \\\n"
 "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
-"  opts=\"pgpmode=prevous\" http://example.com/DL/ \\\n"
+"  opts=\"pgpmode=previous\" http://example.com/DL/ \\\n"
 "      files/(?:\\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ \\\n"
-"      previous uupdate\n"
+"      previous\n"
 "\n"
 
 #. type: =head2
@@ -25827,19 +25783,7 @@ msgstr "Voici un exemple pour les archives amont multiples de base."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1027
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-#| "      http://example.com/release/foo.html \\\n"
-#| "      files/foo-([\\d\\.]+)\\.tar\\.gz debian\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%, component=bar\" \\\n"
-#| "      http://example.com/release/foo.html \\\n"
-#| "      files/foobar-([\\d\\.]+)\\.tar\\.gz same\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%, component=baz\" \\\n"
-#| "      http://example.com/release/foo.html \\\n"
-#| "      files/foobaz-([\\d\\.]+)\\.tar\\.gz same uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
@@ -25855,14 +25799,14 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-"      http://example.com/release/toto.html \\\n"
-"      files/toto-([\\d\\.]+)\\.tar\\.gz debian\n"
+"      http://example.com/release/foo.html \\\n"
+"      files/foo-@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%, component=bar\" \\\n"
-"      http://example.com/release/toto.html \\\n"
-"      files/totobar-([\\d\\.]+)\\.tar\\.gz same\n"
+"      http://example.com/release/foo.html \\\n"
+"      files/foobar-@ANY_VERSION@@ARCHIVE_EXT@ same\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%, component=baz\" \\\n"
-"      http://example.com/release/toto.html \\\n"
-"      files/totobaz-([\\d\\.]+)\\.tar\\.gz same uupdate\n"
+"      http://example.com/release/foo.html \\\n"
+"      files/foobaz-@ANY_VERSION@@ARCHIVE_EXT@ same\n"
 "\n"
 
 #. type: textblock
@@ -25900,13 +25844,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1051
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/\" \\\n"
-#| "      http://tmrc.mit.edu/mirror/twisted/Twisted/([\\d+\\.]+)/ \\\n"
-#| "      Twisted-([\\d\\.]+)\\.tar\\.xz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/\" \\\n"
@@ -25916,8 +25854,8 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/\" \\\n"
-"      http://tmrc.mit.edu/mirror/twisted/Twisted/([\\d+\\.]+)/ \\\n"
-"      Twisted-([\\d\\.]+)\\.tar\\.xz debian uupdate\n"
+"      http://tmrc.mit.edu/mirror/twisted/Twisted/@ANY_VERSION@/ \\\n"
+"      Twisted-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -25960,14 +25898,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1068
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-#| "      http://www.cpan.org/modules/by-module/Text/ \\\n"
-#| "      Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-#| "      debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
@@ -25978,8 +25909,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
 "      http://www.cpan.org/modules/by-module/Text/ \\\n"
-"      Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-"      debian uupdate\n"
+"      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -25993,13 +25923,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1076
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-#| "      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-#| "      debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
@@ -26008,8 +25932,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-"      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-"      debian uupdate\n"
+"      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26023,14 +25946,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1083
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
-#| "      http://www.cpan.org/modules/by-module/Text/\\\n"
-#| "      Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-#| "      debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
@@ -26041,8 +25957,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"pgpsigurlmangle=s%$%.sig%\" \\\n"
 "      http://www.cpan.org/modules/by-module/Text/\\\n"
-"      Text-CSV_XS-(.+)\\.tar\\.gz \\\n"
-"      debian uupdate\n"
+"      Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26071,20 +25986,14 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1096
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)\\.tar\\.gz \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)@ARCHIVE_EXT@\n"
 "\n"
 msgstr ""
 "  version=4\n"
-"  http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)\\.tar\\.gz \\\n"
-"  debian uupdate\n"
+"  http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26103,12 +26012,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1104
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"dversionmangle=s/\\+dfsg\\d*$//,repacksuffix=+dfsg1\" \\\n"
-#| "  http://some.site.org/some/path/foobar-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"dversionmangle=s/\\+dfsg\\d*$//,repacksuffix=+dfsg1\" \\\n"
@@ -26117,7 +26021,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"dversionmangle=s/\\+dfsg\\d*$//,repacksuffix=+dfsg1\" \\\n"
-"  http://some.site.org/some/path/tototiti-(.+)\\.tar\\.gz debian uupdate\n"
+"  http://some.site.org/some/path/foobar-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26153,13 +26057,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1119
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=filenamemangle=s/.*=(.*)/$1/ \\\n"
-#| "  http://foo.bar.org/dl/\\?path=&dl=foo-(.+)\\.tar\\.gz \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=filenamemangle=s/.*=(.*)/$1/ \\\n"
@@ -26168,8 +26066,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=filenamemangle=s/.*=(.*)/$1/ \\\n"
-"  http://toto.titi.org/dl/\\?path=&dl=toto-(.+)\\.tar\\.gz \\\n"
-"  debian uupdate\n"
+"  http://foo.bar.org/dl/\\?path=&dl=foo-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26183,13 +26080,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1126
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\\n"
-#| "  http://foo.bar.org/dl/\\?path=&dl_version=(.+) \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\\n"
@@ -26198,8 +26089,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\\n"
-"  http://toto.titi.org/dl/\\?path=&dl_version=(.+) \\\n"
-"  debian uupdate\n"
+"  http://foo.bar.org/dl/\\?path=&dl_version=@ANY_VERSION@\n"
 "\n"
 
 #. type: textblock
@@ -26214,13 +26104,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1133
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=filenamemangle=s&.*/dl/(.*)/foo\\.tar\\.gz&foo-$1\\.tar\\.gz& \\\n"
-#| "  http://foo.bar.org/dl/([\\.\\d]+)/ foo.tar.gz \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=filenamemangle=s&.*/dl/(.*)/foo\\.tar\\.gz&foo-$1\\.tar\\.gz& \\\n"
@@ -26228,9 +26112,8 @@ msgid ""
 "\n"
 msgstr ""
 "  version=4\n"
-"  opts=filenamemangle=s&.*/dl/(.*)/toto\\.tar\\.gz&toto-$1\\.tar\\.gz& \\\n"
-"  http://toto.titi.org/dl/([\\.\\d]+)/ toto.tar.gz \\\n"
-"  debian uupdate\n"
+"  opts=filenamemangle=s&.*/dl/(.*)/foo\\.tar\\.gz&foo-$1\\.tar\\.gz& \\\n"
+"  http://foo.bar.org/dl/@ANY_VERSION@/ foo.tar.gz\n"
 "\n"
 
 #. type: =head2
@@ -26253,14 +26136,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1144
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=downloadurlmangle=s/prdownload/download/ \\\n"
-#| "  http://developer.berlios.de/project/showfiles.php?group_id=2051 \\\n"
-#| "  http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=downloadurlmangle=s/prdownload/download/ \\\n"
@@ -26271,8 +26147,7 @@ msgstr ""
 "  version=4\n"
 "  opts=downloadurlmangle=s/prdownload/download/ \\\n"
 "  http://developer.berlios.de/project/showfiles.php?group_id=2051 \\\n"
-"  http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz \\\n"
-"  debian uupdate\n"
+"  http://prdownload.berlios.de/softdevice/vdr-softdevice-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26293,16 +26168,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1155
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=oversionmangle=s/(.*)/$1+dfsg1/ \\\n"
-#| "  http://example.com/~user/release/foo.html \\\n"
-#| "  files/foo-([\\d\\.]*).tar.gz debian\n"
-#| "  opts=\"component=bar\" \\\n"
-#| "  http://example.com/~user/release/foo.html \\\n"
-#| "  files/bar-([\\d\\.]*).tar.gz same uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=oversionmangle=s/(.*)/$1+dfsg1/ \\\n"
@@ -26315,11 +26181,11 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=oversionmangle=s/(.*)/$1+dfsg1/ \\\n"
-"  http://example.com/~user/release/toto.html \\\n"
-"  files/toto-([\\d\\.]*).tar.gz debian\n"
+"  http://example.com/~user/release/foo.html \\\n"
+"  files/foo-@ANY_VERSION@@ARCHIVE_EXT@ debian\n"
 "  opts=\"component=bar\" \\\n"
-"  http://example.com/~user/release/toto.html \\\n"
-"  files/titi-([\\d\\.]*).tar.gz same uupdate\n"
+"  http://example.com/~user/release/foo.html \\\n"
+"  files/bar-@ANY_VERSION@@ARCHIVE_EXT@ same\n"
 "\n"
 
 #. type: =head2
@@ -26345,13 +26211,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1173
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=pagemangle=\"s/<a\\s+bogus=/<a href=/g\" \\\n"
-#| "  http://example.com/release/foo.html \\\n"
-#| "  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=pagemangle=\"s/<a\\s+bogus=/<a href=/g\" \\\n"
@@ -26361,8 +26221,8 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=pagemangle=\"s/<a\\s+bogus=/<a href=/g\" \\\n"
-"  http://example.com/release/truc.html \\\n"
-"  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
+"  http://example.com/release/foo.html \\\n"
+"  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26383,13 +26243,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1183
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pagemangle=s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g\" \\\n"
-#| "  http://example.com/release/foo.html \\\n"
-#| "  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pagemangle=s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g\" \\\n"
@@ -26398,9 +26252,9 @@ msgid ""
 "\n"
 msgstr ""
 "  version=4\n"
-"   opts=\"pagemangle=s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g\" \\\n"
-"  http://example.com/release/toto.html \\\n"
-"  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate\n"
+"  opts=\"pagemangle=s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g\" \\\n"
+"  http://example.com/release/foo.html \\\n"
+"  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26410,20 +26264,14 @@ msgstr "Site FTP (de base) :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1190
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.+)\\.tar\\.gz \\\n"
-#| "  debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 msgstr ""
 "  version=4\n"
-"  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.+)\\.tar\\.gz \\\n"
-"  debian uupdate\n"
+"  ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26433,12 +26281,7 @@ msgstr "Site FTP (expressions rationnelles) :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1195
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  ftp://ftp.worldforge.org/pub/worldforge/libs/\\\n"
-#| "  Atlas-C++/transitional/Atlas-C\\+\\+-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  ftp://ftp.worldforge.org/pub/worldforge/libs/\\\n"
@@ -26447,7 +26290,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  ftp://ftp.worldforge.org/pub/worldforge/libs/\\\n"
-"  Atlas-C++/transitional/Atlas-C\\+\\+-(.+)\\.tar\\.gz debian uupdate\n"
+"  Atlas-C++/transitional/Atlas-C\\+\\+-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26484,13 +26327,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1211
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"uversionmangle=s/^/0.0./\" \\\n"
-#| "  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/\\\n"
-#| "  development/Wine-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"uversionmangle=s/^/0.0./\" \\\n"
@@ -26501,7 +26338,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"uversionmangle=s/^/0.0./\" \\\n"
 "  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/\\\n"
-"  development/Wine-(.+)\\.tar\\.gz debian uupdate\n"
+"  development/Wine-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26523,18 +26360,14 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1222
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  https://sf.net/<project>/ <tar-name>-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  https://sf.net/<project>/ <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 msgstr ""
 "  version=4\n"
-"  https://sf.net/<project>/ <tar-name>-(.+)\\.tar\\.gz debian uupdate\n"
+"  https://sf.net/<project>/ <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26544,18 +26377,14 @@ msgstr "Pour B<audacity>, configurer le fichier de veille ainsi :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1227
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  https://sf.net/audacity/ audacity-minsrc-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  https://sf.net/audacity/ audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 msgstr ""
 "  version=4\n"
-"  https://sf.net/audacity/ audacity-minsrc-(.+)\\.tar\\.gz debian uupdate\n"
+"  https://sf.net/audacity/ audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26570,15 +26399,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1233
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"uversionmangle=s/-pre/~pre/, \\\n"
-#| "\tfilenamemangle=s%(?:.*)audacity-minsrc-(.+)\\.tar\\.xz/download%\\\n"
-#| "                         audacity-$1.tar.xz%\" \\\n"
-#| "\thttp://sourceforge.net/projects/audacity/files/audacity/(\\d[\\d\\.]+)/ \\\n"
-#| "\t(?:.*)audacity-minsrc-([\\d\\.]+)\\.tar\\.xz/download debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"uversionmangle=s/-pre/~pre/, \\\n"
@@ -26590,10 +26411,10 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  opts=\"uversionmangle=s/-pre/~pre/, \\\n"
-"\tfilenamemangle=s%(?:.*)audacity-minsrc-(.+)\\.tar\\.xz/download%\\\n"
+"    filenamemangle=s%(?:.*)audacity-minsrc-(.+)\\.tar\\.xz/download%\\\n"
 "                         audacity-$1.tar.xz%\" \\\n"
-"\thttp://sourceforge.net/projects/audacity/files/audacity/(\\d[\\d\\.]+)/ \\\n"
-"\t(?:.*)audacity-minsrc-([\\d\\.]+)\\.tar\\.xz/download debian uupdate\n"
+"    http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/ \\\n"
+"    (?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download\n"
 "\n"
 
 #. type: textblock
@@ -26621,13 +26442,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1249
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"filenamemangle=s%(?:.*?)?v?(\\d[\\d.]*)\\.tar\\.gz%@PACKAGE@-$1.tar.gz%\" \\\n"
-#| "      https://github.com/<user>/<project>/tags \\\n"
-#| "      (?:.*?/)?v?(\\d[\\d.]*)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"filenamemangle=s%(?:.*?)?v?(\\d[\\d.]*)\\.tar\\.gz%@PACKAGE@-$1.tar.gz%\" \\\n"
@@ -26638,7 +26453,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"filenamemangle=s%(?:.*?)?v?(\\d[\\d.]*)\\.tar\\.gz%@PACKAGE@-$1.tar.gz%\" \\\n"
 "      https://github.com/<user>/<project>/tags \\\n"
-"      (?:.*?/)?v?(\\d[\\d.]*)\\.tar\\.gz debian uupdate\n"
+"      (?:.*?/)?@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26660,12 +26475,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1260
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  https://pypi.python.org/packages/source/<initial>/<project>/ \\\n"
-#| "      <tar-name>-(.+)\\.tar\\.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  https://pypi.python.org/packages/source/<initial>/<project>/ \\\n"
@@ -26674,7 +26484,7 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  https://pypi.python.org/packages/source/<initial>/<project>/ \\\n"
-"      <tar-name>-(.+)\\.tar\\.gz debian uupdate\n"
+"      <tar-name>-@@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: textblock
@@ -26684,12 +26494,7 @@ msgstr "Pour B<cfn-sphere>, configurer le fichier ainsi :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1266
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  https://pypi.python.org/packages/source/c/cfn-sphere/ \\\n"
-#| "      cfn-sphere-([\\d\\.]+).tar.gz debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  https://pypi.python.org/packages/source/c/cfn-sphere/ \\\n"
@@ -26698,19 +26503,12 @@ msgid ""
 msgstr ""
 "  version=4\n"
 "  https://pypi.python.org/packages/source/c/cfn-sphere/ \\\n"
-"      cfn-sphere-([\\d\\.]+).tar.gz debian uupdate\n"
+"      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1273
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"pgpmode=none\" \\\n"
-#| "      https://pypi.python.org/pypi/cfn-sphere/ \\\n"
-#| "      https://pypi.python.org/packages/.*/.*/.*/\\\n"
-#| "      cfn-sphere-([\\d\\.]+).tar.gz#.* debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"pgpmode=none\" \\\n"
@@ -26723,7 +26521,7 @@ msgstr ""
 "  opts=\"pgpmode=none\" \\\n"
 "      https://pypi.python.org/pypi/cfn-sphere/ \\\n"
 "      https://pypi.python.org/packages/.*/.*/.*/\\\n"
-"      cfn-sphere-([\\d\\.]+).tar.gz#.* debian uupdate\n"
+"      cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@#.*\n"
 "\n"
 
 #. type: =head2
@@ -26757,13 +26555,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1288
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"searchmode=plain\" \\\n"
-#| "   https://registry.npmjs.org/aes-js \\\n"
-#| "   https://registry.npmjs.org/aes-js/-/aes-js-(\\d[\\d\\.]*)@ARCHIVE_EXT@\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"searchmode=plain\" \\\n"
@@ -26774,7 +26566,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"searchmode=plain\" \\\n"
 "   https://registry.npmjs.org/aes-js \\\n"
-"   https://registry.npmjs.org/aes-js/-/aes-js-(\\d[\\d\\.]*)@ARCHIVE_EXT@\n"
+"   https://registry.npmjs.org/aes-js/-/aes-js-@ANY_VERSION@@ARCHIVE_EXT@\n"
 "\n"
 
 #. type: =head2
@@ -26793,22 +26585,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1298
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
-#| "    https://registry.npmjs.org/mongodb \\\n"
-#| "    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
-#| "    https://registry.npmjs.org/bson \\\n"
-#| "    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
-#| "    https://registry.npmjs.org/mongodb-core \\\n"
-#| "    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
-#| "    https://registry.npmjs.org/require_optional \\\n"
-#| "    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
@@ -26828,16 +26605,16 @@ msgstr ""
 "  version=4\n"
 "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
 "    https://registry.npmjs.org/mongodb \\\n"
-"    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@ group\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
 "    https://registry.npmjs.org/bson \\\n"
-"    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@ group\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
 "    https://registry.npmjs.org/mongodb-core \\\n"
-"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@ group\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
 "    https://registry.npmjs.org/require_optional \\\n"
-"    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@ group\n"
 "\n"
 
 #. type: textblock
@@ -26861,22 +26638,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1318
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
-#| "    https://registry.npmjs.org/mongodb \\\n"
-#| "    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
-#| "    https://registry.npmjs.org/bson \\\n"
-#| "    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
-#| "    https://registry.npmjs.org/mongodb-core \\\n"
-#| "    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
-#| "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
-#| "    https://registry.npmjs.org/require_optional \\\n"
-#| "    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
@@ -26896,16 +26658,16 @@ msgstr ""
 "  version=4\n"
 "  opts=\"searchmode=plain,pgpmode=none\" \\\n"
 "    https://registry.npmjs.org/mongodb \\\n"
-"    https://registry.npmjs.org/mongodb/-/mongodb-(\\d[\\d\\.]*)@ARCHIVE_EXT@ group\n"
+"    https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@ group\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=bson\" \\\n"
 "    https://registry.npmjs.org/bson \\\n"
-"    https://registry.npmjs.org/bson/-/bson-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
+"    https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@ checksum\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=mongodb-core\" \\\n"
 "    https://registry.npmjs.org/mongodb-core \\\n"
-"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
+"    https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@ checksum\n"
 "  opts=\"searchmode=plain,pgpmode=none,component=requireoptional\" \\\n"
 "    https://registry.npmjs.org/require_optional \\\n"
-"    https://registry.npmjs.org/require_optional/-/require_optional-(\\d[\\d\\.]*)@ARCHIVE_EXT@ checksum\n"
+"    https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@ checksum\n"
 "\n"
 
 #. type: textblock
@@ -26997,13 +26759,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1361
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=git, gitmode=full, pgpmode=none\" \\\n"
-#| "  http://git.ao2.it/tweeper.git \\\n"
-#| "  refs/tags/v([\\d\\.]+) debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=git, gitmode=full, pgpmode=none\" \\\n"
@@ -27014,7 +26770,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"mode=git, gitmode=full, pgpmode=none\" \\\n"
 "  http://git.ao2.it/tweeper.git \\\n"
-"  refs/tags/v([\\d\\.]+) debian uupdate\n"
+"  refs/tags/v@ANY_VERSION@\n"
 "\n"
 
 #. type: textblock
@@ -27061,13 +26817,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1381
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=git, pgpmode=none\" \\\n"
-#| "  https://github.com/Debian/dh-make-golang \\\n"
-#| "  HEAD debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=git, pgpmode=none\" \\\n"
@@ -27078,7 +26828,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"mode=git, pgpmode=none\" \\\n"
 "  https://github.com/Debian/dh-make-golang \\\n"
-"  HEAD debian uupdate\n"
+"  HEAD\n"
 "\n"
 
 #. type: textblock
@@ -27125,13 +26875,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1402
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=svn, pgpmode=none\" \\\n"
-#| "  svn://svn.code.sf.net/p/jmol/code/tags/ \\\n"
-#| "  ([\\d.]+)\\/ debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
@@ -27142,7 +26886,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
 "  svn://svn.code.sf.net/p/jmol/code/tags/ \\\n"
-"  ([\\d.]+)\\/ debian uupdate\n"
+"  @ANY_VERSION@\\/\n"
 "\n"
 
 #. type: =head2
@@ -27166,13 +26910,7 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1414
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  version=4\n"
-#| "  opts=\"mode=svn, pgpmode=none\" \\\n"
-#| "  svn://svn.code.sf.net/p/jmol/code/trunk/ \\\n"
-#| "  HEAD debian uupdate\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
@@ -27183,7 +26921,7 @@ msgstr ""
 "  version=4\n"
 "  opts=\"mode=svn, pgpmode=none\" \\\n"
 "  svn://svn.code.sf.net/p/jmol/code/trunk/ \\\n"
-"  HEAD debian uupdate\n"
+"  HEAD\n"
 "\n"
 
 #. type: textblock
