@@ -11,6 +11,8 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + Replace tempfile with mktemp.  Closes: #995583
 
   [ Hugh McMaster ]
+  * nmudiff:
+    + Fix spelling of the --non-dd/--nondd options in the manpage.  MR: !241
   * uscan:
     + Assign $newfile_base a filename, not a URL, when filenamemangling.
       Closes: #993585; MR: !235
