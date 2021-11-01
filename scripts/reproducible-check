@@ -50,7 +50,7 @@ class ReproducibleCheck:
     VERSION = 1
 
     STATUS_URL = (
-        "https://tests.reproducible-builds.org/debian/reproducible-tracker.json.bz2"
+        "https://tests.reproducible-builds.org/debian/reproducible.json.bz2"
     )
 
     CACHE = os.path.join(xdg_cache_home, NAME, os.path.basename(STATUS_URL))
@@ -172,13 +172,12 @@ class ReproducibleCheck:
             all_packages = json.loads(f.read().decode("utf-8"))
 
             for x in all_packages:
-                for y in x["architecture_details"]:
-                    if y["status"] != "reproducible":
-                        continue
+                if x["status"] != "reproducible":
+                    continue
 
-                    data.add((x["package"], y["architecture"], x["version"]))
+                data.add((x["package"], x["architecture"], x["version"]))
 
-                    source_packages.add(x["package"])
+                source_packages.add(x["package"])
 
         self.log.debug("Parsed data about %d source packages", len(source_packages))
 
