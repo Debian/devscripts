@@ -292,13 +292,13 @@ This is substituted by the legal upstream version regex (capturing).
 
 This is substituted by the typical archive file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz)
+  (?i)(?:\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz))
 
 =item B<@SIGNATURE_EXT@>
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz)\.(?:asc|pgp|gpg|sig|sign)
+  (?i)(?:\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz))'(?:\.(?:asc|pgp|gpg|sig|sign))'
 
 =item B<@DEB_EXT@>
 
@@ -364,6 +364,8 @@ CONFIGURATION VARIABLES>.
 =item * B<repack> is set in the watch line as B<opts="repack,>I<...>B<">.
 
 =item * The upstream archive is of B<zip> type including B<jar>, B<xpi>, ...
+
+=item * The upstream archive is of B<zstd> (Zstandard) type.
 
 =item * B<Files-Excluded> or B<Files-Excluded->I<component> stanzas are set in
 F<debian/copyright> to make B<mk-origtargz> invoked from B<uscan> remove
@@ -1795,12 +1797,13 @@ Instead of symlinking as described above, rename the downloaded files.
 
 =item B<--repack>
 
-After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xpi
-archive, repack it to the specified compression (see B<--compression>).
+After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xpi,
+zstd archive, repack it to the specified compression (see B<--compression>).
 
 The unzip package must be installed in order to repack zip and jar archives,
-the mozilla-devscripts package must be installed to repack xpi archives, and
-the xz-utils package must be installed to repack lzma or xz tar archives.
+the mozilla-devscripts package must be installed to repack xpi archives,
+the xz-utils package must be installed to repack lzma or xz tar archives, and
+zstd must be installed to repack zstd archives.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
@@ -1895,8 +1898,8 @@ equivalent to the B<--destdir> option.
 =item B<USCAN_REPACK>
 
 If this is set to yes, then after having downloaded a bzip tar, lzma tar, xz
-tar, or zip archive, uscan will repack it to the specified compression (see
-B<--compression>). This is equivalent to the B<--repack> option.
+tar, zip or zstd archive, uscan will repack it to the specified compression
+(see B<--compression>). This is equivalent to the B<--repack> option.
 
 =item B<USCAN_EXCLUSION>
 

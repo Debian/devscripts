@@ -142,8 +142,9 @@ B<--copy>, B<--rename> and B<--symlink> are mutually exclusive.
 Make the resulting file a symlink to the given original file. (This is the
 default behaviour.)
 
-If the file has to be modified (because it is a B<zip>, or B<xpi> file, because
-of B<--repack> or B<Files-Excluded>), this option behaves like B<--copy>.
+If the file has to be modified (because it is a B<zip>, B<xpi> or B<zst> file,
+because of B<--repack> or B<Files-Excluded>), this option behaves like
+B<--copy>.
 
 =item B<--copy>
 
@@ -154,9 +155,9 @@ modified, of course).
 
 Rename the original file.
 
-If the file has to be modified (because it is a B<zip>, or B<xpi> file, because
-of B<--repack> or B<Files-Excluded>), this implies that the original file is
-deleted afterwards.
+If the file has to be modified (because it is a B<zip>, B<xpi>, B<zst> file,
+because of B<--repack> or B<Files-Excluded>), this implies that the original
+file is deleted afterwards.
 
 =item B<--repack>
 
