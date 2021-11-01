@@ -1324,7 +1324,7 @@ sub download_file_and_sig {
         # Decompress archive if requested and applicable
         if ($download_available == 1 and $self->{'decompress'}) {
             my $suffix_gz = $sigfile_base;
-            $suffix_gz =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
+            $suffix_gz =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma|\.zstd?)?$/$1/;
             if ($suffix_gz eq '.gz') {
                 if (-x '/bin/gunzip') {
                     uscan_exec('/bin/gunzip', "--keep",
@@ -1359,6 +1359,15 @@ sub download_file_and_sig {
                     $sigfile_base =~ s/(.*?)\.lzma/$1/;
                 } else {
                     uscan_warn "Please install xz-utils or lzma.";
+                    return $self->status(1);
+                }
+            } elsif ($suffix_gz =~ /^zstd?$/) {
+                if (-x '/usr/bin/unzstd') {
+                    uscan_exec('/usr/bin/unzstd', "--keep",
+                        "$self->{config}->{destdir}/$sigfile_base");
+                    $sigfile_base =~ s/(.*?)\.zst/$1/;
+                } else {
+                    uscan_warn("Please install zstd.\n");
                     return $self->status(1);
                 }
             } else {

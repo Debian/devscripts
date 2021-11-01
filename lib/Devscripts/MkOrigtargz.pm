@@ -97,10 +97,11 @@ sub make_orig_targz {
             }
         }
 
-# Figure out the top-level contents of the tarball.
-# If we'd pass "." to tar we'd get the same contents, but the filenames would
-# start with ./, which is confusing later.
-# This should also be more reliable than, say, changing directories and globbing.
+        # Figure out the top-level contents of the tarball.
+        # If we'd pass "." to tar we'd get the same contents, but the filenames
+        # would start with ./, which is confusing later.
+        # This should also be more reliable than, say, changing directories and
+        # globbing.
         unless (opendir(TMPDIR, $tempdir)) {
             ds_die("Can't open $tempdir $!\n");
             return $self->status(1);
@@ -139,10 +140,12 @@ sub make_orig_targz {
 
         $self->config->mode('repack');
         $upstream_tar = $destfile;
+    } elsif (compression_guess_from_file($upstream_tar) =~ /^zstd?$/) {
+        $self->config->force_repack(1);
     }
 
-# From now on, $upstream_tar is guaranteed to be a compressed tarball. It is always
-# a full (possibly relative) path, and distinct from $destfile.
+    # From now on, $upstream_tar is guaranteed to be a compressed tarball. It
+    # is always a full (possibly relative) path, and distinct from $destfile.
 
     # Find out if we have to repack
     my $do_repack = 0;

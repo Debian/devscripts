@@ -49,6 +49,8 @@ my %mime2comp = (
     "application/x-compress"   => "compress",
     "application/java-archive" => "zip",
     "application/x-tar"        => "tar",
+    "application/zstd"         => "zst",
+    "application/x-zstd"       => "zst",
 );
 
 sub compression_guess_from_file {
@@ -78,6 +80,12 @@ my %comp_properties = (
     zip => {
         file_ext    => 'zip',
         decomp_prog => ['unzip'],
+    },
+    zst => {
+        file_ext => 'zst',
+        #comp_prog     => ['zstd'],
+        decomp_prog   => ['unzstd'],
+        default_level => 3,
     });
 
 sub compression_get_property {

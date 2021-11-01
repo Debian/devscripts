@@ -43,6 +43,8 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
     + Add repack tests for lzma.
     + Die if filenamemangle failed.  MR: !238
     + Die in case of filename conflict within the same uscan process.  MR: !238
+    + Add Zstandard support.  For now uscan will force its repacking to
+      .tar.xz, at least until dpkg-source fully supports the format.  MR: !122
 
   [ Nicholas D Steeves ]
   * d/control:

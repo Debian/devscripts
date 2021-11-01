@@ -23,9 +23,11 @@ use constant default_compression => 'xz';
 # txz
 # tar\.Z
 # tar
+# tar.zst
+# tar.zstd
 # END
 use constant tar_regex =>
-  qr/t(?:ar(?:\.(?:[gx]z|lzma|bz2|Z))?|lz(?:ma?)?|[gx]z|bz2?)$/;
+  qr/t(?:ar(?:\.(?:[gx]z|lzma|bz2|Z)|.zstd?)?|lz(?:ma?)?|[gx]z|bz2?)$/;
 
 extends 'Devscripts::Config';
 

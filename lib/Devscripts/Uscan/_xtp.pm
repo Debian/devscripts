@@ -38,7 +38,7 @@ sub _xtp_newfile_base {
 
             # uversionmanglesd version is '', make best effort to set it
             $newfile_base
-              =~ m/^.+?[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+              =~ m/^.+?[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz|zstd?)|\.zip)$/i;
             $self->search_result->{newversion} = $1;
             unless ($self->search_result->{newversion}) {
                 uscan_warn

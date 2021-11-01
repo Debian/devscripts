@@ -99,8 +99,14 @@ END
     mkdir -p "$TEMP_PKG_DIR"/repo/foo
     touch "$TEMP_PKG_DIR"/repo/foo/content
 
-    ( cd "$TEMP_PKG_DIR"/repo ;
-      tar -caf $PKG-1.$from_ext $PKG/* )
+    if [ "$from_ext" = "tar.zstd" ]
+    then
+        ( cd "$TEMP_PKG_DIR"/repo ;
+          tar --zstd -cf $PKG-1.$from_ext $PKG/* )
+    else
+        ( cd "$TEMP_PKG_DIR"/repo ;
+          tar -caf $PKG-1.$from_ext $PKG/* )
+    fi
 
     OUTPUT=$( cd "$TEMP_PKG_DIR"/$PKG ; $COMMANDDEHS --repack --compression=$to_comp )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
@@ -129,6 +135,8 @@ testRepackXZ_XZ() { helperTestRepack "tar.xz" "xz" "XZ compressed data" ; }
 testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
 testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
 testRepackLZ_XZ() { helperTestRepack "tar.lzma" "xz" "XZ compressed data" ; }
+testRepackZST_XZ() { helperTestRepack "tar.zst" "xz" "XZ compressed data" ; }
+testRepackZSTD_XZ() { helperTestRepack "tar.zstd" "xz" "XZ compressed data" ; }
 
 # The following function tests the --repack feature, with a zip file
 testRepackZip_XZ() {

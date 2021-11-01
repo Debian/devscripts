@@ -98,7 +98,7 @@ Please note the following.
 
 =item * For simplicity, the compression method used in examples is B<gzip> with
 B<.gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> with
-corresponding B<xz>, B<bz2>, and B<lzma> suffixes may also be used.
+corresponding B<xz>, B<bz2> and B<lzma> suffixes may also be used.
 
 =item * The new B<version=4> enables handling of multiple upstream tarball
 (MUT) packages but this is a rare case for Debian packaging.  For a single
@@ -292,13 +292,13 @@ This is substituted by the legal upstream version regex (capturing).
 
 This is substituted by the typical archive file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz)
 
 =item B<@SIGNATURE_EXT@>
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)\.(?:asc|pgp|gpg|sig|sign)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|tar\.zstd?|zip|tgz|tbz|txz)\.(?:asc|pgp|gpg|sig|sign)
 
 =item B<@DEB_EXT@>
 

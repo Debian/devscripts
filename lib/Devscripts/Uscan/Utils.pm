@@ -106,6 +106,8 @@ sub get_compression ($) {
         lzma  => 'lzma',
         xz    => 'xz',
         zip   => 'zip',
+        zst   => 'zst',
+        zstd  => 'zst',
     );
 
     # Normalize compression methods to the names used by Dpkg::Compression
@@ -131,6 +133,8 @@ sub get_suffix ($) {
         lzma  => 'lzma',
         xz    => 'xz',
         zip   => 'zip',
+        zst   => 'zst',
+        zstd  => 'zst',
     );
 
     # Normalize compression methods to the names used by Dpkg::Compression
@@ -158,6 +162,9 @@ sub get_priority ($) {
     if ($href =~ m/\.tar\.lzma/i) {
         $priority = 3;
     }
+    #if ($href =~ m/\.tar\.zstd?/i) {
+    #    $priority = 4;
+    #}
     if ($href =~ m/\.tar\.xz/i) {
         $priority = 4;
     }
