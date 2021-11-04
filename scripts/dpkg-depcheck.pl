@@ -121,7 +121,7 @@ EOF
 
 # Features:
 # This are heuristics used to speed up the process.
-# Since thay may be considered as "kludges" or worse "bugs"
+# Since they may be considered as "kludges" or worse "bugs"
 # by some, they can be deactivated
 # 0 disabled by default, 1 enabled by default.
 %feature = (

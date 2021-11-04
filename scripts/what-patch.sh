@@ -72,7 +72,7 @@ if grep -qF quilt debian/source/format 2>/dev/null; then
 fi
 
 # Do not change the output of existing checks by default, as there are build
-# tools that rely on the exisitng output.  If changes in reporting is needed,
+# tools that rely on the existing output.  If changes in reporting is needed,
 # please check the "VERBOSE" flag (see below for examples).  Feel free
 # to add new patchsystem detection and reporting.
 for filename in $(echo "debian/rules"; grep ^include debian/rules | grep -vF '$(' | awk '{print $2}')

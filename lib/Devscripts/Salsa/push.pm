@@ -1,4 +1,4 @@
-# Push local work. Like gbp push but able to push uncomplete work
+# Push local work. Like gbp push but able to push incomplete work
 package Devscripts::Salsa::push;
 use strict;
 use Devscripts::Output;
