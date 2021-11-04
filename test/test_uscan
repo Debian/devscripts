@@ -22,7 +22,7 @@ test_dir=$(readlink -f "${0%/*}")
 . "$test_dir/lib_test_uscan"
 
 SUFFIX="1"
-if which dpkg-vendor >/dev/null 2>&1; then
+if command -v dpkg-vendor >/dev/null; then
     VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
     case "$VENDER" in
         debian) SUFFIX="1" ;;
