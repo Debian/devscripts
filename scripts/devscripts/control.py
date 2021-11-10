@@ -67,7 +67,7 @@ class Control:
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
         self.paragraphs = []
-        with open(filename) as sequence:
+        with open(filename, encoding="utf8") as sequence:
             for paragraph in debian.deb822.Deb822.iter_paragraphs(sequence):
                 self.paragraphs.append(paragraph)
 
