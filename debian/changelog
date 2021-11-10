@@ -35,6 +35,8 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
       blind cargo-culting.
   * Declaratively build-depend on dh-sequence-python3 and drop --with python3.
   * Bump debhelper compat level to 13.
+  * Fix some new pylint issues across the codebase:  Closes: #998542
+    + R1732: consider-using-with
 
   [ Yadd ]
   * Update fr translation.

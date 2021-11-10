@@ -232,7 +232,7 @@ class TestCommand:
         environ['AUTOPKGTEST_TMP'] = tmpdir1
         # only for compatibility with old DEP-8 spec.
         environ['ADTTMP'] = tmpdir2
-        child = ipc.Popen(command, stdout=ipc.PIPE,
+        child = ipc.Popen(command, stdout=ipc.PIPE,  # pylint: disable=consider-using-with
                           stderr=ipc.PIPE, env=environ)
         output = []
         stderr = False
@@ -362,7 +362,7 @@ class TestGroup:
             if isinstance(self._depends_cache, Exception):
                 raise self._depends_cache  # fpos, pylint: disable=raising-bad-type
             return
-        child = ipc.Popen(['dpkg-checkbuilddeps', '-d',
+        child = ipc.Popen(['dpkg-checkbuilddeps', '-d',  # pylint: disable=consider-using-with
                            self.depends], stderr=ipc.PIPE, env={})
         error = child.stderr.read().decode('ASCII')
         child.stderr.close()

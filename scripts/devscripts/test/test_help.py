@@ -44,11 +44,10 @@ class HelpTestCase(unittest.TestCase):
     @classmethod
     def make_help_tester(cls, script):
         def tester(self):
-            with open('/dev/null', 'r') as null:
-                process = subprocess.Popen(['./' + script, '--help'],
-                                           close_fds=True, stdin=null,
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
+            with subprocess.Popen(['./' + script, '--help'],
+                                  close_fds=True, stdin=subprocess.DEVNULL,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE) as process:
                 started = time.time()
                 out = []
 

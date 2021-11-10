@@ -66,10 +66,10 @@ class Control:
     def __init__(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        sequence = open(filename)
-        self.paragraphs = list()
-        for paragraph in debian.deb822.Deb822.iter_paragraphs(sequence):
-            self.paragraphs.append(paragraph)
+        self.paragraphs = []
+        with open(filename) as sequence:
+            for paragraph in debian.deb822.Deb822.iter_paragraphs(sequence):
+                self.paragraphs.append(paragraph)
 
     def get_maintainer(self):
         """Returns the value of the Maintainer field."""
@@ -84,9 +84,8 @@ class Control:
         if filename:
             self.filename = filename
         content = "\n".join([x.dump() for x in self.paragraphs])
-        control_file = open(self.filename, "wb")
-        control_file.write(content.encode("utf-8"))
-        control_file.close()
+        with open(self.filename, "wb") as control_file:
+            control_file.write(content.encode("utf-8"))
 
     def set_maintainer(self, maintainer):
         """Sets the value of the Maintainer field."""

@@ -152,11 +152,9 @@ class Install:
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = [
-            line.strip()
-            for line in open(filename).readlines()
-            if line.strip()
-        ]
+        with open(filename) as f:
+            lines = f.readlines()
+        self.content = [l.strip() for l in lines if l.strip()]
 
     def save(self):
         to_write = "\n".join(self.content) + "\n"

@@ -411,16 +411,16 @@ def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
         # we only use the more complex Popen method if live output is required
         # for logging levels of INFO or lower
         if logging.root.isEnabledFor(logging.INFO):
-            process = subprocess.Popen(
+            with subprocess.Popen(
                 cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, env=env
-            )
-            buf = io.BytesIO()
-            for line in iter(process.stdout.readline, b""):
-                sys.stdout.buffer.write(line)
-                sys.stdout.buffer.flush()
-                buf.write(line)
-            ret = process.wait()
-            output = buf.getvalue()
+                    ) as process:
+                buf = io.BytesIO()
+                for line in iter(process.stdout.readline, b""):
+                    sys.stdout.buffer.write(line)
+                    sys.stdout.buffer.flush()
+                    buf.write(line)
+                ret = process.wait()
+                output = buf.getvalue()
         else:
             output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, env=env)
     except subprocess.CalledProcessError as e:
