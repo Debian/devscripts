@@ -36,8 +36,9 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
   * Declaratively build-depend on dh-sequence-python3 and drop --with python3.
   * Bump debhelper compat level to 13.
   * Fix some new pylint issues across the codebase:  Closes: #998542
-    + R1732: consider-using-with
-    + C0209: consider-using-f-string (prject-wide ignore)
+    + R1732: consider-using-with.
+    + C0209: consider-using-f-string (prject-wide ignore).
+    + R1734/R1735: use-list-literal/use-dict-literal.
 
   [ Yadd ]
   * Update fr translation.

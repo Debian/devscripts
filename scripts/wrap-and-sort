@@ -154,7 +154,7 @@ class Install:
         self.filename = filename
         with open(filename) as f:
             lines = f.readlines()
-        self.content = [l.strip() for l in lines if l.strip()]
+        self.content = [line.strip() for line in lines if line.strip()]
 
     def save(self):
         to_write = "\n".join(self.content) + "\n"
@@ -274,7 +274,7 @@ def main():
                         help="location of the 'debian' directory (default: ./debian)",
                         metavar="PATH", default="debian")
     parser.add_argument("-f", "--file", metavar="FILE",
-                        dest="files", action="append", default=list(),
+                        dest="files", action="append", default=[],
                         help="Wrap and sort only the specified file.")
     parser.add_argument("-v", "--verbose",
                         help="print all files that are touched",

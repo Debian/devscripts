@@ -647,7 +647,7 @@ def qemuarg(val):
 
 
 def read_pkglist(infile):
-    result = dict()
+    result = {}
     with open(infile) as f:
         for line in f:
             pkg, version = line.split("\t")
@@ -703,7 +703,7 @@ def upgrade_single_package(toupgrade, goodpkgs, badpkgs, good, bad, staticargs):
     newbadpkgs = read_pkglist(newbadpkgpath)
     # find all packages that are completely new or of a
     # different version than those in the last good test
-    newupgraded = list()
+    newupgraded = []
     for pkg, version in newbadpkgs.items():
         if pkg not in goodpkgs or version != goodpkgs[pkg]:
             newupgraded.append(pkg)
