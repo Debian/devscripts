@@ -130,7 +130,7 @@ sub check_signature($\@;\$) {
     push @cmd, $havegpg, "--status-fd", $fd,
       qw(--batch --no-options --no-default-keyring --always-trust);
     foreach (@$rings) { push @cmd, '--keyring'; push @cmd, $_; }
-
+    push @cmd, '--verify', '--output', '-';
     my ($out, $err) = ('', '');
     eval {
         spawn(
