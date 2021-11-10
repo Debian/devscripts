@@ -35,9 +35,8 @@ DEFAULT_URLLIB_TIMEOUT = 30
 
 def _get_json_url(http_url: str, timeout: int = DEFAULT_URLLIB_TIMEOUT):
     headers = {'User-Agent': USER_AGENT, 'Accept': 'application/json'}
-    http_contents = urlopen(
-        Request(http_url, headers=headers),
-        timeout=timeout).read()
+    with urlopen(Request(http_url, headers=headers), timeout=timeout) as resp:
+        http_contents = resp.read()
     return json.loads(http_contents)
 
 
@@ -52,7 +51,8 @@ def schedule(source, suite, api_url=DEFAULT_API_URL):
     headers = {'User-Agent': USER_AGENT}
     req = Request(url, headers=headers, method='POST')
     try:
-        resp = json.load(urlopen(req))
+        with urlopen(req) as resp:
+            resp = json.load(resp)
     except HTTPError as err:
         if err.code == 404:
             raise NoSuchSource(json.loads(err.read())['reason']) from err
@@ -87,13 +87,14 @@ def diff(source, suite, api_url=DEFAULT_API_URL):
     headers = {'User-Agent': USER_AGENT, 'Accept': 'text/plain'}
     req = Request(url, headers=headers)
     try:
-        resp = urlopen(req)
+        with urlopen(req) as resp:
+            data = resp.read()
     except HTTPError as err:
         if err.code == 404:
             raise MissingDiffError(err.read().decode()) from err
         raise err
     else:
-        return resp.read()
+        return data
 
 
 def main(argv):
