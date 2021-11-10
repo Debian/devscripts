@@ -37,6 +37,7 @@ devscripts (2.21.5) UNRELEASED; urgency=medium
   * Bump debhelper compat level to 13.
   * Fix some new pylint issues across the codebase:  Closes: #998542
     + R1732: consider-using-with
+    + C0209: consider-using-f-string (prject-wide ignore)
 
   [ Yadd ]
   * Update fr translation.
