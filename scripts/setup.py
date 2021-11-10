@@ -18,7 +18,8 @@ def get_version():
         match = re.compile(r".*\((.*)\).*").match(head)
         if match:
             version = match.group(1)
-        with open(os.path.join("devscripts", "__init__.py"), "w") as f:
+        path = os.path.join("devscripts", "__init__.py")
+        with open(path, "w", encoding="utf8") as f:
             f.write("version = '{}'\n".format(version))
         return version
     raise Exception("Failed to determine version from debian/changelog")

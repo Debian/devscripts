@@ -101,7 +101,9 @@ def apply_dch_patch(source_file, current, old_version, target, dry_run):
 
     shutil.copy(source_file, source_file + ".new")
     try:
-        with open(source_file + ".new", "w") as fp:
+        # disable unspecified-encoding, as in Mattia's opinion this should
+        # likely be rewritten to use pure binary instead of encode/decode.
+        with open(source_file + ".new", "w") as fp:  # pylint: disable=unspecified-encoding
             current.write_to_open_file(fp)
         os.rename(source_file + ".new", source_file)
     except Exception:
@@ -162,7 +164,7 @@ def debdiff_apply(patch, patch_name, args):
         return False
 
     # read this here so --source-version can work even without a d/changelog
-    with open(args.changelog) as fp:
+    with open(args.changelog, encoding="utf8") as fp:
         current = Changelog(fp.read())
     if target.package == CHBLOCK_DUMMY_PACKAGE:
         target.package = current[0].package

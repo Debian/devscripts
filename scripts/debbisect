@@ -648,7 +648,7 @@ def qemuarg(val):
 
 def read_pkglist(infile):
     result = {}
-    with open(infile) as f:
+    with open(infile, encoding="utf8") as f:
         for line in f:
             pkg, version = line.split("\t")
             result[pkg] = version.strip()

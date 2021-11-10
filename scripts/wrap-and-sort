@@ -136,7 +136,7 @@ class WrapAndSortControl(Control):
     def check_changed(self):
         """Checks if the content has changed in the control file"""
         content = "\n".join([x.dump() for x in self.paragraphs])
-        with open(self.filename, "r") as control_file:
+        with open(self.filename, "r", encoding="utf8") as control_file:
             if content != control_file.read():
                 return True
         return False
@@ -152,14 +152,14 @@ class Install:
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        with open(filename) as f:
+        with open(filename, encoding="utf8") as f:
             lines = f.readlines()
         self.content = [line.strip() for line in lines if line.strip()]
 
     def save(self):
         to_write = "\n".join(self.content) + "\n"
 
-        with open(self.filename, "r+") as install_file:
+        with open(self.filename, "r+", encoding="utf8") as install_file:
             content = install_file.read()
             if to_write != content:
                 if not self.args.dry_run:
