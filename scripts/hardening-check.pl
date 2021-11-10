@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Report the hardening characterists of a set of binaries.
+# Report the hardening characteristics of a set of binaries.
 # Copyright (C) 2009-2013 Kees Cook <kees@debian.org>
 # License: GPLv2 or newer
 use strict;
