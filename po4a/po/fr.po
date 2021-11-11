@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2021-11-10 15:45+0100\n"
-"PO-Revision-Date: 2021-11-01 11:03+0100\n"
+"PO-Revision-Date: 2021-11-11 17:26+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -3939,7 +3939,7 @@ msgid ""
 "will be printed in stdout, like so:"
 msgstr ""
 "Agit comme un linter, pour intégration dans un éditeur de texte. Les "
-"\"bashismes\" possibles seront affichés dans stdout, comme ceci : "
+"\"bashismes\" possibles seront affichés dans stdout, comme ceci :"
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:45
@@ -14173,7 +14173,7 @@ msgstr "I<deb-janitor>(1)"
 #. type: Plain text
 #: ../doc/devscripts.1:91
 msgid "command-line client for interacting with the Debian Janitor."
-msgstr "Client lige de commande pour interagir avec Debian-Janitor."
+msgstr "client ligne de commande pour interagir avec Debian-Janitor."
 
 #. type: IP
 #: ../doc/devscripts.1:91
@@ -18317,19 +18317,14 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:145
-#, fuzzy
-#| msgid ""
-#| "If the file has to be modified (because it is a B<zip>, or B<xpi> file, "
-#| "because of B<--repack> or B<Files-Excluded>), this option behaves like "
-#| "B<--copy>."
 msgid ""
 "If the file has to be modified (because it is a B<zip>, B<xpi> or B<zst> "
 "file, because of B<--repack> or B<Files-Excluded>), this option behaves like "
 "B<--copy>."
 msgstr ""
 "Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<ZIP> ou "
-"B<xpi>, à cause de B<--repack> ou à cause de B<Files-Excluded>), cette "
-"option se comporte comme B<--copy>."
+"B<xpi> ou B<zst>, à cause de B<--repack> ou à cause de B<Files-Excluded>), "
+"cette option se comporte comme B<--copy>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:149 ../scripts/uscan.pl:1790
@@ -18357,19 +18352,14 @@ msgstr "Renommer le fichier d’origine."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:158
-#, fuzzy
-#| msgid ""
-#| "If the file has to be modified (because it is a B<zip>, or B<xpi> file, "
-#| "because of B<--repack> or B<Files-Excluded>), this implies that the "
-#| "original file is deleted afterwards."
 msgid ""
 "If the file has to be modified (because it is a B<zip>, B<xpi>, B<zst> file, "
 "because of B<--repack> or B<Files-Excluded>), this implies that the original "
 "file is deleted afterwards."
 msgstr ""
-"Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<ZIP> ou "
-"B<xpi>, à cause de B<--repack> ou à cause de B<Files-Excluded>), cela "
-"implique la suppression du fichier d’origine à la fin."
+"Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<zip>, "
+"B<xpi> ou B<zst>, à cause de B<--repack> ou à cause de B<Files-Excluded>), "
+"cela implique la suppression du fichier d’origine à la fin."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:162 ../scripts/uscan.pl:1798
@@ -18765,10 +18755,9 @@ msgstr "Ne pas ajouter le tag I<pending>."
 
 #. type: TP
 #: ../scripts/nmudiff.1:79
-#, fuzzy, no-wrap
-#| msgid "B<--no-dd>, B<--nodd>"
+#, no-wrap
 msgid "B<--non-dd>, B<--nondd>"
-msgstr "B<--no-dd>, B<--nodd>"
+msgstr "B<--non-dd>, B<--nondd>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:82
@@ -23452,17 +23441,12 @@ msgstr "Veuillez noter les informations suivantes."
 
 #. type: =item
 #: ../scripts/uscan.pl:99
-#, fuzzy
-#| msgid ""
-#| "* For simplicity, the compression method used in examples is B<gzip> with "
-#| "B<.gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> with "
-#| "corresponding B<xz>, B<bz2>, and B<lzma> suffixes may also be used."
 msgid ""
 "* For simplicity, the compression method used in examples is B<gzip> with B<."
 "gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> with "
 "corresponding B<xz>, B<bz2> and B<lzma> suffixes may also be used."
 msgstr ""
-"– Pour des raisons de simplicité, la méthode de compression utilisée dans "
+"* Pour des raisons de simplicité, la méthode de compression utilisée dans "
 "les exemples est B<gzip> avec le suffixe B<.gz>. Les autres méthodes telles "
 "que B<xz>, B<bzip2> et B<lzma>, avec les suffixes B<xz>, B<bz2> et B<lzma> "
 "correspondants peuvent également être utilisées."
@@ -23924,15 +23908,12 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:295
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  (?i)(?:\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|tar\\.zstd?|zip|tgz|tbz|txz))\n"
 "\n"
 msgstr ""
-"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\n"
+" (?i)(?:\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|tar\\.zstd?|zip|tgz|tbz|txz))\n"
 "\n"
 
 #. type: =item
@@ -23951,15 +23932,12 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:301
-#, fuzzy, no-wrap
-#| msgid ""
-#| "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\\.(?:asc|pgp|gpg|sig|sign)\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "  (?i)(?:\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|tar\\.zstd?|zip|tgz|tbz|txz))'(?:\\.(?:asc|pgp|gpg|sig|sign))'\n"
 "\n"
 msgstr ""
-"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\\.(?:asc|pgp|gpg|sig|sign)\n"
+"  (?i)(?:\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|tar\\.zstd?|zip|tgz|tbz|txz))'(?:\\.(?:asc|pgp|gpg|sig|sign))'\n"
 "\n"
 
 #. type: =item
@@ -24144,11 +24122,8 @@ msgstr "– L'archive amont est de type B<zip>, y compris B<jar>, B<xpi>, ..."
 
 #. type: =item
 #: ../scripts/uscan.pl:368
-#, fuzzy
-#| msgid ""
-#| "* The upstream archive is of B<zip> type including B<jar>, B<xpi>, ..."
 msgid "* The upstream archive is of B<zstd> (Zstandard) type."
-msgstr "– L'archive amont est de type B<zip>, y compris B<jar>, B<xpi>, ..."
+msgstr "– L'archive amont est de type B<zstdi> (Zstandard)."
 
 #. type: =item
 #: ../scripts/uscan.pl:370
@@ -27842,28 +27817,17 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:1800
-#, fuzzy
-#| msgid ""
-#| "After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, "
-#| "xpi archive, repack it to the specified compression (see B<--"
-#| "compression>)."
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, "
 "xpi, zstd archive, repack it to the specified compression (see B<--"
 "compression>)."
 msgstr ""
 "Après avoir téléchargé une archive lzma tar, xz tar, bzip tar, gz tar, zip, "
-"jar ou xpi, le rempaqueter à la compression spécifiée (voir B<--"
+"jar, xpi, zstd, le rempaqueter à la compression spécifiée (voir B<--"
 "compression>)."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1803
-#, fuzzy
-#| msgid ""
-#| "The unzip package must be installed in order to repack zip and jar "
-#| "archives, the mozilla-devscripts package must be installed to repack xpi "
-#| "archives, and the xz-utils package must be installed to repack lzma or xz "
-#| "tar archives."
 msgid ""
 "The unzip package must be installed in order to repack zip and jar archives, "
 "the mozilla-devscripts package must be installed to repack xpi archives, the "
@@ -27871,9 +27835,9 @@ msgid ""
 "zstd must be installed to repack zstd archives."
 msgstr ""
 "Le paquet B<unzip> doit être installé pour rempaqueter les archives zip et "
-"jar, le paquet mozilla-devscripts doit être installé pour rempaqueter les "
-"archives xpi, et le paquet B<xz-utils> doit être installé pour rempaqueter "
-"les archives tar compressées avec lzma ou xz."
+"jar, le paquet mozilla-devscripts pour les archives xpi, et le paquet B<xz-"
+"utils> pour les archives tar compressées avec lzma ou xz et le paquet "
+"B<zstd> pour les archives zstd."
 
 #. type: =item
 #: ../scripts/uscan.pl:1808
@@ -28114,20 +28078,15 @@ msgstr "B<USCAN_REPACK>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1900
-#, fuzzy
-#| msgid ""
-#| "If this is set to yes, then after having downloaded a bzip tar, lzma tar, "
-#| "xz tar, or zip archive, uscan will repack it to the specified compression "
-#| "(see B<--compression>). This is equivalent to the B<--repack> option."
 msgid ""
 "If this is set to yes, then after having downloaded a bzip tar, lzma tar, xz "
 "tar, zip or zstd archive, uscan will repack it to the specified compression "
 "(see B<--compression>). This is equivalent to the B<--repack> option."
 msgstr ""
 "Si elle est définie à B<yes>, alors après avoir téléchargé une archive tar "
-"compressée avec bzip ou lzma ou xz ou une archive ZIP, B<uscan> recréera une "
-"archive compressée du type défini (voir B<--compression>). C'est équivalent "
-"à l'option B<--repack>."
+"compressée avec bzip, lzma, xz ou zstd ou une archive ZIP, B<uscan> recréera "
+"une archive compressée du type défini (voir B<--compression>). C'est "
+"équivalent à l'option B<--repack>."
 
 #. type: =item
 #: ../scripts/uscan.pl:1904
