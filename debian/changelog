@@ -4,9 +4,10 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   * dscverify:
     + Explictly tell gpg to verify the signature, to avoid warning messages
       from it.  Thanks to Jakub Wilk.  Closes: #999141
+  * Add zstd to the autopkgtests dependencies.
 
   [ Yadd ]
-  * Update French translation
+  * Update French translation.
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 10 Nov 2021 16:33:57 +0100
 
