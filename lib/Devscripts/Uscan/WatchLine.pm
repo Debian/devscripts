@@ -1143,7 +1143,7 @@ sub cmp_versions {
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""
-                : " (mangled local version is $mangled_lastversion)\n"
+                : "       (mangled local version is $mangled_lastversion)\n"
               );
 
             # There's a newer upstream version available, which may already
@@ -1159,7 +1159,7 @@ sub cmp_versions {
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""
-                : " (mangled local version is $mangled_lastversion)\n"
+                : "            (mangled local version is $mangled_lastversion)\n"
               );
             uscan_verbose " => Package is up to date from:\n"
               . "             => $self->{upstream_url}";
@@ -1180,7 +1180,7 @@ sub cmp_versions {
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""
-                : " (mangled local version is $mangled_lastversion)\n"
+                : "            (mangled local version is $mangled_lastversion)\n"
               );
             uscan_verbose " => Only older package available from:\n"
               . "             => $self->{upstream_url}";
