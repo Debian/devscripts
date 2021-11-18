@@ -1251,7 +1251,7 @@ B<filenamemangle>:
   version=4
   opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%@PACKAGE@-$1.tar.gz%" \
       https://github.com/<user>/<project>/tags \
-      (?:.*?/)?@ANY_VERSION@@ARCHIVE_EXT@
+      (?:.*?/)?v?@ANY_VERSION@@ARCHIVE_EXT@
 
 =head2 PyPI
 
