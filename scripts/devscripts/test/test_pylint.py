@@ -29,7 +29,7 @@ CONFIG = os.path.join(os.path.dirname(__file__), "pylint.conf")
 
 
 def check_pylint_version():
-    return Version(pylint.__version__) >= Version('2.4.4')
+    return Version(pylint.__version__) >= Version('2.11.1')
 
 
 @unittest.skipIf(not check_pylint_version(), "pylint version not supported")
