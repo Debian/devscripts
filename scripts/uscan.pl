@@ -1249,7 +1249,7 @@ upstream tarball from into the standard F<< <project>-<version>.tar.gz >> using
 B<filenamemangle>:
 
   version=4
-  opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%@PACKAGE@-$1.tar.gz%" \
+  opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*@ARCHIVE_EXT@)%@PACKAGE@-$1%" \
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?@ANY_VERSION@@ARCHIVE_EXT@
 
