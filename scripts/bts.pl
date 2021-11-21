@@ -2802,7 +2802,7 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if ($interactive eq 'force') {
+    if ($interactive eq 'force' || $use_mutt) {
         push @ccemails, generate_packages_cc();
     }
     if ($ccsecurity) {
