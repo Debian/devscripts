@@ -375,7 +375,7 @@ Note that when sending directly via an SMTP host, specifying addresses in
 B<--cc-addr> or B<BTS_DEFAULT_CC> that the SMTP host will not relay will cause the
 SMTP host to reject the entire mail.
 
-Note also that the use of the B<reassign> command may, when either B<--interactive>
+Note also that the use of the B<reassign> command may, when either B<--mutt>
 or B<--force-interactive> mode is enabled, lead to the automatic addition of a Cc
 to I<$newpackage>@packages.debian.org.  In these cases, the note above regarding
 relaying applies.  The submission interface (port 587) on reportbug.debian.org
