@@ -11,13 +11,14 @@ our @EXPORT = ('partial_version');
 
 sub _xtp_newfile_base {
     my ($self) = @_;
-    my $newfile_base = basename($self->search_result->{newfile});
-
+    my $newfile_base;
     if (@{ $self->filenamemangle }) {
 
         # HTTP or FTP site (with filenamemangle)
         if ($self->versionless) {
             $newfile_base = $self->upstream_url;
+        } else {
+            $newfile_base = $self->search_result->{newfile};
         }
         my $cmp = $newfile_base;
         uscan_verbose "Matching target for filenamemangle: $newfile_base";
@@ -51,6 +52,7 @@ sub _xtp_newfile_base {
         }
     } else {
         # HTTP or FTP site (without filenamemangle)
+        $newfile_base = basename($self->search_result->{newfile});
         if ($self->mode eq 'http') {
 
             # Remove HTTP header trash

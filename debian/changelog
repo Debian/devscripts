@@ -7,6 +7,9 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   * Add zstd to the autopkgtests dependencies.  Closes: #1000417
   * origtargz:
     + Document pristine-lfs in README.
+  * uscan:
+    + Revert "Assign $newfile_base a filename, not a URL, when
+      filenamemangling".  Re-opens: #993585; Closes: #1000210
 
   [ Yadd ]
   * Update French translation.
@@ -14,7 +17,6 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   [ Unit 193 ]
   * uscan:
     + Better alignment for the verbose output.
-
 
   [ Ville Skyttä ]
   * Replace `switch` with `command -v`.  MR: !244
