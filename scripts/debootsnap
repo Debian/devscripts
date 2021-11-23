@@ -464,7 +464,7 @@ def serve_repo(tmpdirname):
 
 
 def run_mmdebstrap(tmpdirname, sources, nativearch, foreignarches, output):
-    with open(tmpdirname + "/sources.list", "w", ecoding="utf8") as f:
+    with open(tmpdirname + "/sources.list", "w", encoding="utf8") as f:
         for source in sources:
             f.write(
                 "deb [check-valid-until=no] http://snapshot.debian.org/"
