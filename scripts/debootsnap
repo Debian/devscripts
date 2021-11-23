@@ -191,9 +191,9 @@ class Proxy(http.server.SimpleHTTPRequestHandler):
 
 
 def parse_buildinfo(val):
-    with open(val) as f:
+    with open(val, encoding="utf8") as f:
         buildinfo = BuildInfo(f)
-    pkgs = list()
+    pkgs = []
     for dep in buildinfo.relations["installed-build-depends"]:
         assert len(dep) == 1
         dep = dep[0]
@@ -209,7 +209,7 @@ def parse_buildinfo(val):
 def parse_pkgs(val):
     if val == "-":
         val = sys.stdin.read()
-    pkgs = list()
+    pkgs = []
     pattern = re.compile(
         r"""
             ^[^a-z0-9]*                    # garbage at the beginning
@@ -337,7 +337,7 @@ def query_metasnap(pkgsleft, archive, nativearch):
     assert r.status_code == 200, r.text
 
     suite2pkgs = defaultdict(set)
-    pkg2range = dict()
+    pkg2range = {}
     for line in r.text.splitlines():
         n, a, v, s, c, b, e = line.split()
         assert (n, a, v) in handled_pkgs
@@ -351,7 +351,7 @@ def query_metasnap(pkgsleft, archive, nativearch):
 
 def comp_ts(ranges):
     last = "19700101T000000Z"  # impossibly early date
-    res = list()
+    res = []
     for c, b, e in ranges:
         if last >= b:
             # add the component the current timestamp needs
@@ -411,7 +411,7 @@ def compute_sources(pkgs, nativearch, ignore_notfound):
 
 
 def create_repo(tmpdirname, pkgs):
-    with open(tmpdirname + "/control", "w") as f:
+    with open(tmpdirname + "/control", "w", encoding="utf8") as f:
 
         def pkg2name(n, a, v):
             if a is None:
@@ -464,7 +464,7 @@ def serve_repo(tmpdirname):
 
 
 def run_mmdebstrap(tmpdirname, sources, nativearch, foreignarches, output):
-    with open(tmpdirname + "/sources.list", "w") as f:
+    with open(tmpdirname + "/sources.list", "w", ecoding="utf8") as f:
         for source in sources:
             f.write(
                 "deb [check-valid-until=no] http://snapshot.debian.org/"
@@ -495,7 +495,7 @@ def run_mmdebstrap(tmpdirname, sources, nativearch, foreignarches, output):
         )
 
     newpkgs = set()
-    with open(tmpdirname + "/pkglist") as f:
+    with open(tmpdirname + "/pkglist", encoding="utf8") as f:
         for line in f:
             line = line.rstrip()
             n, v = line.split("=")
@@ -541,9 +541,9 @@ def download_packages(tmpdirname, sources, pkgs, nativearch, foreignarches):
     ]:
         os.makedirs(tmpdirname + "/" + d)
     # apt-get update requires /var/lib/dpkg/status
-    with open(tmpdirname + "/var/lib/dpkg/status", "w") as f:
+    with open(tmpdirname + "/var/lib/dpkg/status", "w", encoding="utf8") as f:
         pass
-    with open(tmpdirname + "/apt.conf", "w") as f:
+    with open(tmpdirname + "/apt.conf", "w", encoding="utf8") as f:
         f.write('Apt::Architecture "%s";\n' % nativearch)
         f.write('Apt::Architectures { "%s"; ' % nativearch)
         for a in foreignarches:
@@ -562,7 +562,7 @@ def download_packages(tmpdirname, sources, pkgs, nativearch, foreignarches):
     os.makedirs(tmpdirname + "/cache")
 
     with proxy_snapshot(tmpdirname) as port:
-        with open(tmpdirname + "/etc/apt/sources.list", "w") as f:
+        with open(tmpdirname + "/etc/apt/sources.list", "w", encoding="utf8") as f:
             for source in sources:
                 f.write(
                     "deb [check-valid-until=no] http://localhost:%d/" % port
