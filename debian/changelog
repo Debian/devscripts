@@ -22,6 +22,9 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   [ Johannes Schauer Marin Rodrigues ]
   * New script!
     + debootsnap: bootstrap a Debian system from snapshot.debian.org.  MR: !231
+  * debbisect:
+    + Add an example debbisect script to use when one wants to bisect the
+      build of a Debian source package.  MR: !242
 
   [ Paul Wise ]
   * bts:  MR: !247

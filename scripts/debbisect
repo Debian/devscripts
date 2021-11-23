@@ -365,11 +365,10 @@ def get_mirror(port, timestamp):
 def runtest(timestamp, staticargs, toupgrade=None, badtimestamp=None):
     ret = 0
     goodmirror = get_mirror(staticargs.port, timestamp)
-    env = {
-        "DEBIAN_BISECT_EPOCH": "%d" % int(timestamp.timestamp()),
-        "DEBIAN_BISECT_TIMESTAMP": timestamp.strftime("%Y%m%dT%H%M%SZ"),
-        "PATH": os.environ.get("PATH", "/usr/sbin:/usr/bin:/sbin:/bin"),
-    }
+    env = {k: v for k, v in os.environ.items() if k.startswith("DEBIAN_BISECT_")}
+    env["DEBIAN_BISECT_EPOCH"] = "%d" % int(timestamp.timestamp())
+    env["DEBIAN_BISECT_TIMESTAMP"] = timestamp.strftime("%Y%m%dT%H%M%SZ")
+    env["PATH"] = os.environ.get("PATH", "/usr/sbin:/usr/bin:/sbin:/bin")
     if staticargs.port is not None:
         env["DEBIAN_BISECT_MIRROR"] = goodmirror
     if staticargs.depends or staticargs.qemu:
@@ -809,6 +808,15 @@ that we can see which packages differed in the logs at the end and uses
 command can be re-run without downloading everything from snapshot.debian.org
 again.
 
+If you want to build a source package you can use the script shipped by
+devscripts as /usr/share/doc/devscripts/examples/debbisect_buildsrc.sh and
+either use it unmodified like this:
+
+    $ DEBIAN_BISECT_SRCPKG=mysrc {progname} "two years ago" yesterday \
+    > /usr/share/doc/devscripts/examples/debbisect_buildsrc.sh
+
+or use the script as a starting point to do your own custom builds.
+
 Once debbisect has finished bisecting and figured out the last good and the
 first bad timestamp, there might be more than one package that differs in
 version between these two timestamps. debbisect can figure out which package is
@@ -870,6 +878,9 @@ DEBIAN_BISECT_TIMESTAMP Contains a timestamp in the format used by
                         snapshot.debian.org. Can also be generated from
                         DEBIAN_BISECT_EPOCH via:
                         date --utc --date=@$DEBIAN_BISECT_EPOCH +%Y%m%dT%H%M%SZ
+
+DEBIAN_BISECT_*         All environment variables starting with DEBIAN_BISECT_
+                        are passed to the test script.
 
 Written by Johannes Schauer Marin Rodrigues <josch@debian.org>
 """,
