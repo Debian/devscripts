@@ -459,7 +459,7 @@ testRepackZip2GZ() {
 }
 
 testRepackJar2GZ() {
-	if ! which jar >/dev/null
+	if ! command -v jar >/dev/null
 	then
           # skip to avoid dependency on java-jdk
 	  return

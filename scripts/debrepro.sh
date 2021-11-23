@@ -21,14 +21,14 @@ set -eu
 
 check_dependencies() {
     for optional in disorderfs diffoscope; do
-        if ! which "$optional" > /dev/null; then
+        if ! command -v "$optional" > /dev/null; then
             echo "W: $optional not installed, there will be missing functionality" >&2
         fi
     done
 
     local failed=''
     for mandatory in faketime; do
-        if ! which "$mandatory" > /dev/null; then
+        if ! command -v "$mandatory" > /dev/null; then
             echo "E: $mandatory not installed, cannot proceed." >&2
             failed=yes
         fi
@@ -115,7 +115,7 @@ create_build_script() {
         'export TZ=GMT+12' \
         'export TZ=GMT-14'
 
-    if which disorderfs >/dev/null; then
+    if command -v disorderfs >/dev/null; then
         disorderfs_commands='cd .. &&
 mv source orig &&
 mkdir source &&
@@ -177,7 +177,7 @@ compare() {
         fi
     done
     if [ "$rc" -ne 0 ]; then
-        if which diffoscope >/dev/null; then
+        if command -v diffoscope >/dev/null; then
             diffoscope "$tmpdir"/first/*.changes "$tmpdir"/second/*.changes || true
         else
             echo "I: install diffoscope for a deep comparison between artifacts"

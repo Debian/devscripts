@@ -140,7 +140,7 @@ DEFAULT_UUPDATE_SYMLINK_ORIG=yes
 VARS="UUPDATE_ROOTCMD UUPDATE_PRISTINE UUPDATE_SYMLINK_ORIG"
 
 SUFFIX="1"
-if which dpkg-vendor >/dev/null 2>&1; then
+if command -v dpkg-vendor >/dev/null; then
   VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
   case "$VENDER" in
     debian) SUFFIX="1" ;;

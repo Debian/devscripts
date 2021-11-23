@@ -151,7 +151,7 @@ test_debuild() {
 	dpkg-buildpackage: full upload (original source is included)
 	Now signing changes and any dsc files...
 EOS
-  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+  if command -v dpkg-genbuildinfo >/dev/null; then
     cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 signfile dsc test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
 	
@@ -325,7 +325,7 @@ test_debuild_forcesign() {
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
 	Now signing changes and any dsc files...
 EOS
-  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+  if command -v dpkg-genbuildinfo >/dev/null; then
     cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 signfile dsc test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
 	
