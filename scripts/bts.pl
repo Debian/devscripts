@@ -318,7 +318,7 @@ single B<%> if this is needed.)
 =item B<--cc-addr=>I<CC_EMAIL_ADDRESS>
 
 Send carbon copies to a list of users. I<CC_EMAIL_ADDRESS> should be a
-comma-separated list of email addresses.
+comma-separated list of email addresses. Multiple options add more CCs.
 
 =item B<--use-default-cc>
 
@@ -375,7 +375,7 @@ Note that when sending directly via an SMTP host, specifying addresses in
 B<--cc-addr> or B<BTS_DEFAULT_CC> that the SMTP host will not relay will cause the
 SMTP host to reject the entire mail.
 
-Note also that the use of the B<reassign> command may, when either B<--interactive>
+Note also that the use of the B<reassign> command may, when either B<--mutt>
 or B<--force-interactive> mode is enabled, lead to the automatic addition of a Cc
 to I<$newpackage>@packages.debian.org.  In these cases, the note above regarding
 relaying applies.  The submission interface (port 587) on reportbug.debian.org
@@ -493,7 +493,7 @@ my $includeresolved = 1;
 my $requestack      = 1;
 my $interactive_re  = '^(force|no|yes)$';
 my $interactive     = 'no';
-my $ccemail         = "";
+my @ccemails        = ();
 my $toolname        = "";
 my $btsserver       = 'https://bugs.debian.org';
 my $use_mutt        = 0;
@@ -594,8 +594,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
     $requestack      = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
     $interactive     = $config_vars{'BTS_INTERACTIVE'};
-    $ccemail         = $config_vars{'BTS_DEFAULT_CC'};
-    $btsserver       = $config_vars{'BTS_SERVER'};
+    push @ccemails, $config_vars{'BTS_DEFAULT_CC'} || ();
+    $btsserver = $config_vars{'BTS_SERVER'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -611,7 +611,7 @@ my $opt_mutt;
 my $opt_soap_timeout;
 my $mboxmode       = 0;
 my $quiet          = 0;
-my $opt_ccemail    = "";
+my @opt_ccemails   = ();
 my $use_default_cc = 1;
 my $ccsecurity     = "";
 
@@ -627,7 +627,7 @@ GetOptions(
     "cache-delay=i"             => \$opt_cachedelay,
     "m|mbox"                    => \$mboxmode,
     "mailreader|mail-reader=s"  => \$opt_mailreader,
-    "cc-addr=s"                 => \$opt_ccemail,
+    "cc-addr=s"                 => \@opt_ccemails,
     "sendmail=s"                => \$opt_sendmail,
     "smtp-host|smtphost=s"      => \$opt_smtphost,
     "smtp-user|smtp-username=s" => \$opt_smtpuser,
@@ -660,12 +660,11 @@ if ($opt_help)    { bts_help();    exit 0; }
 if ($opt_version) { bts_version(); exit 0; }
 
 if (!$use_default_cc) {
-    $ccemail = "";
+    @ccemails = ();
 }
 
-if ($opt_ccemail) {
-    $ccemail .= ", " if $ccemail;
-    $ccemail .= $opt_ccemail;
+if (@opt_ccemails) {
+    push @ccemails, @opt_ccemails;
 }
 
 if ($opt_mailreader) {
@@ -2505,7 +2504,7 @@ Valid options are:
    --cc-addr=CC_EMAIL_ADDRESS
                           Send carbon copies to a list of users.
                           CC_EMAIL_ADDRESS should be a comma-separated list of
-                          e-mail addresses.
+                          e-mail addresses. Multiple options add more CCs.
    --use-default-cc       Send carbon copies to any addresses specified in the
                           configuration file BTS_DEFAULT_CC (default)
    --no-use-default-cc    Do not do so
@@ -2790,7 +2789,7 @@ sub generate_packages_cc {
     if (keys %ccsubmitters && $btsserver) {
         push @ccs, map { "$_\@$btsserver" } sort keys %ccsubmitters;
     }
-    return join(', ', @ccs);
+    return @ccs;
 }
 
 # Sends all cached mail to the bts (duh).
@@ -2803,17 +2802,13 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if ($interactive eq 'force') {
-        $ccemail .= ", " if length $ccemail;
-        $ccemail .= generate_packages_cc();
+    if ($interactive eq 'force' || $use_mutt) {
+        push @ccemails, generate_packages_cc();
     }
     if ($ccsecurity) {
-        my $comma = "";
-        if ($ccemail) {
-            $comma = ", ";
-        }
-        $ccemail = "$ccemail$comma$ccsecurity";
+        push @ccemails, $ccsecurity;
     }
+    my $ccemail = join(', ', @ccemails);
     if ($ENV{'DEBEMAIL'} || $ENV{'EMAIL'}) {
         # We need to fake the From: line
         my ($email, $name);

@@ -15,6 +15,7 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   * uscan:
     + Better alignment for the verbose output.
 
+
   [ Ville Skyttä ]
   * Replace `switch` with `command -v`.  MR: !244
 
@@ -22,15 +23,21 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   * New script!
     + debootsnap: bootstrap a Debian system from snapshot.debian.org.  MR: !231
 
+  [ Paul Wise ]
+  * bts:  MR: !247
+    + Allow adding more --cc-addr options to add more CCs.
+    + Add package/submitter CCs when sending mails via mutt.
+    + Correct and update documentation about additional CCs.
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 10 Nov 2021 16:33:57 +0100
 
 devscripts (2.21.5) unstable; urgency=medium
 
   [ Paul Wise ]
   * bts:
-    + sync list of tags from the BTS debbugs config.
+    + Sync list of tags from the BTS debbugs config.
   * grep-excuses:
-    + allow passing multiple package names to -w/--wipnity.  MR: !232
+    + Allow passing multiple package names to -w/--wipnity.  MR: !232
 
   [ Daichi Fukui ]
   * dpkg-depcheck:
