@@ -5,6 +5,8 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
     + Explictly tell gpg to verify the signature, to avoid warning messages
       from it.  Thanks to Jakub Wilk.  Closes: #999141
   * Add zstd to the autopkgtests dependencies.  Closes: #1000417
+  * origtargz:
+    + Document pristine-lfs in README.
 
   [ Yadd ]
   * Update French translation.
