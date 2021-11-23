@@ -16,6 +16,10 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
   [ Ville Skyttä ]
   * Replace `switch` with `command -v`.  MR: !244
 
+  [ Johannes Schauer Marin Rodrigues ]
+  * New script!
+    + debootsnap: bootstrap a Debian system from snapshot.debian.org.  MR: !231
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 10 Nov 2021 16:33:57 +0100
 
 devscripts (2.21.5) unstable; urgency=medium

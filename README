@@ -108,6 +108,13 @@ And now, in alphabetical order, the scripts:
   ability to install the package with a very short command is very
   useful when troubleshooting packages.
 
+- debootsnap: Combines debootstrap and snapshot.debian.org to create a chroot
+  containing exactly the requested selection of packages. This can be used
+  to re-create a chroot from the past, for example to reproduce a bug. The
+  tool is also used by debrebuild to build a package in a chroot with build
+  dependencies in the same version as recorded in the buildinfo file.
+  [python3-pycurl, mmdebstrap]
+
 - debpkg: A wrapper for dpkg used by debi to allow convenient testing
   of packages.  For debpkg to work, it needs to be made setuid root,
   and this needs to be performed by the sysadmin -- it is not
@@ -125,7 +132,7 @@ And now, in alphabetical order, the scripts:
 
 - debrebuild: A script that provided a .buildinfo file reports the
   instructions on how to try to reproduce the reported build.
-  [sbuild | mmdebstrap, libdistro-info-perl]
+  [sbuild | mmdebstrap, python3-pycurl]
 
 - debrepro: A script that tests reproducibility of Debian packages. It will
   build a given source directory twice, with a set of variation between the

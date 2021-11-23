@@ -23,7 +23,7 @@ use Dpkg::Control;
 use Dpkg::Index;
 use Dpkg::Deps;
 use Dpkg::Source::Package;
-use File::Temp qw(tempdir);
+use File::Temp qw(tempfile tempdir);
 use File::Path qw(make_path);
 use File::HomeDir;
 use JSON::PP;
@@ -73,7 +73,6 @@ my $respect_build_path = 1;
 my $use_tor            = 0;
 my $outdir             = './';
 my $builder            = 'none';
-my $timestamp          = '';
 
 my %OPTIONS = (
     'help|h'              => sub { usage(0); },
@@ -81,7 +80,6 @@ my %OPTIONS = (
     'respect-build-path!' => \$respect_build_path,
     'buildresult=s'       => \$outdir,
     'builder=s'           => \$builder,
-    'timestamp|t=s'       => \$timestamp,
 );
 
 sub usage {
@@ -105,9 +103,6 @@ Options:
  --builder=BUILDER          Which building software should be used. Possible values are
                             none, sbuild, mmdebstrap, dpkg and sbuild+unshare. The default
                             is none. See section BUILDER for details.
- --timestamp, -t            The required unstable main timestamps from snapshot.d.o if you
-                            already know them, separated by commas, or one of the values
-                            "first_seen" or "metasnap". See section TIMESTAMPS.
 
 Note: $progname can parse buildinfo files with and without a GPG signature.  However,
 the signature (if present) is discarded as debrebuild does not support verifying
@@ -135,19 +130,6 @@ The desired backend is chosen using the --builder option. The default is
     sbuild+unshare  Use sbuild with the unshare backend. This will create the
                     chroot and perform the build without superuser privileges
                     and without any setup.
-
-TIMESTAMPS
-
-The --timestamp option allows one to skip the step of figuring out the correct
-set of required timestamps by listing them separated by commas in the same
-format used in the snapshot.d.o URL. The default is to use the "first_seen"
-attribute from the snapshot.d.o API and download multiple Packages files until
-all required timestamps are found. To explicitly select this mode, use
---timestamp=first_seen. Lastly, the metasnap.d.n service can be used to figure
-out the right set of timestamps. This mode can be selected by using
---timestamp=metasnap. In contrast to the "first_seen" mode, the metasnap.d.n
-service will always return a minimal set of timestamps if the package versions
-were at some point part of Debian unstable main.
 
 UNSHARE
 
@@ -384,519 +366,6 @@ if (!defined($base_files_version)) {
     die "no base-files\n";
 }
 
-# figure out the debian release from the version of base-files
-my $base_dist;
-
-my %base_files_map = ();
-my $di_path        = '/usr/share/distro-info/debian.csv';
-eval { require Debian::DistroInfo; };
-if (!$@) {
-    # libdistro-info-perl is installed
-    my $di = DebianDistroInfo->new();
-    foreach my $series ($di->all) {
-        if (!$di->version($series)) {
-            next;
-        }
-        $base_files_map{ $di->version($series) } = $series;
-    }
-} elsif (-f $di_path) {
-    # distro-info-data is installed
-    open my $fh, '<', $di_path or die "cannot open $di_path: $!\n";
-    my $i = 0;
-    while (my $line = <$fh>) {
-        chomp($line);
-        $i++;
-        my @cells = split /,/, $line;
-        if (scalar @cells < 4) {
-            die "cannot parse line $i of $di_path\n";
-        }
-        if (
-            $i == 1
-            and (  scalar @cells < 6
-                or $cells[0] ne 'version'
-                or $cells[1] ne 'codename'
-                or $cells[2] ne 'series'
-                or $cells[3] ne 'created'
-                or $cells[4] ne 'release'
-                or $cells[5] ne 'eol')
-        ) {
-            die "cannot find correct header in $di_path\n";
-        }
-        if ($i == 1) {
-            next;
-        }
-        $base_files_map{ $cells[0] } = $cells[2];
-    }
-    close $fh;
-} else {
-    # nothing is installed -- use hard-coded values
-    %base_files_map = (
-        "6"  => "squeeze",
-        "7"  => "wheezy",
-        "8"  => "jessie",
-        "9"  => "stretch",
-        "10" => "buster",
-        "11" => "bullseye",
-        "12" => "bookworm",
-        "13" => "trixie",
-    );
-}
-
-$base_files_version =~ s/^(\d+).*/$1/;
-
-# we subtract one from $base_files_version because we want the Debian release
-# before what is currently in unstable
-$base_dist = $base_files_map{ $base_files_version - 1 };
-
-if (!defined $base_dist) {
-    die "base-files version didn't map to any Debian release\n";
-}
-
-my $src_date;
-{
-    print "retrieving snapshot.d.o data for $srcpkgname $srcpkgver\n";
-    my $json_url
-      = "http://snapshot.debian.org/mr/package/$srcpkgname/$srcpkgver/srcfiles?fileinfo=1";
-    my $content = LWP::Simple::get($json_url);
-    die "cannot retrieve $json_url" unless defined $content;
-    my $json = JSON::PP->new();
-    # json options taken from debsnap
-    my $json_text = $json->allow_nonref->utf8->relaxed->decode($content);
-    die "cannot decode json" unless defined $json_text;
-    foreach my $result (@{ $json_text->{result} }) {
-        # FIXME - assumption: package is from Debian official (and not ports)
-        my @package_from_main = grep { $_->{archive_name} eq "debian" }
-          @{ $json_text->{fileinfo}->{ $result->{hash} } };
-        if (scalar @package_from_main > 1) {
-            die
-              "more than one package with the same hash in Debian official\n";
-        }
-        if (scalar @package_from_main == 0) {
-            die "no package with the right hash in Debian official\n";
-        }
-        $src_date = $package_from_main[0]->{first_seen};
-    }
-}
-if (!defined($src_date)) {
-    die "cannot find .dsc\n";
-}
-
-# support timestamps being separated by a comma
-my @required_timestamps = ();
-if ($timestamp eq "first_seen") {
-    # nothing to do, timestamps will be figured out later
-} elsif ($timestamp eq "metasnap") {
-    # acquire the required timestamps using metasnap.d.n
-    print "retrieving required timestamps from metasnap.d.n\n";
-    my $ua = LWP::UserAgent->new(timeout => 10);
-    $ua->env_proxy;
-    my @pkgs = ();
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-        if (defined $pkg_arch) {
-            push @pkgs,
-              URI::Escape::uri_escape("$pkg_name:$pkg_arch=$pkg_ver");
-        } else {
-            push @pkgs, URI::Escape::uri_escape("$pkg_name=$pkg_ver");
-        }
-    }
-    my $response
-      = $ua->get('https://metasnap.debian.net/cgi-bin/api'
-          . '?archive=debian'
-          . "&pkgs="
-          . (join "%2C", @pkgs)
-          . "&arch=$build_arch"
-          . '&suite=unstable'
-          . '&comp=main');
-    if (!$response->is_success) {
-        die "request to metasnap.d.n failed: $response->status_line";
-    }
-    foreach my $line (split /\n/, $response->decoded_content) {
-        my ($arch, $t) = split / /, $line, 2;
-        if ($arch ne $build_arch) {
-            die
-"debrebuild is currently unable to handle multiple architectures";
-        }
-        push @required_timestamps, $t;
-    }
-} else {
-    @required_timestamps = split(/,/, $timestamp);
-}
-
-# setup a temporary apt directory
-
-my $tempdir = tempdir(CLEANUP => 1);
-
-foreach my $d ((
-        '/etc/apt',                        '/etc/apt/apt.conf.d',
-        '/etc/apt/preferences.d',          '/etc/apt/trusted.gpg.d',
-        '/etc/apt/sources.list.d',         '/var/lib/apt/lists/partial',
-        '/var/cache/apt/archives/partial', '/var/lib/dpkg',
-    )
-) {
-    make_path("$tempdir/$d");
-}
-
-# We use the Build-Date field as a heuristic to find a good date for the
-# stable release. If we would get the stable release from deb.debian.org
-# instead, then packages might be newer than in unstable of the past because
-# of point releases. The date from the source package will also work in most
-# cases but will fail for binNMU buildinfo files where the source package
-# might even come from years in the past
-my $build_date;
-{
-    local $ENV{LC_ALL} = 'C';
-    my $tp
-      = Time::Piece->strptime($cdata->{'Build-Date'}, '%a, %d %b %Y %T %z');
-    $build_date = $tp->strftime("%Y%m%dT%H%M%SZ");
-}
-
-sub get_sources_list() {
-    my @result = ();
-    push @result, "deb $base_mirror/$build_date/ $base_dist main";
-    push @result, "deb-src $base_mirror/$src_date/ unstable main";
-    foreach my $ts (@required_timestamps) {
-        push @result, "deb $base_mirror/$ts/ unstable main";
-    }
-    return @result;
-}
-
-open(FH, '>', "$tempdir/etc/apt/sources.list");
-print FH (join "\n", get_sources_list) . "\n";
-close FH;
-# FIXME - document what's dpkg's status for
-# Create dpkg status
-open(FH, '>', "$tempdir/var/lib/dpkg/status");
-close FH;    #empty file
-# Create apt.conf
-my $aptconf = "$tempdir/etc/apt/apt.conf";
-open(FH, '>', $aptconf);
-
-# We create an apt.conf and pass it to apt via the APT_CONFIG environment
-# variable instead of passing all options via the command line because
-# otherwise apt will read the system's config first and might get unwanted
-# configuration options from there. See apt.conf(5) for the order in which
-# configuration options are read.
-#
-# While we are at it, we also set all other options through our custom
-# apt.conf.
-#
-# Apt::Architecture has to be set because otherwise apt will default to the
-# architecture apt was compiled for.
-#
-# Apt::Architectures has to be set or otherwise apt will use dpkg to find all
-# foreign architectures of the system running apt.
-#
-# Dir::State::status has to be set even though Dir is set because Dir::State
-# is set to var/lib/apt, so Dir::State::status would be below that but really
-# isn't and without an absolute path, Dir::State::status would be constructed
-# from Dir + Dir::State + Dir::State::status. This has been fixed in apt
-# commit 475f75506db48a7fa90711fce4ed129f6a14cc9a.
-#
-# Acquire::Check-Valid-Until has to be set to false because the snapshot
-# timestamps might be too far in the past to still be valid. This could be
-# fixed by a solution to https://bugs.debian.org/763419
-#
-# Acquire::Languages has to be set to prevent downloading of translations from
-# the mirrors.
-#
-# Binary::apt-get::Acquire::AllowInsecureRepositories has to be set to false
-# so that apt-get update fails if repositories cannot be authenticated. The
-# default value of this option will change to true with apt from Debian
-# Buster.
-#
-# We need APT::Get::allow-downgrades set to true, because even if we choose a
-# base distribution that was released before the state that "unstable"
-# currently is in, the package versions in that stable release might be newer
-# than what is in unstable due to security fixes. Choosing a stable release
-# from an older snapshot timestamp would fix this problem but would defeat the
-# purpose of a base distribution for builders like sbuild which can take
-# advantage of existing chroot environments.
-
-print FH <<EOF;
-Apt {
-   Architecture "$build_arch";
-   Architectures "$build_arch";
-};
-
-Dir "$tempdir";
-Dir::State::status "$tempdir/var/lib/dpkg/status";
-Acquire::Languages "none";
-Binary::apt-get::Acquire::AllowInsecureRepositories "false";
-EOF
-my @common_aptopts = (
-    'Acquire::Check-Valid-Until "false";',
-    'Acquire::http::Dl-Limit "1000";',
-    'Acquire::https::Dl-Limit "1000";',
-    'Acquire::Retries "5";',
-    'APT::Get::allow-downgrades "true";',
-);
-foreach my $line (@common_aptopts) {
-    print FH "$line\n";
-}
-close FH;
-
-# add the removed keys because they are not returned by Dpkg::Vendor
-# we don't need the Ubuntu vendor now but we already put the comments to
-# possibly extend this script to other Debian derivatives
-my @keyrings     = ();
-my $debianvendor = Dpkg::Vendor::Debian->new();
-push @keyrings, $debianvendor->run_hook('archive-keyrings');
-push @keyrings, $debianvendor->run_hook('archive-keyrings-historic');
-#my $ubuntuvendor = Dpkg::Vendor::Ubuntu->new();
-#push @keyrings, $ubuntuvendor->run_hook('archive-keyrings');
-#push @keyrings, $ubuntuvendor->run_hook('archive-keyrings-historic');
-
-foreach my $keyring (@keyrings) {
-    my $base = basename $keyring;
-    print "$keyring\n";
-    if (-f $keyring) {
-        print "linking $tempdir/etc/apt/trusted.gpg.d/$base to $keyring\n";
-        symlink $keyring, "$tempdir/etc/apt/trusted.gpg.d/$base";
-    }
-}
-
-$ENV{'APT_CONFIG'} = $aptconf;
-
-0 == system 'apt-get', 'update' or die "apt-get update failed\n";
-
-sub dpkg_index_key_func {
-    return
-        $_[0]->{Package} . ' '
-      . $_[0]->{Version} . ' '
-      . $_[0]->{Architecture};
-}
-
-sub parse_all_packages_files {
-    my $dpkg_index = Dpkg::Index->new(get_key_func => \&dpkg_index_key_func);
-
-    open(my $fd, '-|', 'apt-get', 'indextargets', '--format', '$(FILENAME)',
-        'Created-By: Packages');
-    while (my $fname = <$fd>) {
-        chomp $fname;
-        print "parsing $fname...\n";
-        open(my $fd2, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $fname);
-        $dpkg_index->parse($fd2, "pipe") or die "cannot parse Packages file\n";
-        close($fd2);
-    }
-    close($fd);
-    return $dpkg_index;
-}
-
-my $index = parse_all_packages_files();
-if (scalar @required_timestamps == 0) {
-    # go through all packages in the Installed-Build-Depends field and find out
-    # the timestamps at which they were first seen each
-    my %notfound_timestamps;
-
-    my %missing;
-
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        my $pkg_arch = $pkg->{architecture};
-
-      # check if we really need to acquire this package from snapshot.d.o or if
-      # it already exists in the cache
-        if (defined $pkg->{architecture}) {
-            if ($index->get_by_key("$pkg_name $pkg_ver $pkg_arch")) {
-                print "skipping $pkg_name $pkg_ver\n";
-                next;
-            }
-        } else {
-            if ($index->get_by_key("$pkg_name $pkg_ver $build_arch")) {
-                $pkg->{architecture} = $build_arch;
-                print "skipping $pkg_name $pkg_ver\n";
-                next;
-            }
-            if ($index->get_by_key("$pkg_name $pkg_ver all")) {
-                $pkg->{architecture} = "all";
-                print "skipping $pkg_name $pkg_ver\n";
-                next;
-            }
-        }
-
-        print "retrieving snapshot.d.o data for $pkg_name $pkg_ver\n";
-        my $json_url
-          = "http://snapshot.debian.org/mr/binary/$pkg_name/$pkg_ver/binfiles?fileinfo=1";
-        my $content = LWP::Simple::get($json_url);
-        die "cannot retrieve $json_url" unless defined $content;
-        my $json = JSON::PP->new();
-        # json options taken from debsnap
-        my $json_text = $json->allow_nonref->utf8->relaxed->decode($content);
-        die "cannot decode json" unless defined $json_text;
-        my $pkg_hash;
-        if (scalar @{ $json_text->{result} } == 1) {
-           # if there is only a single result, then the package must either be
-           # Architecture:all, be the build architecture or match the requested
-           # architecture
-            $pkg_hash = ${ $json_text->{result} }[0]->{hash};
-            $pkg->{architecture}
-              = ${ $json_text->{result} }[0]->{architecture};
-            # if a specific architecture was requested, it should match
-            if (defined $pkg_arch && $pkg_arch ne $pkg->{architecture}) {
-                die
-"package $pkg_name was explicitly requested for $pkg_arch but only $pkg->{architecture} was found\n";
-            }
-            # if no specific architecture was requested, it should be the build
-            # architecture
-            if (   !defined $pkg_arch
-                && $build_arch ne $pkg->{architecture}
-                && "all" ne $pkg->{architecture}) {
-                die
-"package $pkg_name was implicitly requested for $pkg_arch but only $pkg->{architecture} was found\n";
-            }
-          # Ensure that $pkg_arch is defined from here as we want to look it up
-          # later in a Packages file from snapshot.d.o if it is not in the
-          # current Packages file
-            $pkg_arch = $pkg->{architecture};
-        } else {
-            # Since the package occurs more than once, we expect it to be of
-            # Architecture:any
-            #
-            # If no specific architecture was requested, look for the build
-            # architecture
-            if (!defined $pkg_arch) {
-                $pkg_arch = $build_arch;
-            }
-            foreach my $result (@{ $json_text->{result} }) {
-                if ($result->{architecture} eq $pkg_arch) {
-                    $pkg_hash = $result->{hash};
-                    last;
-                }
-            }
-            if (!defined($pkg_hash)) {
-                die "cannot find package in architecture $pkg_arch\n";
-            }
-            # we now know that this package is not architecture:all but has a
-            # concrete architecture
-            $pkg->{architecture} = $pkg_arch;
-        }
-        # FIXME - assumption: package is from Debian official (and not ports)
-        my @package_from_main = grep { $_->{archive_name} eq "debian" }
-          @{ $json_text->{fileinfo}->{$pkg_hash} };
-        if (scalar @package_from_main > 1) {
-            die
-              "more than one package with the same hash in Debian official\n";
-        }
-        if (scalar @package_from_main == 0) {
-            die "no package with the right hash in Debian official\n";
-        }
-        my $date = $package_from_main[0]->{first_seen};
-        $pkg->{first_seen}                             = $date;
-        $notfound_timestamps{$date}                    = 1;
-        $missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"} = 1;
-    }
-
-    # feed apt with timestamped snapshot.debian.org URLs until apt is able to
-    # find all the required package versions. We start with the most recent
-    # timestamp, check which packages cannot be found at that timestamp, add
-    # the timestamp of the most recent not-found package and continue doing
-    # this iteratively until all versions can be found.
-
-    while (0 < scalar keys %notfound_timestamps) {
-        print "left to check: " . (scalar keys %notfound_timestamps) . "\n";
-        my @timestamps = map { Time::Piece->strptime($_, '%Y%m%dT%H%M%SZ') }
-          (sort keys %notfound_timestamps);
-        my $newest = $timestamps[$#timestamps];
-        $newest = $newest->strftime("%Y%m%dT%H%M%SZ");
-        push @required_timestamps, $newest;
-        delete $notfound_timestamps{$newest};
-
-        my $snapshot_url = "$base_mirror/$newest/";
-
-        open(FH, '>>', "$tempdir/etc/apt/sources.list");
-        print FH "deb ${snapshot_url} unstable main\n";
-        close FH;
-
-        0 == system 'apt-get', 'update' or die "apt-get update failed\n";
-
-        my $index = parse_all_packages_files();
-        foreach my $pkg (@inst_build_deps) {
-            my $pkg_name   = $pkg->{name};
-            my $pkg_ver    = $pkg->{version};
-            my $pkg_arch   = $pkg->{architecture};
-            my $first_seen = $pkg->{first_seen};
-            my $cdata = $index->get_by_key("$pkg_name $pkg_ver $pkg_arch");
-            if (not defined($cdata->{"Package"})) {
-                # Not present yet; we hope a later snapshot URL will locate it.
-                next;
-            }
-            delete($missing{"${pkg_name}/${pkg_ver}/${pkg_arch}"});
-            if (defined $first_seen) {
-              # this may delete timestamps that we actually need for some other
-              # packages
-                delete $notfound_timestamps{$first_seen};
-            }
-        }
-    }
-
-    if (%missing) {
-        print STDERR 'Cannot locate the following packages via snapshots'
-          . " or the current repo/mirror\n";
-        for my $key (sort(keys(%missing))) {
-            print STDERR "  ${key}\n";
-        }
-        exit(1);
-    }
-} else {
-    # find out the actual package architecture for all installed build
-    # dependencies without explicit architecture qualification
-    foreach my $pkg (@inst_build_deps) {
-        my $pkg_name = $pkg->{name};
-        my $pkg_ver  = $pkg->{version};
-        if (defined $pkg->{architecture}) {
-            next;
-        }
-        if ($index->get_by_key("$pkg_name $pkg_ver $build_arch")) {
-            $pkg->{architecture} = $build_arch;
-            next;
-        }
-        if ($index->get_by_key("$pkg_name $pkg_ver all")) {
-            $pkg->{architecture} = "all";
-            next;
-        }
-        die "cannot find $pkg_name $pkg_ver in index\n";
-    }
-}
-
-# remove $tempdir manually to avoid any surprises
-0 == system 'apt-get', '--option',
-  'Dir::Etc::SourceList=/dev/null',  '--option',
-  'Dir::Etc::SourceParts=/dev/null', 'update'
-  or die "apt-get update failed\n";
-
-foreach my $f (
-    '/var/cache/apt/pkgcache.bin',
-    '/var/cache/apt/srcpkgcache.bin',
-    '/var/lib/dpkg/status',
-    '/var/lib/apt/lists/lock',
-    '/etc/apt/apt.conf',
-    '/etc/apt/sources.list',
-    '/etc/apt/trusted.gpg.d/debian-archive-removed-keys.gpg',
-    '/etc/apt/trusted.gpg.d/debian-archive-keyring.gpg'
-) {
-    unlink "$tempdir/$f" or die "cannot unlink $tempdir/$f: $!\n";
-}
-
-foreach my $d (
-    '/var/cache/apt/archives/partial', '/var/cache/apt/archives',
-    '/var/cache/apt',                  '/var/cache',
-    '/var/lib/dpkg',                   '/var/lib/apt/lists/auxfiles',
-    '/var/lib/apt/lists/partial',      '/var/lib/apt/lists',
-    '/var/lib/apt',                    '/var/lib',
-    '/var',                            '/etc/apt/sources.list.d',
-    '/etc/apt/trusted.gpg.d',          '/etc/apt/preferences.d',
-    '/etc/apt/apt.conf.d',             '/etc/apt',
-    '/etc',                            ''
-) {
-    rmdir "$tempdir/$d" or die "cannot rmdir $d: $!\n";
-}
-
-!-e $tempdir or die "failed to remove $tempdir\n";
-
 if ($builder ne "none") {
     if (!-e $outdir) {
         make_path($outdir);
@@ -923,21 +392,29 @@ foreach my $pkg (@inst_build_deps) {
     my $pkg_name = $pkg->{name};
     my $pkg_ver  = $pkg->{version};
     my $pkg_arch = $pkg->{architecture};
-    if (any { $_ eq $builder } ('mmdebstrap', 'none', 'dpkg')) {
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            push @install, "$pkg_name=$pkg_ver";
-        } else {
-            push @install, "$pkg_name:$pkg_arch=$pkg_ver";
-        }
-    } elsif (any { $_ eq $builder } ('sbuild', 'sbuild+unshare')) {
-        if ($pkg_arch eq "all" || $pkg_arch eq $build_arch) {
-            push @install, "$pkg_name (= $pkg_ver)";
-        } else {
-            push @install, "$pkg_name:$pkg_arch (= $pkg_ver)";
-        }
+    if (   not defined $pkg_arch
+        or $pkg_arch eq "all"
+        or $pkg_arch eq $build_arch) {
+        push @install, "$pkg_name=$pkg_ver";
     } else {
-        die "unsupported builder: $builder\n";
+        push @install, "$pkg_name:$pkg_arch=$pkg_ver";
     }
+}
+
+my $tarballpath = '';
+my $sourceslist = '';
+if (any { $_ eq $builder } ('none', 'dpkg')) {
+    open my $fh, '-|', 'debootsnap', "--buildinfo=$buildinfo",
+      '--sources-list-only' // die "cannot exec debootsnap";
+    $sourceslist = do { local $/; <$fh> };
+    close $fh;
+} elsif (any { $_ eq $builder } ('mmdebstrap', 'sbuild', 'sbuild+unshare')) {
+    (undef, $tarballpath)
+      = tempfile('debrebuild.tar.XXXXXXXXXXXX', OPEN => 0, TMPDIR => 1);
+    0 == system 'debootsnap', "--buildinfo=$buildinfo", $tarballpath
+      or die "debootsnap failed";
+} else {
+    die "unsupported builder: $builder\n";
 }
 
 if ($builder eq "none") {
@@ -948,7 +425,7 @@ if ($builder eq "none") {
     print
       "The following sources.list contains all the required repositories:\n";
     print "\n";
-    print(join "\n", get_sources_list);
+    print "$sourceslist\n";
     print "\n";
     print "You can manually install the right dependencies like this:\n";
     print "\n";
@@ -1004,7 +481,7 @@ if ($builder eq "none") {
         die "$sources already exists -- refusing to overwrite\n";
     }
     open(FH, '>', $sources) or die "cannot open $sources: $!\n";
-    print FH (join "\n", get_sources_list) . "\n";
+    print FH "$sourceslist\n";
     close FH;
 
     my $config = '/etc/apt/apt.conf.d/23-debrebuild.conf';
@@ -1012,6 +489,13 @@ if ($builder eq "none") {
         die "$config already exists -- refusing to overwrite\n";
     }
     open(FH, '>', $config) or die "cannot open $config: $!\n";
+    my @common_aptopts = (
+        'Acquire::Check-Valid-Until "false";',
+        'Acquire::http::Dl-Limit "1000";',
+        'Acquire::https::Dl-Limit "1000";',
+        'Acquire::Retries "5";',
+        'APT::Get::allow-downgrades "true";',
+    );
     foreach my $line (@common_aptopts) {
         print FH "$line\n";
     }
@@ -1063,45 +547,8 @@ if ($builder eq "none") {
       . "/${srcpkgname}_${srcpkgbinver}_$changesarch.changes", $outdir
       or die "dcmd failed\n";
 } elsif ($builder eq "sbuild" or $builder eq "sbuild+unshare") {
-    my $tarballpath = File::HomeDir->my_home
-      . "/.cache/sbuild/$base_dist-$build_arch.tar.gz";
-    if ($builder eq "sbuild+unshare") {
-        if (!-e $tarballpath) {
-            my $chrootdir = tempdir();
-            0 == system 'sbuild-createchroot', '--chroot-mode=unshare',
-              '--make-sbuild-tarball', $tarballpath,
-              $base_dist, $chrootdir, "$base_mirror/$build_date/"
-              or die "sbuild-createchroot failed\n";
-            !-e $chrootdir or die "$chrootdir wasn't removed\n";
-        }
-    }
 
     my @cmd = ('env', "--chdir=$outdir", @environment, 'sbuild');
-    foreach my $line (get_sources_list) {
-        push @cmd, "--extra-repository=$line";
-    }
-
-    # Release files from snapshots.d.o have often expired by the time
-    # we fetch them.  Include the option to work around that to assist
-    # the user.
-    push @cmd,
-        '--chroot-setup-commands=echo '
-      . (String::ShellQuote::shell_quote(join '\n', @common_aptopts))
-      . ' | tee /etc/apt/apt.conf.d/23-debrebuild.conf';
-
-    # sbuild chroots have build-essential already installed. This might
-    # interfere with the packages that we need to install. Example:
-    # libc6-dev : Breaks: libgcc-8-dev (< 8.4.0-2~) but 8.3.0-6 is to be inst..
-    # Thus, we remove them beforehand -- the right versions will get installed
-    # later anyways.
-    # We have to list the packages manually instead of relying on autoremove
-    # because debootstrap marks them all as manually installed.
-    push @cmd,
-      (     '--chroot-setup-commands=apt-get --yes remove build-essential'
-          . ' libc6-dev gcc g++ make dpkg-dev');
-    push @cmd, '--chroot-setup-commands=apt-get --yes autoremove';
-
-    push @cmd, "--add-depends=" . (join ",", @install);
     push @cmd, "--build=$build_arch";
     push @cmd, "--host=$host_arch";
 
@@ -1123,22 +570,15 @@ if ($builder eq "none") {
     if ($cdata->{"Binary-Only-Changes"}) {
         push @cmd, "--binNMU-changelog=$cdata->{'Binary-Only-Changes'}";
     }
-    if ($builder eq "sbuild+unshare") {
-        push @cmd, "--chroot=$tarballpath";
-        push @cmd, "--chroot-mode=unshare";
-    }
-    push @cmd, "--dist=$base_dist";
+    push @cmd, "--chroot=$tarballpath";
+    push @cmd, "--chroot-mode=unshare";
+    push @cmd, "--dist=unstable";
     push @cmd, "--no-run-lintian";
     push @cmd, "--no-run-autopkgtest";
     push @cmd, "--no-apt-upgrade";
     push @cmd, "--no-apt-distupgrade";
     # disable the explainer
     push @cmd, "--bd-uninstallable-explainer=";
-    # We need the aspcud resolver to install packages that are older than the
-    # ones in the latest snapshot. Apt by default will only use the latest
-    # package versions as candidates and sbuild uses a dummy package instead
-    # of crafting an apt command line with the exact version requirements.
-    push @cmd, "--build-dep-resolver=aspcud";
 
     if ($custom_build_path) {
         push @cmd, "--build-path=$custom_build_path";
@@ -1169,26 +609,17 @@ if ($builder eq "none") {
         'PATH=/usr/sbin:/usr/bin:/sbin:/bin',
         'mmdebstrap',
         "--arch=$build_arch",
-        "--variant=apt",
-        (map { "--aptopt=$_" } @common_aptopts),
-        '--include=' . (join ' ', @install),
-        '--essential-hook=chroot "$1" sh -c "'
-          . (
-            join ' && ',
-            'rm /etc/apt/sources.list',
-            'echo '
-              . (
-                String::ShellQuote::shell_quote(
-                    (join "\n", get_sources_list) . "\n"
-                ))
-              . ' >> /etc/apt/sources.list',
-            'apt-get update'
-          )
-          . '"',
+        "--variant=custom",
+        '--skip=setup',
+        '--skip=update',
+        '--skip=cleanup',
+        "--setup-hook=tar --exclude=\"./dev/*\" -C \"\$1\" -xf "
+          . (String::ShellQuote::shell_quote $tarballpath),
+        '--setup-hook=rm "$1"/etc/apt/sources.list',
+"--customize-hook=debsnap --force --destdir \"\$1\" $srcpkgname $srcpkgver",
         '--customize-hook=chroot "$1" sh -c "'
           . (
             join ' && ',
-            "apt-get source --only-source -d $srcpkgname=$srcpkgver",
             "mkdir -p "
               . (String::ShellQuote::shell_quote(dirname $custom_build_path)),
             "dpkg-source --no-check -x /"
@@ -1203,9 +634,8 @@ if ($builder eq "none") {
         '--customize-hook=sync-out '
           . (dirname $custom_build_path)
           . " $outdir",
-        $base_dist,
+        '',
         '/dev/null',
-        "deb $base_mirror/$build_date/ $base_dist main"
     );
     print((join ' ', @cmd) . "\n");
 
