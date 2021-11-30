@@ -1,8 +1,8 @@
-devscripts (2.21.6) UNRELEASED; urgency=medium
+devscripts (2.21.6) unstable; urgency=medium
 
   [ Mattia Rizzolo ]
   * dscverify:
-    + Explictly tell gpg to verify the signature, to avoid warning messages
+    + Explicitly tell gpg to verify the signature, to avoid warning messages
       from it.  Thanks to Jakub Wilk.  Closes: #999141
   * Add zstd to the autopkgtests dependencies.  Closes: #1000417
   * origtargz:
@@ -36,7 +36,7 @@ devscripts (2.21.6) UNRELEASED; urgency=medium
     + Add package/submitter CCs when sending mails via mutt.
     + Correct and update documentation about additional CCs.
 
- -- Mattia Rizzolo <mattia@debian.org>  Wed, 10 Nov 2021 16:33:57 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 30 Nov 2021 14:01:41 +0100
 
 devscripts (2.21.5) unstable; urgency=medium
 
