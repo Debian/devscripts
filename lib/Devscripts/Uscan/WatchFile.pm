@@ -439,7 +439,8 @@ sub process_group {
       @last_debian_mangled_uversions
       if (grep { $_ } @last_debian_mangled_uversions);
     my $mangled_ver
-      = Dpkg::Version->new("1:" . $dehs_tags->{'debian-uversion'} . "-0",
+      = Dpkg::Version->new(
+        "1:" . $dehs_tags->{'debian-mangled-uversion'} . "-0",
         check => 0);
     my $upstream_ver = Dpkg::Version->new("1:$new_version-0", check => 0);
     if ($mangled_ver == $upstream_ver) {

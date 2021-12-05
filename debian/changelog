@@ -2,6 +2,9 @@ devscripts (2.21.7) UNRELEASED; urgency=medium
 
   [ Yadd ]
   * fix po4a/devscripts-po4a.conf to install translated manpages of uscan
+  * uscan:
+    + Fix status result for packages using "group".
+      Closes: #1000969; MR: !252
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 01 Dec 2021 21:34:33 +0100
 

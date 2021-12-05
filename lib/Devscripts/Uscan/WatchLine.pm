@@ -982,7 +982,7 @@ sub search {
       . "    \$filepattern = $self->{parse_result}->{filepattern} found\n"
       . "    \$newfile     = $newfile\n"
       . "    \$newversion  = $newversion\n"
-      . "    \$lastversion = $self->{parse_result}->{lastversion}";
+      . "    \$lastversion = $self->{parse_result}->{mangled_lastversion}";
     $self->search_result({
         newversion => $newversion,
         newfile    => $newfile,
@@ -1139,7 +1139,7 @@ sub cmp_versions {
         if ($compver eq 'newer') {
             uscan_msg "Newest version of $name on remote site is "
               . "$self->{search_result}->{newversion}, "
-              . "local version is $self->{parse_result}->{lastversion}\n"
+              . "local version is $self->{parse_result}->{mangled_lastversion}\n"
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""
@@ -1155,7 +1155,7 @@ sub cmp_versions {
         } elsif ($compver eq 'same') {
             uscan_verbose "Newest version of $name on remote site is "
               . $self->search_result->{newversion}
-              . ", local version is $self->{parse_result}->{lastversion}\n"
+              . ", local version is $self->{parse_result}->{mangled_lastversion}\n"
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""
@@ -1176,7 +1176,7 @@ sub cmp_versions {
         } else {    # $compver eq 'old'
             uscan_verbose "Newest version of $name on remote site is "
               . $self->search_result->{newversion}
-              . ", local version is $self->{parse_result}->{lastversion}\n"
+              . ", local version is $self->{parse_result}->{mangled_lastversion}\n"
               . (
                 $mangled_lastversion eq $self->parse_result->{lastversion}
                 ? ""

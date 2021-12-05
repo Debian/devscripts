@@ -82,10 +82,10 @@ makeRepo() {
 version=4
 http://localhost:$PORT/ .*$PKG-([\d\.]+).tar.gz $lv
 
-opts="component=bar1$cmpopt1" http://localhost:$PORT/ .*bar1-([\d\.]+).tar.gz $lv1
-opts="component=bar2$cmpopt2" http://localhost:$PORT/ .*bar2-([\d\.]+).tar.gz $lv2
-opts="component=bar3$cmpopt3" http://localhost:$PORT/ .*bar3-([\d\.]+).tar.gz $lv3
-opts="component=bar4$cmpopt4" http://localhost:$PORT/ .*bar4-([\d\.]+).tar.gz $lv4
+opts="dversionmangle=auto,component=bar1$cmpopt1" http://localhost:$PORT/ .*bar1-([\d\.]+).tar.gz $lv1
+opts="dversionmangle=auto,component=bar2$cmpopt2" http://localhost:$PORT/ .*bar2-([\d\.]+).tar.gz $lv2
+opts="dversionmangle=auto,component=bar3$cmpopt3" http://localhost:$PORT/ .*bar3-([\d\.]+).tar.gz $lv3
+opts="dversionmangle=auto,component=bar4$cmpopt4" http://localhost:$PORT/ .*bar4-([\d\.]+).tar.gz $lv4
 END
 
     cat <<END > "$TEMP_PKG_DIR"/$PKG/debian/changelog
@@ -186,6 +186,10 @@ testCmpIgnoreND() {
 
 testCmpGroupND() {
   helperNoDownload "group" "" "group" "" "group" "" "group" "" "group" "1.0.0+~2.0.1+~2.0.2+~2.0.3+~2.0.4"
+}
+
+testCmpGroupRepackND() {
+  helperNoDownload "group" "" "group" "" "group" "" "group" "" "group" "1.0.0+~2.0.1~ds+~2.0.2+~2.0.3+~2.0.4"
 }
 
 testCmpChecksumND() {
