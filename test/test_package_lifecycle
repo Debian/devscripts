@@ -24,6 +24,12 @@ if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.19
     echo "This test requires dpkg-dev >= 1.19.1." >&2
     exit 1
 fi
+if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.21.0~"; then
+    _dpkg_genchanges="dpkg-genchanges  >"
+else
+    _dpkg_genchanges="dpkg-genchanges -O"
+fi
+declare -r _dpkg_genchanges
 
 if test "${1:-}" = --installed; then
     shift
@@ -145,7 +151,7 @@ test_debuild() {
 	 debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-1_all.deb'.
-	 dpkg-genchanges  >../test_1.0-1_${_ARCH}.changes
+	 ${_dpkg_genchanges}../test_1.0-1_${_ARCH}.changes
 	dpkg-genchanges: including full source code in upload
 	 dpkg-source --after-build .
 	dpkg-buildpackage: full upload (original source is included)
@@ -288,7 +294,7 @@ test_debuild2() {
 	 debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
-	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
+	 ${_dpkg_genchanges}../test_1.0-2_${_ARCH}.changes
 	dpkg-genchanges: not including original source code in upload
 	 dpkg-source --after-build .
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
@@ -319,7 +325,7 @@ test_debuild_forcesign() {
 	 debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
-	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
+	 ${_dpkg_genchanges}../test_1.0-2_${_ARCH}.changes
 	dpkg-genchanges: not including original source code in upload
 	 dpkg-source --after-build .
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
