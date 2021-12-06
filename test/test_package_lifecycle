@@ -26,6 +26,9 @@ if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.19
 fi
 if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.21.0~"; then
     _dpkg_genchanges="dpkg-genchanges  >"
+elif dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" eq "1.21.0"; then
+    echo "This version of dpkg produces incorrect output, not supported" >&2
+    exit 1
 else
     _dpkg_genchanges="dpkg-genchanges -O"
 fi
