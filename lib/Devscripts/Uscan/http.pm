@@ -456,6 +456,7 @@ sub plain_search {
             push @hrefs, $self->parse_href($1, $_pattern, $2);
         }
     }
+    $self->parse_result->{urlbase} = $self->parse_result->{base};
     return @hrefs;
 }
 

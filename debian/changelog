@@ -5,6 +5,7 @@ devscripts (2.21.7) UNRELEASED; urgency=medium
     + Fix build to install translated manpages of uscan.  Closes: #1001157
   * uscan:
     + Fix version mangling when using "group".  Closes: #1000969; MR: !252
+    + Fix urlbase when searchmode=plain.  Closes: #1001472; MR: !253
 
   [ Mattia Rizzolo ]
   * tests:
