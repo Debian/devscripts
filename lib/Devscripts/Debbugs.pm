@@ -21,6 +21,8 @@ package Devscripts::Debbugs;
 
 =head1 OPTIONS
 
+=over
+
 =item select [key:value  ...]
 
 Uses the SOAP interface to output a list of bugs which match the given
@@ -91,6 +93,8 @@ For example, to select the set of bugs submitted by
 jrandomdeveloper@example.com and tagged wontfix, one would use
 
 select("submitter:jrandomdeveloper@example.com", "tag:wontfix")
+
+=back
 
 =cut
 
