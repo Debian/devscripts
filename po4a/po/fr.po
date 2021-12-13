@@ -23370,7 +23370,7 @@ msgid ""
 "* B<uscan> reads the first entry in F<debian/changelog> to determine the "
 "source package name I<< <spkg> >> and the last upstream version."
 msgstr ""
-"– B<uscan> lit la première entrée dans F<debian/changelog> pour déterminer "
+"* B<uscan> lit la première entrée dans F<debian/changelog> pour déterminer "
 "le nom du paquet source I<< <spkg> >> et la dernière version amont."
 
 #. type: =item
@@ -23379,7 +23379,7 @@ msgid ""
 "* B<uscan> process the watch lines F<debian/watch> from the top to the "
 "bottom in a single pass."
 msgstr ""
-"– B<uscan> traite les lignes de veille F<debian/watch> de haut en bas en une "
+"* B<uscan> traite les lignes de veille F<debian/watch> de haut en bas en une "
 "passe unique."
 
 #. type: =item
@@ -23387,7 +23387,7 @@ msgstr ""
 msgid ""
 "* B<uscan> downloads a web page from the specified I<URL> in F<debian/watch>."
 msgstr ""
-"– B<uscan> télécharge une page web à partir de l'I<URL> spécifiée dans "
+"* B<uscan> télécharge une page web à partir de l'I<URL> spécifiée dans "
 "F<debian/watch>."
 
 #. type: =item
@@ -23396,7 +23396,7 @@ msgid ""
 "* B<uscan> extracts hrefs pointing to the upstream tarball(s) from the web "
 "page using the specified I<matching-pattern> in F<debian/watch>."
 msgstr ""
-"– B<uscan> extrait les références href pointant vers l'archive amont (ou les "
+"* B<uscan> extrait les références href pointant vers l'archive amont (ou les "
 "archives) à partir de la page web en utilisant le I<motif_correspondant> "
 "dans F<debian/watch>."
 
@@ -23406,7 +23406,7 @@ msgid ""
 "* B<uscan> downloads the upstream tarball with the highest version newer "
 "than the last upstream version."
 msgstr ""
-"– B<uscan> télécharge l'archive amont avec la version la plus haute plus "
+"* B<uscan> télécharge l'archive amont avec la version la plus haute plus "
 "récente que la dernière version amont."
 
 #. type: =item
@@ -23415,7 +23415,7 @@ msgid ""
 "* B<uscan> saves the downloaded tarball to the parent B<../> directory: "
 "I<< ../<upkg>-<uversion>.tar.gz >>"
 msgstr ""
-"– B<uscan> sauvegarde l'archive téléchargée dans le répertoire parent B<../"
+"* B<uscan> sauvegarde l'archive téléchargée dans le répertoire parent B<../"
 "> : I<< ../<upkg>-<uversion>.tar.gz >>"
 
 #. type: =item
@@ -23424,7 +23424,7 @@ msgid ""
 "* B<uscan> invokes B<mk-origtargz> to create the source tarball: I<< ../"
 "<spkg>_<oversion>.orig.tar.gz >>"
 msgstr ""
-"– B<uscan> invoque B<mk-origtargz> pour créer l'archive source : I<< ../"
+"* B<uscan> invoque B<mk-origtargz> pour créer l'archive source : I<< ../"
 "<spkg>_<oversion>.orig.tar.gz >>"
 
 #. type: =item
@@ -23434,7 +23434,7 @@ msgid ""
 "tarball will instead be named I<< ../<spkg>_<oversion>.orig-<component>.tar."
 "gz >>."
 msgstr ""
-"– Pour un paquet MUT (\"multiple upstream tarball\" - archive amont "
+"* Pour un paquet MUT (\"multiple upstream tarball\" - archive amont "
 "multiple), l'archive amont secondaire sera plutôt nommée I<< ../"
 "<spkg>_<oversion>.orig-<composante>.tar.gz >>."
 
@@ -23442,7 +23442,7 @@ msgstr ""
 #: ../scripts/uscan.pl:86
 msgid "* Repeat until all lines in F<debian/watch> are processed."
 msgstr ""
-"– L'action est répétée jusqu'à ce que toutes les lignes de F<debian/watch> "
+"* L'action est répétée jusqu'à ce que toutes les lignes de F<debian/watch> "
 "soient traitées."
 
 #. type: =item
@@ -23451,7 +23451,7 @@ msgid ""
 "* B<uscan> invokes B<uupdate> to create the Debianized source tree: I<< ../"
 "<spkg>-<oversion>/* >>"
 msgstr ""
-"– B<uscan> invoque B<uupdate> pour créer l'arborescence source debianisée : "
+"* B<uscan> invoque B<uupdate> pour créer l'arborescence source debianisée : "
 "I<< ../<spkg>-<oversion>/* >>"
 
 #. type: textblock
@@ -23566,18 +23566,18 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:139
 msgid "* Leading spaces and tabs are dropped."
-msgstr "– Les espaces et les tabulations de début sont supprimées."
+msgstr "* Les espaces et les tabulations de début sont supprimées."
 
 #. type: =item
 #: ../scripts/uscan.pl:141
 msgid "* Empty lines are dropped."
-msgstr "– Les lignes vides sont supprimées."
+msgstr "* Les lignes vides sont supprimées."
 
 #. type: =item
 #: ../scripts/uscan.pl:143
 msgid "* A line started by B<#> (hash) is a comment line and dropped."
 msgstr ""
-"– Une ligne qui débute par B<#> (dièse) est une ligne de commentaire et elle "
+"* Une ligne qui débute par B<#> (dièse) est une ligne de commentaire et elle "
 "est supprimée."
 
 #. type: =item
@@ -23588,7 +23588,7 @@ msgid ""
 "concatenated line is parsed as a single line. (The existence or non-"
 "existence of the space before the tailing single B<\\> is significant.)"
 msgstr ""
-"– Un B<\\> unique (barre inverse oblique) à la fin d'une ligne est supprimé "
+"* Un B<\\> unique (barre inverse oblique) à la fin d'une ligne est supprimé "
 "et la ligne suivante est concaténée après la suppression des espaces et des "
 "tabulations de début. La ligne concaténée est analysée comme une seule "
 "ligne. (L'existence ou l'inexistence d'une espace avant le B<\\> unique "
@@ -23597,7 +23597,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:150
 msgid "* The first non-comment line is:"
-msgstr "– La première ligne non commentée est la suivante :"
+msgstr "* La première ligne non commentée est la suivante :"
 
 #. type: =item
 #: ../scripts/uscan.pl:154
@@ -23628,7 +23628,7 @@ msgid ""
 "selection of the candidate upstream tarball URLs and are in one of the "
 "following three formats:"
 msgstr ""
-"– Les lignes suivantes non commentées (lignes de veille) précisent les "
+"* Les lignes suivantes non commentées (lignes de veille) précisent les "
 "règles de sélection des URL d'archive amont candidates et sont dans un des "
 "trois formats suivants :"
 
@@ -23638,18 +23638,18 @@ msgid ""
 "* B<opts=\"> I<...> B<\"> B<http://>I<URL> I<matching-pattern> [I<version> "
 "[I<script>]]"
 msgstr ""
-"– B<opts=\"> I<...> B<\"> B<http://>I<URL> I<motif_correspondant> "
+"* B<opts=\"> I<...> B<\"> B<http://>I<URL> I<motif_correspondant> "
 "[I<version> [I<script>]]"
 
 #. type: =item
 #: ../scripts/uscan.pl:171
 msgid "* B<http://>I<URL> I<matching-pattern> [I<version> [I<script>]]"
-msgstr "– B<http://>I<URL> I<motif_correspondant> [I<version> [I<script>]]"
+msgstr "* B<http://>I<URL> I<motif_correspondant> [I<version> [I<script>]]"
 
 #. type: =item
 #: ../scripts/uscan.pl:173
 msgid "* B<opts=\"> I<...> B<\">"
-msgstr "– B<opts=\"> I<...> B<\">"
+msgstr "* B<opts=\"> I<...> B<\">"
 
 #. type: textblock
 #: ../scripts/uscan.pl:177
@@ -23662,7 +23662,7 @@ msgid ""
 "* B<opts=\"> I<...> B<\"> specifies the behavior of B<uscan>.  See L<WATCH "
 "FILE OPTIONS>."
 msgstr ""
-"– B<opts=\"> I<...> B<\"> précise le comportement d'B<uscan>. Voir L<OPTIONS "
+"* B<opts=\"> I<...> B<\"> précise le comportement d'B<uscan>. Voir L<OPTIONS "
 "DE FICHIER DE VEILLE>."
 
 #. type: =item
@@ -23671,18 +23671,18 @@ msgid ""
 "* B<http://>I<URL> specifies the web page where upstream publishes the link "
 "to the latest source archive."
 msgstr ""
-"– B<http://>I<URL> précise la page web où l'amont publie le lien vers la "
+"* B<http://>I<URL> précise la page web où l'amont publie le lien vers la "
 "dernière archive source."
 
 #. type: =item
 #: ../scripts/uscan.pl:189
 msgid "* B<https://>I<URL> may also be used, as may"
-msgstr "– B<https://>I<URL> peut être aussi utilisé, comme peut l'être"
+msgstr "* B<https://>I<URL> peut être aussi utilisé, comme peut l'être"
 
 #. type: =item
 #: ../scripts/uscan.pl:191
 msgid "* B<ftp://>I<URL>"
-msgstr "– B<ftp://>I<URL>"
+msgstr "* B<ftp://>I<URL>"
 
 #. type: =item
 #: ../scripts/uscan.pl:193
@@ -23692,7 +23692,7 @@ msgid ""
 "match, the highest version is picked.) Otherwise, the I<URL> is taken as "
 "verbatim."
 msgstr ""
-"– Certaines parties d'I<URL> peuvent être dans le motif de correspondance "
+"* Certaines parties d'I<URL> peuvent être dans le motif de correspondance "
 "d'expression rationnelle entourées par B<(> et B<)> comme B</toto/titi-([\\."
 "\\d]+)/>. Si plusieurs répertoires correspondent, la version la plus élevée "
 "est choisie.) Autrement, l'I<URL> est prise textuellement."
@@ -23703,7 +23703,7 @@ msgid ""
 "* I<matching-pattern> specifies the full string matching pattern for hrefs "
 "in the web page.  See L<WATCH FILE EXAMPLES>."
 msgstr ""
-"– I<motif_correspondant> précise le motif de chaîne complet correspondant "
+"* I<motif_correspondant> précise le motif de chaîne complet correspondant "
 "aux références hrefs dans la page web. Voir L<EXEMPLES DE FICHIER DE VEILLE>."
 
 #. type: =item
@@ -23712,7 +23712,7 @@ msgid ""
 "* All matching parts in B<(> and B<)> are concatenated with B<.> (period)  "
 "to form the upstream version."
 msgstr ""
-"– Toutes les parties correspondantes entre B<(> et B<)> sont concaténées "
+"* Toutes les parties correspondantes entre B<(> et B<)> sont concaténées "
 "avec un B<.> (point) pour former la version amont."
 
 #. type: =item
@@ -23721,7 +23721,7 @@ msgid ""
 "* If the hrefs do not contain directories, you can combine this with the "
 "previous entry. I.e., B<http://>I<URL>B</>I<matching-pattern> ."
 msgstr ""
-"– Si les références href ne contiennent pas de répertoires, il est possible "
+"* Si les références href ne contiennent pas de répertoires, il est possible "
 "de les combiner avec l'entrée précédente. C'est-à-dire, B<http://>I<URL>B</"
 ">I<motif_correspondant>."
 
@@ -23731,7 +23731,7 @@ msgid ""
 "* I<version> restricts the upstream tarball which may be downloaded.  The "
 "newest available version is chosen in each case."
 msgstr ""
-"– I<version> restreint le choix d'archive amont pouvant être téléchargée. La "
+"* I<version> restreint le choix d'archive amont pouvant être téléchargée. La "
 "version la plus récente disponible est choisie dans tous les cas."
 
 #. type: =item
@@ -23740,7 +23740,7 @@ msgid ""
 "* B<debian> I<(default)> requires the downloading upstream tarball to be "
 "newer than the version obtained from F<debian/changelog>."
 msgstr ""
-"– B<debian> réclame que l'archive amont à télécharger soit plus récente que "
+"* B<debian> réclame que l'archive amont à télécharger soit plus récente que "
 "la version obtenue à partir de F<debian/changelog>."
 
 #. type: =item
@@ -23749,7 +23749,7 @@ msgid ""
 "* I<version-number> such as B<12.5> requires the upstream tarball to be "
 "newer than the I<version-number>."
 msgstr ""
-"– Un I<numéro_de_version> tel que B<12.5> requiert que l'archive amont soit "
+"* Un I<numéro_de_version> tel que B<12.5> requiert que l'archive amont soit "
 "plus récente que le I<numéro_de_version>."
 
 #. type: =item
@@ -23759,7 +23759,7 @@ msgid ""
 "exactly the same as the one for the first upstream tarball downloaded. "
 "(Useful only for MUT)"
 msgstr ""
-"– B<same> requiert que la version téléchargée des archives secondaires soit "
+"* B<same> requiert que la version téléchargée des archives secondaires soit "
 "exactement la même que celle de la première archive amont téléchargée. "
 "(Utile uniquement pour les paquets MUT)"
 
@@ -23769,7 +23769,7 @@ msgid ""
 "* B<previous> restricts the version of the signature file. (Used with "
 "pgpmode=previous)"
 msgstr ""
-"– B<previous> limite la version du fichier de signature. (Utilisé avec "
+"* B<previous> limite la version du fichier de signature. (Utilisé avec "
 "pgpmode=previous)"
 
 #. type: =item
@@ -23778,7 +23778,7 @@ msgid ""
 "* B<ignore> does not restrict the version of the secondary tarballs. (Maybe "
 "useful for MUT)"
 msgstr ""
-"– B<ignore> ne limite pas la version des archives secondaires. (Peut-être "
+"* B<ignore> ne limite pas la version des archives secondaires. (Peut-être "
 "utile pour les paquets MUT)"
 
 #. type: =item
@@ -23788,7 +23788,7 @@ msgid ""
 "version obtained from F<debian/changelog>. Package version is the "
 "concatenation of all \"group\" upstream version."
 msgstr ""
-"– B<group> réclame que l'archive amont à télécharger soit plus récente que "
+"* B<group> réclame que l'archive amont à télécharger soit plus récente que "
 "la version obtenue à partir de F<debian/changelog>. La version du paquet est "
 "la concaténation de toutes les versions amont."
 
@@ -23801,7 +23801,7 @@ msgid ""
 "all the tarballs using the \"checksum\" version system.  At least the main "
 "upstream source has to be declared as \"group\"."
 msgstr ""
-"– B<checksum> exige que l'archive amont à télécharger soit plus récente que "
+"* B<checksum> exige que l'archive amont à télécharger soit plus récente que "
 "la version obtenue à partir de F<debian/changelog>. La version du paquet est "
 "la concaténation de la version de la prinicpale source, suivie de la somme "
 "de contrôle de toutes les versions amont utilisant le système de version "
@@ -23814,7 +23814,7 @@ msgid ""
 "* I<script> is executed at the end of B<uscan> execution with appropriate "
 "arguments provided by B<uscan> I<(default: no action)>."
 msgstr ""
-"– I<script> est exécuté à la fin de l'exécution d'B<uscan> avec les "
+"* I<script> est exécuté à la fin de l'exécution d'B<uscan> avec les "
 "paramètres appropriés fournis par B<uscan> I<(défaut: pas d'action)>."
 
 #. type: =item
@@ -23825,7 +23825,7 @@ msgid ""
 "formats is usually used with its I<version> set to B<debian> and I<script> "
 "set to B<uupdate>."
 msgstr ""
-"– Le paquet Debian typique est un paquet non natif fait à partir d'une "
+"* Le paquet Debian typique est un paquet non natif fait à partir d'une "
 "archive amont. Seulement une ligne unique du fichier de veille dans un des "
 "deux premiers formats est habituellement utilisée avec sa I<version> réglée "
 "à B<debian> et I<script> réglé à B<uupdate>."
@@ -23833,7 +23833,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:256
 msgid "* A native package should not specify I<script>."
-msgstr "– Un paquet natif ne devrait pas spécifier de I<script>."
+msgstr "* Un paquet natif ne devrait pas spécifier de I<script>."
 
 #. type: =item
 #: ../scripts/uscan.pl:258
@@ -23842,7 +23842,7 @@ msgid ""
 "I<script> in the last watch line and should skip specifying I<script> in the "
 "rest of the watch lines."
 msgstr ""
-"– Un paquet MUT (\"multiple upstream tarball\" – archive amont multiple) "
+"* Un paquet MUT (\"multiple upstream tarball\" – archive amont multiple) "
 "devrait indiquer B<uupdate> comme I<script> dans la dernière ligne de veille "
 "et ne devrait pas indiquer de I<script> dans le reste des lignes de veille."
 
@@ -23853,7 +23853,7 @@ msgid ""
 "parameters: B<user-agent>, B<compression>.  If this format is used, this "
 "must be followed by the I<URL> defining watch line(s)."
 msgstr ""
-"– Le dernier format des lignes de veille est utile pour configurer des "
+"* Le dernier format des lignes de veille est utile pour configurer des "
 "paramètres permanents : B<user-agent>, B<compression>. Si ce format est "
 "utilisé, ces paramètres doivent être suivis de la (ou des) lignes(s) de "
 "veille définissant l'I<URL>."
@@ -23864,7 +23864,7 @@ msgid ""
 "* [ and ] in the above format are there to mark the optional parts and "
 "should not be typed."
 msgstr ""
-"– [and] dans le format ci-dessus sont ici pour marquer les parties "
+"* [and] dans le format ci-dessus sont ici pour marquer les parties "
 "optionnelles et ne devraient pas être tapées."
 
 #. type: textblock
@@ -24118,32 +24118,32 @@ msgid ""
 "* B<USCAN_REPACK> is set in the devscript configuration.  See L<DEVSCRIPT "
 "CONFIGURATION VARIABLES>."
 msgstr ""
-"– B<USCAN_REPACK> est configuré dans la configuration de devscript. Voir "
+"* B<USCAN_REPACK> est configuré dans la configuration de devscript. Voir "
 "L<VARIABLES DE CONFIGURATION DE DEVSCRIPT>."
 
 #. type: =item
 #: ../scripts/uscan.pl:362
 msgid "* B<--repack> is set on the commandline.  See <COMMANDLINE OPTIONS>."
 msgstr ""
-"– B<--repack> est configuré en ligne de commande. Voir <OPTIONS DE LIGNE DE "
+"* B<--repack> est configuré en ligne de commande. Voir <OPTIONS DE LIGNE DE "
 "COMMANDE>."
 
 #. type: =item
 #: ../scripts/uscan.pl:364
 msgid "* B<repack> is set in the watch line as B<opts=\"repack,>I<...>B<\">."
 msgstr ""
-"– B<repack> est configuré sur la ligne de veille de cette manière : B<opts="
+"* B<repack> est configuré sur la ligne de veille de cette manière : B<opts="
 "\"repack,>I<...>B<\">."
 
 #. type: =item
 #: ../scripts/uscan.pl:366
 msgid "* The upstream archive is of B<zip> type including B<jar>, B<xpi>, ..."
-msgstr "– L'archive amont est de type B<zip>, y compris B<jar>, B<xpi>, ..."
+msgstr "* L'archive amont est de type B<zip>, y compris B<jar>, B<xpi>, ..."
 
 #. type: =item
 #: ../scripts/uscan.pl:368
 msgid "* The upstream archive is of B<zstd> (Zstandard) type."
-msgstr "– L'archive amont est de type B<zstdi> (Zstandard)."
+msgstr "* L'archive amont est de type B<zstdi> (Zstandard)."
 
 #. type: =item
 #: ../scripts/uscan.pl:370
@@ -24153,7 +24153,7 @@ msgid ""
 "files from the upstream tarball and repack it.  See L<COPYRIGHT FILE "
 "EXAMPLES> and mk-origtargz(1)."
 msgstr ""
-"– Les alinéas B<Files-Excluded> ou B<Files-Excluded->I<composante> sont "
+"* Les alinéas B<Files-Excluded> ou B<Files-Excluded->I<composante> sont "
 "configurés dans F<debian/copyright> pour que B<mk-origtargz> invoqué à "
 "partir d'B<uscan> supprime les fichiers de l'archive amont et la "
 "rempaquette. Voir L<EXEMPLES DE FICHIER DE COPYRIGHT> et mk-origtargz(1)."
@@ -24979,7 +24979,7 @@ msgstr ""
 #: ../scripts/uscan.pl:689
 msgid "* I<rule> may only use the B<s>, B<tr>, and B<y> operations."
 msgstr ""
-"– Une I<règle> peut seulement utiliser les opérations B<s>, B<tr> et B<y>."
+"* Une I<règle> peut seulement utiliser les opérations B<s>, B<tr> et B<y>."
 
 #. type: =item
 #: ../scripts/uscan.pl:693
@@ -25032,7 +25032,7 @@ msgstr "Par exemple, si la première entrée de F<debian/changelog> est :"
 #. type: =item
 #: ../scripts/uscan.pl:717
 msgid "* I<< bar >> (B<3:2.03+dfsg1-4>) unstable; urgency=low"
-msgstr "– I<< titi >> (B<3:2.03+dfsg1-4>) unstable; urgency=low"
+msgstr "* I<< titi >> (B<3:2.03+dfsg1-4>) unstable; urgency=low"
 
 #. type: textblock
 #: ../scripts/uscan.pl:721
@@ -25075,7 +25075,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:737
 msgid "* B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\">"
-msgstr "– B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\">"
+msgstr "* B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\">"
 
 #. type: textblock
 #: ../scripts/uscan.pl:741
@@ -25092,7 +25092,7 @@ msgid ""
 "* If the directory name part of I<URL> has no parentheses, B<(> and B<)>, it "
 "is taken as verbatim."
 msgstr ""
-"– Si la partie nom du répertoire de l'I<URL> n'a pas de parenthèse, B<(> et "
+"* Si la partie nom du répertoire de l'I<URL> n'a pas de parenthèse, B<(> et "
 "B<)>, il est pris tel quel."
 
 #. type: =item
@@ -25105,7 +25105,7 @@ msgid ""
 "specified for the download, the matching version string has priority over "
 "the newest version."
 msgstr ""
-"– Si la partie nom du répertoire de l'I<URL> a des parenthèses B<(> et B<)>, "
+"* Si la partie nom du répertoire de l'I<URL> a des parenthèses B<(> et B<)>, "
 "alors B<uscan> cherche de façon récursive tous les répertoires possibles "
 "pour trouver une page avec la nouvelle version. Si la règle "
 "B<dirversionmangle> existe, l'index de tri généré est utilisé pour trouver "
@@ -25207,17 +25207,17 @@ msgstr "Les versions amont candidates sont alors :"
 #. type: =item
 #: ../scripts/uscan.pl:802
 msgid "* B<2.02>"
-msgstr "– B<2.02>"
+msgstr "* B<2.02>"
 
 #. type: =item
 #: ../scripts/uscan.pl:804
 msgid "* B<2.03>"
-msgstr "– B<2.03>"
+msgstr "* B<2.03>"
 
 #. type: =item
 #: ../scripts/uscan.pl:806
 msgid "* B<2.04>"
-msgstr "– B<2.04>"
+msgstr "* B<2.04>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:810
@@ -25331,7 +25331,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:851
 msgid "* F<../foo-2.04.tar.gz>"
-msgstr "– F<../toto-2.04.tar.gz>"
+msgstr "* F<../toto-2.04.tar.gz>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:855
@@ -25431,7 +25431,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:893
 msgid "* F<../bar_2.04.orig.tar.gz> -> F<foo-2.04.tar.gz> (as is)"
-msgstr "– F<../titi_2.04.orig.tar.gz> -> F<toto-2.04.tar.gz> (tel quel)"
+msgstr "* F<../titi_2.04.orig.tar.gz> -> F<toto-2.04.tar.gz> (tel quel)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:897
@@ -25492,7 +25492,7 @@ msgstr "Par exemple, l'archive amont rempaquetée peut être :"
 #. type: =item
 #: ../scripts/uscan.pl:919
 msgid "* F<../bar_2.04+dfsg1.orig.tar.gz> (repackaged)"
-msgstr "– F<../titi_2.04+dfsg1.orig.tar.gz> (rempaqueté)"
+msgstr "* F<../titi_2.04+dfsg1.orig.tar.gz> (rempaqueté)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:925
@@ -27086,7 +27086,7 @@ msgid ""
 "* The fingerprint as the 20 byte data calculated from the public OpenPGP "
 "key. E.  g., 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>'"
 msgstr ""
-"– L'empreinte sous la forme des 20 octets de données calculés à partir de la "
+"* L'empreinte sous la forme des 20 octets de données calculés à partir de la "
 "clef publique OpenPGP. Par exemple \"B<CF21 8F0E 7EAB F584 B7E2 0402 C77E "
 "2D68 7254 3FAF>"
 
@@ -27096,7 +27096,7 @@ msgid ""
 "* The long keyid as the last 8 byte data of the fingerprint. E. g., "
 "'B<C77E2D6872543FAF>'"
 msgstr ""
-"– L'identificateur long \" long keyid\") sous la forme des 8 derniers octets "
+"* L'identificateur long \" long keyid\") sous la forme des 8 derniers octets "
 "de données de l'empreinte. Par exemple, \"B<C77E2D6872543FAF>\""
 
 #. type: =item
@@ -27105,7 +27105,7 @@ msgid ""
 "* The short keyid is the last 4 byte data of the fingerprint. E. g., "
 "'B<72543FAF>'"
 msgstr ""
-"– L'identificateur court (\"short keyid\") sous la forme des 4 derniers "
+"* L'identificateur court (\"short keyid\") sous la forme des 4 derniers "
 "octets de données de l'empreinte. Par exemple, \"B<72543FAF>\""
 
 #. type: textblock
@@ -28491,7 +28491,7 @@ msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version>\"."
 msgstr ""
-"– B<uscan> invoque le I<script> personnalisé comme ceci : \"I<script> B<--"
+"* B<uscan> invoque le I<script> personnalisé comme ceci : \"I<script> B<--"
 "upstream-version> I<version>\"."
 
 #. type: =item
@@ -28500,7 +28500,7 @@ msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--find> B<--"
 "upstream-version> I<version>\"."
 msgstr ""
-"– B<uscan> invoque B<uupdate> standard comme ceci : \"B<uupdate> B<--find> "
+"* B<uscan> invoque B<uupdate> standard comme ceci : \"B<uupdate> B<--find> "
 "B<--upstream-version> I<version>\"."
 
 #. type: textblock
