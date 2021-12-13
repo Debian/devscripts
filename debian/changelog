@@ -3,7 +3,8 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
   [ Yadd ]
   * Translations:
     + fix some POD error in translations
-    + add uscan and salsa in translation list
+    + add uscan and salsa in translation list.  Closes: #1001157
+    + build translated manpages even if there are some POD errors
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
