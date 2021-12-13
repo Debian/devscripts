@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2021-11-28 05:58+0100\n"
-"PO-Revision-Date: 2021-12-13 19:04+0100\n"
+"PO-Revision-Date: 2021-12-13 21:46+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23354,7 +23354,7 @@ msgid ""
 msgstr ""
 "Sauf si B<--watchfile> est indiqué, B<uscan> recherche récursivement les "
 "arborescences source valides en partant du répertoire courant (voir la "
-"section L<Vérification des noms de répertoires> ci-dessous pour plus de "
+"section L<Vérification du nom du répertoire> ci-dessous pour plus de "
 "détails)."
 
 #. type: textblock
@@ -25075,7 +25075,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/uscan.pl:737
 msgid "* B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\">"
-msgstr "– B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\""
+msgstr "– B<opts=\"dversionmangle=s/\\+dfsg\\d*$//\">"
 
 #. type: textblock
 #: ../scripts/uscan.pl:741
@@ -27024,8 +27024,8 @@ msgid ""
 ">>:"
 msgstr ""
 "Voici un autre exemple de fichier F<debian/copyright> qui déclenche le "
-"rempaquetage automatique d'archives amont multiples en I<<<spkg>_<oversion>."
-"orig.tar.gz >> et I<< <spkg>_<oversion>.orig-titi.tar.gz >> :"
+"rempaquetage automatique d'archives amont multiples en I<< <spkg>_<oversion>."
+"orig.tar.gz >> et I<< <spkg>_<oversion>.orig-bar.tar.gz >>:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1449
