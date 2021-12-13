@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2021-11-28 05:58+0100\n"
-"PO-Revision-Date: 2021-11-28 06:03+0100\n"
+"PO-Revision-Date: 2021-12-13 19:04+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -202,8 +202,8 @@ msgid ""
 "every line with the current time and O for stdout and E for stderr."
 msgstr ""
 "B<annotate-output> va lancer le programme indiqué en ajoutant au début de "
-"chaque ligne l'heure actuelle ainsi qu'un O pour la sortie standard "
-"(« stdout ») et un E pour la sortie d'erreur (« stderr »)."
+"chaque ligne l'heure actuelle ainsi qu'un O pour la sortie standard (\"stdout"
+"\") et un E pour la sortie d'erreur (\"stderr\")."
 
 #. type: SH
 #: ../scripts/annotate-output.1:11 ../scripts/bts.pl:264
@@ -251,7 +251,7 @@ msgstr "B<+FORMAT>"
 msgid ""
 "Controls the timestamp format, as per B<date>(1).  Defaults to \"%H:%M:%S\"."
 msgstr ""
-"Contrôler le format d'horodatage, comme pour B<date>(1). « %H:%M:%S » par "
+"Contrôler le format d'horodatage, comme pour B<date>(1). \"%H:%M:%S\" par "
 "défaut."
 
 #. type: TP
@@ -504,7 +504,7 @@ msgid ""
 msgstr ""
 "Si un paramètre est passé, il peut être soit branche--version, auquel cas "
 "B<archpath> affiche le nom du paquet correspondant à l'archive actuelle et "
-"la catégorie, soit un nom de branche complet (sans « -- »), auquel cas "
+"la catégorie, soit un nom de branche complet (sans \"--\"), auquel cas "
 "B<archpath> affiche le nom du paquet correspondant dans la même archive, la "
 "même catégorie, et à la même version que la copie de travail actuelle."
 
@@ -531,7 +531,7 @@ msgid ""
 "version 1.0, you might use a command like this:"
 msgstr ""
 "Ou si vous voulez marquer votre code actuel comme étant une version 1.0 dans "
-"une branche « releases », vous pouvez utiliser une commande telle que :"
+"une branche \"releases\", vous pouvez utiliser une commande telle que :"
 
 #. type: Plain text
 #: ../scripts/archpath.1:48
@@ -545,7 +545,7 @@ msgid ""
 "That's much easier than using \\(oqbaz tree-version\\(cq to look up the "
 "package name and manually modifying the result."
 msgstr ""
-"C'est bien plus commode que d'utiliser « baz tree-version » pour récupérer "
+"C'est bien plus commode que d'utiliser \"baz tree-version\" pour récupérer "
 "le nom du paquet puis modifier le résultat manuellement."
 
 #. type: Plain text
@@ -611,7 +611,7 @@ msgid ""
 msgstr ""
 "En général, cette interface en ligne de commande est la même que si vous "
 "vouliez écrire un message à control@bugs.debian.org, simplement précédée de "
-"« bts ». Par exemple :"
+"\"bts\". Par exemple :"
 
 #. type: verbatim
 #: ../scripts/bts.pl:226
@@ -638,9 +638,9 @@ msgid ""
 msgstr ""
 "Quelques commandes supplémentaires ont été ajoutées pour votre confort, et "
 "ce programme est moins strict sur la validité des numéros de bogue. Par "
-"exemple, « severity Bug#85942 normal » est compris, tout comme « severity "
-"#85942 normal ». (Bien sûr, votre interpréteur de commandes peut comprendre "
-"« # » comme un caractère de commentaire, donc il faudra probablement le "
+"exemple, \"severity Bug#85942 normal\" est compris, tout comme \"severity "
+"#85942 normal\". (Bien sûr, votre interpréteur de commandes peut comprendre "
+"\"#\" comme un caractère de commentaire, donc il faudra probablement le "
 "mettre entre guillemets.)"
 
 #. type: textblock
@@ -652,7 +652,7 @@ msgid ""
 msgstr ""
 "De même, pour vous faciliter la vie, ce programme vous permet d'abréger les "
 "commandes en la plus courte sous-chaîne unique (d'une manière similaire à "
-"celle de cvs). Ainsi des choses comme « bts cl 85942 » sont comprises."
+"celle de cvs). Ainsi des choses comme \"bts cl 85942\" sont comprises."
 
 #. type: textblock
 #: ../scripts/bts.pl:240
@@ -667,12 +667,12 @@ msgid ""
 msgstr ""
 "Il est aussi possible d'inclure un commentaire dans le message envoyé au "
 "BTS. Si votre interpréteur de commandes ne supprime pas le commentaire dans "
-"une commande telle que « bts severity 30321 normal #sévérité augmentée », "
+"une commande telle que \"bts severity 30321 normal #sévérité augmentée\", "
 "alors ce programme se débrouille pour trouver où se situe le commentaire et "
 "pour l'inclure dans le message. Remarquez que la plupart des interpréteurs "
 "de commandes ne tiennent pas compte de ce type de commentaires avant "
 "d'exécuter le programme, à moins que ce commentaire soit placé entre "
-"guillemets. (Quelque chose comme « bts severity #85942 normal » ne sera pas "
+"guillemets. (Quelque chose comme \"bts severity #85942 normal\" ne sera pas "
 "traité comme un commentaire.)"
 
 #. type: textblock
@@ -708,7 +708,7 @@ msgid ""
 "The abbreviation \"it\" may be used to refer to the last mentioned bug "
 "number, so you could write:"
 msgstr ""
-"L'abréviation « it » peut être utilisée pour désigner le dernier numéro de "
+"L'abréviation \"it\" peut être utilisée pour désigner le dernier numéro de "
 "bogue mentionné, donc vous pouvez écrire :"
 
 #. type: verbatim
@@ -840,9 +840,9 @@ msgid ""
 "Open a mail reader to read the mbox corresponding to a given bug number for "
 "B<show> and B<bugs> commands."
 msgstr ""
-"Ouvrir un client de messagerie pour parcourir la boîte de messagerie "
-"(« mbox ») correspondant à un numéro de bogue donné, pour les commandes "
-"B<show> et B<bugs>."
+"Ouvrir un client de messagerie pour parcourir la boîte de messagerie (\"mbox"
+"\") correspondant à un numéro de bogue donné, pour les commandes B<show> et "
+"B<bugs>."
 
 #. type: =item
 #: ../scripts/bts.pl:310
@@ -858,11 +858,11 @@ msgid ""
 "Default is 'B<mutt -f %s>'.  (Also, B<%%> will be substituted by a single B<"
 "%> if this is needed.)"
 msgstr ""
-"Indiquer la commande pour lire la boîte de messagerie (« mbox »). Doit "
-"contenir une chaîne « B<%s> », qui sera remplacée par le nom du fichier "
+"Indiquer la commande pour lire la boîte de messagerie (\"mbox\"). Doit "
+"contenir une chaîne \"B<%s>\", qui sera remplacée par le nom du fichier "
 "mbox. La commande sera découpée en fonction des espaces et ne sera pas "
-"passée à un interpréteur de commandes (« shell »). Par défaut, « B<mutt> B<-"
-"f> B<%s> » sera utilisé (par ailleurs B<%%> sera remplacé par un simple B<%> "
+"passée à un interpréteur de commandes (\"shell\"). Par défaut, \"B<mutt> B<-"
+"f> B<%s>\" sera utilisé (par ailleurs B<%%> sera remplacé par un simple B<%> "
 "si nécessaire)."
 
 #. type: =item
@@ -1003,9 +1003,9 @@ msgid ""
 "to use a port other than the default.  It may also begin with \"ssmtp://\" "
 "or \"smtps://\" to indicate that SMTPS should be used."
 msgstr ""
-"Le nom d'hôte peut être suivi d'un caractère deux-points (« : ») et d'un "
+"Le nom d'hôte peut être suivi d'un caractère deux-points (\":\") et d'un "
 "numéro de port afin d'utiliser un port autre que le port par défaut. Il peut "
-"également commencer par « ssmtp:// » ou « smtps:// » pour indiquer que le "
+"également commencer par \"ssmtp://\" ou \"smtps://\" pour indiquer que le "
 "protocole SMTPS doit être utilisé."
 
 #. type: textblock
@@ -1203,7 +1203,7 @@ msgid ""
 msgstr ""
 "Supprimer les courriers de confirmation du BTS. Remarquez que cela "
 "n'affectera que les copies des courriers en copie des bogues, pas celles "
-"envoyées par le robot « control »."
+"envoyées par le robot \"control\"."
 
 #. type: =item
 #: ../scripts/bts.pl:440
@@ -1228,7 +1228,7 @@ msgid ""
 "Before sending an e-mail to the control bot, display the content and allow "
 "it to be edited, or the sending cancelled."
 msgstr ""
-"Avant d'envoyer un courrier au robot « control », afficher son contenu et "
+"Avant d'envoyer un courrier au robot \"control\", afficher son contenu et "
 "permettre de l'éditer ou d'annuler l'envoi."
 
 #. type: =item
@@ -1255,7 +1255,7 @@ msgstr "B<--no-interactive>"
 msgid ""
 "Send control e-mails without confirmation.  This is the default behaviour."
 msgstr ""
-"Envoyer des courrier à « control » sans confirmation. C'est le comportement "
+"Envoyer des courrier à \"control\" sans confirmation. C'est le comportement "
 "par défaut."
 
 #. type: =item
@@ -1273,7 +1273,7 @@ msgstr ""
 "En lançant B<bts cache>, n'afficher que les informations concernant les "
 "pages nouvellement mises en cache, et non les messages indiquant ce qui a "
 "déjà été mis en cache. Si cette option est fournie deux fois, n'afficher que "
-"les messages d'erreur, vers la sortie d'erreur (« stderr »)."
+"les messages d'erreur, vers la sortie d'erreur (\"stderr\")."
 
 #. type: TP
 #: ../scripts/bts.pl:464 ../scripts/cvs-debrelease.1:57
@@ -1588,9 +1588,9 @@ msgstr ""
 "demandée par B<bts show> va être automatiquement mise en cache et sera donc "
 "disponible pour être visualisée plus tard tout en étant hors ligne. Les "
 "pages mises en cache automatiquement de cette manière seront supprimées lors "
-"d'invocations ultérieures de « B<bts> B<show>|B<bugs>|B<cache> » si on n'y "
+"d'invocations ultérieures de \"B<bts> B<show>|B<bugs>|B<cache>\" si on n'y "
 "accède pas dans les 30 jours. Attention : sur un système de fichiers monté "
-"avec l'option « noatime », l'exécution de « B<bts> B<show>|B<bugs> » ne met "
+"avec l'option \"noatime\", l'exécution de \"B<bts> B<show>|B<bugs>\" ne met "
 "pas à jour les heures et dates d'accès aux fichiers du cache ; un bogue mis "
 "en cache sera donc nettoyé automatiquement 30 jours après son téléchargement "
 "initial, même si on y accède entre temps."
@@ -1633,7 +1633,7 @@ msgstr ""
 "peut contenir la chaîne B<%s> ; si c'est le cas, celle-ci est remplacée par "
 "l'URL à afficher. Si une des commandes ne contient pas B<%s>, le navigateur "
 "est lancé comme si l'URL avait été indiquée en tant que premier paramètre. "
-"La chaîne B<%%> doit être remplacée par un simple « % »."
+"La chaîne B<%%> doit être remplacée par un simple \"%\"."
 
 #. type: textblock
 #: ../scripts/bts.pl:961
@@ -1762,7 +1762,7 @@ msgid ""
 "addition to the standard tags."
 msgstr ""
 "Étiquettes attachées au bogue. Si B<users> est indiqué, les étiquettes "
-"peuvent être des « usertags » en plus des étiquettes traditionnelles."
+"peuvent être des \"usertags\" en plus des étiquettes traditionnelles."
 
 #. type: =item
 #: ../scripts/bts.pl:1086 ../scripts/bts.pl:1948
@@ -1814,7 +1814,7 @@ msgstr "B<users>"
 msgid "Users to use when looking up usertags."
 msgstr ""
 "Utilisateurs à utiliser pour la recherche d'étiquettes utilisateur "
-"(« usertags »)."
+"(\"usertags\")."
 
 #. type: =item
 #: ../scripts/bts.pl:1106 ../scripts/bts.pl:1956
@@ -1920,7 +1920,7 @@ msgid ""
 msgstr ""
 "La commande de contrôle B<clone> vous permet de dupliquer un rapport de "
 "I<bogue>. C'est utile dans le cas où un rapport de bogue unique indique en "
-"fait que plusieurs bogues distincts se produisent. Les « nouveaux ID » sont "
+"fait que plusieurs bogues distincts se produisent. Les \"nouveaux ID\" sont "
 "des nombres négatifs, séparés par des espaces, qui peuvent être utilisés "
 "dans les commandes de contrôle suivantes pour se référer aux rapports de "
 "bogue nouvellement dupliqués. Un nouveau rapport de bogue est produit pour "
@@ -2017,8 +2017,8 @@ msgid ""
 "meaning `use the address on the current email as the new submitter address'."
 msgstr ""
 "Changer l'adresse électronique du rapporteur du ou des I<bogue>s, où B<!> "
-"signifie « utiliser l'adresse électronique actuelle en tant que nouvelle "
-"adresse du rapporteur »."
+"signifie \"utiliser l'adresse électronique actuelle en tant que nouvelle "
+"adresse du rapporteur\"."
 
 #. type: =item
 #: ../scripts/bts.pl:1380
@@ -2099,8 +2099,8 @@ msgid ""
 "This is equivalent to the sequence of commands \"B<found> I<bug> I<version>"
 "\", \"B<notfound> I<bug> I<version>\"."
 msgstr ""
-"Cette commande est équivalente à la séquence « B<found> I<bogue> "
-"I<version> », « B<notfound> I<bogue> I<version> »."
+"Cette commande est équivalente à la séquence \"B<found> I<bogue> I<version>"
+"\", \"B<notfound> I<bogue> I<version>\"."
 
 #. type: =item
 #: ../scripts/bts.pl:1481
@@ -2214,8 +2214,8 @@ msgid ""
 "Adding/removing the B<security> tag will add \"team\\@security.debian.org\" "
 "to the Cc list of the control email."
 msgstr ""
-"L’ajout ou suppression de l’étiquette B<security> ajoutera « team\\@security."
-"debian.org » en copie du message de contrôle."
+"L’ajout ou suppression de l’étiquette B<security> ajoutera \"team\\@security."
+"debian.org\" en copie du message de contrôle."
 
 #. type: textblock
 #: ../scripts/bts.pl:1595
@@ -2244,7 +2244,7 @@ msgid ""
 "There is also a tag for each release of Debian since \"potato\". Note that "
 "this list may be out of date, see the website for the most up to date source."
 msgstr ""
-"Il y aussi une étiquette pour chaque version de Debian depuis « Potato ». "
+"Il y aussi une étiquette pour chaque version de Debian depuis \"Potato\". "
 "Remarquez que cette liste peut être obsolète, consultez le site web pour "
 "avoir la source la plus à jour."
 
@@ -2533,9 +2533,9 @@ msgid ""
 "Change the \"owner\" address of a I<bug>, with B<!> meaning `use the address "
 "on the current email as the new owner address'."
 msgstr ""
-"Changer l'adresse électronique du « propriétaire » du I<bogue>, où B<!> "
-"signifie « utiliser l'adresse électronique actuelle comme nouvelle adresse "
-"de propriétaire »."
+"Changer l'adresse électronique du \"propriétaire\" du I<bogue>, où B<!> "
+"signifie \"utiliser l'adresse électronique actuelle comme nouvelle adresse "
+"de propriétaire\"."
 
 #. type: textblock
 #: ../scripts/bts.pl:2055
@@ -2550,7 +2550,7 @@ msgstr "B<noowner> I<bogue>"
 #. type: textblock
 #: ../scripts/bts.pl:2069
 msgid "Mark a bug as having no \"owner\"."
-msgstr "Marquer un bogue comme n'ayant pas de « propriétaire »."
+msgstr "Marquer un bogue comme n'ayant pas de \"propriétaire\"."
 
 #. type: =item
 #: ../scripts/bts.pl:2079
@@ -3159,7 +3159,7 @@ msgid ""
 "mail to the control bot should automatically be sent."
 msgstr ""
 "Indiquer une liste d'adresses électroniques auxquelles une copie conforme "
-"des courriers, créés pour le robot « control », doit être envoyée "
+"des courriers, créés pour le robot \"control\", doit être envoyée "
 "automatiquement."
 
 #. type: =item
@@ -3241,7 +3241,7 @@ msgid ""
 "package."
 msgstr ""
 "B<build-rdeps> recherche tous les paquets qui dépendent du paquet indiqué "
-"pour leur construction (« reverse build depends » : dépendances de "
+"pour leur construction (\"reverse build depends\" : dépendances de "
 "construction inverses)"
 
 #. type: textblock
@@ -3284,7 +3284,7 @@ msgstr "B<-u>, B<--update>"
 #: ../scripts/build-rdeps.pl:52
 msgid "Run apt-get update before searching for build-depends."
 msgstr ""
-"Exécuter « apt-get update » avant de chercher les dépendances de "
+"Exécuter \"apt-get update\" avant de chercher les dépendances de "
 "construction."
 
 #. type: =item
@@ -3296,7 +3296,7 @@ msgstr "B<-s>, B<--sudo>"
 #: ../scripts/build-rdeps.pl:56
 msgid "Use sudo when running apt-get update. Has no effect if -u is omitted."
 msgstr ""
-"Utiliser sudo pour l'exécution de « apt-get update ». Ça n'a aucun effet si -"
+"Utiliser sudo pour l'exécution de \"apt-get update\". Ça n'a aucun effet si -"
 "u n'est pas utilisée."
 
 #. type: =item
@@ -3341,8 +3341,8 @@ msgstr "B<--origin>"
 #: ../scripts/build-rdeps.pl:72
 msgid "Restrict the search to only the specified origin (such as \"Debian\")."
 msgstr ""
-"Restreindre la recherche à l'origine indiquée seulement (par exemple "
-"« Debian »)."
+"Restreindre la recherche à l'origine indiquée seulement (par exemple \"Debian"
+"\")."
 
 #. type: =item
 #: ../scripts/build-rdeps.pl:74
@@ -3367,7 +3367,7 @@ msgid ""
 "is installed."
 msgstr ""
 "Définir explicitement l'architecture de l'hôte. Par défaut, c'est la valeur "
-"de « dpkg-architecture -qDEB_HOST_ARCH ». Cette option ne fonctionne que si "
+"de \"dpkg-architecture -qDEB_HOST_ARCH\". Cette option ne fonctionne que si "
 "dose-extra >= 4.0 est installé."
 
 #. type: =item
@@ -3383,7 +3383,7 @@ msgid ""
 "is installed."
 msgstr ""
 "Définir explicitement l'architecture de construction. Par défaut, c'est la "
-"valeur de « dpkg-architecture -qDEB_BUILD_ARCH ». Cette option ne fonctionne "
+"valeur de \"dpkg-architecture -qDEB_BUILD_ARCH\". Cette option ne fonctionne "
 "que si dose-extra >= 4.0 est installé."
 
 #. type: =item
@@ -3524,7 +3524,7 @@ msgstr "deb-src http://<miroir>/debian <dist> main contrib non-free"
 msgid ""
 "and run apt-get update afterwards or use the update option of this tool."
 msgstr ""
-"et d'exécuter ensuite « apt-get update » ou d'utiliser l'option B<--update> "
+"et d'exécuter ensuite \"apt-get update\" ou d'utiliser l'option B<--update> "
 "de cet outil."
 
 #. type: =head1
@@ -3570,8 +3570,8 @@ msgid ""
 "easy to query the status of packages in other distribution without using "
 "chroots, for instance."
 msgstr ""
-"B<chdist> est une réécriture de ce qu'était « MultiDistroTools » (ou "
-"« mdt »). Ce programme permet de créer des « arbres APT » pour différentes "
+"B<chdist> est une réécriture de ce qu'était \"MultiDistroTools\" (ou \"mdt"
+"\"). Ce programme permet de créer des \"arbres APT\" pour différentes "
 "distributions, facilitant la récupération du statut de paquets d'autres "
 "distributions sans, par exemple, utiliser de chroot."
 
@@ -3599,7 +3599,7 @@ msgstr "B<-a>, B<--arch> I<ARCH>"
 #: ../scripts/chdist.pl:47
 msgid "Choose architecture (default: `B<dpkg --print-architecture>`)."
 msgstr ""
-"Choisir l'architecture (par défaut : « B<dpkg> B<--print-architecture> »)."
+"Choisir l'architecture (par défaut : \"B<dpkg> B<--print-architecture>\")."
 
 #. type: textblock
 #: ../scripts/chdist.pl:51 ../scripts/deb-reversion.dbk:239
@@ -3842,10 +3842,10 @@ msgid ""
 "such as XSI or User Portability."
 msgstr ""
 "Remarquez que la définition d'une construction spécifique à bash dans ce "
-"contexte correspond grossièrement à « une fonctionnalité d'un interpréteur "
-"de commandes qu'il n'est pas nécessaire de gérer d'après POSIX » ; cela "
+"contexte correspond grossièrement à \"une fonctionnalité d'un interpréteur "
+"de commandes qu'il n'est pas nécessaire de gérer d'après POSIX\" ; cela "
 "signifie que certains des points relevés peuvent être permis dans des "
-"sections optionnelles de POSIX, comme XSI ou « User Portability »."
+"sections optionnelles de POSIX, comme XSI ou \"User Portability\"."
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:23
@@ -3890,7 +3890,7 @@ msgid ""
 "Check for \"B<echo -n>\" usage (non POSIX but required by Debian Policy "
 "10.4.)"
 msgstr ""
-"Vérifier l'utilisation de « B<echo -n> » (pas dans POSIX, mais permise par "
+"Vérifier l'utilisation de \"B<echo -n>\" (pas dans POSIX, mais permise par "
 "la Charte Debian, section 10.4)."
 
 #. type: TP
@@ -3963,8 +3963,8 @@ msgstr ""
 "Met en évidence les lignes qui, même si elles ne contiennent pas de "
 "construction propre à bash, peuvent être utiles pour déterminer si certains "
 "problèmes particuliers sont des faux positifs qui peuvent être ignorés. Par "
-"exemple, l'utilisation de « B<$BASH_ENV> » peut être précédée d'une "
-"vérification pour s'assurer que « B<$BASH> » est définie."
+"exemple, l'utilisation de \"B<$BASH_ENV>\" peut être précédée d'une "
+"vérification pour s'assurer que \"B<$BASH>\" est définie."
 
 #. type: TP
 #: ../scripts/checkbashisms.1:52
@@ -4780,7 +4780,7 @@ msgstr ""
 "Le nom de code à passer à l’option B<--distribution> de B<cowbuilder> à la "
 "place de I<dist>. C’est nécessaire quand I<dist> est un nom localement "
 "significatif utilisé pour un chroot de construction configuré spécialement, "
-"comme par exemple « wheezy_backports », et non le nom de suite formel d’une "
+"comme par exemple \"wheezy_backports\", et non le nom de suite formel d’une "
 "I<dist>ribution connue de debootstrap. Cette option ne peut pas être "
 "remplacée en ligne de commande, puisqu’il n’y pas vraiment de raison de la "
 "modifier pour les appels individuels de B<cowpoke>. Si cette option n’est "
@@ -4807,7 +4807,7 @@ msgstr ""
 "B<cowbuilder> quand un chroot est créé (en utilisant l’option B<--create>). "
 "C’est pratique quand des options comme B<--othermirror> sont voulues pour "
 "créer des configurations spéciales de chroot, comme par exemple "
-"« wheezy_backports ». Par défaut il n’est pas défini. Toutes les valeurs "
+"\"wheezy_backports\". Par défaut il n’est pas défini. Toutes les valeurs "
 "définie dans ce tableaux seront ignorées si l’option B<--create-opts> est "
 "passée en ligne de commande."
 
@@ -4988,7 +4988,7 @@ msgid ""
 msgstr ""
 "Il n'y a rien de particulier à faire pour configurer une instance de "
 "B<cowbuilder> pour qu'elle puisse être utilisée avec B<cowpoke>. Créez-la "
-"simplement telle que vous en avez besoin avec « B<cowbuilder --create> » en "
+"simplement telle que vous en avez besoin avec \"B<cowbuilder --create>\" en "
 "suivant la documentation de B<cowbuilder>, puis configurez B<cowpoke> avec "
 "les informations sur l'utilisateur, l'architecture et le chemin nécessaire "
 "pour y accéder sur les machines où vous souhaitez l'appeler (ou configurez "
@@ -5082,10 +5082,10 @@ msgstr ""
 "superutilisateur, B<cowpoke> nécessite également certains des droits du "
 "superutilisateur. Et toutes les horreurs qui peuvent arriver à cause de ça "
 "pourront vous arriver un jour. B<cowbuilder> est connu pour avoir "
-"accidentellement écrasé des systèmes de fichiers montés avec l'option "
-"« bind » en dehors de son chroot, et pire encore peut arriver. Soyez "
-"prudents, conservez des sauvegardes de ce que vous ne souhaitez pas perdre "
-"sur vos machines de construction et utilisez B<cowpoke> pour isoler tous ces "
+"accidentellement écrasé des systèmes de fichiers montés avec l'option \"bind"
+"\" en dehors de son chroot, et pire encore peut arriver. Soyez prudents, "
+"conservez des sauvegardes de ce que vous ne souhaitez pas perdre sur vos "
+"machines de construction et utilisez B<cowpoke> pour isoler tous ces "
 "problèmes sur une machine qui n'est pas votre machine de développement avec "
 "vos quelques heures de travail non committé."
 
@@ -5643,7 +5643,7 @@ msgid ""
 "(for I<.changes> files) or a source package (for I<.dsc> files)."
 msgstr ""
 "B<dcmd> remplace toutes les références à un fichier I<.dsc> ou I<.changes> "
-"sur la ligne de commande par la liste des fichiers de sa section « Files », "
+"sur la ligne de commande par la liste des fichiers de sa section \"Files\", "
 "plus le fichier lui-même. Cela facilite la manipulation de tous les fichiers "
 "impliqués dans un envoi (pour les fichiers I<.changes>) ou un paquet source "
 "(pour les fichiers I<.dsc>)."
@@ -5691,7 +5691,7 @@ msgstr "B<--schanges>"
 #. type: Plain text
 #: ../scripts/dcmd.1:25
 msgid "Select I<.changes> files for the 'source' architecture."
-msgstr "Sélectionner les fichiers I<.changes> pour l'architecture « source »."
+msgstr "Sélectionner les fichiers I<.changes> pour l'architecture \"source\"."
 
 #. type: TP
 #: ../scripts/dcmd.1:25
@@ -6118,7 +6118,7 @@ msgid ""
 "the input instead of looking up the maintainer of each listed package."
 msgstr ""
 "Lire la liste de paquets depuis l'entrée standard, au format du fichier de "
-"contrôle Debian (« debian/control »). Cela inclut le fichier d'état, ou la "
+"contrôle Debian (\"debian/control\"). Cela inclut le fichier d'état, ou la "
 "sortie d'apt-cache. C'est l'utilisation la plus rapide de dd-list, "
 "puisqu'elle utilise les informations de responsable depuis l'entrée plutôt "
 "que de rechercher les responsables de chaque paquet."
@@ -6191,10 +6191,10 @@ msgid ""
 "maintainers; this is the default behaviour, use --nouploaders to prevent it. "
 "Uploaders are indicated with \"(U)\" appended to the package name."
 msgstr ""
-"Afficher aussi la liste des développeurs marqués comme « uploaders » des "
+"Afficher aussi la liste des développeurs marqués comme \"uploaders\" des "
 "paquets et non seulement les responsables ; c'est le comportement par "
 "défaut, utilisez --nouploaders si ce n'est pas ce que vous souhaitez. Les "
-"uploaders sont indiqués avec un « (U) » ajouté en fin de nom de paquet."
+"uploaders sont indiqués avec un \"(U)\" ajouté en fin de nom de paquet."
 
 #. type: TP
 #: ../scripts/dd-list.1:95
@@ -6418,11 +6418,11 @@ msgstr ""
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<expression_rationnelle>. Il s'agit "
 "d'une expression rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son "
-"début et à sa fin. Si elle contient un « / », alors elle doit correspondre "
+"début et à sa fin. Si elle contient un \"/\", alors elle doit correspondre "
 "au chemin complet, sinon elle doit correspondre au nom de répertoire "
-"complet. Si elle contient la chaîne « PACKAGE », cette chaîne sera remplacée "
+"complet. Si elle contient la chaîne \"PACKAGE\", cette chaîne sera remplacée "
 "par le nom du paquet source déterminé par le journal de modifications. La "
-"valeur par défaut de cette expression rationnelle est « PACKAGE(-.+)? », ce "
+"valeur par défaut de cette expression rationnelle est \"PACKAGE(-.+)?\", ce "
 "qui correspond aux répertoires nommés PACKAGE ou PACKAGE-version."
 
 #. type: TP
@@ -6765,7 +6765,7 @@ msgstr ""
 "suivante. Si la variable d'environnement B<DEBFULLNAME> est définie, sa "
 "valeur est utilisée comme nom complet du responsable. Si la variable "
 "d'environnement B<DEBEMAIL> est définie, elle est utilisée comme adresse "
-"électronique. Si cette variable est de la forme « nom E<lt>adresseE<gt> », "
+"électronique. Si cette variable est de la forme \"nom E<lt>adresseE<gt>\", "
 "alors le nom est pris dans cette variable si la variable d'environnement "
 "B<DEBFULLNAME> n'est pas définie. Si cette variable d'environnement n'est "
 "pas définie, le même test est réalisé sur B<EMAIL>. Puis, si le nom complet "
@@ -6878,11 +6878,11 @@ msgstr ""
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
 "rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son début et à sa "
-"fin. Si elle contient un « B</> », alors elle doit correspondre au chemin "
-"complet. Si elle contient la chaîne « B<PACKAGE> », cette chaîne sera "
+"fin. Si elle contient un \"B</>\", alors elle doit correspondre au chemin "
+"complet. Si elle contient la chaîne \"B<PACKAGE>\", cette chaîne sera "
 "remplacée par le nom du paquet source déterminé par le fichier I<changelog>. "
-"La valeur par défaut de cette expression rationnelle est « B<PACKAGE(-.+)?"
-"> », ce qui correspond aux répertoires nommés B<PACKAGE> ou B<PACKAGE-"
+"La valeur par défaut de cette expression rationnelle est \"B<PACKAGE(-.+)?>"
+"\", ce qui correspond aux répertoires nommés B<PACKAGE> ou B<PACKAGE-"
 ">I<version>."
 
 #. type: Plain text
@@ -7079,7 +7079,7 @@ msgid ""
 "parsechangelog> warning on the next invocation due to the lack of changes."
 msgstr ""
 "Quand elle est utilisée avec l'option B<--create>, elle permet de supprimer "
-"l'ajout automatique d'une entrée « B<initial release> » (de telle sorte que "
+"l'ajout automatique d'une entrée \"B<initial release>\" (de telle sorte que "
 "le prochain appel à B<debchange> ajoutera la première entrée). Remarquez que "
 "B<dpkg-parsechangelog> produira des avertissements du fait de l'absence de "
 "description de modifications."
@@ -7120,8 +7120,8 @@ msgid ""
 "to I<no> or the B<--no-auto-nmu> option is used."
 msgstr ""
 "Incrémenter le numéro de version Debian pour un envoi d'un non-responsable "
-"soit en ajoutant « B<.1> » à une version non-NMU (à moins qu'il s'agisse "
-"d'un paquet Debian natif, auquel cas « B<+nmu1> » est ajouté), soit en "
+"soit en ajoutant \"B<.1>\" à une version non-NMU (à moins qu'il s'agisse "
+"d'un paquet Debian natif, auquel cas \"B<+nmu1>\" est ajouté), soit en "
 "incrémentant un numéro de NMU et ajouter un commentaire NMU au journal des "
 "modifications. Cela se produit automatiquement si l'auteur du paquet n'est "
 "pas dans les champs B<Maintainer> ou B<Uploaders> de I<debian/control>, à "
@@ -7142,8 +7142,8 @@ msgid ""
 "incrementing a binNMU version number, and add a binNMU changelog comment."
 msgstr ""
 "Incrémenter le numéro de version Debian pour un envoi binaire d'un non-"
-"responsable soit en ajoutant « B<+b1> » à une version non-binNMU soit en "
-"incrémentant un numéro de binNMU, et ajouter un commentaire « binNMU » dans "
+"responsable soit en ajoutant \"B<+b1>\" à une version non-binNMU soit en "
+"incrémentant un numéro de binNMU, et ajouter un commentaire \"binNMU\" dans "
 "le journal des modifications."
 
 #. type: TP
@@ -7159,7 +7159,7 @@ msgid ""
 "B<QA upload> changelog comment."
 msgstr ""
 "Incrémenter le numéro de publication de Debian pour un envoi par l'équipe QA "
-"de Debian, et ajouter un commentaire « B<QA upload> » dans le journal des "
+"de Debian, et ajouter un commentaire \"B<QA upload>\" dans le journal des "
 "modifications."
 
 #. type: TP
@@ -7175,7 +7175,7 @@ msgid ""
 "\"build1\" or by incrementing a rebuild version number."
 msgstr ""
 "Incrémente le numéro de version Debian pour une reconstruction sans "
-"modification en ajoutant « build1 » ou en incrémentant un numéro de "
+"modification en ajoutant \"build1\" ou en incrémentant un numéro de "
 "reconstruction."
 
 #. type: TP
@@ -7191,7 +7191,7 @@ msgid ""
 "maintainer upload, and add a B<Security Team upload> changelog comment."
 msgstr ""
 "Incrémenter le numéro de publication de Debian pour un envoi par l'équipe "
-"Sécurité de Debian, et ajouter un commentaire « B<Security Team upload> » "
+"Sécurité de Debian, et ajouter un commentaire \"B<Security Team upload>\" "
 "dans le journal des modifications."
 
 #. type: TP
@@ -7208,7 +7208,7 @@ msgid ""
 msgstr ""
 "Incrémenter le numéro de publication de Debian pour un envoi d'un non-"
 "responsable de l'équipe Sécurité de Debian LTS, et ajouter un commentaire "
-"« B<LTS Security Team upload> » dans le journal des modifications."
+"\"B<LTS Security Team upload>\" dans le journal des modifications."
 
 #. type: TP
 #: ../scripts/debchange.1:253
@@ -7223,7 +7223,7 @@ msgid ""
 "upload> changelog comment."
 msgstr ""
 "Incrémenter le numéro de publication de Debian pour un envoi par l'équipe, "
-"et ajouter un commentaire « B<Team upload> » dans le journal des "
+"et ajouter un commentaire \"B<Team upload>\" dans le journal des "
 "modifications."
 
 #. type: TP
@@ -7344,8 +7344,8 @@ msgid ""
 "represents a Non Maintainer Upload.  This is the default."
 msgstr ""
 "Essayer de déterminer automatiquement si une modification dans le journal "
-"des modifications correspond à une NMU (mise à jour indépendante ou « Non "
-"Maintainer Upload »). Il s'agit du comportement par défaut."
+"des modifications correspond à une NMU (mise à jour indépendante ou \"Non "
+"Maintainer Upload\"). Il s'agit du comportement par défaut."
 
 #. type: TP
 #: ../scripts/debchange.1:288
@@ -7384,7 +7384,7 @@ msgstr ""
 "augmenté depuis l'entrée la plus récente du fichier I<changelog>, la "
 "nouvelle entrée sera ajoutée avec pour numéro de version I<version>B<-1> (ou "
 "I<version> dans le cas d'un paquet Debian natif), avec le même temps absolu "
-"(« epoch ») que le paquet précédent. Si le numéro de version amont est le "
+"(\"epoch\") que le paquet précédent. Si le numéro de version amont est le "
 "même, cette option se comporte de la même façon que B<-i>."
 
 #. type: TP
@@ -7497,9 +7497,8 @@ msgid ""
 "existing entries."
 msgstr ""
 "Utiliser le niveau d'urgence indiqué dans la nouvelle entrée du fichier "
-"I<changelog>, s'il y en a une, au lieu du niveau d'urgence moyen "
-"(« B<medium> ») par défaut ou de la valeur actuelle pour les entrées "
-"existantes."
+"I<changelog>, s'il y en a une, au lieu du niveau d'urgence moyen (\"B<medium>"
+"\") par défaut ou de la valeur actuelle pour les entrées existantes."
 
 #. type: TP
 #: ../scripts/debchange.1:334
@@ -7655,8 +7654,8 @@ msgid ""
 "See the above section \"B<Directory name checking>\" for an explanation of "
 "this option."
 msgstr ""
-"Veuillez consulter la section ci-dessus « B<Vérification du nom du "
-"répertoire> » pour une explication de cette option."
+"Veuillez consulter la section ci-dessus \"B<Vérification du nom du "
+"répertoire>\" pour une explication de cette option."
 
 #. type: TP
 #: ../scripts/debchange.1:394
@@ -7720,7 +7719,7 @@ msgid ""
 "and will therefore affect all B<devscripts> scripts which check their value, "
 "as described in their respective manpages and in B<devscripts.conf>(5)."
 msgstr ""
-"Veuillez consulter la section « B<Vérification du nom du répertoire> » ci-"
+"Veuillez consulter la section \"B<Vérification du nom du répertoire>\" ci-"
 "dessus pour une explication de ces variables. Remarquez que ce sont des "
 "variables de configuration pour tous les outils du paquet B<devscripts> ; "
 "elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
@@ -7812,7 +7811,7 @@ msgid ""
 msgstr ""
 "Utiliser ce fuseau horaire pour les entrées de journal des modifications. "
 "Par défaut, le fuseau horaire de l'utilisateur sur le système est utilisé, "
-"comme avec « B<date -R> » avec prise en compte de la variable "
+"comme avec \"B<date -R>\" avec prise en compte de la variable "
 "d'environnement TZ."
 
 #. type: TP
@@ -8127,7 +8126,7 @@ msgstr ""
 "N'afficher qu'un résumé des informations sur le dépôt du paquet, sans le "
 "récupérer ; le format de sortie comprend deux champs séparés par une "
 "tabulation : le type de dépôt et l'URL du dépôt. Cette action fonctionne "
-"hors-ligne, elle n'utilise que des informations « statiques » telles "
+"hors-ligne, elle n'utilise que des informations \"statiques\" telles "
 "qu'elles sont connues du cache d'APT."
 
 #. type: textblock
@@ -8164,7 +8163,7 @@ msgid ""
 "of the currently supported repository types."
 msgstr ""
 "Forcer le type de dépôt (défini par défaut par des heuristiques basées sur "
-"l'URL ou, si les heuristiques échouent, « git ») ; le type de dépôt doit "
+"l'URL ou, si les heuristiques échouent, \"git\") ; le type de dépôt doit "
 "être un des types de dépôt gérés."
 
 #. type: =item
@@ -8300,7 +8299,7 @@ msgid ""
 "As a shorthand, the string \"B<*>\" can be given to require tracking of all "
 "remote branches."
 msgstr ""
-"Comme raccourci, la chaîne « B<*> » peut être fournie pour demander le suivi "
+"Comme raccourci, la chaîne \"B<*>\" peut être fournie pour demander le suivi "
 "de toutes les branches distantes."
 
 # NOTE: presque identique
@@ -8357,8 +8356,8 @@ msgid ""
 "repositories. The Debian repositories on S<salsa.debian.org> are implicitly "
 "defined, as is S<github.com>."
 msgstr ""
-"Cette configuration est utilisée pour configurer la localisation du « mode "
-"authentifié » pour les dépôts. Les dépôts Debian de S<salsa.debian.org> sont "
+"Cette configuration est utilisée pour configurer la localisation du \"mode "
+"authentifié\" pour les dépôts. Les dépôts Debian de S<salsa.debian.org> sont "
 "implicitement définis, comme l'est S<github.com>."
 
 #. type: textblock
@@ -8393,7 +8392,7 @@ msgstr ""
 "Veuillez noter que les blancs ne sont autorisés ni dans les expressions "
 "rationnelles ni dans les textes de remplacement. Aussi, comme les fichiers "
 "de configuration sont souvent lus par les interpréteurs de commandes avec "
-"« source », vous avez intérêt à utiliser des guillemets simples autour de la "
+"\"source\", vous avez intérêt à utiliser des guillemets simples autour de la "
 "valeur de cette variable."
 
 #. type: =item
@@ -8580,7 +8579,7 @@ msgstr "B<-d>"
 msgid "Do not run dpkg-checkbuilddeps to check build dependencies."
 msgstr ""
 "Ne pas exécuter dpkg-checkbuilddeps pour vérifier les dépendances de "
-"construction du paquet (« build dependencies »)."
+"construction du paquet (\"build dependencies\")."
 
 #. type: TP
 #: ../scripts/debclean.1:99
@@ -8660,7 +8659,7 @@ msgid ""
 "Commit a release of the package. The version number is determined from "
 "debian/changelog, and is used to tag the package in the repository."
 msgstr ""
-"Commiter une distribution (« release ») du paquet. Le numéro de version est "
+"Commiter une distribution (\"release\") du paquet. Le numéro de version est "
 "déterminé à partir du fichier debian/changelog et est utilisé pour étiqueter "
 "le paquet dans le dépôt."
 
@@ -8797,7 +8796,7 @@ msgid ""
 "message."
 msgstr ""
 "Si cette option est utilisée et que le message d'envoi est défini à l'aide "
-"du journal des modifications, les caractères « *  » (espace comprise) seront "
+"du journal des modifications, les caractères \"*\" (espace comprise) seront "
 "enlevés au début du message."
 
 # NOTE: space inside the brackets?
@@ -8808,7 +8807,7 @@ msgid ""
 "message begins with \"[*+-] \"."
 msgstr ""
 "Cette option est activée par défaut et est ignorée si plus d'une ligne du "
-"message commence par « [*+-]  » (espace comprise)."
+"message commence par \"[*+-]\" (espace comprise)."
 
 #. type: =item
 #: ../scripts/debcommit.pl:85
@@ -9018,7 +9017,7 @@ msgid ""
 "and the bugs."
 msgstr ""
 "Si l'entrée du journal des modifications utilisée pour le message de commit "
-"ferme des bogues, des options B<--fixes> pour « bzr commit » seront produits "
+"ferme des bogues, des options B<--fixes> pour \"bzr commit\" seront produits "
 "pour associer la révision aux bogues."
 
 #. type: textblock
@@ -9570,7 +9569,7 @@ msgid ""
 msgstr ""
 "Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
 "devscripts> sont évalués dans cet ordre par un interpréteur de commandes "
-"(« shell ») pour placer les variables de configuration. Des options de ligne "
+"(\"shell\") pour placer les variables de configuration. Des options de ligne "
 "de commande peuvent être utilisées pour neutraliser les paramètres des "
 "fichiers de configuration. Les paramètres des variables d'environnement sont "
 "ignorés à cette fin. Si la première option donnée en ligne de commande est "
@@ -10260,8 +10259,8 @@ msgid ""
 msgstr ""
 "B<debpkg> appelle simplement B<dpkg>(1), mais devient superutilisateur "
 "auparavant de façon à être capable d'installer ou de retirer des paquets. Il "
-"nettoie également l'environnement et remet le PATH à une valeur saine : « /"
-"usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11 » de telle sorte que les versions "
+"nettoie également l'environnement et remet le PATH à une valeur saine : \"/"
+"usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11\" de telle sorte que les versions "
 "locales des programmes ne soient pas exécutées par accident."
 
 #. type: Plain text
@@ -10693,13 +10692,13 @@ msgid ""
 "B<dupload> or B<dput> with the I<.changes> file as parameter in order to "
 "perform the actual uploading."
 msgstr ""
-"B<debrelease> est un simple script d'encapsulation (« wrapper ») d'appels à "
+"B<debrelease> est un simple script d'encapsulation (\"wrapper\") d'appels à "
 "B<dupload> ou B<dput>. Il est appelé depuis l'arborescence des sources d'un "
 "paquet, et détermine la version actuelle d'un paquet. Il recherche ensuite "
 "un fichier I<.changes> correspondant (qui liste les fichiers nécessaires à "
 "l'envoi à l'archive Debian) dans le répertoire parent de l'arborescence du "
 "code source, et appelle ensuite B<dupload> ou B<dput> avec le fichier I<."
-"changes> en paramètre de façon à réaliser l'envoi (« upload »)."
+"changes> en paramètre de façon à réaliser l'envoi (\"upload\")."
 
 #. type: Plain text
 #: ../scripts/debrelease.1:20
@@ -11000,8 +10999,8 @@ msgstr ""
 "le contenu du fichier <filename>.deb</filename>. Cela peut être réalisé soit "
 "en lançant la commande <command>&dhcommand;</command> comme superutilisateur "
 "soit en lançant <citerefentry><refentrytitle>fakeroot</refentrytitle> "
-"<manvolnum>1</manvolnum></citerefentry>, comme « fakeroot &dhcommand; toto."
-"deb »."
+"<manvolnum>1</manvolnum></citerefentry>, comme \"fakeroot &dhcommand; toto."
+"deb\"."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:113
@@ -11017,11 +11016,11 @@ msgid ""
 "<command>sh -c</command>."
 msgstr ""
 "Avec <option>-k <replaceable class=\"parameter\">hook</replaceable></"
-"option>, un script crochet (« hook ») peut être précisé, et lancé sur les "
+"option>, un script crochet (\"hook\") peut être précisé, et lancé sur les "
 "paquets binaires dépaquetés juste avant qu'ils soient rempaquetés. Si vous "
 "voulez écrire les entrées du fichier <filename>changelog</filename> avec ce "
-"script, utilisez la commande « <command>dch -a -- <replaceable class="
-"\"parameter\">votre message</replaceable></command> ». (Alternativement, "
+"script, utilisez la commande \"<command>dch -a -- <replaceable class="
+"\"parameter\">votre message</replaceable></command>\". (Alternativement, "
 "vous pouvez ne pas indiquer l'entrée du <filename>changelog</filename> dans "
 "la ligne de commande <command>&dhcommand;</command>, <command>dch</command> "
 "sera alors appelée automatiquement.) La commande crochet doit être placée "
@@ -11129,7 +11128,7 @@ msgid ""
 "Instead of using 'LOCAL.' as the version string to append to the old version "
 "number, use <replaceable class=\"parameter\">string</replaceable> instead."
 msgstr ""
-"Au lieu d'ajouter « LOCAL. » à l'ancien numéro de version, ajouter "
+"Au lieu d'ajouter \"LOCAL.\" à l'ancien numéro de version, ajouter "
 "<replaceable class=\"parameter\">chaîne</replaceable>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
@@ -11166,7 +11165,7 @@ msgstr ""
 "filename>. Doit être placée entre guillemets si elle est constituée de plus "
 "d'un mot (du point de vue de l'interpréteur). Une seule commande de crochet "
 "peut être précisée ; si vous voulez effectuer plus de choses, vous pouvez "
-"indiquer « bash » comme commande de crochet, vous aurez ainsi une invite de "
+"indiquer \"bash\" comme commande de crochet, vous aurez ainsi une invite de "
 "commandes pour travailler."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
@@ -11978,7 +11977,7 @@ msgid ""
 msgstr ""
 "Forcer l'écrasement d'une I<destination> existante. Par défaut, B<debsnap> "
 "insistera pour que le répertoire de destination n'existe pas, sauf s'il "
-"s'agit explicitement de « B<.> » (le répertoire de travail en cours). C'est "
+"s'agit explicitement de \"B<.>\" (le répertoire de travail en cours). C'est "
 "pour éviter que des fichiers soient accidentellement écrasés par ce qui est "
 "récupéré de l'archive et pour garantir aux autres scripts que seuls les "
 "fichiers récupérés seront présents à la fin."
@@ -12124,7 +12123,7 @@ msgstr "B<DEBSNAP_BASE_URL>"
 #. type: Plain text
 #: ../scripts/debsnap.1:99
 msgid "The base url for the snapshots archive."
-msgstr "L'URL de base pour l'archive d'instantanés (« snapshots »)."
+msgstr "L'URL de base pour l'archive d'instantanés (\"snapshots\")."
 
 #. type: Plain text
 #: ../scripts/debsnap.1:101
@@ -12304,7 +12303,7 @@ msgid ""
 "`B<reportbug devscripts>`"
 msgstr ""
 "Le programme fait partie du paquet devscripts. Veuillez soumettre les "
-"rapports de bogue en utilisant « B<reportbug devscripts> »"
+"rapports de bogue en utilisant \"B<reportbug devscripts>\""
 
 #. type: TH
 #: ../scripts/debuild.1:1
@@ -12461,11 +12460,11 @@ msgstr ""
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<expression_rationnelle>. Il s'agit "
 "d'une expression rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son "
-"début et à sa fin. Si elle contient un « / », alors elle doit correspondre "
+"début et à sa fin. Si elle contient un \"/\", alors elle doit correspondre "
 "au chemin complet, sinon elle doit correspondre au nom de répertoire "
-"complet. Si elle contient la chaîne « PACKAGE », cette chaîne sera remplacée "
+"complet. Si elle contient la chaîne \"PACKAGE\", cette chaîne sera remplacée "
 "par le nom du paquet source déterminé par le fichier I<changelog>. La valeur "
-"par défaut de cette expression rationnelle est « PACKAGE(-.+)? », ce qui "
+"par défaut de cette expression rationnelle est \"PACKAGE(-.+)?\", ce qui "
 "correspond aux répertoires nommés PACKAGE ou PACKAGE-version."
 
 #. type: Plain text
@@ -12487,9 +12486,9 @@ msgstr ""
 "B<GPG_TTY>, B<DBUS_SESSION_BUS_ADDRESS>, B<FAKEROOTKEY>, B<DEBEMAIL>, "
 "B<DEB_>I<*>, des variables (B<C>, B<CPP>, B<CXX>, B<LD> et B<F>)B<FLAGS> et "
 "les variables B<_APPEND> associées, ainsi que les variables pour les "
-"paramètres régionaux B<LANG> et B<LC_>I<*>. La variable B<TERM> vaut "
-"« dumb » si elle n'est pas définie, et B<PATH> est définie à « /usr/sbin:/"
-"usr/bin:/sbin:/bin:/usr/bin/X11 »."
+"paramètres régionaux B<LANG> et B<LC_>I<*>. La variable B<TERM> vaut \"dumb"
+"\" si elle n'est pas définie, et B<PATH> est définie à \"/usr/sbin:/usr/bin:/"
+"sbin:/bin:/usr/bin/X11\"."
 
 #. type: Plain text
 #: ../scripts/debuild.1:109
@@ -12628,7 +12627,7 @@ msgid ""
 "passed through to B<dpkg-buildpackage> using its corresponding B<--hook-"
 ">I<name> option.  The available hooks are as follows:"
 msgstr ""
-"B<debuild> gère un certain nombre de points d'ancrage (« hook ») quand il "
+"B<debuild> gère un certain nombre de points d'ancrage (\"hook\") quand il "
 "exécute B<dpkg-buildpackage>. Remarquez que les points d'ancrage entre "
 "B<clean-hook> et B<lintian> (inclus) sont passées au travers de B<dpkg-"
 "buildpackage> en utilisant leur option B<--hook->I<nom> correspondante. Les "
@@ -12878,14 +12877,14 @@ msgstr ""
 "modifiée : B<%%> deviendra un signe B<%> simple, B<%p> sera remplacé par le "
 "nom du paquet, B<%v> par le numéro de version du paquet, B<%s> par le numéro "
 "de version du source et B<%u> par le numéro de version amont. Ni B<%s> ni B<"
-"%u> ne contiendra de temps absolu (« epoch »). B<%a> sera B<1> si l'action "
+"%u> ne contiendra de temps absolu (\"epoch\"). B<%a> sera B<1> si l'action "
 "suivante doit être effectuée et B<0> dans le cas contraire (par exemple, "
 "dans le crochet B<dpkg-source>, B<%a> sera B<1> si B<dpkg-source> doit être "
 "lancé et B<0> sinon). Elle sera alors passée à l'interpréteur de commandes "
 "pour être traitée, et peut donc inclure des redirections ou des choses du "
 "genre. Par exemple, pour ne lancer que le crochet B<dpkg-source> si B<dpkg-"
-"source> doit être exécutée, le crochet peut ressemble à ceci : « if [ %a -eq "
-"1 ]; then ...; fi »."
+"source> doit être exécutée, le crochet peut ressemble à ceci : \"if [ %a -eq "
+"1 ]; then ...; fi\"."
 
 #. type: Plain text
 #: ../scripts/debuild.1:256
@@ -12924,7 +12923,7 @@ msgid ""
 "If I<var> ends in an asterisk (\"*\") then all variables with names that "
 "match the portion of I<var> before the asterisk will be preserved."
 msgstr ""
-"Si I<var> se termine par un astérisque (« * ») alors toutes les variables "
+"Si I<var> se termine par un astérisque (\"*\") alors toutes les variables "
 "qui ont une correspondance avec la portion de I<var> avant l'astérisque "
 "seront préservées."
 
@@ -13058,7 +13057,7 @@ msgstr ""
 msgid "Do not run B<dpkg-checkbuilddeps> to check build dependencies."
 msgstr ""
 "Ne pas exécuter B<dpkg-checkbuilddeps> pour vérifier les dépendances de "
-"construction du paquet (« build dependencies »)."
+"construction du paquet (\"build dependencies\")."
 
 #. type: TP
 #: ../scripts/debuild.1:324
@@ -13086,7 +13085,7 @@ msgid ""
 msgstr ""
 "Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
 "devscripts> sont évalués dans cet ordre par un interpréteur de commandes "
-"(« shell ») pour placer les variables de configuration. Des options de ligne "
+"(\"shell\") pour placer les variables de configuration. Des options de ligne "
 "de commande peuvent être utilisées pour neutraliser les paramètres des "
 "fichiers de configuration. Les paramètres des variables d'environnement sont "
 "ignorés à cette fin. Si la première option donnée en ligne de commande est "
@@ -13210,7 +13209,7 @@ msgstr ""
 "cause des problèmes de guillemets avec les interpréteurs de commandes, pour "
 "les paramètres contenant un espace, il sera nécessaire d'ajouter des "
 "guillemets supplémentaires. Par exemple, pour forcer à toujours utiliser "
-"votre clef GPG, même pour les envois parrainés (« sponsored upload »), le "
+"votre clef GPG, même pour les envois parrainés (\"sponsored upload\"), le "
 "fichier de configuration pourra contenir :"
 
 #. type: Plain text
@@ -13357,9 +13356,9 @@ msgid ""
 "To build a package for a sponsored upload, given I<foobar_1.0-1.dsc> and the "
 "respective source files, run something like the following commands:"
 msgstr ""
-"Pour construire un paquet pour un envoi parrainé (« sponsored upload »), "
-"donné par I<toto_1.0-1.dsc> et les fichiers source respectifs, lancez "
-"quelque chose qui ressemblerait aux commandes suivantes :"
+"Pour construire un paquet pour un envoi parrainé (sponsored upload), donné "
+"par I<toto_1.0-1.dsc> et les fichiers source respectifs, lancez quelque "
+"chose qui ressemblerait aux commandes suivantes :"
 
 #. type: Plain text
 #: ../scripts/debuild.1:440
@@ -13510,9 +13509,9 @@ msgstr ""
 "fichiers I<correctif> donnés et construit une entrée du journal de "
 "modifications pour chaque correctif. Si l'auteur du correctif est différent "
 "de celui détecté par les variables d'environnement B<DEBEMAIL>, B<NAME>, "
-"B<DEBEMAIL> ou B<EMAIL>, « Thanks to I<auteur> E<lt>I<adresse>E<gt> » est "
+"B<DEBEMAIL> ou B<EMAIL>, \"Thanks to I<auteur> E<lt>I<adresse>E<gt>\" est "
 "ajouté à l'entrée du journal de modifications pour ce correctif. Tous les "
-"champs B<bug-debian> et B<bug-ubuntu> sont ajoutés en « Closes » de l'entrée "
+"champs B<bug-debian> et B<bug-ubuntu> sont ajoutés en \"Closes\" de l'entrée "
 "du journal de modifications. Les entrées du journal de modifications "
 "préparées sont passées en argument à B<debchange> avec les I<options_dch> "
 "données."
@@ -13765,7 +13764,7 @@ msgid ""
 "wrappers around debi and debc respectively (see below) which allow them to "
 "be called from the CVS working directory. [cvs-buildpackage]"
 msgstr ""
-"encapsulations (« wrappers ») respectivement de debi et debc (voir plus bas) "
+"encapsulations (\"wrappers\") respectivement de debi et debc (voir plus bas) "
 "pouvant être appelées depuis un répertoire de travail CVS. [cvs-buildpackage]"
 
 #. type: IP
@@ -14480,7 +14479,7 @@ msgid ""
 "may be installed to satisfy the build-dependencies of the given package. "
 "[equivs]"
 msgstr ""
-"À partir d'un nom de paquet ou d'un fichier « control », créer un paquet "
+"À partir d'un nom de paquet ou d'un fichier \"control\", créer un paquet "
 "binaire qui peut être installé pour satisfaire les dépendances de "
 "construction d'un paquet. [equivs]"
 
@@ -14597,7 +14596,7 @@ msgid ""
 "reports on the reproducible status of installed packages. For more details "
 "please see E<lt>https://reproducible-builds.orgE<gt>."
 msgstr ""
-"rapporter l'état « reproductible » des paquets installés. Pour en savoir "
+"rapporter l'état \"reproductible\" des paquets installés. Pour en savoir "
 "plus, voir E<lt>https://reproducible-builds.orgE<gt>."
 
 #. type: IP
@@ -14685,7 +14684,7 @@ msgid ""
 "latest changelog as pending. [libsoap-lite-perl]"
 msgstr ""
 "exécuter depuis une arborescence source Debian et placer l'étiquette "
-"« pending » sur tous les bogues à fermer dans le dernier groupe d'entrée du "
+"\"pending\" sur tous les bogues à fermer dans le dernier groupe d'entrée du "
 "changelog. [libsoap-lite-perl]"
 
 #. type: IP
@@ -14966,9 +14965,9 @@ msgid ""
 "any\", or \"Arch: $arch\" will be downloaded."
 msgstr ""
 "Interpréter I<paquet> comme un nom de paquet source, et télécharger tous les "
-"binaires trouvés dans la sortie de « apt-cache showsrc I<paquet> ». Si "
+"binaires trouvés dans la sortie de \"apt-cache showsrc I<paquet>\". Si "
 "I<paquet> porte une qualification d'architecture, alors seuls les paquets "
-"binaires qui sont « Arch: all », « Arch: any », ou « Arch: $arch » seront "
+"binaires qui sont \"Arch: all\", \"Arch: any\", ou \"Arch: $arch\" seront "
 "téléchargés."
 
 #. type: =item
@@ -15060,13 +15059,13 @@ msgid ""
 msgstr ""
 "En plus de I</var/cache/apt/archives>, B<dget> cherche les paquets ayant une "
 "somme de contrôle MD5 correspondante dans la liste de répertoires donnée en "
-"paramètre à B<--path>. Par exemple « --path /srv/pbuilder/result:/home/cb/"
-"UploadQueue ». Si RÉP est vide (c'est-à-dire que l'option « --path '' » est "
+"paramètre à B<--path>. Par exemple \"--path /srv/pbuilder/result:/home/cb/"
+"UploadQueue\". Si RÉP est vide (c'est-à-dire que l'option \"--path '' est "
 "passée), alors tous les répertoires passés précédemment ou dans les fichiers "
 "de configuration sont ignorés. Cette option peut être passée plusieurs fois, "
 "et B<dget> cherchera dans tous les répertoires listés. Ainsi, l'exemple ci-"
-"dessus est équivalent à « --path /srv/pbuilder/result --path /home/cb/"
-"UploadQueue »."
+"dessus est équivalent à \"--path /srv/pbuilder/result --path /home/cb/"
+"UploadQueue\"."
 
 #. type: =item
 #: ../scripts/dget.pl:671
@@ -15147,8 +15146,8 @@ msgid ""
 "Set to 'no' to disable extracting downloaded source packages.  Default is "
 "'yes'."
 msgstr ""
-"À configurer à « no » pour désactiver l'extraction des paquets source "
-"téléchargés. La valeur par défaut est « yes »."
+"À configurer à \"no\" pour désactiver l'extraction des paquets source "
+"téléchargés. La valeur par défaut est \"yes\"."
 
 #. type: =item
 #: ../scripts/dget.pl:711
@@ -15161,8 +15160,8 @@ msgid ""
 "Set to 'no' to disable checking signatures of downloaded source packages.  "
 "Default is 'yes'."
 msgstr ""
-"À configurer à « no » pour désactiver la vérification des signatures des "
-"paquets source téléchargés. La valeur par défaut est « yes »."
+"À configurer à \"no\" pour désactiver la vérification des signatures des "
+"paquets source téléchargés. La valeur par défaut est \"yes\"."
 
 #. type: textblock
 #: ../scripts/dget.pl:720
@@ -15202,8 +15201,8 @@ msgid ""
 "downloaded source. Set DGET_UNPACK=no to revert to the old behaviour."
 msgstr ""
 "Avant la version 2.10.17 de devscripts, le comportement par défaut était de "
-"ne pas extraire les paquets source téléchargés. Configurez DGET_UNPACK à "
-"« no » pour retrouver cet ancien comportement."
+"ne pas extraire les paquets source téléchargés. Configurez DGET_UNPACK à \"no"
+"\" pour retrouver cet ancien comportement."
 
 #. type: textblock
 #: ../scripts/dget.pl:735
@@ -15278,9 +15277,9 @@ msgid ""
 "``___'', and an extension of ``.patch''."
 msgstr ""
 "Extraire les correctifs de .diff.gz qui ne s'appliquent au répertoire "
-"« debian/ ». Un correctif est créé par fichier modifié. Chaque correctif est "
-"nommé en fonction du chemin du fichier modifié, en remplaçant « / » par "
-"« ___ », et avec une extension « .patch »."
+"\"debian/\". Un correctif est créé par fichier modifié. Chaque correctif est "
+"nommé en fonction du chemin du fichier modifié, en remplaçant \"/\" par \"___"
+"\", et avec une extension \".patch\"."
 
 #. type: TP
 #: ../scripts/diff2patches.1:18
@@ -15295,7 +15294,7 @@ msgid ""
 "directory."
 msgstr ""
 "Extraire les correctifs de I<nom_fichier> qui ne s'appliquent pas au "
-"répertoire « debian/ »."
+"répertoire \"debian/\"."
 
 #. type: Plain text
 #: ../scripts/diff2patches.1:25
@@ -15337,7 +15336,7 @@ msgid ""
 "preferred, if it exists.  If I<DEB_PATCHES> is present in the environment, "
 "it will override this behavior (see ``ENVIRONMENT VARIABLES'' section below)."
 msgstr ""
-"Les correctifs sont extraits dans ce répertoire. « debian/patches/ » est "
+"Les correctifs sont extraits dans ce répertoire. \"debian/patches/\" est "
 "utilisé s'il existe. Si I<DEB_PATCHES> est définie, elle est prioritaire sur "
 "ce comportement (consultez la section B<VARIABLES D'ENVIRONNEMENT> ci-"
 "dessous)."
@@ -15356,7 +15355,7 @@ msgid ""
 msgstr ""
 "Quand elle est présente et si elle pointe vers un répertoire existant, les "
 "correctifs sont extraits dans ce répertoire au lieu de les placer dans le "
-"répertoire « debian » ou « debian/patches »."
+"répertoire \"debian\" ou \"debian/patches\"."
 
 #. type: Plain text
 #: ../scripts/diff2patches.1:48
@@ -15435,8 +15434,8 @@ msgid ""
 "Do not report any build-essential or essential packages used, or any of "
 "their (direct or indirect) dependencies."
 msgstr ""
-"Ne signaler aucune utilisation d'un paquet « essential » (essentiel) ou "
-"« build-essential » (essentiel pour la construction des paquets), ou d'une "
+"Ne signaler aucune utilisation d'un paquet \"essential\" (essentiel) ou "
+"\"build-essential\" (essentiel pour la construction des paquets), ou d'une "
 "de leurs dépendances (directes ou indirectes)."
 
 #. type: TP
@@ -15478,7 +15477,7 @@ msgstr "B<-C>, B<--C-locale>"
 #. type: Plain text
 #: ../scripts/dpkg-depcheck.1:37
 msgid "Run I<command> with the C locale."
-msgstr "Exécuter la I<commande> avec les paramètres régionaux (« locale ») C."
+msgstr "Exécuter la I<commande> avec les paramètres régionaux (\"locale\") C."
 
 #. type: TP
 #: ../scripts/dpkg-depcheck.1:37
@@ -15489,7 +15488,7 @@ msgstr "B<--no-C-locale>"
 #. type: Plain text
 #: ../scripts/dpkg-depcheck.1:40
 msgid "Don't change locale when running I<command>."
-msgstr "Ne pas changer la « locale » lors de l'exécution de I<commande>."
+msgstr "Ne pas changer la \"locale\" lors de l'exécution de I<commande>."
 
 #. type: TP
 #: ../scripts/dpkg-depcheck.1:40
@@ -15541,7 +15540,7 @@ msgid ""
 "using a temporary file."
 msgstr ""
 "Écrire la sortie de B<strace> dans I<FICHIER> plutôt que dans un fichier "
-"temporaire lorsque la I<commande> est « tracée »."
+"temporaire lorsque la I<commande> est \"tracée\"."
 
 #. type: TP
 #: ../scripts/dpkg-depcheck.1:54
@@ -15555,7 +15554,7 @@ msgid ""
 "Get B<strace> output from I<FILE> instead of tracing I<command>; B<strace> "
 "must have be run with the B<-f -q> options for this to work."
 msgstr ""
-"Utiliser la sortie B<strace> du I<FICHIER> au lieu de « tracer » la "
+"Utiliser la sortie B<strace> du I<FICHIER> au lieu de \"trace\" la "
 "I<commande>. B<strace> doit avoir été exécuté avec les options B<-f -q> pour "
 "que cela fonctionne."
 
@@ -15607,7 +15606,7 @@ msgid ""
 "they don't actually use.  Enabled by default."
 msgstr ""
 "Ne pas utiliser I<execve> lorsque seul un paramètre B<--version> est donné "
-"au programme. C'est une astuce pour les scripts « configure » qui "
+"au programme. C'est une astuce pour les scripts \"configure\" qui "
 "recherchent des exécutables qu'ils n'utiliseront pas finalement. Cette "
 "fonctionnalité est activée par défaut."
 
@@ -15852,7 +15851,7 @@ msgid ""
 "orgE<gt>."
 msgstr ""
 "La version initiale de B<dpkg-genbuilddeps> a été écrite par Ben Collins "
-"E<lt>bcollins@debian.orgE<gt>. La version actuelle est un simple « wrapper » "
+"E<lt>bcollins@debian.orgE<gt>. La version actuelle est un simple \"wrapper\" "
 "autour de B<dpkg-depcheck> écrit par Bill Allombert E<lt>ballombe@debian."
 "orgE<gt>. Cette page de manuel a été écrite par Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt>."
@@ -16027,7 +16026,7 @@ msgid ""
 "packages, it is assumed that I<debian/*> are exactly the contents of "
 "I<debian.tar.gz/bz2>.)"
 msgstr ""
-"Mode « rapide ». Pour le format source 1.0, éviter de se rabattre sur le "
+"Mode \"rapide\". Pour le format source 1.0, éviter de se rabattre sur le "
 "balayage du fichier I<.orig.tar.gz> si I<fichier> n'a pas été trouvé dans le "
 "I<.diff.gz> (pour les paquets au format source 3.0, I<debian/*> est censé se "
 "trouver directement dans I<.debian.tar.gz/bz2>)."
@@ -16171,7 +16170,7 @@ msgid ""
 msgstr ""
 "Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
 "devscripts> sont évalués dans cet ordre par un interpréteur de commandes "
-"(« shell ») pour placer les variables de configuration. Des options de ligne "
+"(\"shell\") pour placer les variables de configuration. Des options de ligne "
 "de commande peuvent être utilisées pour neutraliser les paramètres des "
 "fichiers de configuration. Les paramètres des variables d'environnement sont "
 "ignorés à cette fin. Si la première option donnée en ligne de commande est "
@@ -16190,7 +16189,7 @@ msgid ""
 "This is a colon-separated list of extra keyrings to use in addition to any "
 "specified on the command line."
 msgstr ""
-"Liste de trousseaux de clefs supplémentaires (séparés par des « : ») à "
+"Liste de trousseaux de clefs supplémentaires (séparés par des \":\") à "
 "utiliser en plus de ceux indiqués en ligne de commande."
 
 #. type: SH
@@ -16330,7 +16329,7 @@ msgid ""
 "If I<version-pattern> is \"last\" then only the logs for the most recent "
 "version of I<package> found on buildd.debian.org will be downloaded."
 msgstr ""
-"Si I<modèle-version> vaut « last », alors seuls les journaux de la version "
+"Si I<modèle-version> vaut \"last\", alors seuls les journaux de la version "
 "la plus récente de I<paquet> trouvée sur buildd.debian.org seront "
 "téléchargés."
 
@@ -16340,7 +16339,7 @@ msgid ""
 "If I<version-pattern> is \"last-all\" then the logs for the most recent "
 "version found on each build log index will be downloaded."
 msgstr ""
-"Si I<modèle-version> vaut « last-all », alors les journaux pour la version "
+"Si I<modèle-version> vaut \"last-all\", alors les journaux pour la version "
 "la plus récente de I<paquet> trouvée dans chaque index de journaux de "
 "construction seront téléchargés."
 
@@ -16417,7 +16416,7 @@ msgid ""
 msgstr ""
 "B<git-deborig> tente de produire le fichier I<orig.tar> dont vous avez "
 "besoin pour votre envoi en appelant B<git-archive>(1) sur une étiquette ou "
-"un « head » de branche de git; Il a été écrit en pensant au déroulement de "
+"un \"head\" de branche de git; Il a été écrit en pensant au déroulement de "
 "B<dgit-maint-merge>(7) mais peut être utilisé avec d’autres flux de travaux."
 
 #. type: textblock
@@ -16429,7 +16428,7 @@ msgid ""
 msgstr ""
 "B<git-deborig> essaiera plusieurs noms d'étiquette courants. S'il échoue, ou "
 "si plus d'une étiquette courante sont présentes, il est possible de préciser "
-"en ligne de commande l'étiquette ou le « head » de branche à archiver "
+"en ligne de commande l'étiquette ou le \"head\" de branche à archiver "
 "(I<objet_d'envoi> ci-dessus)."
 
 #. type: textblock
@@ -16726,7 +16725,7 @@ msgid ""
 "Space Layout Randomization (ASLR)."
 msgstr ""
 "Cela indique que l'exécutable a été construit d'une manière telle (PIE) que "
-"la section « texte » du programme peut être transférée en mémoire. Pour "
+"la section \"texte\" du programme peut être transférée en mémoire. Pour "
 "tirer avantage de cette fonctionnalité, le noyau exécuté doit prendre en "
 "charge la distribution aléatoire de l'espace d'adressage (Address Space "
 "Layout Randomization – ASLR) de texte."
@@ -16818,7 +16817,7 @@ msgstr ""
 "Cela indique que l'exécutable a été construit avec les options B<-Wl,-z,"
 "relro> pour que les marquages ELF (RELRO) demandent que l'éditeur de liens "
 "au moment de l'exécution marque toutes les zones de la table de réadressage "
-"en « lecture seule » si les translations d'adresses ont été résolues avant "
+"en \"lecture seule\" si les translations d'adresses ont été résolues avant "
 "le début de l'exécution. Cela réduit le nombre de zones de mémoire d'un "
 "programme qui peuvent être utilisées par un attaquant pour réaliser une "
 "exploitation efficace de corruption de mémoire."
@@ -16952,7 +16951,7 @@ msgid ""
 "libc."
 msgstr ""
 "Au lieu de faire un rapport normal, localiser le libc pour le premier ELF "
-"sur la ligne de commande et rapporter toutes les fonctions « renforcées » "
+"sur la ligne de commande et rapporter toutes les fonctions \"renforcées\" "
 "exportées par libc."
 
 #. type: =item
@@ -17017,7 +17016,7 @@ msgid ""
 msgstr ""
 "Quand toutes les fonctionnalités de sécurisation vérifiables des exécutables "
 "examinés ont été détectées, ce programme s'achève avec un code de sortie de "
-"« 0 ». Si une vérification échoue, le code de sortie sera « 1 ». Les "
+"\"0\". Si une vérification échoue, le code de sortie sera \"1\". Les "
 "vérifications individuelles peuvent être désactivées avec des options en "
 "ligne de commande."
 
@@ -17169,7 +17168,7 @@ msgstr ""
 "ceux de votre équipe n'ont pas été chargés depuis longtemps et, "
 "vraisemblablement, ont besoin d'une actualisation de leur empaquetage. C'est "
 "moins adapté aux objectifs d'une équipe MIA (recherche de responsables "
-"« manquant à l'appel ») dans la mesure où elle n'individualise pas qui verse "
+"\"manquant à l'appel\") dans la mesure où elle n'individualise pas qui verse "
 "réellement un paquet."
 
 #. type: =item
@@ -17514,8 +17513,8 @@ msgid ""
 "always the same as #VERSION#."
 msgstr ""
 "Les différentes parties du numéro de version peuvent être indiquées en "
-"utilisant #EPOCH#, #UPSTREAM_VERSION# et #REVISION#. #EPOCH# contient le "
-"« : » de fin et #REVISION# contient le tiret de début, de telle sorte que "
+"utilisant #EPOCH#, #UPSTREAM_VERSION# et #REVISION#. #EPOCH# contient le \":"
+"\" de fin et #REVISION# contient le tiret de début, de telle sorte que "
 "#EPOCH##UPSTREAM_VERSION##REVISION# est toujours identique à #VERSION#."
 
 #. type: textblock
@@ -17605,7 +17604,7 @@ msgstr "B<--tags>"
 #. type: textblock
 #: ../scripts/mass-bug.pl:88
 msgid "Set the BTS pseudo-header for tags."
-msgstr "Définir le pseudo-en-tête « tags » pour le BTS."
+msgstr "Définir le pseudo-en-tête \"tags\" pour le BTS."
 
 #. type: =item
 #: ../scripts/mass-bug.pl:90 ../scripts/salsa.pl:555
@@ -17626,7 +17625,7 @@ msgstr "B<--usertags>"
 #. type: textblock
 #: ../scripts/mass-bug.pl:96
 msgid "Set the BTS pseudo-header for usertags."
-msgstr "Définir le pseudo-en-tête « usertags » pour le BTS."
+msgstr "Définir le pseudo-en-tête \"usertags\" pour le BTS."
 
 #. type: =item
 #: ../scripts/mass-bug.pl:98
@@ -17736,11 +17735,11 @@ msgid ""
 "later ones is merged into it."
 msgstr ""
 "B<mergechanges> fusionne deux fichiers I<.changes> (ou plus), en fusionnant "
-"les champs « Architecture », « Description » et « Files » des fichiers "
-"(ainsi que les champs « Checksums-* », s'il y en a). Des vérifications de "
-"base sont effectuées pour s'assurer que les fichiers « changes » proviennent "
+"les champs \"Architecture\", \"Description\" et \"Files\" des fichiers "
+"(ainsi que les champs \"Checksums-*\", s'il y en a). Des vérifications de "
+"base sont effectuées pour s'assurer que les fichiers \"changes\" proviennent "
 "du même paquet source et de la même version, et qu'ils utilisent le même "
-"format de fichier « changes ». Le premier fichier « changes » est utilisé "
+"format de fichier \"changes\". Le premier fichier \"changes\" est utilisé "
 "comme base et les informations des fichiers suivants y sont ajoutées."
 
 #. type: Plain text
@@ -17753,7 +17752,7 @@ msgstr ""
 "La sortie est normalement dirigée vers la sortie standard (I<stdout>). Si "
 "l'option B<-f> est utilisée, la sortie est écrite dans "
 "I<paquet>_I<version>_multi.changes, dans le même répertoire que le premier "
-"fichier « changes »."
+"fichier \"changes\"."
 
 #. type: Plain text
 #: ../scripts/mergechanges.1:21
@@ -17894,8 +17893,8 @@ msgstr ""
 "option n'est pas passée, retourner à la valeur donnée par B<--host-arch>. Si "
 "ni cette option ni B<--host-arch> ne sont utilisées, mais que les "
 "dépendances de construction (Build-Depends) renferment des restrictions "
-"d'architectures, utiliser la valeur affichée par « dpkg-architecture -"
-"qDEB_HOST_ARCH ». Autrement, utiliser I<all>."
+"d'architectures, utiliser la valeur affichée par \"dpkg-architecture -"
+"qDEB_HOST_ARCH\". Autrement, utiliser I<all>."
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:70
@@ -17928,8 +17927,8 @@ msgid ""
 "create a binary package that is able to satisfy crossbuild dependencies."
 msgstr ""
 "Configurer l'architecture de l'hôte pour laquelle le paquet binaire est "
-"construit. La valeur par défaut est celle affichée par « dpkg-architecture -"
-"qDEB_HOST_ARCH ». Utiliser cette option pour créer un paquet binaire capable "
+"construit. La valeur par défaut est celle affichée par \"dpkg-architecture -"
+"qDEB_HOST_ARCH\". Utiliser cette option pour créer un paquet binaire capable "
 "de satisfaire des dépendances de construction croisée."
 
 #. type: textblock
@@ -17963,8 +17962,8 @@ msgid ""
 "to create a binary package that is able to satisfy crossbuild dependencies."
 msgstr ""
 "Configurer l'architecture de construction pour laquelle le paquet binaire "
-"est construit. La valeur par défaut est celle affichée par « dpkg-"
-"architecture -qDEB_BUILD_ARCH ». Utiliser cette option pour créer un paquet "
+"est construit. La valeur par défaut est celle affichée par \"dpkg-"
+"architecture -qDEB_BUILD_ARCH\". Utiliser cette option pour créer un paquet "
 "binaire capable de satisfaire des dépendances de construction croisée."
 
 #. type: =item
@@ -18114,7 +18113,7 @@ msgstr ""
 "avant les paragraphes suivants qui contiennent B<Files> et les autres "
 "alinéas. L'alinéa B<Files-Included> devrait être utilisé pour ignorer une "
 "partie des sous-répertoires indiqué par les alinéas B<Files-Excluded>. Voir "
-"B<uscan>(1) « EXEMPLES DE FICHIER DE COPYRIGHT ».)"
+"B<uscan>(1) \"EXEMPLES DE FICHIER DE COPYRIGHT\".)"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:53
@@ -18124,8 +18123,8 @@ msgid ""
 "treated in the same way.  The B<xpi> archive is detected by its extension "
 "and is handled properly using the B<xpi-unpack> command."
 msgstr ""
-"Le type d'archive de B<zip> est identifié par la commande « B<file --"
-"dereference --brief --mime-type> ». Ainsi, toutes les archives de type   "
+"Le type d'archive de B<zip> est identifié par la commande \"B<file --"
+"dereference --brief --mime-type>\". Ainsi, toutes les archives de type "
 "B<zip> telles que B<jar> sont traitées de la même manière. Les archives "
 "B<xpi> sont détectées par leur extension et traitées correctement avec la "
 "commande B<xpi-unpack>."
@@ -18616,7 +18615,7 @@ msgstr ""
 "éditeur (choisi par B<sensible-editor>) est utilisé pour lancer un éditeur "
 "de sorte que le message (y compris le différentiel) puisse être examiné et "
 "modifié ; une fois que vous avez quitté l'éditeur, le différentiel est "
-"envoyé par courrier électronique au système de gestion de bogues (« BTS ») "
+"envoyé par courrier électronique au système de gestion de bogues (\"BTS\") "
 "Debian."
 
 #. type: Plain text
@@ -18988,8 +18987,8 @@ msgstr ""
 "F<debian> et les répertoires du dépôt de système de contrôle de versions. "
 "I<Remarquez que toutes les modifications non prises en compte (committed) "
 "seront effacées> du système de correctifs utilisé (par exemple au format "
-"source « 3.0 (quilt) ») et que tous les correctifs seront retirés du paquet "
-"si aucun système n'est utilisé (pour le format source d'origine « 1.0 »). "
+"source \"3.0 (quilt)\") et que tous les correctifs seront retirés du paquet "
+"si aucun système n'est utilisé (pour le format source d'origine \"1.0\"). "
 "Certains fichiers du système de contrôle de versions, hors de F<debian/>, "
 "sont conservés (F<.bzr-builddeb>, F<.bzr-ignore>, F<.gitignore> ou F<."
 "hgignore>) s'ils sont gardés dans le système de contrôle de versions."
@@ -19313,7 +19312,7 @@ msgstr ""
 "Au lieu d'utiliser le numéro de version Debian pour l'axe des ordonnées, "
 "utilise le nombre de bogues fermés par chaque entrée du fichier "
 "I<changelog>. Remarquez que ce nombre de bogues est trouvé en recherchant "
-"« #dddd » dans le fichier I<changelog>, et peut donc être imprécis. Cette "
+"\"#dddd\" dans le fichier I<changelog>, et peut donc être imprécis. Cette "
 "option ne peut pas être utilisée avec B<--linecount>."
 
 #. type: TP
@@ -19413,7 +19412,7 @@ msgstr ""
 "après l'initialisation, mais avant la commande B<plot> finale. Elles peuvent "
 "être utilisées pour remplacer l'apparence par défaut fournie par ce "
 "programme de façon arbitraire. Vous pouvez également utiliser quelque chose "
-"comme « set terminal png color » pour modifier le type du fichier de sortie, "
+"comme \"set terminal png color\" pour modifier le type du fichier de sortie, "
 "ce qui peut être utile avec l'option -s."
 
 #. type: Plain text
@@ -19467,7 +19466,7 @@ msgid ""
 msgstr ""
 "Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
 "devscripts> sont évalués dans cet ordre par un interpréteur de commandes "
-"(« shell ») pour placer les variables de configuration. Des options de ligne "
+"(\"shell\") pour placer les variables de configuration. Des options de ligne "
 "de commande peuvent être utilisées pour neutraliser les paramètres des "
 "fichiers de configuration. Les paramètres des variables d'environnement sont "
 "ignorés à cette fin. Si la première option donnée en ligne de commande est "
@@ -19577,7 +19576,7 @@ msgid ""
 "probably require quoting!"
 msgstr ""
 "Date à laquelle B<at>(1) doit envoyer la demande de désabonnement, en "
-"utilisant la syntaxe de B<at>. La valeur par défaut est « now + 30 days ». "
+"utilisant la syntaxe de B<at>. La valeur par défaut est \"now + 30 days\". "
 "Cette option doit probablement être protégée avec des guillemets !"
 
 #. type: TP
@@ -19685,7 +19684,7 @@ msgid ""
 "given on the command-line, which are in that list."
 msgstr ""
 "B<rc-alert> télécharge la liste des bogues empêchant l'intégration de "
-"paquets dans la prochaine distribution (« release-critical ») depuis les "
+"paquets dans la prochaine distribution (\"release-critical\") depuis les "
 "pages web du BTS Debian, puis affiche l'ensemble des paquets installés sur "
 "le système, ou fournis sur la ligne de commande, qui se trouvent dans cette "
 "liste."
@@ -19741,7 +19740,7 @@ msgid ""
 msgstr ""
 "Une liste d'étiquettes que le bogue doit avoir, dans le format utilisé pour "
 "la sortie. Par exemple, pour inclure les bogues avec l'étiquette security ou "
-"help, utilisez « SH »."
+"help, utilisez \"SH\"."
 
 #. type: TP
 #: ../scripts/rc-alert.1:35
@@ -19804,7 +19803,7 @@ msgid ""
 msgstr ""
 "Une liste de distributions pour lesquelles le bogue s'applique, au format "
 "utilisé pour la sortie. Par exemple, pour inclure les bogues qui affectent "
-"testing ou unstable, utilisez « TU »."
+"testing ou unstable, utilisez \"TU\"."
 
 #. type: TP
 #: ../scripts/rc-alert.1:52
@@ -19862,7 +19861,7 @@ msgid ""
 "incomplete."
 msgstr ""
 "Il est également possible de ne lister que les bogues qui ont certaines "
-"étiquettes utilisateur (« debtags »). Remarquez que vous devez avoir "
+"étiquettes utilisateur (\"debtags\"). Remarquez que vous devez avoir "
 "installé debtags et que les étiquettes utilisateur ne sont pas "
 "nécessairement configurées comme il faut par les responsables des paquets. "
 "La liste produite sera donc probablement incomplète."
@@ -20023,8 +20022,8 @@ msgid ""
 msgstr ""
 "Le bogue doit s'appliquer aux paquets qui correspondent aux étiquettes "
 "debtags indiquées, c'est-à-dire que la sélection ne comprendra que des "
-"paquets qui ont l'étiquette « role::plugin » et qui ont soit l'étiquette "
-"« implemented-in::perl », soit l'étiquette « implemented-in::python »."
+"paquets qui ont l'étiquette \"role::plugin\" et qui ont soit l'étiquette "
+"\"implemented-in::perl\", soit l'étiquette \"implemented-in::python\"."
 
 #. type: TP
 #: ../scripts/rc-alert.1:115
@@ -20046,7 +20045,7 @@ msgstr ""
 #: ../scripts/rc-alert.1:121
 msgid "It is not possible to say \"does not apply only to unstable\""
 msgstr ""
-"Il n'est pas possible de demander « ne s'applique pas uniquement à unstable »"
+"Il n'est pas possible de demander \"ne s'applique pas uniquement à unstable\""
 
 #. type: Plain text
 #: ../scripts/rc-alert.1:125
@@ -20087,7 +20086,7 @@ msgid ""
 "master.debian.org. This script, B<rmadison>, is a command line frontend to "
 "this CGI."
 msgstr ""
-"L'outil B<dak ls> interroge la base d'archive Debian (« projectb ») et "
+"L'outil B<dak ls> interroge la base d'archive Debian (\"projectb\") et "
 "affiche les versions de paquet enregistrées par architecture/composante/"
 "distribution. Le script CGI à B<https://qa.debian.org/madison.php> met ce "
 "service à disposition, de sorte qu'un accès SSH à ftp-master.debian.org ou "
@@ -20133,8 +20132,8 @@ msgstr "B<-g>, B<--greaterorequal>"
 #: ../scripts/rmadison.pl:296
 msgid "show buildd 'dep-wait pkg >= {highest version}' info"
 msgstr ""
-"afficher les informations de démon d'empaquetage « dep-wait pkg >= {highest "
-"version} »"
+"afficher les informations de démon d'empaquetage \"dep-wait pkg >= {highest "
+"version}\""
 
 #. type: =item
 #: ../scripts/rmadison.pl:298
@@ -20145,8 +20144,8 @@ msgstr "B<-G>, B<--greaterthan>"
 #: ../scripts/rmadison.pl:300
 msgid "show buildd 'dep-wait pkg >> {highest version}' info"
 msgstr ""
-"afficher les informations de démon d'empaquetage « dep-wait pkg >> {highest "
-"version} »"
+"afficher les informations de démon d'empaquetage \"dep-wait pkg >> {highest "
+"version}\""
 
 #. type: textblock
 #: ../scripts/rmadison.pl:304
@@ -20180,7 +20179,7 @@ msgid ""
 "not supported by the CGI on qa.debian.org and most other installations."
 msgstr ""
 "B<Remarque :> Étant donné que l'option B<-r> peut facilement créer un déni "
-"de service sur la base de données (« B<-r> B<.> »), cette option n'est pas "
+"de service sur la base de données (\"B<-r> B<.>\"), cette option n'est pas "
 "prise en charge par le script CGI sur qa.debian.org ni sur la plupart des "
 "autres installations."
 
@@ -20203,7 +20202,7 @@ msgstr "B<-t>, B<--time>"
 #: ../scripts/rmadison.pl:323
 msgid "show projectb snapshot and reload time (not supported by all archives)"
 msgstr ""
-"afficher le temps utilisé pour faire l'image « projectb » et le temps de "
+"afficher le temps utilisé pour faire l'image \"projectb\" et le temps de "
 "chargement (pas géré par toutes les archives)"
 
 #. type: =item
@@ -20296,8 +20295,8 @@ msgid ""
 "Debian this defaults to debian. For Ubuntu this defaults to ubuntu."
 msgstr ""
 "Définir l'URL par défaut à utiliser, à moins qu'une autre soit fournie par "
-"une option en ligne de commande. Pour Debian, c’est « debian » par défaut. "
-"Pour Ubuntu, c’est « ubuntu » par défaut."
+"une option en ligne de commande. Pour Debian, c’est \"debian\" par défaut. "
+"Pour Ubuntu, c’est \"ubuntu\" par défaut."
 
 #. type: =item
 #: ../scripts/rmadison.pl:373
@@ -20394,8 +20393,8 @@ msgid ""
 "B<sadt> is a simple implementation of DEP-8 (“automatic as-installed package "
 "testing”) test runner."
 msgstr ""
-"B<sadt> permet simplement d’exécuter des tests DEP-8 (« test automatique de "
-"paquet tel qu’il est installé »)."
+"B<sadt> permet simplement d’exécuter des tests DEP-8 (\"test automatique de "
+"paquet tel qu’il est installé\")."
 
 #. type: textblock
 #: ../scripts/sadt.pod:30
@@ -21067,7 +21066,7 @@ msgid ""
 "Push relevant packaging refs to origin Git remote. To be run from packaging "
 "working directory."
 msgstr ""
-"Poussez les références pertinentes du paquet vers le dépôt Git « origin ». À "
+"Poussez les références pertinentes du paquet vers le dépôt Git \"origin\". À "
 "exécuter à partir du répertoire de travail d'empaquetage."
 
 #. type: verbatim
@@ -21087,25 +21086,25 @@ msgid ""
 "or, falling back, to the \"origin\" remote:"
 msgstr ""
 "Il pousse les références suivantes vers le dépôt amont configuré pour la "
-"branche debian-branch ou, à défaut, vers le dépôt « origin » :"
+"branche debian-branch ou, à défaut, vers le dépôt \"origin\" :"
 
 #. type: =item
 #: ../scripts/salsa.pl:223
 msgid "\"master\" branch (or whatever is set to debian-branch in gbp.conf)"
 msgstr ""
-"branche « master » (ou celle indiqué dans debian-branch du fichier gbp.conf)"
+"branche \"master\" (ou celle indiqué dans debian-branch du fichier gbp.conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:225
 msgid "\"upstream\" branch (or whatever is set to upstream-branch in gbp.conf)"
 msgstr ""
-"branche « upstream » (ou celle indiqué dans upstream-branch du fichier gbp."
+"branche \"upstream\" (ou celle indiqué dans upstream-branch du fichier gbp."
 "conf)"
 
 #. type: =item
 #: ../scripts/salsa.pl:227
 msgid "\"pristine-tar\" branch"
-msgstr "Branche « pristine-tar »"
+msgstr "Branche \"pristine-tar\""
 
 #. type: =item
 #: ../scripts/salsa.pl:229
@@ -22815,8 +22814,8 @@ msgid ""
 "suspicious-source - search for files that do not meet the GPL's definition "
 "of \"source\" for a work"
 msgstr ""
-"suspicious-source - Rechercher des fichiers qui ne sont pas sous la « forme "
-"la plus adéquate pour les modifications » demandée par la GPL"
+"suspicious-source - Rechercher des fichiers qui ne sont pas sous la \"forme "
+"la plus adéquate pour les modifications\" demandée par la GPL"
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:23
@@ -22834,7 +22833,7 @@ msgstr ""
 "B<suspicious-source> affiche une liste de fichiers qui ne sont pas des "
 "fichiers source usuels. Il devrait être exécuté depuis le répertoire racine "
 "d'une arborescence source pour trouver les fichiers qui risquent de ne pas "
-"être sous la « forme la plus adéquate pour les modifications » telle que "
+"être sous la \"forme la plus adéquate pour les modifications\" telle que "
 "définie par la GPL ou d'autres licences."
 
 #. type: Plain text
@@ -23070,7 +23069,7 @@ msgid ""
 "tagpending - tags bugs that are to be closed in the latest changelog as "
 "pending"
 msgstr ""
-"tagpending - Placer l'étiquette « pending » sur tous les bogues à fermer "
+"tagpending - Placer l'étiquette \"pending\" sur tous les bogues à fermer "
 "dans le dernier groupe d'entrée du fichier changelog"
 
 #. type: textblock
@@ -23087,14 +23086,14 @@ msgid ""
 msgstr ""
 "B<tagpending> analyse les fichiers I<debian/changelog> afin de trouver quels "
 "bogues seront fermés si le paquet était envoyé. Chaque bogue est ensuite "
-"marqué avec une étiquette « pending », en utilisant B<bts>(1), si elle n'est "
+"marqué avec une étiquette \"pending\", en utilisant B<bts>(1), si elle n'est "
 "pas déjà présente."
 
 #. type: textblock
 #: ../scripts/tagpending.pl:100
 msgid "Check whether any bugs require tagging, but do not actually do so."
 msgstr ""
-"Vérifier si l'étiquette « pending » doit être placée sur certains bogues, "
+"Vérifier si l'étiquette \"pending\" doit être placée sur certains bogues, "
 "sans placer cette étiquette."
 
 #. type: =item
@@ -23162,7 +23161,7 @@ msgstr "B<-C>, B<--confirm>"
 #. type: textblock
 #: ../scripts/tagpending.pl:128
 msgid "Tag bugs as both confirmed and pending."
-msgstr "Placer à la fois l'étiquette « confirmed » et « pending »."
+msgstr "Placer à la fois l'étiquette \"confirmed\" et \"pending\"."
 
 #. type: =item
 #: ../scripts/tagpending.pl:130
@@ -23435,7 +23434,7 @@ msgid ""
 "tarball will instead be named I<< ../<spkg>_<oversion>.orig-<component>.tar."
 "gz >>."
 msgstr ""
-"– Pour un paquet MUT (« multiple upstream tarball » - archive amont "
+"– Pour un paquet MUT (\"multiple upstream tarball\" - archive amont "
 "multiple), l'archive amont secondaire sera plutôt nommée I<< ../"
 "<spkg>_<oversion>.orig-<composante>.tar.gz >>."
 
@@ -23480,7 +23479,7 @@ msgid ""
 "upstream tarball package, there is only one watch line and no I<< ../"
 "<spkg>_<oversion>.orig-<component>.tar.gz >> ."
 msgstr ""
-"– La nouvelle B<version=4> permet la gestion des paquets MUT, mais ce sont "
+"* La nouvelle B<version=4> permet la gestion des paquets MUT, mais ce sont "
 "des cas rares parmi les paquets Debian. Pour un paquet d'archive simple, il "
 "n'y a qu'une ligne de veille et pas de I<< ../<spkg>_<oversion>.orig-"
 "<composante>.tar.gz >> ."
@@ -23491,7 +23490,7 @@ msgid ""
 "* B<uscan> with the B<--verbose> option produces a human readable report of "
 "B<uscan>'s execution."
 msgstr ""
-"– B<uscan> avec l'option B<--verbose> produit un rapport lisible de son "
+"* B<uscan> avec l'option B<--verbose> produit un rapport lisible de son "
 "exécution."
 
 #. type: =item
@@ -23500,7 +23499,7 @@ msgid ""
 "* B<uscan> with the B<--debug> option produces a human readable report of "
 "B<uscan>'s execution including internal variable states."
 msgstr ""
-"– B<uscan> avec l'option B<--debug> produit un rapport lisible de son "
+"* B<uscan> avec l'option B<--debug> produit un rapport lisible de son "
 "exécution avec l'état des variables internes."
 
 #. type: =item
@@ -23510,7 +23509,7 @@ msgid ""
 "of B<uscan>'s execution including internal variable states and remote "
 "content during \"search\" step."
 msgstr ""
-"– B<uscan> avec l'option B<--extra-debug> produit un rapport lisible de son "
+"* B<uscan> avec l'option B<--extra-debug> produit un rapport lisible de son "
 "exécution avec l'état des variables internes et le contenu distant lors de "
 "la phase \"recherche\"."
 
@@ -23521,7 +23520,7 @@ msgid ""
 "report in XML format for other programs such as the Debian External Health "
 "System."
 msgstr ""
-"– B<uscan> avec l'option B<--dehs> produit un rapport d'état du paquet amont "
+"* B<uscan> avec l'option B<--dehs> produit un rapport d'état du paquet amont "
 "au format XML pour que d'autres programmes tels que Debian External Health "
 "System."
 
@@ -23532,7 +23531,7 @@ msgid ""
 "version upstream tarball is used or not; and to download the latest upstream "
 "tarball.  The ordering of versions is decided by B<dpkg --compare-versions>."
 msgstr ""
-"– L'objectif premier d'B<uscan> est d'aider à déterminer si c'est bien la "
+"* L'objectif premier d'B<uscan> est d'aider à déterminer si c'est bien la "
 "dernière version de l'archive amont qui est utilisée et de télécharger cette "
 "version d'archive. L'ordre des versions est déterminée par B<dpkg --compare-"
 "versions>."
@@ -23545,7 +23544,7 @@ msgid ""
 "of the source tree are skipped to avoid running unsafe scripts.  This also "
 "changes the default to B<--no-download> and B<--skip-signature>."
 msgstr ""
-"– L'option B<--safe> d'B<uscan> limite ses fonctionnalités à ses objectifs "
+"* L'option B<--safe> d'B<uscan> limite ses fonctionnalités à ses objectifs "
 "premiers. À la fois le repaquetage des fichiers téléchargés et la mise à "
 "jour de l'arborescence source sont sautés pour éviter l'exécution de scripts "
 "non sécurisés. Cela change aussi les options par défaut à B<--no-download> "
@@ -23618,7 +23617,7 @@ msgid ""
 "If you use \"B<version=3>\" instead here, some features may not work as "
 "documented here.  See L<HISTORY AND UPGRADING>."
 msgstr ""
-"Si vous utilisez ici « B<version=3> » à la place, certaines fonctionnalités "
+"Si vous utilisez ici \"B<version=3>\" à la place, certaines fonctionnalités "
 "peuvent ne pas fonctionner comme cela est documenté ici. Voir L<HISTORIQUE "
 "ET MISE À NIVEAU>."
 
@@ -23805,9 +23804,9 @@ msgstr ""
 "– B<checksum> exige que l'archive amont à télécharger soit plus récente que "
 "la version obtenue à partir de F<debian/changelog>. La version du paquet est "
 "la concaténation de la version de la prinicpale source, suivie de la somme "
-"de contrôle de toutes les versions amont utilisant le système de version « "
-"checksum ». À minima, la source principale doit être déclarée comme « group "
-"»."
+"de contrôle de toutes les versions amont utilisant le système de version "
+"\"checksum\". À minima, la source principale doit être déclarée comme \"group"
+"\"."
 
 #. type: =item
 #: ../scripts/uscan.pl:246
@@ -23843,7 +23842,7 @@ msgid ""
 "I<script> in the last watch line and should skip specifying I<script> in the "
 "rest of the watch lines."
 msgstr ""
-"– Un paquet MUT (« multiple upstream tarball » – archive amont multiple) "
+"– Un paquet MUT (\"multiple upstream tarball\" – archive amont multiple) "
 "devrait indiquer B<uupdate> comme I<script> dans la dernière ligne de veille "
 "et ne devrait pas indiquer de I<script> dans le reste des lignes de veille."
 
@@ -24383,11 +24382,11 @@ msgid ""
 "tagging with random alphabetic tags."
 msgstr ""
 "Lorsque B<pretty=describe> est utilisé, la chaîne de version amont est la "
-"sortie de la commande « B<git describe --tags | sed s/-/./g> » à la place. "
-"Par exemple, si l'envoi (commit) est le B<cinquième> après la dernière "
-"étiquette B<v2.17.12> et son empreinte courte est B<ged992511>, alors, la "
-"chaîne est B<v2.17.12.5.ged992511>. Dans ce cas, c'est une bonne idée "
-"d'ajouter B<uversionmangle=s/^/0.0~/> ou B<uversionmangle=s/^v//> pour "
+"sortie de la commande \"B<git describe --tags | sed s/-/./g>\"requi à la "
+"place. Par exemple, si l'envoi (commit) est le B<cinquième> après la "
+"dernière étiquette B<v2.17.12> et son empreinte courte est B<ged992511>, "
+"alors, la chaîne est B<v2.17.12.5.ged992511>. Dans ce cas, c'est une bonne "
+"idée d'ajouter B<uversionmangle=s/^/0.0~/> ou B<uversionmangle=s/^v//> pour "
 "rendre la chaîne de la version amont compatible avec Debian. "
 "B<uversionmangle=s/^v//> peut aussi bien fonctionner. Veuillez noter qu'afin "
 "que B<pretty=describe> fonctionne bien, l'amont doit éviter d'étiqueter avec "
@@ -24457,7 +24456,7 @@ msgid ""
 "full clone operation."
 msgstr ""
 "Configurer le I<mode> de l'opération git clone. La valeur par défaut est "
-"B<gitmode=shallow>. Pour certains serveurs git simples (« dumb »), il peut "
+"B<gitmode=shallow>. Pour certains serveurs git simples (\"dumb\"), il peut "
 "être nécessaire de configurer soi-même la valeur B<gitmode=full> pour "
 "imposer une opération de clonage complète."
 
@@ -24672,7 +24671,7 @@ msgid ""
 "Disable all site specific special case code such as URL redirector uses and "
 "page content alterations. (persistent)"
 msgstr ""
-"Désactiver tout le code « special code » spécifique au site telles que les "
+"Désactiver tout le code \"special code\" spécifique au site telles que les "
 "utilisations de redirecteur d'URL et les altérations de contenu de page. "
 "(Persistant)"
 
@@ -24708,7 +24707,7 @@ msgstr "B<pasv>, B<passive>"
 #. type: textblock
 #: ../scripts/uscan.pl:588
 msgid "Use PASV mode for the FTP connection."
-msgstr "Utiliser le mode passif (« PASV ») pour les connexions FTP."
+msgstr "Utiliser le mode passif (\"PASV\") pour les connexions FTP."
 
 #. type: textblock
 #: ../scripts/uscan.pl:590
@@ -24719,7 +24718,7 @@ msgid ""
 msgstr ""
 "Si le mode PASV (passif) est requis à cause de l'environnement réseau côté "
 "client, configurer B<uscan> pour qu'il utilise le mode PASV avec les "
-"L<OPTIONS DE LIGNE DE COMMANDE > ou plutôt avec les L<VARIABLES DE "
+"L<OPTIONS DE LIGNE DE COMMANDE> ou plutôt avec les L<VARIABLES DE "
 "CONFIGURATION DE DEVSCRIPT>."
 
 #. type: =item
@@ -24912,7 +24911,7 @@ msgid ""
 msgstr ""
 "Sans cette option, le nom de fichier de l'archive amont par défaut est "
 "généré en prenant la dernière composante de l'URL et en retirant tout ce qui "
-"est après un « ? » ou un « # »."
+"est après un \"?\" ou un \"#\"."
 
 #. type: =item
 #: ../scripts/uscan.pl:664
@@ -24972,8 +24971,8 @@ msgid ""
 "Each mangling I<rule> behaves as if a Perl command \"I<$string> B<=~> I<rule>"
 "\" is executed.  There are some notable details."
 msgstr ""
-"Chaque I<règle> de manipulation se comporte comme si une commande Perl « I<"
-"$string> B<=~> I<règle> » était exécutée. Il y a quelques particularités "
+"Chaque I<règle> de manipulation se comporte comme si une commande Perl \"I<"
+"$string> B<=~> I<règle>\" était exécutée. Il y a quelques particularités "
 "notables."
 
 #. type: =item
@@ -25318,7 +25317,7 @@ msgid ""
 msgstr ""
 "En absence de règle B<filenamemangle>, le nom de fichier d'archive amont par "
 "défaut est généré en prenant la dernière composante de l'URL et en retirant "
-"tout ce qu'il y a après un « ? » ou un « # »."
+"tout ce qu'il y a après un \"?\" ou un \"#\"."
 
 #. type: textblock
 #: ../scripts/uscan.pl:846
@@ -25459,7 +25458,7 @@ msgid ""
 "the B<repacksuffix> option for the single upstream package.  Here I<< "
 "<oversion> >> is updated to be I<< <oversion><suffix> >>."
 msgstr ""
-"B<mk-origtargz> vérifie le motif générique (« glob ») des noms de fichiers "
+"B<mk-origtargz> vérifie le motif générique (\"glob\") des noms de fichiers "
 "du paragraphe B<Files-Excluded> dans la première section de F<debian/"
 "copyright>, retire les fichiers correspondants pour créer une archive amont "
 "rempaquetée. Normalement, l'archive amont rempaquetée est renommée en I<< ../"
@@ -25501,8 +25500,8 @@ msgid ""
 "B<uscan> normally invokes \"B<uupdate> B<--find --upstream-version> "
 "I<oversion> \" for the version=4 watch file."
 msgstr ""
-"B<uscan> invoque normalement « B<uupdate> B<--find --upstream-version> "
-"I<oversion> » pour le fichier de veille version=4."
+"B<uscan> invoque normalement \"B<uupdate> B<--find --upstream-version> "
+"I<oversion>\" pour le fichier de veille version=4."
 
 #. type: textblock
 #: ../scripts/uscan.pl:928
@@ -25557,7 +25556,7 @@ msgid ""
 "The existence and non-existence of a space the before tailing B<\\> (back "
 "slash)  are significant."
 msgstr ""
-"L'existence ou l'absence d'une espace avant le B<\\> (« back slash ») final "
+"L'existence ou l'absence d'une espace avant le B<\\> (\"back slash\") final "
 "est significatif."
 
 #. type: textblock
@@ -26067,8 +26066,8 @@ msgid ""
 "URL and removing everything after any '?' or '#'."
 msgstr ""
 "Le nom de fichier de l'archive amont est découvert en prenant le dernier "
-"composant de l'URL et en retirant tout ce qui se trouve après un « ? » ou un "
-"« # »."
+"composant de l'URL et en retirant tout ce qui se trouve après un \"?\" ou un "
+"\"#\"."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1117
@@ -26658,9 +26657,9 @@ msgid ""
 "To avoid having a too long version, the \"checksum\" method can be used.  In "
 "this case, the main source has to be declared as \"group\":"
 msgstr ""
-"Pour éviter d'avoir un trop long numéro de version, la méthode « checksum » "
+"Pour éviter d'avoir un trop long numéro de version, la méthode \"checksum\" "
 "peut être utilisée. Dans ce cas la principale source doit être déclarée "
-"comme « group » :"
+"comme \"group\" :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1320
@@ -26704,10 +26703,10 @@ msgid ""
 "versions are \"1.2.4\", \"2.0.1\" and \"10.0\", with the main tarball having "
 "version \"2.0.6\":"
 msgstr ""
-"Le « checksum » est composé des sommes séparées de chaque chiffre composant "
+"Le \"checksum\" est composé des sommes séparées de chaque chiffre composant "
 "la version des composants. Ci-dessous un exemple avec 3 composants dont les "
-"versions respectives sont : « 1.2.4 », « 2.0.1 » et « 10.0 », et la version "
-"de la source principale « 2.0.6 » :"
+"versions respectives sont : \"1.2.4\", \"2.0.1\" et \"10.0\", et la version "
+"de la source principale \"2.0.6\" :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1338
@@ -26803,7 +26802,7 @@ msgstr ""
 #: ../scripts/uscan.pl:1368
 msgid "Please note \"B<git ls-remote>\" is used to obtain references for tags."
 msgstr ""
-"Veuillez noter que « B<git ls-remote> » est utilisé pour obtenir les "
+"Veuillez noter que \"B<git ls-remote>\" est utilisé pour obtenir les "
 "références des étiquettes."
 
 #. type: textblock
@@ -26867,9 +26866,9 @@ msgid ""
 "default behavior."
 msgstr ""
 "Veuillez noter qu'une copie superficielle locale du dépôt git est réalisée "
-"avec la commande « B<git clone --bare --depth=1> ... » normalement dans le "
-"répertoire cible. B<uscan> génère la nouvelle version amont avec « B<git log "
-"--date=%Y%m%d --pretty=0.0~git%cd.%h> » sur cette copie locale du dépôt, "
+"avec la commande \"B<git clone --bare --depth=1> ...\" normalement dans le "
+"répertoire cible. B<uscan> génère la nouvelle version amont avec \"B<git log "
+"--date=%Y%m%d --pretty=0.0~git%cd.%h>\" sur cette copie locale du dépôt, "
 "comme comportement par défaut."
 
 #. type: textblock
@@ -27076,8 +27075,8 @@ msgid ""
 "publishes the corresponding public OpenPGP key.  This public OpenPGP key can "
 "be identified in 3 ways using the hexadecimal form."
 msgstr ""
-"Supposons que la « B<< clef de test d'uscan (non secrète) <none@debian.org> "
-">> » amont signe son paquet avec une clef secrète OpenPGP et publie la clef "
+"Supposons que la \"B<< clef de test d'uscan (non secrète) <none@debian.org> "
+">>\" amont signe son paquet avec une clef secrète OpenPGP et publie la clef "
 "publique OpenPGP correspondante. Cette clef publique OpenPGP peut être "
 "identifiée de trois façons différentes avec sa forme hexadécimale."
 
@@ -27088,8 +27087,8 @@ msgid ""
 "key. E.  g., 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>'"
 msgstr ""
 "– L'empreinte sous la forme des 20 octets de données calculés à partir de la "
-"clef publique OpenPGP. Par exemple « B<CF21 8F0E 7EAB F584 B7E2 0402 C77E "
-"2D68 7254 3FAF> »"
+"clef publique OpenPGP. Par exemple \"B<CF21 8F0E 7EAB F584 B7E2 0402 C77E "
+"2D68 7254 3FAF>"
 
 #. type: =item
 #: ../scripts/uscan.pl:1479
@@ -27097,8 +27096,8 @@ msgid ""
 "* The long keyid as the last 8 byte data of the fingerprint. E. g., "
 "'B<C77E2D6872543FAF>'"
 msgstr ""
-"– L'identificateur long (« long keyid ») sous la forme des 8 derniers octets "
-"de données de l'empreinte. Par exemple, « B<C77E2D6872543FAF> »"
+"– L'identificateur long \" long keyid\") sous la forme des 8 derniers octets "
+"de données de l'empreinte. Par exemple, \"B<C77E2D6872543FAF>\""
 
 #. type: =item
 #: ../scripts/uscan.pl:1482
@@ -27106,8 +27105,8 @@ msgid ""
 "* The short keyid is the last 4 byte data of the fingerprint. E. g., "
 "'B<72543FAF>'"
 msgstr ""
-"– L'identificateur court (« short keyid ») sous la forme des 4 derniers "
-"octets de données de l'empreinte. Par exemple, « B<72543FAF> »"
+"– L'identificateur court (\"short keyid\") sous la forme des 4 derniers "
+"octets de données de l'empreinte. Par exemple, \"B<72543FAF>\""
 
 #. type: textblock
 #: ../scripts/uscan.pl:1487
@@ -27653,7 +27652,7 @@ msgid ""
 "Disable all site specific special case codes to perform URL redirections and "
 "page content alterations."
 msgstr ""
-"Désactiver tout le code « special code » spécifique au site pour réaliser "
+"Désactiver tout le code \"special code\" spécifique au site pour réaliser "
 "les redirections d'URL et les altérations de contenu de page."
 
 #. type: =item
@@ -27669,8 +27668,8 @@ msgid ""
 "Example:"
 msgstr ""
 "Ajoute l'en-tête spécifié dans les requêtes HTTP correspondant à l'url. "
-"Cette option peut être multivaluée, les valeurs doivent être de la forme « "
-"baseUrl@NomEnTête=valeur ». Exemple :"
+"Cette option peut être multivaluée, les valeurs doivent être de la forme "
+"\"baseUrl@NomEnTête=valeur\". Exemple :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1722
@@ -27692,7 +27691,7 @@ msgstr "Sécurité :"
 msgid ""
 "The given I<baseUrl> must exactly match the base url before '/'.  Examples:"
 msgstr ""
-"L'URL I<baseUrl> doit exactement correspondre à l'URL de base avant « / ».  "
+"L'URL I<baseUrl> doit exactement correspondre à l'URL de base avant \"/\".  "
 "Exemples :"
 
 #. type: verbatim
@@ -27757,7 +27756,7 @@ msgstr "B<--pasv>"
 #. type: textblock
 #: ../scripts/uscan.pl:1753
 msgid "Force PASV mode for FTP connections."
-msgstr "Forcer le mode passif (« PASV ») pour les connexions FTP."
+msgstr "Forcer le mode passif (\"PASV\") pour les connexions FTP."
 
 #. type: =item
 #: ../scripts/uscan.pl:1755
@@ -27798,7 +27797,7 @@ msgstr "B<--user-agent>, B<--useragent>"
 #. type: textblock
 #: ../scripts/uscan.pl:1769
 msgid "Override the default user agent header."
-msgstr "Utiliser un champ « user agent » différent de celui par défaut."
+msgstr "Utiliser un champ \"user agent\" différent de celui par défaut."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1773
@@ -27924,7 +27923,7 @@ msgid ""
 msgstr ""
 "Les deux fichiers de configuration F</etc/devscripts.conf> et F<~/."
 "devscripts> sont évalués dans cet ordre par un interpréteur de commandes "
-"(« shell ») pour placer les variables de configuration. Des options de ligne "
+"(\"shell\") pour placer les variables de configuration. Des options de ligne "
 "de commande peuvent être utilisées pour neutraliser les paramètres des "
 "fichiers de configuration. Les paramètres des variables d'environnement sont "
 "ignorés à cette fin. Si la première option donnée en ligne de commande est "
@@ -28075,7 +28074,7 @@ msgid ""
 "default.  This is equivalent to the B<--user-agent> option."
 msgstr ""
 "Si elle est définie, elle spécifie la chaîne à utiliser pour annoncer le "
-"navigateur (« user agent ») à la place de la valeur par défaut. C'est "
+"navigateur (\"user agent\") à la place de la valeur par défaut. C'est "
 "équivalent à l'option B<--user-agent>."
 
 #. type: =item
@@ -28441,8 +28440,8 @@ msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
 msgstr ""
-"- B<uscan> invoque le I<script> personnalisé comme ceci : « I<script> B<--"
-"upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz> »."
+"- B<uscan> invoque le I<script> personnalisé comme ceci : I<script> B<--"
+"upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>."
 
 #. type: =item
 #: ../scripts/uscan.pl:2064
@@ -28450,9 +28449,9 @@ msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--no-symlink --"
 "upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
 msgstr ""
-"- B<uscan> invoque B<uupdate> standard comme ceci : « B<uupdate> B<--no-"
+"- B<uscan> invoque B<uupdate> standard comme ceci : \"B<uupdate> B<--no-"
 "symlink --upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig."
-"tar.gz> »."
+"tar.gz>\"."
 
 #. type: =item
 #: ../scripts/uscan.pl:2069
@@ -28492,8 +28491,8 @@ msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version>\"."
 msgstr ""
-"– B<uscan> invoque le I<script> personnalisé comme ceci : « I<script> B<--"
-"upstream-version> I<version> »."
+"– B<uscan> invoque le I<script> personnalisé comme ceci : \"I<script> B<--"
+"upstream-version> I<version>\"."
 
 #. type: =item
 #: ../scripts/uscan.pl:2084
@@ -28501,8 +28500,8 @@ msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--find> B<--"
 "upstream-version> I<version>\"."
 msgstr ""
-"– B<uscan> invoque B<uupdate> standard comme ceci : « B<uupdate> B<--find> "
-"B<--upstream-version> I<version> »."
+"– B<uscan> invoque B<uupdate> standard comme ceci : \"B<uupdate> B<--find> "
+"B<--upstream-version> I<version>\"."
 
 #. type: textblock
 #: ../scripts/uscan.pl:2089
@@ -28623,7 +28622,7 @@ msgstr ""
 "grâce au nom de l'archive source (si ce numéro de version ne contient que "
 "des chiffres et points). En cas d'échec, vous devez spécifier le numéro de "
 "version explicitement (sans le numéro de livraison Debian, qui sera toujours "
-"initialisé à « 1 », ou « 0ubuntu1 » sur les systèmes Ubuntu reconnus). Cela "
+"initialisé à \"1\", ou \"0ubuntu1\" sur les systèmes Ubuntu reconnus). Cela "
 "peut se faire avec les options B<--upstream-version> ou B<-v> ou, dans le "
 "cas d'une archive, avec un numéro de version à la fin du nom de fichier. (La "
 "raison d'être de cette deuxième méthode est que B<uupdate> peut alors être "
@@ -28904,7 +28903,7 @@ msgid ""
 "of rejected patches will be shown.  The file I<debian/rules> is made "
 "executable and all of the I<.orig> files created by B<patch> are deleted."
 msgstr ""
-"La rustine (« patch ») I<.diff.gz> de la version actuelle est appliquée à "
+"La rustine (\"patch\") I<.diff.gz> de la version actuelle est appliquée à "
 "l'archive décompressée. Un message d'avertissement est affiché avant de "
 "quitter avec une valeur de retour non nulle si la rustine ne s'applique pas "
 "sans problème ou si elle n'a pas été trouvée. La liste des rustines rejetées "
@@ -28924,7 +28923,7 @@ msgid ""
 "``New upstream release.''."
 msgstr ""
 "Une entrée du fichier I<changelog> avec la nouvelle version est créée avec "
-"le texte « New upstream release » (nouvelle version amont)."
+"le texte \"New upstream release\" (nouvelle version amont)."
 
 #. type: Plain text
 #: ../scripts/uupdate.1:157 ../scripts/uupdate.1:189
@@ -28934,7 +28933,7 @@ msgid ""
 "manually afterwards."
 msgstr ""
 "Sur les systèmes Ubuntu, la détection B<dpkg-vendor> est utilisée pour "
-"configurer le numéro de livraison Debian à « 0ubuntu1 ». Vous devriez "
+"configurer le numéro de livraison Debian à \"0ubuntu1\". Vous devriez "
 "ensuite modifier I<debian/changelog> vous-même."
 
 #. type: SH
@@ -29276,7 +29275,7 @@ msgid ""
 "this is \"no\"."
 msgstr ""
 "Afficher la date de l'envoi avec les détails sur la personne ayant effectué "
-"l'envoi. La valeur par défaut est « no »."
+"l'envoi. La valeur par défaut est \"no\"."
 
 #. type: TP
 #: ../scripts/who-uploads.1:61
@@ -29396,7 +29395,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:83
 msgid "Separate keyrings with a colon \":\"."
-msgstr "Séparez les trousseaux par un deux-points « : »."
+msgstr "Séparez les trousseaux par un deux-points \":\"."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:85
@@ -29513,7 +29512,7 @@ msgid ""
 "Note, that only primary UIDs will match."
 msgstr ""
 "Rechercher tous les droits de DM donnés par l’identifiant utilisateur "
-"« arno@debian.org ». Remarquez que seuls les identifiants utilisateur "
+"\"arno@debian.org\". Remarquez que seuls les identifiants utilisateur "
 "primaires correspondront."
 
 #. type: =item
@@ -29546,7 +29545,7 @@ msgstr "who-permits-upload --search=uid \"Paul Tagliamonte\""
 #: ../scripts/who-permits-upload.pl:158
 msgid "Look up all DM upload permissions given to \"Paul Tagliamonte\"."
 msgstr ""
-"Rechercher tous les droits d’envoi de DM donnés à « Paul Tagliamonte »."
+"Rechercher tous les droits d’envoi de DM donnés à \"Paul Tagliamonte\"."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:164
@@ -30025,7 +30024,7 @@ msgid ""
 "below, as well as in the relevant manpages."
 msgstr ""
 "Toutes les variables sont écrites en majuscules, et commencent par le nom du "
-"script. Les variables globales au paquet commencent par « DEVSCRIPTS », et "
+"script. Les variables globales au paquet commencent par \"DEVSCRIPTS\", et "
 "sont listées ci-dessous et dans les pages de manuel appropriées."
 
 #. type: Plain text

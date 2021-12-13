@@ -27,10 +27,10 @@ clean: ../doc/devscripts.1
 	$(MAKE) -C ../doc devscripts.1
 
 %.1:: %.pl translate
-	podchecker $<
+	-podchecker $< && \
 	pod2man --utf8 --center=" " --release="$(DESC_$(dir $@))" $< > $@
 %.1:: %.pod translate
-	podchecker $<
+	-podchecker $< && \
 	pod2man --utf8 --center=" " --release="$(DESC_$(dir $@))" $< > $@
 %.1:: %.dbk translate
 	xsltproc --nonet \
