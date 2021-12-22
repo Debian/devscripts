@@ -6,6 +6,10 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
     + add uscan and salsa in translation list.  Closes: #1001157
     + build translated manpages even if there are some POD errors
 
+  [ Vipul Kumar ]
+  * wnpp-check:
+    + Replace non-HTTPs URLs with HTTPs URLs. Closes: #1002311, #902242
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
 devscripts (2.21.7) unstable; urgency=medium
