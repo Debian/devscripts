@@ -175,7 +175,7 @@ if (system("command -v wget >/dev/null 2>&1") == 0) {
     $getcommand   = "wget -q -O -";
 } elsif (system("command -v curl >/dev/null 2>&1") == 0) {
     $curl_or_wget = "curl";
-    $getcommand   = "curl -qfs";
+    $getcommand   = "curl -qfsL";
 } else {
     die
 "$progname: this program requires either the wget or curl package to be installed\n";
@@ -198,7 +198,7 @@ if (-d $cachedir) {
             die "$progname: wget failed!\n";
         }
     } elsif ("$curl_or_wget" eq "curl") {
-        if (system('curl', '-qfsR', $url) != 0) {
+        if (system('curl', '-qfsLR', $url) != 0) {
             die "$progname: curl failed!\n";
         }
     } else {
