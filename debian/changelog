@@ -8,7 +8,9 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
 
   [ Vipul Kumar ]
   * wnpp-check:
-    + Replace HTTP URLs with HTTPS. Closes: #1002311, #902242; MR: !256
+    + Replace HTTP URLs with HTTPS.  Closes: #1002311, #902242; MR: !256
+  * rc-alert, wnpp-alert, wnpp-check:
+    + Allow curl to follow HTTP redirections.  MR: !257
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
