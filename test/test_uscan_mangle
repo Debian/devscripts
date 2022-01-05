@@ -236,7 +236,6 @@ helperWatch() {
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
     POOLPATH=${POOLPATH:-pool}
-    GZREPACK=${GZREPACK:-xz}
     MGZREPACK=${MGZREPACK:-gz}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
@@ -283,6 +282,13 @@ helperWatch() {
     $DEBUGLSLR
     UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
+    if [ ! -f $STARBALL ]; then
+        # testWatch4WebNonNativeMUT0() only repacks its component tarballs. It does
+        # not repack the main upstream tarball, which is the usual behaviour when
+        # excluding files from the upstream source. This means we need to find the
+        # upstream tarball.
+        STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.gz
+    fi
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
@@ -296,7 +302,7 @@ helperWatch() {
     fi
     for cpnt in $COMPONENTS; do
         UTARBALL=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz
-        STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK
+        STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$MGZREPACK
         assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
         assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
         if [ "$PGP" = "pgp" ]; then
@@ -304,7 +310,7 @@ helperWatch() {
             if [ ! -f $UTARSIG ]; then
                 UTARSIG=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz.asc
             fi
-            STARSIG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
+            STARSIG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$MGZREPACK.asc
             assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
 	    # Skipping this: signature link skipped when upstream file is repacked
             #assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
@@ -352,7 +358,6 @@ helperWatch() {
     cd $ORIGDIR
     unset REPOPATH
     unset POOLPATH
-    unset GZREPACK
     unset MGZREPACK
     unset XCOMMAND
     unset WATCHVER
@@ -883,10 +888,8 @@ testWatch4WebNonNativeUA() {
 testWatch4WebNonNativeBZ2() {
     WATCHVER=4
     WATCHLINE='opts=repack,compression=bz2 @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
-    GZREPACK=bz2
     MGZREPACK=bz2
     helperWatch
-    unset GZREPACK
 }
 
 # test repack and compression
@@ -894,9 +897,7 @@ testWatch4WebNonNativeXZ() {
     MGZREPACK=xz
     WATCHVER=4
     WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
-    GZREPACK=xz
     helperWatch
-    unset GZREPACK
 }
 
 # test spaces everywhere
@@ -908,9 +909,7 @@ testWatch4PrWebNonNativeXZ() {
                      repack , compression=xz" \
     @@@url@@@/ (?:.*)/boo@ANY_VERSION@@ARCHIVE_EXT@ \
     debian uupdate'
-    GZREPACK=xz
     helperWatch sitePrWebNonNative
-    unset GZREPACK
 }
 
 # test get strictly href from links and not something like foo-href. See #904578 and MR !25
@@ -1048,6 +1047,7 @@ testWatch4WebNonNativeMUT0() {
     WATCHVER=4
     COMPONENTS="foo bar baz"
     FILEEXCLUDE=3
+    MGZREPACK=xz
     WATCHLINE='
 opts="component=foo,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ debian
 opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
@@ -1062,7 +1062,6 @@ testWatch4WebNonNativeGroup() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1077,7 +1076,6 @@ testWatch4WebNonNativeGroupRepackSuffix() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,repacksuffix=+ds,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1091,7 +1089,6 @@ testWatch4WebNonNativeGroupRepackSuffix2() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="dversionmangle=auto,pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="dversionmangle=auto,component=bar,repacksuffix=~ds,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1106,7 +1103,6 @@ testWatch4WebNonNativeGroupSigned() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1121,7 +1117,6 @@ testWatch4WebNonNativeGroupSignedNext() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     SIGMODE=ASC
     WATCHLINE='
 opts="pgpmode=next" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1139,7 +1134,6 @@ testWatch4WebNonNativeGroupWithCompression() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1153,7 +1147,6 @@ testWatch4WebNonNativeGroupWithChecksum1() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ group
@@ -1167,7 +1160,6 @@ testWatch4WebNonNativeGroupWithChecksum2() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ checksum
@@ -1181,7 +1173,6 @@ testWatch4WebNonNativeGroupWithChecksumAndIgnore() {
     FILEEXCLUDE=3
     UVERSION=2.0
     CMPVERSION=3.0
-    GZREPACK=gz
     WATCHLINE='
 opts="pgpmode=none" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ group
 opts="component=bar,compression=xz,repack,pgpmode=none" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ checksum
