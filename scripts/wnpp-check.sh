@@ -17,6 +17,9 @@ PROGNAME=${0##*/}
 
 usage () { echo \
 "Usage: $PROGNAME <package name> [...]
+  -e,--exact         Require an exact package name match,
+                     rather than the default substring match.
+
   -h,--help          Show this help message
   -v,--version       Show a version message
 
