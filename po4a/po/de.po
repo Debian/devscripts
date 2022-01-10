@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.18.9\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2021-11-28 05:58+0100\n"
+"POT-Creation-Date: 2022-01-10 19:19+0100\n"
 "PO-Revision-Date: 2020-04-25 23:04+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -3876,7 +3876,7 @@ msgstr ""
 #: ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21
 #: ../scripts/uupdate.1:101 ../scripts/whodepends.1:11
 #: ../scripts/who-uploads.1:45 ../scripts/who-permits-upload.pl:71
-#: ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
+#: ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:20
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr "B<--help>, B<-h>"
@@ -3885,7 +3885,7 @@ msgstr "B<--help>, B<-h>"
 #: ../scripts/checkbashisms.1:27 ../scripts/debdiff.1:179
 #: ../scripts/manpage-alert.1:16 ../scripts/mk-build-deps.pl:113
 #: ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:26
-#: ../scripts/wnpp-check.1:20
+#: ../scripts/wnpp-check.1:23
 msgid "Show a summary of options."
 msgstr "zeigt eine Zusammenfassung der Optionen."
 
@@ -3989,7 +3989,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/checkbashisms.1:55 ../scripts/debdiff.1:179
 #: ../scripts/rc-alert.1:24 ../scripts/whodepends.1:14
-#: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:20
+#: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:23
 #, no-wrap
 msgid "B<--version>, B<-v>"
 msgstr "B<--version>, B<-v>"
@@ -3999,7 +3999,7 @@ msgstr "B<--version>, B<-v>"
 #: ../scripts/getbuildlog.1:31 ../scripts/grep-excuses.1:29
 #: ../scripts/manpage-alert.1:19 ../scripts/mk-build-deps.pl:117
 #: ../scripts/rc-alert.1:27 ../scripts/whodepends.1:17
-#: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23
+#: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:26
 msgid "Show version and copyright information."
 msgstr "zeigt die Version und Copyright-Informationen."
 
@@ -14075,7 +14075,8 @@ msgstr "I<debuild>(1)"
 #: ../doc/devscripts.1:81
 msgid ""
 "A script that provided a .buildinfo file reports the instructions on how to "
-"try to reproduce the reported build. [sbuild | mmdebstrap, python3-pycurl]"
+"try to reproduce the reported build. [sbuild | mmdebstrap, python3-pycurl, "
+"libdpkg-perl]"
 msgstr ""
 
 #. type: IP
@@ -29769,13 +29770,13 @@ msgstr ""
 "quellpaketbasiert ist."
 
 #. type: TP
-#: ../scripts/wnpp-check.1:23
+#: ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--exact>, B<-e>"
 msgstr "B<--exact>, B<-e>"
 
 #. type: Plain text
-#: ../scripts/wnpp-check.1:26
+#: ../scripts/wnpp-check.1:20
 msgid ""
 "Require an exact package name match, rather than the default substring match."
 msgstr ""

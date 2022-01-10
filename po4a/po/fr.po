@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2021-11-28 05:58+0100\n"
-"PO-Revision-Date: 2021-12-13 22:15+0100\n"
+"POT-Creation-Date: 2022-01-10 19:19+0100\n"
+"PO-Revision-Date: 2022-01-10 19:20+0100\n"
 "Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -3865,7 +3865,7 @@ msgstr ""
 #: ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21
 #: ../scripts/uupdate.1:101 ../scripts/whodepends.1:11
 #: ../scripts/who-uploads.1:45 ../scripts/who-permits-upload.pl:71
-#: ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
+#: ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:20
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr "B<--help>, B<-h>"
@@ -3874,7 +3874,7 @@ msgstr "B<--help>, B<-h>"
 #: ../scripts/checkbashisms.1:27 ../scripts/debdiff.1:179
 #: ../scripts/manpage-alert.1:16 ../scripts/mk-build-deps.pl:113
 #: ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:26
-#: ../scripts/wnpp-check.1:20
+#: ../scripts/wnpp-check.1:23
 msgid "Show a summary of options."
 msgstr "Afficher un résumé des options."
 
@@ -3980,7 +3980,7 @@ msgstr "Arrête immédiatement après une première erreur."
 #. type: TP
 #: ../scripts/checkbashisms.1:55 ../scripts/debdiff.1:179
 #: ../scripts/rc-alert.1:24 ../scripts/whodepends.1:14
-#: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:20
+#: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:23
 #, no-wrap
 msgid "B<--version>, B<-v>"
 msgstr "B<--version>, B<-v>"
@@ -3990,7 +3990,7 @@ msgstr "B<--version>, B<-v>"
 #: ../scripts/getbuildlog.1:31 ../scripts/grep-excuses.1:29
 #: ../scripts/manpage-alert.1:19 ../scripts/mk-build-deps.pl:117
 #: ../scripts/rc-alert.1:27 ../scripts/whodepends.1:17
-#: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23
+#: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:26
 msgid "Show version and copyright information."
 msgstr "Affiche la version et le copyright."
 
@@ -14071,11 +14071,12 @@ msgstr "I<debrebuild>(1)"
 #: ../doc/devscripts.1:81
 msgid ""
 "A script that provided a .buildinfo file reports the instructions on how to "
-"try to reproduce the reported build. [sbuild | mmdebstrap, python3-pycurl]"
+"try to reproduce the reported build. [sbuild | mmdebstrap, python3-pycurl, "
+"libdpkg-perl]"
 msgstr ""
 "Un script qui fournit un fichier .buildinfo expose les instructions pour "
 "reproduire la construction à l'identique. [sbuild | mmdebstrap, python3-"
-"pycurl]"
+"pycurl, libdpkg-perl]"
 
 #. type: IP
 #: ../doc/devscripts.1:81
@@ -29696,13 +29697,13 @@ msgstr ""
 "paquets source."
 
 #. type: TP
-#: ../scripts/wnpp-check.1:23
+#: ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--exact>, B<-e>"
 msgstr "B<--exact>, B<-e>"
 
 #. type: Plain text
-#: ../scripts/wnpp-check.1:26
+#: ../scripts/wnpp-check.1:20
 msgid ""
 "Require an exact package name match, rather than the default substring match."
 msgstr ""
