@@ -17,6 +17,8 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
     + Document -e,--exact in the --help output.  Closes: #1003254
   * Make pristine-tar a Suggests in Ubuntu, as it's not in main so it can't be
     a Recommends.  LP: #1885766
+  * Don't build-depend on subversion on i386, skipping the test_uscan_svn
+    test; this is to avoid a delta with Ubuntu, that doesn't have svn on i386.
 
   [ Johannes Schauer Marin Rodrigues ]
   * debrebuild:

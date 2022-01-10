@@ -52,7 +52,7 @@ Build-Depends:
  python3-unidiff <!nocheck>,
  python3-xdg <!nocheck>,
  shunit2 <!nocheck>,
- subversion <!nocheck>,
+ subversion [!i386] <!nocheck>,
  unzip <!nocheck>,
  wdiff <!nocheck>,
  xsltproc,

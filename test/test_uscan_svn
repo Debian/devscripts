@@ -25,6 +25,11 @@ if [ "$DEB_HOST_OS" = "kfreebsd" ]; then
     echo "This test is not supported on $(dpkg-architecture -qDEB_HOST_ARCH), skipping"
     exit 0
 fi
+DEB_HOST_ARCH="$(dpkg-architecture -qDEB_HOST_ARCH)"
+if [ "$DEB_HOST_ARCH" = "i386" ]; then
+    echo "To \"help\" Ubuntu that has a fondamentally broken i386 (so that we can't depend on svn), this test is simply skipped on i386."
+    exit 0
+fi
 
 TESTTYPE=Svn
 . ./lib_test_uscan
