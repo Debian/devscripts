@@ -16,6 +16,11 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
   * wnpp-check:
     + Document -e,--exact in the --help output.  Closes: #1003254
 
+  [ Johannes Schauer Marin Rodrigues ]
+  * debrebuild:
+    + Use the new field_parse_binary_source() from libdpkg-perl >= 1.21.0
+      if available.  MR: !249
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
 devscripts (2.21.7) unstable; urgency=medium

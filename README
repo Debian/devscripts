@@ -132,7 +132,7 @@ And now, in alphabetical order, the scripts:
 
 - debrebuild: A script that provided a .buildinfo file reports the
   instructions on how to try to reproduce the reported build.
-  [sbuild | mmdebstrap, python3-pycurl]
+  [sbuild | mmdebstrap, python3-pycurl, libdpkg-perl]
 
 - debrepro: A script that tests reproducibility of Debian packages. It will
   build a given source directory twice, with a set of variation between the

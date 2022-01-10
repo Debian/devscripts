@@ -230,20 +230,25 @@ if (not defined($host_arch)) {
 
 my $srcpkgname = $cdata->{Source};
 my $srcpkgver  = $cdata->{Version};
+{
+    # make $@ local, so we don't print "Undefined subroutine" error message
+    # in other parts where we evaluate $@
+    local $@ = '';
+    # field_parse_binary_source is only available starting with dpkg 1.21.0
+    eval { ($srcpkgname, $srcpkgver) = field_parse_binary_source($cdata); };
+    if ($@) {
+        ($srcpkgname, $srcpkgver) = split / /, $srcpkgname, 2;
+        # Add a simple control check to avoid the worst surprises and stop
+        # obvious cases of garbage-in-garbage-out.
+        die("Unexpected source package name: ${srcpkgname}\n")
+          if $srcpkgname =~ m{[ \t_/\(\)<>!\n%&\$\#\@]};
+        # remove the surrounding parenthesis from the version
+        $srcpkgver =~ s/^\((.*)\)$/$1/;
+    }
+}
+
 my $srcpkgbinver
   = $cdata->{Version};    # this version will include the binmu suffix
-if ($srcpkgname =~ / /) {
-    # In some cases such as binNMUs, the source field contains a version in
-    # the form:
-    #     mscgen (0.20)
-    ($srcpkgname, $srcpkgver) = split / /, $srcpkgname, 2;
-    # Add a simple control check to avoid the worst surprises and stop obvious
-    # cases of garbage-in-garbage-out.
-    die("Unexpected source package name: ${srcpkgname}\n")
-      if $srcpkgname =~ m{[ \t_/\(\)<>!\n%&\$\#\@]};
-    # remove the surrounding parenthesis from the version
-    $srcpkgver =~ s/^\((.*)\)$/$1/;
-}
 
 my $new_buildinfo;
 {
