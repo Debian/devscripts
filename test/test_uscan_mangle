@@ -1055,6 +1055,52 @@ testWatch4WebNonNativeSelfSig() {
 
 ### VERSION 4 only ###
 
+# filenamemangle supports two patterns, each causing different behaviour.
+#   * The first pattern replaces the existing URL with the new filename.
+#   * The second pattern modifies the filename component, creating a new (and invalid) URL.
+
+# test normal web page (filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNative_filenamemangle1a() {
+    return # FIXME: WIP
+    WATCHVER=4
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (signature and filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNative_filenamemangle1b() {
+    return # FIXME: WIP
+    WATCHVER=4
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#, \
+      pgpsigurlmangle=s/$/.asc/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNative_filenamemangle1c() {
+    return # FIXME: WIP
+    WATCHVER=4
+    WATCHLINE='
+opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (signature and filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNative_filenamemangle1d() {
+    return # FIXME: WIP
+    WATCHVER=4
+    WATCHLINE='
+opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/, \
+      pgpsigurlmangle=s/$/.asc/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
 # test normal web page (MUT)
 testWatch4WebNonNativeMUT() {
     MGZREPACK=xz

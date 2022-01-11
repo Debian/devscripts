@@ -30,7 +30,7 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
     + Use MGZREPACK to specify the expected file extension when necessary;
       otherwise, use the default file extension.
     + Add a workaround for testWatch4WebNonNativeMUT0(). MR: !258
-    + Test use of filenamemangle with multiple upstream tarballs.
+    + Test use of filenamemangle with single and multiple upstream tarballs.
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
