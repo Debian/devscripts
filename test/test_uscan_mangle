@@ -243,6 +243,7 @@ helperWatch() {
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     COMPONENTS=${COMPONENTS:-}
     FILEEXCLUDE=${FILEEXCLUDE:-0} # no exclude
+    FILENAMEMANGLE=${FILENAMEMANGLE:-}
     SIGMODE=${SIGMODE:-ASC} # ASC=ASCII or BIN=BINARY or SELF
     KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
     cd "$TEMP_PKG_DIR"
@@ -281,6 +282,11 @@ helperWatch() {
     cd "$TEMP_PKG_DIR"
     $DEBUGLSLR
     UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
+    if [ -z "$FILENAMEMANGLE" ]; then
+        UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
+    else
+        UTARBALL=${PKG}-${UVERSION:-${VERNEW}}-filenamemangle.tar.gz
+    fi
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
     if [ ! -f $STARBALL ]; then
         # testWatch4WebNonNativeMUT0() only repacks its component tarballs. It does
@@ -364,6 +370,7 @@ helperWatch() {
     unset WATCHLINE
     unset COMPONENTS
     unset FILEEXCLUDE
+    unset FILENAMEMANGLE
     unset SIGMODE
     unset KEYMODE
 }
@@ -1061,8 +1068,8 @@ testWatch4WebNonNativeSelfSig() {
 
 # test normal web page (filenamemangle on main upstream tarball [pattern 1])
 testWatch4WebNonNative_filenamemangle1a() {
-    return # FIXME: WIP
     WATCHVER=4
+    FILENAMEMANGLE=foo
     WATCHLINE='
 opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#" \
       @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
@@ -1071,8 +1078,8 @@ opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#"
 
 # test normal web page (signature and filenamemangle on main upstream tarball [pattern 1])
 testWatch4WebNonNative_filenamemangle1b() {
-    return # FIXME: WIP
     WATCHVER=4
+    FILENAMEMANGLE=foo
     WATCHLINE='
 opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#, \
       pgpsigurlmangle=s/$/.asc/" \
