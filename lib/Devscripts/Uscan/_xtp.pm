@@ -32,6 +32,9 @@ sub _xtp_newfile_base {
             $self->status(1);
             return undef;
         }
+        if ($newfile_base =~ m/^(?:https?|ftp):/) {
+            $newfile_base = basename($newfile_base);
+        }
         if ($cmp eq $newfile_base) {
             uscan_die "filenamemangle failed for $cmp";
         }

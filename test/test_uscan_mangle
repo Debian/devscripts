@@ -1089,8 +1089,8 @@ opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#,
 
 # test normal web page (filenamemangle on main upstream tarball [pattern 2])
 testWatch4WebNonNative_filenamemangle1c() {
-    return # FIXME: WIP
     WATCHVER=4
+    FILENAMEMANGLE=foo
     WATCHLINE='
 opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
       @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
@@ -1099,8 +1099,8 @@ opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
 
 # test normal web page (signature and filenamemangle on main upstream tarball [pattern 2])
 testWatch4WebNonNative_filenamemangle1d() {
-    return # FIXME: WIP
     WATCHVER=4
+    FILENAMEMANGLE=foo
     WATCHLINE='
 opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/, \
       pgpsigurlmangle=s/$/.asc/" \
