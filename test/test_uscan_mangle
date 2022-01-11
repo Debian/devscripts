@@ -243,6 +243,7 @@ helperWatch() {
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     COMPONENTS=${COMPONENTS:-}
     FILEEXCLUDE=${FILEEXCLUDE:-0} # no exclude
+    FILENAMEMANGLE=${FILENAMEMANGLE:-}
     SIGMODE=${SIGMODE:-ASC} # ASC=ASCII or BIN=BINARY or SELF
     KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
     cd "$TEMP_PKG_DIR"
@@ -281,6 +282,11 @@ helperWatch() {
     cd "$TEMP_PKG_DIR"
     $DEBUGLSLR
     UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
+    if [[ "$FILENAMEMANGLE" != *"$PKG"* ]]; then
+        UTARBALL=${PKG}-${UVERSION:-${VERNEW}}.tar.gz
+    else
+        UTARBALL=${PKG}-${UVERSION:-${VERNEW}}-filenamemangle.tar.gz
+    fi
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
     if [ ! -f $STARBALL ]; then
         # testWatch4WebNonNativeMUT0() only repacks its component tarballs. It does
@@ -301,7 +307,11 @@ helperWatch() {
         assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
     for cpnt in $COMPONENTS; do
-        UTARBALL=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz
+        if [[ "$FILENAMEMANGLE" != *"$cpnt"* ]]; then
+            UTARBALL=${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz
+        else
+            UTARBALL=${PKG}-${cpnt}-${CMPVERSION:-${VERNEW}}.tar.gz
+        fi
         STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$MGZREPACK
         assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
         assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
@@ -364,6 +374,7 @@ helperWatch() {
     unset WATCHLINE
     unset COMPONENTS
     unset FILEEXCLUDE
+    unset FILENAMEMANGLE
     unset SIGMODE
     unset KEYMODE
 }
@@ -674,6 +685,33 @@ siteWebNonNativeMUT() {
 <a href="/2.0/baz/ooo/baz-2.0.tar.gz">Latest</a> <br />
 <a href="/3.0/baz/ooo/baz-3.0.tar.gz">OOPS Latest</a> <br />
 <a href="/3.0/baz/ooo/baz-3.0.tar.gz.asc">Latest sig</a> <br />
+</body>
+<html>
+END
+}
+
+siteWebNonNativeMUT_filenamemangle() {
+    siteNonNative foo
+    siteNonNative bar EXTRA
+    siteNonNative baz EXTRA
+    cat <<END > "$TEMP_PKG_DIR"/$REPOPATH/index.html
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit old</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz.asc">Latest sig</a> <br />
+<a href="/0.0/bar/ooo/bar-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/bar/ooo/bar-1.0.tar.gz">A bit old</a> <br />
+<a href="/2.0/bar/ooo/bar-2.0.tar.gz">Latest</a> <br />
+<a href="/3.0/bar/ooo/bar-2.0.tar.gz.asc">Latest sig</a> <br />
+<a href="/0.0/baz/ooo/baz-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/baz/ooo/baz-1.0.tar.gz">A bit old</a> <br />
+<a href="/2.0/baz/ooo/baz-2.0.tar.gz">Latest</a> <br />
+<a href="/3.0/baz/ooo/baz-2.0.tar.gz.asc">Latest sig</a> <br />
 </body>
 <html>
 END
@@ -1028,6 +1066,52 @@ testWatch4WebNonNativeSelfSig() {
 
 ### VERSION 4 only ###
 
+# filenamemangle supports two patterns, each causing different behaviour.
+#   * The first pattern replaces the existing URL with the new filename.
+#   * The second pattern modifies the filename component, creating a new (and invalid) URL.
+
+# test normal web page (filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNative_filenamemangle1a() {
+    WATCHVER=4
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (signature and filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNative_filenamemangle1b() {
+    WATCHVER=4
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#, \
+      pgpsigurlmangle=s/$/.asc/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNative_filenamemangle1c() {
+    WATCHVER=4
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
+# test normal web page (signature and filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNative_filenamemangle1d() {
+    WATCHVER=4
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s/(\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/, \
+      pgpsigurlmangle=s/$/.asc/" \
+      @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
+    helperWatch siteWebNonNative
+}
+
 # test normal web page (MUT)
 testWatch4WebNonNativeMUT() {
     MGZREPACK=xz
@@ -1040,6 +1124,282 @@ opts="              pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/@PACKAGE@@ANY_VE
 opts="component=bar,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
 opts="component=baz,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same uupdate'
     helperWatch siteWebNonNativeMUT
+}
+
+# test normal web page (MUT, filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle1a() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on main upstream tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle1b() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#, \
+      pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle1c() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on main upstream tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle1d() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=foo
+    WATCHLINE='
+opts="filenamemangle=s/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/, \
+      pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on first component tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle2a() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=bar
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on first component tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle2b() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=bar
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on first component tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle2c() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=bar
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on first component tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle2d() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=bar
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on second component tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle3a() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=baz
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on second component tarball [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle3b() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=baz
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on second component tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle3c() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=baz
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signature and filenamemangle on second component tarball [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle3d() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE=baz
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on both component tarballs [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle4a() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="$COMPONENTS"
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signatures and filenamemangle on both component tarballs [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle4b() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="$COMPONENTS"
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on both component tarballs [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle4c() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="$COMPONENTS"
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signatures and filenamemangle on both component tarballs [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle4d() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="$COMPONENTS"
+    WATCHLINE='
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on all upstream tarballs [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle5a() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="foo $COMPONENTS"
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signatures and filenamemangle on all upstream tarballs [pattern 1])
+testWatch4WebNonNativeMUT_filenamemangle5b() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="foo $COMPONENTS"
+    WATCHLINE='
+opts="filenamemangle=s#.+/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)#$1-filenamemangle$2#, \
+      pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s#.+/(bar-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s#.+/(baz-)#@PACKAGE@-$1#, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, filenamemangle on all upstream tarballs [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle5c() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="foo $COMPONENTS"
+    WATCHLINE='
+opts="filenamemangle=s/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
+}
+
+# test normal web page (MUT, signatures and filenamemangle on all upstream tarballs [pattern 2])
+testWatch4WebNonNativeMUT_filenamemangle5d() {
+    WATCHVER=4
+    COMPONENTS="bar baz"
+    FILENAMEMANGLE="foo $COMPONENTS"
+    WATCHLINE='
+opts="filenamemangle=s/(@PACKAGE@-\d\S+)(@ARCHIVE_EXT@)/$1-filenamemangle$2/, \
+      pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar, filenamemangle=s/(bar-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz, filenamemangle=s/(baz-)/@PACKAGE@-$1/, pgpsigurlmangle=s/$/.asc/" \
+                     @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same'
+    helperWatch siteWebNonNativeMUT_filenamemangle
 }
 
 # test normal web page (MUT with O main)
