@@ -250,10 +250,10 @@ for package; do
 	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
 	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
-	           awk  -F: '/@debian\.org>/ { a = $10; exit} END { print a }' )
+	           awk  -F: '/@debian\.org/ { a = $10; exit} END { print a }' )
 
 	# If $UPLOADER is still null (no @debian.org email found), pull the next email uid
-	if [ -z "$UPLOADER" ]; then 
+	if [ -z "$UPLOADER" ]; then
 	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
 	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
