@@ -246,10 +246,22 @@ for package; do
 	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C $GPG $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
 	         sed -rne 's/.*using [^ ]* key ([0-9A-Z]+).*/\1/p')
 
+	# First try to get the uid@debian.org email
 	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
 	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
-	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^uid/ { a = $10; exit} END { print a }' )
+	           awk  -F: '/@debian\.org>/ { a = $10; exit} END { print a }' )
+
+	# If $UPLOADER is still null (no @debian.org email found), pull the next email uid
+	if [ -z "$UPLOADER" ]; then 
+	UPLOADER=$($GPG $GPG_OPTIONS \
+	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
+	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
+	           awk  -F: '/^uid/ { a = $10; exit} END { print a }' )
+
+	fi
+
+	# If $UPLOADER is still null (no email found on the key) print the <unrecognized public key> message
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
 	output="$VERSION to $DISTRO: $UPLOADER"
