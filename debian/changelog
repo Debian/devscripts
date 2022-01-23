@@ -38,6 +38,12 @@ devscripts (2.21.8) UNRELEASED; urgency=medium
       filenamemangled URL if the given regex pattern only modifies the
       upstream filename. Closes: #993585; MR: !255
 
+  [ Carlos Alberto Lopez Perez ]
+  * reproducible-check:
+    + Use the .json that contains data for all the Debian suites (instead of
+      the currently used one that contains only data for Debian testing), so
+      that there are chances for this to work in Debian stable as well. MR: !245
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 11 Dec 2021 14:02:12 +0100
 
 devscripts (2.21.7) unstable; urgency=medium
