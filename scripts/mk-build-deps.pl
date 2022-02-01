@@ -602,6 +602,7 @@ sub build_equiv {
     my $deb_file = "${pkgname}_${version}_${packagearch}.deb";
     return {
         package  => $pkgname,
-        deb_file => $deb_file
+        # this is created by equivs-build in TMPDIR || !
+        deb_file =>  ($ENV{'TMPDIR'} || cwd) . "/" . $deb_file
     };
 }
