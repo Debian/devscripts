@@ -47,6 +47,9 @@ GetOptions(
 pod2usage(1)                                                if $help;
 pod2usage(-exitstatus => 0, -verbose => 2, -noperldoc => 1) if $man;
 
+my $ldd     = $ENV{'LDD'} || "ldd";
+my $objdump = $ENV{'OBJDUMP'} || "objdump";
+my $readelf = $ENV{'READELF'} || "readelf";
 my $overall = 0;
 my $rc      = 0;
 my $report  = "";
@@ -220,8 +223,8 @@ sub output(@) {
 # Find the libc used in this executable, if any.
 sub find_libc($) {
     my ($file) = @_;
-    my $ldd = output("ldd", $file);
-    $ldd =~ /^\s*libc\.so\.\S+\s+\S+\s+(\S+)/m;
+    my $ldd_out = output($ldd, $file);
+    $ldd_out =~ /^\s*libc\.so\.\S+\s+\S+\s+(\S+)/m;
     return $1 || "";
 }
 
@@ -232,7 +235,7 @@ sub find_functions($$) {
     # Catch "NOTYPE" for object archives.
     my $func_regex = " (I?FUNC|NOTYPE) ";
 
-    my $relocs = output("readelf", "-sW", $file);
+    my $relocs = output($readelf, "-sW", $file);
     for my $line (split("\n", $relocs)) {
         next if ($line               !~ /$func_regex/);
         next if ($undefined && $line !~ /$func_regex.* UND /);
@@ -271,21 +274,21 @@ foreach my $file (@ARGV) {
     @tags   = ();
 
     # Get program headers.
-    my $PROG_REPORT = output("readelf", "-lW", $file);
+    my $PROG_REPORT = output($readelf, "-lW", $file);
     if (length($PROG_REPORT) == 0) {
         $overall = 1;
         next;
     }
 
     # Get ELF headers.
-    my $DYN_REPORT = output("readelf", "-dW", $file);
+    my $DYN_REPORT = output($readelf, "-dW", $file);
 
     # Get disassembly
     my $DISASM
-      = output("objdump", "-d", "--no-show-raw-insn", "-M", "intel", $file);
+      = output($objdump, "-d", "--no-show-raw-insn", "-M", "intel", $file);
 
     # Get notes
-    my $NOTES = output("readelf", "-n", $file);
+    my $NOTES = output($readelf, "-n", $file);
 
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
